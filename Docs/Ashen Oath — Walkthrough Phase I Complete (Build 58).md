@@ -2,6 +2,9 @@
 **V-Control:** 2026-07-30T08:01:13-04:00  
 **Governed By:** ENGINE-SPEC-001 (DEFINITIVE CANON) + AOP-STATE-001
 
+> [!NOTE]
+> **Historical Phase I Walkthrough**: This document captures the initial completion of the Phase I Psychological Runtime Kernel (Build 58). The project has since matured across **Master Batches #1–#111 (Builds 1–2235)**. Canonical variable schemas, invariant laws, and event contracts are now governed by [CONTRACT-SPEC-051](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CONTRACT-SPEC-051%20%28CANONICAL%20VARIABLE%20REGISTRY%20&%20MACRO-SYSTEMIC%20EVENT%20CONTRACTS%29.md) and [ORCH-SPEC-052](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/ORCH-SPEC-052%20%28THE%20CANONICAL%20SOMATIC%20TRANSLATION%20ENGINE%20&%20UNIFIED%20EVENT%20SPINE%29.md).
+
 ---
 
 ## ✅ Phase I Complete — The Psychological Runtime Kernel
@@ -12,7 +15,7 @@ The Soul Constellation Subsystem is online. The Engine of Consequence now has it
 
 ## What Was Built
 
-### 1. [AshenSoulStateVector.h](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/AshenSoulStateVector.h)
+### 1. [AshenSoulStateVector.h](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Soul/AshenSoulStateVector.h)
 The canonical MVSC data contract. All downstream systems reference this file.
 
 **Key types:**
@@ -23,17 +26,17 @@ The canonical MVSC data contract. All downstream systems reference this file.
 - `GetDebtStage()` — single canonical threshold evaluation (no duplicate logic in subsystems)
 - `IsResonanceSyncActive()` — inline resonance condition check
 
-### 2. [AshenOath_ImprintBufferComponent.h](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/AshenOath_ImprintBufferComponent.h) / [.cpp](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/AshenOath_ImprintBufferComponent.cpp)
+### 2. [AshenOath_ImprintBufferComponent.h](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Soul/AshenOath_ImprintBufferComponent.h) / [.cpp](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Soul/AshenOath_ImprintBufferComponent.cpp)
 Session-volatile psychological pressure accumulator. Lives on `AAshenCombatCharacter`.
 
 **Key behaviors:**
 - `AddImprint(Type, Weight)` — FIFO-evicts oldest imprint at capacity (64 max, pre-reserved)
-- `DecayBuffer()` — called on death before Heartstone. Wipes array, reduces `IntegrationDebt` by `DecayOnDeathFraction` (default 0.2). No permanent StateVector change.
+- `DecayBuffer()` — *Legacy Phase I note:* In canonical law ([CONTRACT-SPEC-051](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CONTRACT-SPEC-051%20%28CANONICAL%20VARIABLE%20REGISTRY%20&%20MACRO-SYSTEMIC%20EVENT%20CONTRACTS%29.md) Invariant 2), Integration Debt cannot be passively reduced on death without an authorized `Resolution.*` gameplay tag during deliberate trauma integration. Session buffer imprints are preserved/stabilized rather than wiped.
 - `ConsumeBuffer()` — called during `InvokeIntegration()`. Returns snapshot for `CompileIdentity()`, resets debt to 0.
 - `GetDominantImprintType()` — weight-tallied per type, returns heaviest (used to select Mindscape enemy archetype)
 - `OnDebtStageChanged` delegate — fires only on actual stage transitions, not on every `AddImprint()` call
 
-### 3. [AshenSoulConstellationSubsystem.h](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/AshenSoulConstellationSubsystem.h) / [.cpp](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/AshenSoulConstellationSubsystem.cpp)
+### 3. [AshenSoulConstellationSubsystem.h](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Soul/AshenSoulConstellationSubsystem.h) / [.cpp](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Soul/AshenSoulConstellationSubsystem.cpp)
 The Psychological Runtime Kernel. `UGameInstanceSubsystem`. AXIOM I enforced.
 
 **Full integration pipeline (call order):**
@@ -57,7 +60,7 @@ FinalizeIntegration(SelectedLens)
 
 **MPC Update:** `InvalidateSubsystems()` writes `MPC_Corruption`, `MPC_Resolve`, `MPC_IntegrationDebt`, `MPC_Isolation`, `MPC_GarrettTrust`, `MPC_SerafinaTrust`, `MPC_Despair` in one pass via `UMaterialParameterCollectionInstance`. Zero per-frame per-MID writes.
 
-### 4. [AshenCombatCharacter.h](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/AshenCombatCharacter.h) / [.cpp](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/AshenCombatCharacter.cpp)
+### 4. [AshenCombatCharacter.h](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Combat/AshenCombatCharacter.h) / [.cpp](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Combat/AshenCombatCharacter.cpp)
 `UAshenOath_ImprintBufferComponent* ImprintBufferComponent` added as `CreateDefaultSubobject` in constructor.
 
 ---

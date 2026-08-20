@@ -256,17 +256,17 @@ graph TD
 
 | Domain Index | Domain Focus | Primary Kernel Interface | Master Bridge Header |
 |---|---|---|---|
-| **Domain 1** | Soul, Memory & Epistemic Grounding | `FSoulStateVector`, `FCanonicalCombatEvent` | [`AshenSoulMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenSoulMasterBridge.h) |
-| **Domain 2** | Combat, Trial of Will & GAS | `ETrialOfWillChoice`, `0.75s` Dilation | [`AshenExistentialMeaningMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenExistentialMeaningMasterBridge.h) |
-| **Domain 3** | Companion AI & Shepherd's Gambit | `EContainmentState`, `EUnchainedHazardLevel` | [`AshenShepherdsGambitMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenShepherdsGambitMasterBridge.h) |
-| **Domain 4** | Diegetic Audio, Haptics & Friction | `3-Channel Proximity`, `50% Trigger Lock` | [`AshenControllerFrictionMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenControllerFrictionMasterBridge.h) |
-| **Domain 5** | Somatic Shaders & Mesh Provenance | `Nightsteel Stain`, `Ash-Soot Overlays` | [`AshenSomaticVFXMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenSomaticVFXMasterBridge.h) |
-| **Domain 6** | The Living Journal & Somatic UI | `UMB-UI-004`, `Multi-Author Marginalia` | [`AshenLivingJournalMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenLivingJournalMasterBridge.h) |
-| **Domain 7** | Garrett's Alchemy & World Traversal | `FAlchemicalInventoryPouch`, `Caltrops` | [`AshenAlchemicalMatrixMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenAlchemicalMatrixMasterBridge.h) |
+| **Domain 1** | Soul, Memory & Epistemic Grounding | `FSoulStateVector`, `FCanonicalCombatEvent` | [`AshenSoulConstellationMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenSoulConstellationMasterBridge.h) |
+| **Domain 2** | Combat, Trial of Will & GAS | `ETrialOfWillChoice`, `0.75s` Dilation | [`AshenExistentialMeaningMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenExistentialMeaningMasterBridge.h) |
+| **Domain 3** | Companion AI & Shepherd's Gambit | `EContainmentState`, `EUnchainedHazardLevel` | [`AshenShepherdsGambitMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenShepherdsGambitMasterBridge.h) |
+| **Domain 4** | Diegetic Audio, Haptics & Friction | `3-Channel Proximity`, `50% Trigger Lock` | [`AshenControllerFrictionMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenControllerFrictionMasterBridge.h) |
+| **Domain 5** | Somatic Shaders & Mesh Provenance | `Nightsteel Stain`, `Ash-Soot Overlays` | [`AshenSomaticMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenSomaticMasterBridge.h) |
+| **Domain 6** | The Living Journal & Somatic UI | `UMB-UI-004`, `Multi-Author Marginalia` | [`AshenLivingJournalMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenLivingJournalMasterBridge.h) |
+| **Domain 7** | Garrett's Alchemy & World Traversal | `FAlchemicalInventoryPouch`, `Caltrops` | [`AshenAlchemicalMatrixMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenAlchemicalMatrixMasterBridge.h) |
 
 ---
 
 ### 🛡️ Production Verification Status
-* **Total Clean Production Builds**: **2,115 Builds** (0 Errors, 0 Warnings).
+* **Total Clean Production Builds**: **2,235 Builds** (0 Errors, 0 Warnings).
 * **Deterministic Automated QA Coverage**: **100%** (Value-asserting test suites for every master batch).
 * **Architecture Map Synchronization**: **Synchronized** ([`Docs/ARCHITECTURE_MAP.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/ARCHITECTURE_MAP.md)).
