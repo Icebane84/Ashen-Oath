@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2335: Master Batch #116 — The Empathic Transference & Shadow Burnout Matrix (BURDEN-SPEC-057)
+**Domain:** Companions / Combat / AI / Audio / UI / Narrative / World / Core / Orchestration / QA  
+**Status:** 2,335 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2316 | `AshenTransferenceBurnoutTypes.h` | `AshenTransferenceBurnoutTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Companions |
+| 2317 | `AshenEmpathicTransferenceSubsystem.h/.cpp` | `UAshenEmpathicTransferenceSubsystem` — Subsystem calculating transference costs & moral evaluations | Companions |
+| 2318 | `AshenSerafinaBurnoutReceiverComponent.h/.cpp` | `UAshenSerafinaBurnoutReceiverComponent` — Serafina somatic component tracking absorbed trauma & recovery delays | Companions |
+| 2319 | `AshenStaggerResolutionEvaluatorComponent.h/.cpp` | `UAshenStaggerResolutionEvaluatorComponent` — Evaluates companion reactions to Mercy vs Execution choices | Companions |
+| 2320 | `AshenShadowOveruseAuditorComponent.h/.cpp` | `UAshenShadowOveruseAuditorComponent` — Audits dark ability frequency and triggers restraint interventions | Companions |
+| 2321 | `AshenEmpathicTransferenceGASAbility.h/.cpp` | `UAshenEmpathicTransferenceGASAbility` — Serafina sacrificial heal ability absorbing trauma at somatic cost | Combat |
+| 2322 | `AshenSomaticBurnoutDebuffGASAbility.h/.cpp` | `UAshenSomaticBurnoutDebuffGASAbility` — Passive GAS ability applying recovery delays based on burnout tier | Combat |
+| 2323 | `AshenMercyBindingGASAbility.h/.cpp` | `UAshenMercyBindingGASAbility` — Non-lethal binding ability sparing staggered foes (+Grace, +Serafina Trust) | Combat |
+| 2324 | `AshenRuthlessExecutionGASAbility.h/.cpp` | `UAshenRuthlessExecutionGASAbility` — Lethal execution finisher (+Wrath, +Garrett Pragmatic Approval, -Serafina Grief) | Combat |
+| 2325 | `AshenShadowRestraintGroundingGASAbility.h/.cpp` | `UAshenShadowRestraintGroundingGASAbility` — Companion ability physically grounding Kaelen during corruption spikes | Combat |
+| 2326 | `BTTask_AshenEvaluateStaggerChoice.h/.cpp` | `UBTTask_AshenEvaluateStaggerChoice` — Behavior Tree Task querying companion suggestions on staggered foes | AI |
+| 2327 | `BTTask_AshenSerafinaTransferenceTriage.h/.cpp` | `UBTTask_AshenSerafinaTransferenceTriage` — Behavior Tree Task auditing burnout severity before emergency heals | AI |
+| 2328 | `AshenBurnoutAudioStrainComponent.h/.cpp` | `UAshenBurnoutAudioStrainComponent` — Modulates voice pitch & mixes heavy breathing as burnout escalates | Audio |
+| 2329 | `AshenUserWidget_TransferenceAuraOverlayHUD.h/.cpp` | `UAshenUserWidget_TransferenceAuraOverlayHUD` — UMG/Slate overlay rendering golden transference tethers | UI |
+| 2330 | `AshenStaggeredEliteAnchorActor.h/.cpp` | `AAshenStaggeredEliteAnchorActor` — 3D world encounter entity representing staggered foes | World |
+| 2331 | `AshenTransferenceSaveGameAdapter.h/.cpp` | `UAshenTransferenceSaveGameAdapter` — Serializes cumulative burnout levels and mercy/execution counts | Core |
+| 2332 | `AshenTransferenceDialogueBridge.h/.cpp` | `UAshenTransferenceDialogueBridge` — Injects fatigue & execution history into campfire dialogues | Narrative |
+| 2333 | `AshenCompanionFatigueMeshAdapter.h/.cpp` | `UAshenCompanionFatigueMeshAdapter` — Modulates skeletal blendspaces for shoulder slump and fatigue | Companions |
+| 2334 | `AshenTransferenceMasterBridge.h/.cpp` | `UAshenTransferenceMasterBridge` — Master bridge coordinating Transference Subsystem, State Registry & Audio | Orchestration |
+| 2335 | `AshenMasterBatch116AutomationTest.cpp` | `FAshenMasterBatch116AutomationTest` — Comprehensive value-asserting QA automation test suite | QA |
+
+---
+
 ### Build 2315: Master Batch #115 — The Companion Intent Inference & Dynamic Relational Adaptation Engine (INTENT-SPEC-056)
 **Domain:** Companions / AI / Combat / Audio / UI / Narrative / Core / Orchestration / QA  
 **Status:** 2,315 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
