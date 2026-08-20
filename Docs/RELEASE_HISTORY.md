@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2395: Master Batch #119 — The Mass Kinetic Cleave & Environmental Fracture Engine (KINETIC-SPEC-060)
+**Domain:** Combat / World / Audio / UI / AI / Companions / Core / Orchestration / QA  
+**Status:** 2,395 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2376 | `AshenMassKineticTypes.h` | `AshenMassKineticTypes` — Enums (2), Structs (2), Multicast Delegates (4) | Combat |
+| 2377 | `AshenMassKineticCleaveSubsystem.h/.cpp` | `UAshenMassKineticCleaveSubsystem` — Subsystem coordinating kinetic calculations & Chaos fracture | Combat |
+| 2378 | `AshenMassKineticCleaveComponent.h/.cpp` | `UAshenMassKineticCleaveComponent` — Calculates velocity, kinetic energy Ek & structural strain | Combat |
+| 2379 | `AshenWeaponResistanceWarperComponent.h/.cpp` | `UAshenWeaponResistanceWarperComponent` — Modulates AnimMontage playback based on submerged volume | Combat |
+| 2380 | `AshenCameraResistanceDilationComponent.h/.cpp` | `UAshenCameraResistanceDilationComponent` — Compresses & snaps FOV to physicalize blade drag | Combat |
+| 2381 | `AshenMassKineticCleaveGASAbility.h/.cpp` | `UAshenMassKineticCleaveGASAbility` — Sweeping cleave attack with volume drag physics | Combat |
+| 2382 | `AshenUmbralCleaveWhirlwindGASAbility.h/.cpp` | `UAshenUmbralCleaveWhirlwindGASAbility` — 360-degree whirlwind shattering enemies & structures | Combat |
+| 2383 | `AshenDirectionalChaosSunderGASAbility.h/.cpp` | `UAshenDirectionalChaosSunderGASAbility` — Overhead downward sunder splitting geometry along cutting planes | Combat |
+| 2384 | `AshenKineticDeflectionParryGASAbility.h/.cpp` | `UAshenKineticDeflectionParryGASAbility` — High-precision 120ms parry ability redirecting kinetic force | Combat |
+| 2385 | `AshenBerserkStateOverrideGASAbility.h/.cpp` | `UAshenBerserkStateOverrideGASAbility` — Berserker state override (+150% speed, 100% stagger immunity) | Combat |
+| 2386 | `BTTask_AshenEvaluateKineticCleaveTrajectory.h/.cpp` | `UBTTask_AshenEvaluateKineticCleaveTrajectory` — Behavior Tree Task evaluating multi-target arc paths | AI |
+| 2387 | `BTTask_AshenAvoidEnvironmentalDebris.h/.cpp` | `UBTTask_AshenAvoidEnvironmentalDebris` — Behavior Tree Task directing companions to evade falling Chaos rubble | AI |
+| 2388 | `AshenMassKineticAudioSubsystem.h/.cpp` | `UAshenMassKineticAudioSubsystem` — MetaSounds bridge modulating whoosh pitch & bass impact | Audio |
+| 2389 | `AshenUserWidget_BerserkSensoryVignetteHUD.h/.cpp` | `UAshenUserWidget_BerserkSensoryVignetteHUD` — UMG widget rendering monochromatic red sensory tunnel | UI |
+| 2390 | `AshenDestructibleChaosPillarActor.h/.cpp` | `AAshenDestructibleChaosPillarActor` — 3D world destructible stone pillar entity | World |
+| 2391 | `AshenKineticCombatSaveGameAdapter.h/.cpp` | `UAshenKineticCombatSaveGameAdapter` — Serializes kinetic destruction stats & peak Joules | Core |
+| 2392 | `AshenKineticDestructionDialogueBridge.h/.cpp` | `UAshenKineticDestructionDialogueBridge` — Injects heavy structural destruction reflections into dialogues | Narrative |
+| 2393 | `AshenAngularCounterComponent.h/.cpp` | `UAshenAngularCounterComponent` — Maps 3D impact vectors to 0-360 deg counter-strike angles | Combat |
+| 2394 | `AshenMassKineticMasterBridge.h/.cpp` | `UAshenMassKineticMasterBridge` — Master bridge coordinating kinetic cleave events, audio & UI | Orchestration |
+| 2395 | `AshenMasterBatch119AutomationTest.cpp` | `FAshenMasterBatch119AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2375: Master Batch #118 — Long-Term Canonical Promise Resolution & Campfire Marginalia Incursions (PROMISE-SPEC-059)
 **Domain:** Narrative / Companions / Combat / UI / Audio / AI / World / Core / Orchestration / QA  
 **Status:** 2,375 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
