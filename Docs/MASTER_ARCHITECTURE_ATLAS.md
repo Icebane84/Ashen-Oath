@@ -2,7 +2,7 @@
 **Document ID:** WLF-ENG-ATLAS-001 // HIERARCHICAL MASTER ARCHITECTURE ATLAS  
 **Target Engine:** Unreal Engine 5.8 C++ / Gameplay Ability System (GAS)  
 **Total Builds Clean:** 2,295 Builds (Master Batches #1–#114) | **Standard:** Option A (100% Pure Gameplay Density)  
-**V-Control:** 2026-08-20T10:05:00Z  
+**V-Control:** 2026-08-20T10:06:00Z  
 
 ---
 
@@ -132,7 +132,7 @@ graph TD
 
 ---
 
-## 🏛️ Domain Deep-Dive Subsystem Maps
+## 🏛️ Comprehensive Domain Deep-Dive Subsystem Maps
 
 ---
 
@@ -174,11 +174,12 @@ graph TD
 
 ---
 
-### Domain 3: Companion AI & The Ecology of Fellowship (ECOL-SPEC-053)
+### Domain 3: Companion AI & Symmetrical Collapse (The Shepherd's Gambit & Relational Ecology)
 
 ```mermaid
 graph TD
-    SSV_DATA["FCanonicalSoulStateVector Snapshot"] --> ECOL_SUB["UAshenRelationalEcologySubsystem"]
+    SSV_C["Corruption Amount C & Integration Debt"] --> GAMBIT_SUB["UAshenShepherdsGambitSubsystem"]
+    SSV_C --> ECOL_SUB["UAshenRelationalEcologySubsystem"]
     
     ECOL_SUB --> FAITH["Faith Under Uncertainty Equation: F(t) = P(t) * e^(-lambda * Delta_t)"]
     ECOL_SUB --> PATTERN["UAshenPatternContinuityComponent (Synarchy Ratio & Causal Repair Auditing)"]
@@ -186,8 +187,16 @@ graph TD
     PATTERN --> GARR_TAC["UAshenGarrettTacticalPredictabilityComponent (Spacing: 250uu - 800uu)"]
     PATTERN --> SERA_EMP["UAshenSerafinaEmpathicBoundaryComponent (Soot Toll & Sanctuary Wards)"]
     
-    ECOL_SUB --> BT_INTERCEPT["UBTTask_AshenRelationalIntercept (Forces 1.45x Sprint Intercept)"]
-    ECOL_SUB --> RUPTURE_ACTOR["AAshenRuptureScarAnchorActor (Acoustic Rupture & Memorial Text)"]
+    GAMBIT_SUB -->|C < 0.70| COOP["Standard Cooperation (Three-Legged Stool Loop)"]
+    GAMBIT_SUB -->|C >= 0.70| CRISIS["The Shepherd's Gambit (Symmetrical Party Collapse)"]
+    
+    CRISIS --> SERA_AI["UAshenSerafinaSoulAnchorAIComponent"]
+    SERA_AI --> SUN_PULSE["UAshenSerafinaSunPulseGASAbility (3.0s Disorient)"]
+    SERA_AI --> ANCHOR_CAST["AAshenSerafinaGoldenLeashSanctuaryActor (600uu Tether)"]
+    
+    CRISIS --> GARR_AI["UAshenGarrettSentinelContainmentAIComponent"]
+    GARR_AI --> ESCORT["Kinetic Body-Blocking Wall"]
+    GARR_AI --> DAMPENER["UAshenGarrettGloomwoodNeedleGASAbility (-0.25 C)"]
 ```
 
 ---
@@ -214,7 +223,7 @@ graph TD
 
 ---
 
-### Domain 5: The Campfire Marginalia & Physicalized Inscription Matrix (JOURNAL-SPEC-055)
+### Domain 5: The Campfire Marginalia & Living Journal (JOURNAL-SPEC-055 / UMB-UI-004)
 
 ```mermaid
 graph TD
@@ -237,13 +246,67 @@ graph TD
 
 ---
 
+### Domain 6: Diegetic Audio, Hardware Haptics & Controller Friction
+
+```mermaid
+graph TD
+    AUDIO_EVT["Audio Signal Dispatch"] --> ROUT_SUB["UAshenDiegeticAudioRoutingSubsystem"]
+    
+    ROUT_SUB --> CH_TV["World Spatial Channel (TV / Surround): Traversal Ambiance & Monster Roars"]
+    ROUT_SUB --> CH_DS["Personal Action Channel (DualSense Speaker): Garrett 'Kaelen. Now.' (300-600Hz)"]
+    ROUT_SUB --> CH_HP["Intimate Somatic Channel (Headphones): Heartbeat Frequency & Shadow Whispers"]
+    
+    FRICT_SUB["UAshenControllerFrictionSubsystem"] --> TRIG_EVAL["UAshenDualTriggerLockEvaluatorComponent (45-55% Travel)"]
+    FRICT_SUB --> BREATH_COMP["UAshenRhythmicBreathingCadenceComponent (Cross Inhale / Square Exhale)"]
+    FRICT_SUB --> CHORD_COMP["UAshenMartyrsPivotChordComponent (L3+R3 + R1+Triangle)"]
+    
+    BURNOUT_SCALAR["Serafina Empathic Burnout (0-1)"] --> DUAL_TRIG["UAshenDualSenseAdaptiveTriggerComponent (L2 Resistance)"]
+```
+
+---
+
+### Domain 7: Somatic Shaders, Material Parameter Collections & Mesh Provenance
+
+```mermaid
+graph TD
+    SSV_BROADCAST["FCanonicalSoulStateVector State Changes"] --> MPC["Material Parameter Collection (MPC_SoulState)"]
+    
+    MPC --> OATH_VFX["UAshenOathbringerSomaticVFXComponent (Nightsteel Stain 0-1 & Garnet Eyes 0.2-3.0)"]
+    MPC --> SOOT_MESH["UAshenSomaticTorsoSootMeshAdapter (Permanent Wrath Scorch Overlays)"]
+    MPC --> PALLOR_MESH["UAshenAshenPallorMeshAdapter (Skin Desaturation & Solid Crimson Eye Slits)"]
+    
+    ALCH_COAT["Burning Steel Oil Coated"] --> CUTLASS_MESH["UAshenIgnitedCutlassMeshAdapter (3.0x Flame Emissive Glow)"]
+```
+
+---
+
+### Domain 8: Garrett's Finite Alchemical Formulation & World Traversal
+
+```mermaid
+graph TD
+    WORKSTATION["Campfire Workstation Crafting"] --> ALCH_SUB["UAshenAlchemicalMatrixSubsystem"]
+    
+    ALCH_SUB --> POUCH["FAlchemicalInventoryPouch (Oils, Needles, Smoke, Flares, Caltrops)"]
+    
+    POUCH --> GA_OIL["UAshenApplyBurningSteelOilGASAbility (+35 Posture, -15% Armor for 15s)"]
+    POUCH --> GA_FLARE["UAshenDeployGhostbloomFlareGASAbility (4.0s Stun in 600uu)"]
+    POUCH --> GA_CALTROP["UAshenSeedAlchemicalCaltropsGASAbility (400uu Corridor Seeding)"]
+    
+    GA_CALTROP --> FIELD_ACTOR["AAshenPhysicalAlchemicalCaltropFieldActor (Thermal Ignition Volume)"]
+    GA_FLARE --> TRIP_ACTOR["AAshenGhostbloomTripwireAnchorActor (Detonation Trigger)"]
+    
+    ANOMALY["World Anomaly Spawn"] --> STAR_ACTOR["AAshenStarStriderAnomalyActor (Solid Light Bridges & Whisper Muting)"]
+```
+
+---
+
 ## 🏛️ Master Summary & Architectural Standards
 
 | Domain Index | Domain Focus | Primary Kernel Interface | Master Bridge Header |
 |---|---|---|---|
 | **Domain 1** | Soul, Memory & Epistemic Grounding | `FCanonicalSoulStateVector`, `FCanonicalCombatEvent` | [`AshenSoulConstellationMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenSoulConstellationMasterBridge.h) |
 | **Domain 2** | Combat, Trial of Will & Relational GAS | `ETrialOfWillChoice`, `0.75s` Dilation, `CostlyPresence` | [`AshenExistentialMeaningMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenExistentialMeaningMasterBridge.h) |
-| **Domain 3** | Companion AI & Ecology of Fellowship | `Faith Under Uncertainty`, `Synarchy Ratio` | [`AshenRelationalEcologyMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenRelationalEcologyMasterBridge.h) |
+| **Domain 3** | Companion AI, Shepherd's Gambit & Ecology | `Faith Under Uncertainty`, `Synarchy Ratio`, `Gambit` | [`AshenRelationalEcologyMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenRelationalEcologyMasterBridge.h) |
 | **Domain 4** | Inner Voice Compiler & Cognitive Firewall | `IVC-001`, `4-Stage Zero-Entropy Firewall` | [`AshenInnerVoiceMasterOrchestratorBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenInnerVoiceMasterOrchestratorBridge.h) |
 | **Domain 5** | Campfire Marginalia & Living Journal | `CMM-001`, `Spatial Anti-Collision Engine` | [`AshenCampfireMarginaliaMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenCampfireMarginaliaMasterBridge.h) |
 | **Domain 6** | Diegetic Audio, Haptics & Friction | `3-Channel Proximity`, `50% Trigger Lock` | [`AshenControllerFrictionMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenControllerFrictionMasterBridge.h) |
