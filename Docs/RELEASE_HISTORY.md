@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2315: Master Batch #115 — The Companion Intent Inference & Dynamic Relational Adaptation Engine (INTENT-SPEC-056)
+**Domain:** Companions / AI / Combat / Audio / UI / Narrative / Core / Orchestration / QA  
+**Status:** 2,315 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2296 | `AshenCompanionIntentTypes.h` | `AshenCompanionIntentTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Companions |
+| 2297 | `AshenCompanionIntentInferenceSubsystem.h/.cpp` | `UAshenCompanionIntentInferenceSubsystem` — Evaluates formation breaks & queries historical patterns | Companions |
+| 2298 | `AshenGarrettIntentEvaluatorComponent.h/.cpp` | `UAshenGarrettIntentEvaluatorComponent` — Garrett tactical intent evaluator ("Mr. Hero" vs Flank vs Body-Block) | Companions |
+| 2299 | `AshenSerafinaEmpathicIntentEvaluatorComponent.h/.cpp` | `UAshenSerafinaEmpathicIntentEvaluatorComponent` — Serafina moral intent evaluator & defensive sanctuary hold | Companions |
+| 2300 | `AshenHistoricalIntentProvenanceAuditor.h/.cpp` | `UAshenHistoricalIntentProvenanceAuditor` — Audits historical patterns to compute intent confidence tiers | Companions |
+| 2301 | `AshenShoulderToShoulderCommitGASAbility.h/.cpp` | `UAshenShoulderToShoulderCommitGASAbility` — High-trust companion rush granting +40% mutual poise hardening | Combat |
+| 2302 | `AshenCompanionConfrontationInterveneGASAbility.h/.cpp` | `UAshenCompanionConfrontationInterveneGASAbility` — High-trust companion physical body-block stopping blind rage | Combat |
+| 2303 | `BTTask_AshenEvaluatePlayerIntent.h/.cpp` | `UBTTask_AshenEvaluatePlayerIntent` — Behavior Tree Task querying intent subsystem to update Blackboard | AI |
+| 2304 | `BTTask_AshenShoulderToShoulderSprint.h/.cpp` | `UBTTask_AshenShoulderToShoulderSprint` — Behavior Tree Task executing synchronized 200uu close-formation rush | AI |
+| 2305 | `BTDecorator_AshenIntentConfidenceGate.h/.cpp` | `UBTDecorator_AshenIntentConfidenceGate` — Behavior Tree Decorator gating tactical decisions by confidence | AI |
+| 2306 | `AshenRelationalContextBarkDispatcher.h/.cpp` | `UAshenRelationalContextBarkDispatcher` — Dispatches barks ("There goes our Mr. Hero again") | Audio |
+| 2307 | `AshenCompanionBreathingProximityAdapter.h/.cpp` | `UAshenCompanionBreathingProximityAdapter` — Synchronizes companion sprint breathing when charging in sync | Audio |
+| 2308 | `AshenUserWidget_WordlessResonancePromptHUD.h/.cpp` | `UAshenUserWidget_WordlessResonancePromptHUD` — Subtle gold/amber UI vignette flare during formation charge | UI |
+| 2309 | `AshenCompanionFormationHapticAdapter.h/.cpp` | `UAshenCompanionFormationHapticAdapter` — DualSense tactile haptic rumble for synchronized footsteps | Combat |
+| 2310 | `AshenEndangeredInnocentAnchorActor.h/.cpp` | `AAshenEndangeredInnocentAnchorActor` — 3D world encounter entity defining civilian rescue scenarios | World |
+| 2311 | `AshenCompanionIntentSaveGameAdapter.h/.cpp` | `UAshenCompanionIntentSaveGameAdapter` — Serializes historical intent decisions and trust interpretations | Core |
+| 2312 | `AshenCompanionIntentDialogueBridge.h/.cpp` | `UAshenCompanionIntentDialogueBridge` — Injects formation-break context into campfire dialogue trees | Narrative |
+| 2313 | `AshenCompanionFormationMeshAdapter.h/.cpp` | `UAshenCompanionFormationMeshAdapter` — Drives synchronized lean & sprint animation parameters | Companions |
+| 2314 | `AshenCompanionIntentMasterBridge.h/.cpp` | `UAshenCompanionIntentMasterBridge` — Master bridge connecting Intent Subsystem, State Registry & GAS | Orchestration |
+| 2315 | `AshenMasterBatch115AutomationTest.cpp` | `FAshenMasterBatch115AutomationTest` — Comprehensive value-asserting QA automation test suite | QA |
+
+---
+
 ### Build 2295: Master Batch #114 — The Campfire Marginalia & Physicalized Relational Inscription Matrix (JOURNAL-SPEC-055)
 **Domain:** Companions / UI / Soul / Memory / Core Architecture / Audio / AI / Narrative / Orchestration / QA  
 **Status:** 2,295 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
