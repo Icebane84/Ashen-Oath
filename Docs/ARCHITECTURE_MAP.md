@@ -1,6 +1,6 @@
 # Ashen Oath — Architecture Map & Vertical Slices
-**Status:** Clean Production Architecture | **2,275 Builds Clean** (0 Errors, 0 Warnings)
-**Unreal Engine Version:** 5.8 | **Master Milestone:** 2275 (Master Batches #1–#113)
+**Status:** Clean Production Architecture | **2,295 Builds Clean** (0 Errors, 0 Warnings)
+**Unreal Engine Version:** 5.8 | **Master Milestone:** 2295 (Master Batches #1–#114)
 
 ---
 
@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Master Batch #114 (Builds 2276–2295)**: The Campfire Marginalia & Physicalized Relational Inscription Matrix (JOURNAL-SPEC-055) (100% Pure Gameplay Density)
 - **Master Batch #113 (Builds 2256–2275)**: The Inner Voice Compiler & Phenomenological Cognitive Firewall (VOICE-SPEC-054) (100% Pure Gameplay Density)
 - **Master Batch #112 (Builds 2236–2255)**: The Ecology of Fellowship — Pattern Continuity, Asymmetric Trust & Remembered Repair Matrix (ECOL-SPEC-053) (100% Pure Gameplay Density)
 - **Master Batch #111 (Builds 2216–2235)**: The Canonical Somatic Translation Engine & Unified Event Spine (ORCH-SPEC-052) (100% Pure Gameplay Density)

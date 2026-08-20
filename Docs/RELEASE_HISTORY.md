@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2295: Master Batch #114 — The Campfire Marginalia & Physicalized Relational Inscription Matrix (JOURNAL-SPEC-055)
+**Domain:** Companions / UI / Soul / Memory / Core Architecture / Audio / AI / Narrative / Orchestration / QA  
+**Status:** 2,295 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2276 | `AshenCampfireMarginaliaTypes.h` | `AshenCampfireMarginaliaTypes` — Enums (3), Structs (3), Multicast Delegates (4) | Companions |
+| 2277 | `AshenCompanionMarginaliaEvaluatorComponent.h/.cpp` | `UAshenCompanionMarginaliaEvaluatorComponent` — Multi-author companion annotations & rest evaluator | Companions |
+| 2278 | `AshenMarginaliaSpatialLayoutEngine.h/.cpp` | `UAshenMarginaliaSpatialLayoutEngine` — Spatial envelope manager & 90/140 char budget clamping | Companions |
+| 2279 | `AshenDeterministicMarginaliaFallbackProvider.h/.cpp` | `UAshenDeterministicMarginaliaFallbackProvider` — Pre-authored character-authentic annotations keyed to trust | Companions |
+| 2280 | `AshenMarginaliaProvenanceValidator.h/.cpp` | `UAshenMarginaliaProvenanceValidator` — Audits target memory IDs against active imprint buffers | Companions |
+| 2281 | `AshenUserWidget_LivingJournalSpreadPageHUD.h/.cpp` | `UAshenUserWidget_LivingJournalSpreadPageHUD` — Multi-layer UMG/Slate widget for physical parchment spread | UI |
+| 2282 | `AshenUserWidget_MarginaliaAnnotationSlotHUD.h/.cpp` | `UAshenUserWidget_MarginaliaAnnotationSlotHUD` — Individual margin anchor slot with scratch-out overlays | UI |
+| 2283 | `AshenParchmentDynamicMaterialAdapter.h/.cpp` | `UAshenParchmentDynamicMaterialAdapter` — Dynamic vertex jitter & ink bleed runtime texture masks | UI |
+| 2284 | `AshenCampfireJournalCommunionActor.h/.cpp` | `AAshenCampfireJournalCommunionActor` — 3D world campfire interaction point triggering page updates | World |
+| 2285 | `AshenMarginaliaPenmanshipGASAbility.h/.cpp` | `UAshenMarginaliaPenmanshipGASAbility` — GAS ability triggering dynamic penmanship marks upon crystallization | Combat |
+| 2286 | `BTTask_AshenCampfireJournalAudit.h/.cpp` | `UBTTask_AshenCampfireJournalAudit` — Companion AI behavior tree task triggering sketching at camp | AI |
+| 2287 | `AshenPenmanshipDiegeticAudioComponent.h/.cpp` | `UAshenPenmanshipDiegeticAudioComponent` — Charcoal scratching, quill scratching & page turning audio | Audio |
+| 2288 | `AshenUserWidget_MarginaliaCrossoutOverlayHUD.h/.cpp` | `UAshenUserWidget_MarginaliaCrossoutOverlayHUD` — Animated violent strike-through lines & charcoal scratches | UI |
+| 2289 | `AshenBotanicalPressingAdapter.h/.cpp` | `UAshenBotanicalPressingAdapter` — Renders Serafina's pressed silverleaf herbs in margin canvas | UI |
+| 2290 | `AshenJournalPageTurnPostProcessAdapter.h/.cpp` | `UAshenJournalPageTurnPostProcessAdapter` — Atmospheric camera DOF focus when opening journal at camp | UI |
+| 2291 | `AshenCampfireMarginaliaSaveGameAdapter.h/.cpp` | `UAshenCampfireMarginaliaSaveGameAdapter` — Serializes historical margin entries, cross-outs & slot bindings | Core |
+| 2292 | `AshenMarginaliaDialogueBridge.h/.cpp` | `UAshenMarginaliaDialogueBridge` — Injects margin corrections into next-day campfire dialogue | Narrative |
+| 2293 | `AshenMarginaliaMeshAdapter.h/.cpp` | `UAshenMarginaliaMeshAdapter` — Dynamic skeletal prop mesh for physical leather journal prop | Companions |
+| 2294 | `AshenCampfireMarginaliaMasterBridge.h/.cpp` | `UAshenCampfireMarginaliaMasterBridge` — Master orchestrator connecting IVC, State Registry & Slate UI | Orchestration |
+| 2295 | `AshenMasterBatch114AutomationTest.cpp` | `FAshenMasterBatch114AutomationTest` — Comprehensive value-asserting QA automation test suite | QA |
+
+---
+
 ### Build 2275: Master Batch #113 — The Inner Voice Compiler & Phenomenological Cognitive Firewall (VOICE-SPEC-054)
 **Domain:** Soul / Memory / Core Architecture / Combat / Audio / UI / AI / Narrative / Core / Orchestration / QA  
 **Status:** 2,275 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

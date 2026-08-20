@@ -1,31 +1,81 @@
-// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
+// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
 
 #include "Companions/AshenCompanionMarginaliaEvaluatorComponent.h"
+#include "Companions/AshenMarginaliaSpatialLayoutEngine.h"
+#include "Companions/AshenDeterministicMarginaliaFallbackProvider.h"
+#include "Companions/AshenMarginaliaProvenanceValidator.h"
+#include "Soul/AshenSoulStateVector.h"
 
 UAshenCompanionMarginaliaEvaluatorComponent::UAshenCompanionMarginaliaEvaluatorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UAshenCompanionMarginaliaEvaluatorComponent::EvaluateMarginalia(const FSoulStateVector& StateVector)
+void UAshenCompanionMarginaliaEvaluatorComponent::BeginPlay()
 {
-	if (StateVector.GarrettTrust >= 0.7f)
+	Super::BeginPlay();
+
+	LayoutEngine = NewObject<UAshenMarginaliaSpatialLayoutEngine>(this);
+	FallbackProvider = NewObject<UAshenDeterministicMarginaliaFallbackProvider>(this);
+	ProvenanceValidator = NewObject<UAshenMarginaliaProvenanceValidator>(this);
+}
+
+TArray<FMarginaliaEntry> UAshenCompanionMarginaliaEvaluatorComponent::EvaluateCampfireMarginalia(
+	const FCanonicalSoulStateVector& CurrentSoulState,
+	const TArray<FString>& ActiveImprints)
+{
+	TArray<FMarginaliaEntry> RawEntries;
+
+	const FString PrimaryMemory = ActiveImprints.Num() > 0 ? ActiveImprints[0] : TEXT("");
+
+	if (FallbackProvider)
 	{
-		ActiveGarrettMarginalia = TEXT("Garrett: 'You charged again today. Let the trap do the bleeding next time.'");
+		RawEntries = FallbackProvider->GenerateDeterministicEntries(CurrentSoulState, PrimaryMemory);
+	}
+
+	TArray<FMarginaliaEntry> ValidatedEntries;
+	if (ProvenanceValidator)
+	{
+		ProvenanceValidator->ValidateEntries(RawEntries, ActiveImprints, ValidatedEntries);
 	}
 	else
 	{
-		ActiveGarrettMarginalia = TEXT("Garrett: 'Keep your guard up. I won't cover another blind charge.'");
+		ValidatedEntries = RawEntries;
 	}
 
-	if (StateVector.SerafinaTrust >= 0.7f)
+	TArray<FMarginaliaEntry> FinalLayoutEntries;
+	if (LayoutEngine)
 	{
-		ActiveSerafinaMarginalia = TEXT("Serafina: 'The corruption receded after accepting help. That matters.'");
+		FinalLayoutEntries = LayoutEngine->ResolveSpatialCollisions(ValidatedEntries);
 	}
 	else
 	{
-		ActiveSerafinaMarginalia = TEXT("Serafina: 'The shadow lingers near the bridge. Be careful.'");
+		FinalLayoutEntries = ValidatedEntries;
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("UAshenCompanionMarginaliaEvaluatorComponent: Evaluated marginalia successfully."));
+	OnMarginaliaBatchGenerated.Broadcast(FinalLayoutEntries);
+	return FinalLayoutEntries;
+}
+
+void UAshenCompanionMarginaliaEvaluatorComponent::EvaluateMarginalia(const FSoulStateVector& State)
+{
+	FCanonicalSoulStateVector CanonicalState;
+	CanonicalState.DominantLens = (State.PrimaryLens == EInterpretiveLens::Grace) ? EOntologicalLens::Grace : EOntologicalLens::Defiance;
+	CanonicalState.AccumulatedDysregulation = State.IntegrationDebt;
+
+	TArray<FString> MockImprints;
+	MockImprints.Add(TEXT("mem_default_001"));
+
+	const TArray<FMarginaliaEntry> Entries = EvaluateCampfireMarginalia(CanonicalState, MockImprints);
+	for (const FMarginaliaEntry& Entry : Entries)
+	{
+		if (Entry.Author == EMarginaliaAuthor::Garrett)
+		{
+			CachedGarrettMarginalia = Entry.InscriptionText;
+		}
+		else if (Entry.Author == EMarginaliaAuthor::Serafina)
+		{
+			CachedSerafinaMarginalia = Entry.InscriptionText;
+		}
+	}
 }
