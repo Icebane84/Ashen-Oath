@@ -17,7 +17,7 @@ class ASHENOATH_API UAshenUserWidget_ShatteredVirtueStatus : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|UI")
-	void UpdateVirtueStatusDisplay(FName FractureID, bool bIsActive);
+	void UpdateVirtueStatusDisplay(FName FractureID, bool bInFractureActive);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AshenOath|UI")
 	FName DisplayedFractureID;

@@ -3,11 +3,11 @@
 
 #include "AshenUserWidget_TSCCommandWheel.h"
 
-void UAshenUserWidget_TSCCommandWheel::DisplayTSCCommandWheel(bool bIsActive, float TimeDilation)
+void UAshenUserWidget_TSCCommandWheel::DisplayTSCCommandWheel(bool bInWheelActive, float TimeDilation)
 {
-	bTSCWheelActive = bIsActive;
+	bTSCWheelActive = bInWheelActive;
 	ActiveDilation = TimeDilation;
 
 	UE_LOG(LogTemp, Log, TEXT("UAshenUserWidget_TSCCommandWheel: TSC Command Wheel Display — Active: %s, Dilation: %.2fx."),
-		bIsActive ? TEXT("TRUE") : TEXT("FALSE"), TimeDilation);
+		bInWheelActive ? TEXT("TRUE") : TEXT("FALSE"), TimeDilation);
 }

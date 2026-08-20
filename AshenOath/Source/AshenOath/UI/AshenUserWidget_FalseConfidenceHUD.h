@@ -17,7 +17,7 @@ class ASHENOATH_API UAshenUserWidget_FalseConfidenceHUD : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|UI")
-	void SetFalseConfidenceDeceptionState(bool bIsActive, float Intensity);
+	void SetFalseConfidenceDeceptionState(bool bInDeceptionActive, float Intensity);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AshenOath|UI")
 	bool bDeceptionOverlayActive = false;

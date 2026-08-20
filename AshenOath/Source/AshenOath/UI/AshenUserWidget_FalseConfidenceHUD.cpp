@@ -3,12 +3,12 @@
 
 #include "AshenUserWidget_FalseConfidenceHUD.h"
 
-void UAshenUserWidget_FalseConfidenceHUD::SetFalseConfidenceDeceptionState(bool bIsActive, float Intensity)
+void UAshenUserWidget_FalseConfidenceHUD::SetFalseConfidenceDeceptionState(bool bInDeceptionActive, float Intensity)
 {
-	bDeceptionOverlayActive = bIsActive;
+	bDeceptionOverlayActive = bInDeceptionActive;
 	DeceptionOverlayIntensity = Intensity;
 
-	if (bIsActive)
+	if (bInDeceptionActive)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UAshenUserWidget_FalseConfidenceHUD: FALSE CONFIDENCE DECEPTIVE HUD ACTIVE — Sharpened Viewport, Intensity: %.2f."), Intensity);
 	}

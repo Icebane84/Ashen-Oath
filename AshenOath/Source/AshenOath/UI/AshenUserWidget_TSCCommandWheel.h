@@ -17,7 +17,7 @@ class ASHENOATH_API UAshenUserWidget_TSCCommandWheel : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|UI")
-	void DisplayTSCCommandWheel(bool bIsActive, float TimeDilation);
+	void DisplayTSCCommandWheel(bool bInWheelActive, float TimeDilation);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AshenOath|UI")
 	bool bTSCWheelActive = false;

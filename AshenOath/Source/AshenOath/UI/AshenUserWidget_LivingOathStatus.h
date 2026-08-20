@@ -17,7 +17,7 @@ class ASHENOATH_API UAshenUserWidget_LivingOathStatus : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|UI")
-	void UpdateLivingOathDisplay(FName OathPactID, bool bIsActive);
+	void UpdateLivingOathDisplay(FName OathPactID, bool bInOathBound);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AshenOath|UI")
 	FName DisplayedOathPactID;

@@ -3,11 +3,11 @@
 
 #include "AshenUserWidget_LivingOathStatus.h"
 
-void UAshenUserWidget_LivingOathStatus::UpdateLivingOathDisplay(FName OathPactID, bool bIsActive)
+void UAshenUserWidget_LivingOathStatus::UpdateLivingOathDisplay(FName OathPactID, bool bInOathBound)
 {
 	DisplayedOathPactID = OathPactID;
-	bOathBound = bIsActive;
+	bOathBound = bInOathBound;
 
 	UE_LOG(LogTemp, Log, TEXT("UAshenUserWidget_LivingOathStatus: Living Oath display updated — '%s' (Bound: %s)."),
-		*OathPactID.ToString(), bIsActive ? TEXT("TRUE") : TEXT("FALSE"));
+		*OathPactID.ToString(), bInOathBound ? TEXT("TRUE") : TEXT("FALSE"));
 }

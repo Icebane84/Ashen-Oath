@@ -1,0 +1,3 @@
+{"epoch": 1, "session_id": "sess_001", "event": "TrialOfWill_Defiance", "resolve": 0.85, "debt": 0.25, "coherence": 0.95}
+{"epoch": 2, "session_id": "sess_001", "event": "Companion_MrHeroCommit", "resolve": 0.9, "debt": 0.2, "coherence": 0.98}
+{"epoch": 3, "session_id": "sess_001", "event": "Campfire_Marginalia_Crossout", "resolve": 0.75, "debt": 0.5, "coherence": 0.92}

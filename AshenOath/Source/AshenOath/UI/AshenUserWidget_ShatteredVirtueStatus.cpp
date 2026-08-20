@@ -3,11 +3,11 @@
 
 #include "AshenUserWidget_ShatteredVirtueStatus.h"
 
-void UAshenUserWidget_ShatteredVirtueStatus::UpdateVirtueStatusDisplay(FName FractureID, bool bIsActive)
+void UAshenUserWidget_ShatteredVirtueStatus::UpdateVirtueStatusDisplay(FName FractureID, bool bInFractureActive)
 {
 	DisplayedFractureID = FractureID;
-	bFractureActive = bIsActive;
+	bFractureActive = bInFractureActive;
 
 	UE_LOG(LogTemp, Log, TEXT("UAshenUserWidget_ShatteredVirtueStatus: Virtue Fracture UI updated — '%s' (Active: %s)."),
-		*FractureID.ToString(), bIsActive ? TEXT("TRUE") : TEXT("FALSE"));
+		*FractureID.ToString(), bInFractureActive ? TEXT("TRUE") : TEXT("FALSE"));
 }
