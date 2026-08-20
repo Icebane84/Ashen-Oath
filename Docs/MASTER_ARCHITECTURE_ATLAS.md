@@ -1,22 +1,23 @@
 # MASTER ARCHITECTURE ATLAS: THE MACRO-SYSTEMIC CLOSED-LOOP ENGINE
-**Document ID:** WLF-ENG-ATLAS-001 // HIERARCHICAL MASTER ARCHITECTURE ATLAS
-**Target Engine:** Unreal Engine 5.8 C++ / Gameplay Ability System (GAS)
-**Total Builds Clean:** 2,115 Builds (Master Batches #1–#105) | **Standard:** Option A (100% Pure Gameplay Density)
+**Document ID:** WLF-ENG-ATLAS-001 // HIERARCHICAL MASTER ARCHITECTURE ATLAS  
+**Target Engine:** Unreal Engine 5.8 C++ / Gameplay Ability System (GAS)  
+**Total Builds Clean:** 2,295 Builds (Master Batches #1–#114) | **Standard:** Option A (100% Pure Gameplay Density)  
+**V-Control:** 2026-08-20T10:05:00Z  
 
 ---
 
 ## 🏛️ Executive Philosophy & Systemic Nervous System
 
-In *Ashen Oath*, subsystems do not exist as isolated modules. The **Architecture of Consequence** acts as a **Universal Synaptic Nervous System**, continuously transforming momentary kinetic combat actions into permanent psychological state, dynamic companion behavior, physical hardware resistance, and tangible world provenance.
+In *Ashen Oath*, subsystems do not exist as isolated modules. The **Architecture of Consequence** acts as a **Universal Synaptic Nervous System**, continuously transforming momentary kinetic combat actions into permanent psychological state, dynamic companion behavior, physical hardware resistance, internal voice reflections, and tangible world provenance.
 
 ```
-                           [ THE RUNTIME KERNEL (FSoulStateVector) ]
-                                               │
-         ┌───────────────────┬─────────────────┼───────────────────┬───────────────────┐
-         ▼                   ▼                 ▼                   ▼                   ▼
-    [ COMBAT & GAS ]   [ COMPANION AI ]   [ HARDWARE AUDIO ]  [ SHADERS & MESH ]  [ LIVING JOURNAL ]
-    poise crises ->    spacing & barks;   controller voice &  soot on steel &     handwriting ink &
-    Trial of Will      containment mode   trigger resistance  ashen pallor skin   charcoal sketches
+                           [ THE RUNTIME KERNEL (FCanonicalSoulStateVector) ]
+                                                │
+         ┌───────────────────┬──────────────────┼───────────────────┬───────────────────┬───────────────────┐
+         ▼                   ▼                  ▼                   ▼                   ▼                   ▼
+    [ COMBAT & GAS ]   [ COMPANION AI ]   [ HARDWARE AUDIO ]  [ SHADERS & MESH ]  [ INNER VOICE (IVC) ] [ LIVING JOURNAL ]
+    poise crises ->    spacing & barks;   controller voice &  soot on steel &     DualSense whispers &  multi-author ink,
+    Trial of Will      containment mode   trigger resistance  ashen pallor skin   4-stage C++ firewall  charcoal crossouts
 ```
 
 ---
@@ -34,11 +35,12 @@ graph TD
         
         WILL --> CH_A["[A] DEFIANCE: Blade Plant (+2.5 Debt, 50% Poise Hardening)"]
         WILL --> CH_B["[B] WRATH: Necrotic Counter-Slam (+5.0 Taint, Armor Shred)"]
-        WILL --> CH_C["[C] TRUST: Bulwark Fallback (+3.5 Trust, -5% Debt, 8s Resonance)"]
+        WILL --> CH_C["[C] GRACE: Bulwark Fallback (+3.5 Trust, -5% Debt, 8s Resonance)"]
         
         FRICT["Controller Friction: L2/R2 50% Trigger Lock & Chest Starburst Breathing Cadence"] -.-> WILL
         ALCH["Garrett's Alchemy: Burning Steel Oils, Caltrop Grid & Flash Flares"] --> INP
         TEM["TEM Adversarial AI: Circuit Breaker (<0.15f Utility) & Skeletal Sight Tracing"] --> INP
+        COSTLY["Costly Presence: Sacrificial 1.45x Sprint Intercepts (ECOL-SPEC-053)"] --> INP
     end
 
     %% =========================================================================
@@ -46,12 +48,12 @@ graph TD
     %% =========================================================================
     subgraph S2 ["2. Kernel Mutation, Memory Pipeline & Epistemic Grounding"]
         direction TB
-        CH_A & CH_B & CH_C --> SSV["FSoulStateVector (128-Byte Cache Line: Resolve, Taint, Trust, Burnout)"]
+        CH_A & CH_B & CH_C --> SSV["FCanonicalSoulStateVector (Resolve, Corruption, Isolation, IntegrationDebt)"]
         
-        SSV --> EPI_0["Layer 0: FCanonicalCombatEvent (Immutable Objective Facts)"]
-        EPI_0 --> EPI_1["Layer 1: Permanent Frame Perks (Callout Timers & Hitbox Tolerances)"]
-        EPI_0 --> DEBT["Integration Debt Pipeline (0-49% Buffer, 50-74% Bleed, 75-99% Noise, 100% Collapse)"]
-        EPI_0 --> TAM["TAM-001 Memory Engine (Recency, Consistency, Severity Weights)"]
+        SSV --> SPINE["Unified Event Spine & Somatic Translator (ORCH-SPEC-052)"]
+        SPINE --> DEBT["Integration Debt Pipeline (Dormant -> MemoryBleed -> RuntimeNoise -> Collapse)"]
+        SPINE --> TAM["TAM-001 Memory Engine (Recency, Consistency, Severity Weights)"]
+        SPINE --> ECOL["Relational Ecology: Pattern Continuity & Faith Equation (ECOL-SPEC-053)"]
     end
 
     %% =========================================================================
@@ -74,22 +76,30 @@ graph TD
             HAP_BEAT["Haptic Actuators: Sub-Bass Heartbeat Pulses for Imminent Collapse"]
         end
         
-        subgraph DOM_VFX ["C. Somatic Shaders & Mesh Provenance"]
+        subgraph DOM_IVC ["C. Inner Voice Compiler & Cognitive Firewall (VOICE-SPEC-054)"]
+            IVC_GATE["Salience Gate (Debt Crossings 0.5/0.75, Ruptures >= 0.15)"]
+            IVC_WALL["4-Stage Zero-Entropy Firewall (Schema, Provenance, Tag, Clamp)"]
+            IVC_FALL["Deterministic Fallback Dictionary (Defiance, Grace, Wrath)"]
+            IVC_SPKR["Shadow Self Whispers direct to DualSense Palm Speaker"]
+        end
+        
+        subgraph DOM_VFX ["D. Somatic Shaders & Mesh Provenance"]
             VFX_WEAP["Oathbringer: Nightsteel Stain (0-1) & Garnet Wolf Eyes (0.2-3.0)"]
             VFX_TORSO["Kaelen Torso: Permanent Ash-Soot Scorch Overlays from Wrath"]
             VFX_FACE["Ashen Pallor: Face Skin Desaturation & Solid Crimson Eye Slits"]
             VFX_BLADE["Garrett Cutlasses: 3.0x Flame Emissive Thermal Ignition"]
         end
         
-        subgraph DOM_UI ["D. Living Journal & Diegetic UI"]
-            UI_JOURN["Diegetic Living Journal (UMB-UI-004): 3D Parchment & Multi-Author Ink"]
-            UI_MARG["Garrett Charcoal Weak-Point Diagrams & Serafina Pressed Botanicals"]
-            UI_SUPP["Symbiotic Resonance HUD Suppression (100% UI-Less Cinematic Combat)"]
+        subgraph DOM_UI ["E. Living Journal & Campfire Marginalia (JOURNAL-SPEC-055)"]
+            UI_JOURN["Diegetic Living Journal (UMB-UI-004): 3D Parchment & Dynamic Masks"]
+            UI_LAYOUT["Spatial Layout Engine (90/140 Char Anti-Collision Clamping)"]
+            UI_MARG["Garrett Charcoal Cross-Outs & Serafina Pressed Botanicals"]
+            UI_JITT["Parchment Vertex Jitter: Sin(Time * 20.0) * JitterIntensity"]
         end
         
-        subgraph DOM_WLD ["E. World, Traversal & Mindscape Crucibles"]
-            WLD_REST["Heartstone Campfire: InvokeIntegration() Identity Compilation"]
-            WLD_LENS["Interpretive Lenses: Accountability ('Alone') / Grace ('Together') / Utility ('Pragmatic')"]
+        subgraph DOM_WLD ["F. World, Traversal & Mindscape Crucibles"]
+            WLD_REST["Heartstone Campfire: Multi-Author Marginalia Compilation"]
+            WLD_LENS["Interpretive Lenses: Defiance ('Alone') / Grace ('Together') / Wrath ('Vengeance')"]
             WLD_STAR["Star-Strider Anomalies: Traversable Solid Light Bridges & Whisper Muting"]
         end
     end
@@ -100,10 +110,10 @@ graph TD
     subgraph S4 ["4. Provenance Emergence & Closed-Loop Continuity"]
         direction TB
         PROV_STEEL["The Scar on Steel (Oathbringer Weapon Provenance)"]
-        PROV_INK["The Margin in Ink (Living Journal Shared Memory History)"]
-        PROV_TRUST["The Trust in Combat (Instinctive Sync Finishers & Flank Interceptions)"]
+        PROV_INK["The Margin in Ink (Living Journal Multi-Author History)"]
+        PROV_TRUST["The Trust in Combat (Costly Presence Intercepts & Wordless Reconciliation)"]
         
-        PROV_STEEL & PROV_INK & PROV_TRUST --> CYCLE["Accumulated Provenance Rewrites Future Combat Reality"]
+        PROV_STEEL & PROV_INK & PROV_TRUST --> CYCLE["Accumulated Provenance Rewrites Future Combat & Dialogue Reality"]
     end
 
     %% =========================================================================
@@ -111,11 +121,12 @@ graph TD
     %% =========================================================================
     SSV ==> DOM_AI
     SSV ==> DOM_AUD
+    SSV ==> DOM_IVC
     SSV ==> DOM_VFX
     SSV ==> DOM_UI
     SSV ==> DOM_WLD
 
-    DOM_AI & DOM_AUD & DOM_VFX & DOM_UI & DOM_WLD ==> S4
+    DOM_AI & DOM_AUD & DOM_IVC & DOM_VFX & DOM_UI & DOM_WLD ==> S4
     CYCLE ==> INP
 ```
 
@@ -131,7 +142,7 @@ graph TD
 graph TD
     EVENT["Incoming Combat Event (Parry / Stagger / Kill)"] --> EPI["UAshenEpistemicGroundingSubsystem"]
     EPI --> L0["FCanonicalCombatEvent (Immutable Ground Truth)"]
-    L0 --> SSV["FSoulStateVector (Resolve, Taint, Trust, Burnout)"]
+    L0 --> SSV["FCanonicalSoulStateVector (Resolve, Corruption, Isolation, IntegrationDebt)"]
     
     SSV --> DEBT_COMP["UAshenIntegrationDebtPipelineComponent"]
     DEBT_COMP --> D_STAGE["EIntegrationDebtStage: Dormant -> MemoryBleed -> RuntimeNoise -> ForcedCollapse"]
@@ -140,12 +151,12 @@ graph TD
     TAM_SUB --> TAM_WEIGHTS["FTAM001MemoryWeights: Recency / Consistency / Severity"]
     
     SSV --> MINDSCAPE["UAshenKeystoneMemoryCompilerComponent"]
-    MINDSCAPE --> LENS["InvokeIntegration(): Accountability | Grace | Utility"]
+    MINDSCAPE --> LENS["InvokeIntegration(): Defiance | Grace | Wrath"]
 ```
 
 ---
 
-### Domain 2: The Combat, Trial of Will & GAS Ability Pipeline
+### Domain 2: Combat, Trial of Will & Relational GAS Interventions
 
 ```mermaid
 graph TD
@@ -156,98 +167,72 @@ graph TD
     TOW_EVAL --> GA_WRA["UAshenWrathNecroticCounterGASAbility (950 DMG, +5.0 Taint, Armor Shred)"]
     TOW_EVAL --> GA_TRU["UAshenTrustBulwarkFallbackGASAbility (+3.5 Trust, -5% Debt, 8s Resonance)"]
     
-    TOW_EVAL --> GA_SWEEP["UAshenUnchainedKineticSweepGASAbility (1100 DMG 180° Indiscriminate Cleave)"]
-    GA_SWEEP --> LEECH["UAshenUnchainedVitalLeechComponent (15% Companion Reserve Siphon)"]
+    TOW_EVAL --> GA_COST["UAshenCostlyPresenceInterventionGASAbility (1.45x Sprint Intercept, 100% Damage Absorption)"]
+    TOW_EVAL --> GA_RECON["UAshenWordlessReconciliationGASAbility (1500 Poise DMG Synchronized Strike)"]
+    TOW_EVAL --> GA_TRANS["UAshenEmpathicTransferenceSootGASAbility (Transference Dysregulation Channel)"]
 ```
 
 ---
 
-### Domain 3: Companion AI & Symmetrical Collapse (The Shepherd's Gambit)
+### Domain 3: Companion AI & The Ecology of Fellowship (ECOL-SPEC-053)
 
 ```mermaid
 graph TD
-    SSV_C["Corruption Amount C"] --> GAMBIT_SUB["UAshenShepherdsGambitSubsystem"]
+    SSV_DATA["FCanonicalSoulStateVector Snapshot"] --> ECOL_SUB["UAshenRelationalEcologySubsystem"]
     
-    GAMBIT_SUB -->|C < 0.70| COOP["Standard Cooperation (Three-Legged Stool Loop)"]
-    COOP --> TAM_AI["UAshenTAM001AIDirectorComponent (Spacing: 500uu -> 250uu)"]
+    ECOL_SUB --> FAITH["Faith Under Uncertainty Equation: F(t) = P(t) * e^(-lambda * Delta_t)"]
+    ECOL_SUB --> PATTERN["UAshenPatternContinuityComponent (Synarchy Ratio & Causal Repair Auditing)"]
     
-    GAMBIT_SUB -->|C >= 0.70| CRISIS["The Shepherd's Gambit (Symmetrical Party Collapse)"]
-    CRISIS --> SERA_AI["UAshenSerafinaSoulAnchorAIComponent"]
-    SERA_AI -->|Ally Targeted| SUN_PULSE["UAshenSerafinaSunPulseGASAbility (3.0s Disorient)"]
-    SERA_AI -->|Wild / Untargeted| ANCHOR_CAST["AAshenSerafinaGoldenLeashSanctuaryActor (600uu Tether)"]
+    PATTERN --> GARR_TAC["UAshenGarrettTacticalPredictabilityComponent (Spacing: 250uu - 800uu)"]
+    PATTERN --> SERA_EMP["UAshenSerafinaEmpathicBoundaryComponent (Soot Toll & Sanctuary Wards)"]
     
-    CRISIS --> GARR_AI["UAshenGarrettSentinelContainmentAIComponent"]
-    GARR_AI -->|Serafina Channeling| ESCORT["Kinetic Body-Blocking Wall"]
-    GARR_AI -->|Open Field| DAMPENER["UAshenGarrettGloomwoodNeedleGASAbility (-0.25 C)"]
+    ECOL_SUB --> BT_INTERCEPT["UBTTask_AshenRelationalIntercept (Forces 1.45x Sprint Intercept)"]
+    ECOL_SUB --> RUPTURE_ACTOR["AAshenRuptureScarAnchorActor (Acoustic Rupture & Memorial Text)"]
 ```
 
 ---
 
-### Domain 4: Diegetic Audio, Hardware Haptics & Controller Friction
+### Domain 4: The Inner Voice Compiler & 4-Stage Zero-Entropy Firewall (VOICE-SPEC-054)
 
 ```mermaid
 graph TD
-    AUDIO_EVT["Audio Signal Dispatch"] --> ROUT_SUB["UAshenDiegeticAudioRoutingSubsystem"]
+    INGEST["Salience Gate Trigger (Debt Crossing / Rupture / Lens Shift)"] --> IVC_SUB["UAshenInnerVoiceCompilerSubsystem"]
+    IVC_SUB --> WORKER["FAshenAsyncVoiceCompilationWorker (Non-Abandonable Async Worker)"]
     
-    ROUT_SUB --> CH_TV["World Spatial Channel (TV / Surround): Traversal Ambiance & Monster Roars"]
-    ROUT_SUB --> CH_DS["Personal Action Channel (DualSense Speaker): Garrett 'Kaelen. Now.' (300-600Hz)"]
-    ROUT_SUB --> CH_HP["Intimate Somatic Channel (Headphones): Heartbeat Frequency & Shadow Whispers"]
+    WORKER --> STAGE1["Stage 1: Schema Validation (Rejects malformed JSON / empty ID)"]
+    STAGE1 --> STAGE2["Stage 2: Provenance Audit (Rejects cited memories absent from ImprintBuffer)"]
+    STAGE2 --> STAGE3["Stage 3: Tag Registry Check (Verifies tags exist in Native Tag Dictionary)"]
+    STAGE3 --> STAGE4["Stage 4: Numerical Clamp (Clamps distortion strictly to [0.0, 1.0])"]
     
-    FRICT_SUB["UAshenControllerFrictionSubsystem"] --> TRIG_EVAL["UAshenDualTriggerLockEvaluatorComponent (45-55% Travel)"]
-    FRICT_SUB --> BREATH_COMP["UAshenRhythmicBreathingCadenceComponent (Cross Inhale / Square Exhale)"]
-    FRICT_SUB --> CHORD_COMP["UAshenMartyrsPivotChordComponent (L3+R3 + R1+Triangle)"]
+    STAGE4 -->|PASSED| SANITIZED["Sanitized FAshenInnerVoicePayload"]
+    STAGE4 -->|FAILED| FALLBACK["UAshenDeterministicVoiceFallbackProvider (Defiance / Grace / Wrath)"]
     
-    BURNOUT_SCALAR["Serafina Empathic Burnout (0-1)"] --> DUAL_TRIG["UAshenDualSenseAdaptiveTriggerComponent (L2 Resistance)"]
+    SANITIZED --> AUDIO_DISP["UAshenSubconsciousSemanticAudioAdapter (ShadowSelf -> DualSense Speaker)"]
+    SANITIZED --> HUD_DIST["UAshenUserWidget_CognitiveDistortionOverlayHUD (Edge Desaturation)"]
+    SANITIZED --> MESH_TREM["UAshenInnerVoiceMeshTremorAdapter (Hand Skeletal Tremor)"]
 ```
 
 ---
 
-### Domain 5: Somatic Shaders, Material Parameter Collections & Mesh Provenance
+### Domain 5: The Campfire Marginalia & Physicalized Inscription Matrix (JOURNAL-SPEC-055)
 
 ```mermaid
 graph TD
-    SSV_BROADCAST["FSoulStateVector State Changes"] --> MPC["Material Parameter Collection (MPC_SoulState)"]
+    CAMP_REST["Campfire / Heartstone Rest Trigger"] --> MARG_EVAL["UAshenCompanionMarginaliaEvaluatorComponent"]
     
-    MPC --> OATH_VFX["UAshenOathbringerSomaticVFXComponent (Nightsteel Stain 0-1 & Garnet Eyes 0.2-3.0)"]
-    MPC --> SOOT_MESH["UAshenSomaticTorsoSootMeshAdapter (Permanent Wrath Scorch Overlays)"]
-    MPC --> PALLOR_MESH["UAshenAshenPallorMeshAdapter (Skin Desaturation & Solid Crimson Eye Slits)"]
+    MARG_EVAL --> PROV_VAL["UAshenMarginaliaProvenanceValidator (Discards Unearned Memory Citations)"]
+    PROV_VAL --> LAYOUT["UAshenMarginaliaSpatialLayoutEngine (90/140 Char Anti-Collision Clamping)"]
     
-    ALCH_COAT["Burning Steel Oil Coated"] --> CUTLASS_MESH["UAshenIgnitedCutlassMeshAdapter (3.0x Flame Emissive Glow)"]
-```
-
----
-
-### Domain 6: The Living Journal (UMB-UI-004) & Somatic UI
-
-```mermaid
-graph TD
-    COMBAT_IMPRINT["FCanonicalCombatEvent Logged"] --> INK_MOD["UAshenLivingParchmentInkModulator"]
+    LAYOUT --> PAGE_SPREAD["UAshenUserWidget_LivingJournalSpreadPageHUD (Multi-Layer Parchment Canvas)"]
+    LAYOUT --> SLOT_HUD["UAshenUserWidget_MarginaliaAnnotationSlotHUD (Garrett Charcoal vs Serafina Ink)"]
+    LAYOUT --> CROSS_HUD["UAshenUserWidget_MarginaliaCrossoutOverlayHUD (Animated Violent Scratch-Outs)"]
     
-    INK_MOD --> PAGE_LEFT["Left Page: Kaelen's Log (Handwriting Distortion scales with Debt)"]
-    INK_MOD --> MARG_GARR["Margin Right: Garrett Charcoal Anatomical Weak-Point Diagrams"]
-    INK_MOD --> MARG_SERA["Margin Bottom: Serafina Pressed Alpine Botanicals & Protective Glyphs"]
+    SSV_DEBT["Integration Debt / Corruption"] --> MAT_ADAPT["UAshenParchmentDynamicMaterialAdapter"]
+    MAT_ADAPT --> JITTER["Vertex Jitter: Sin(Time * 20.0) * JitterIntensity"]
+    MAT_ADAPT --> BLEED["Runtime Ink Bleed & Parchment Mask Degradation"]
     
-    TAM_RESONANCE["TAM-001 Consistency >= 0.80"] --> HUD_SUPP["UAshenUserWidget_SymbioticResonanceHUD (Fades Out All HUDs)"]
-```
-
----
-
-### Domain 7: Garrett's Finite Alchemical Formulation & World Traversal
-
-```mermaid
-graph TD
-    WORKSTATION["Campfire Workstation Crafting"] --> ALCH_SUB["UAshenAlchemicalMatrixSubsystem"]
-    
-    ALCH_SUB --> POUCH["FAlchemicalInventoryPouch (Oils, Needles, Smoke, Flares, Caltrops)"]
-    
-    POUCH --> GA_OIL["UAshenApplyBurningSteelOilGASAbility (+35 Posture, -15% Armor for 15s)"]
-    POUCH --> GA_FLARE["UAshenDeployGhostbloomFlareGASAbility (4.0s Stun in 600uu)"]
-    POUCH --> GA_CALTROP["UAshenSeedAlchemicalCaltropsGASAbility (400uu Corridor Seeding)"]
-    
-    GA_CALTROP --> FIELD_ACTOR["AAshenPhysicalAlchemicalCaltropFieldActor (Thermal Ignition Volume)"]
-    GA_FLARE --> TRIP_ACTOR["AAshenGhostbloomTripwireAnchorActor (Detonation Trigger)"]
-    
-    ANOMALY["World Anomaly Spawn"] --> STAR_ACTOR["AAshenStarStriderAnomalyActor (Solid Light Bridges & Whisper Muting)"]
+    MARG_EVAL --> BOTANICAL["UAshenBotanicalPressingAdapter (Serafina Pressed Silverleaf Herbs)"]
+    MARG_EVAL --> DIALOG_BRIDGE["UAshenMarginaliaDialogueBridge (Next-Day Conversation Confrontation Barks)"]
 ```
 
 ---
@@ -256,17 +241,18 @@ graph TD
 
 | Domain Index | Domain Focus | Primary Kernel Interface | Master Bridge Header |
 |---|---|---|---|
-| **Domain 1** | Soul, Memory & Epistemic Grounding | `FSoulStateVector`, `FCanonicalCombatEvent` | [`AshenSoulConstellationMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenSoulConstellationMasterBridge.h) |
-| **Domain 2** | Combat, Trial of Will & GAS | `ETrialOfWillChoice`, `0.75s` Dilation | [`AshenExistentialMeaningMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenExistentialMeaningMasterBridge.h) |
-| **Domain 3** | Companion AI & Shepherd's Gambit | `EContainmentState`, `EUnchainedHazardLevel` | [`AshenShepherdsGambitMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenShepherdsGambitMasterBridge.h) |
-| **Domain 4** | Diegetic Audio, Haptics & Friction | `3-Channel Proximity`, `50% Trigger Lock` | [`AshenControllerFrictionMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenControllerFrictionMasterBridge.h) |
-| **Domain 5** | Somatic Shaders & Mesh Provenance | `Nightsteel Stain`, `Ash-Soot Overlays` | [`AshenSomaticMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenSomaticMasterBridge.h) |
-| **Domain 6** | The Living Journal & Somatic UI | `UMB-UI-004`, `Multi-Author Marginalia` | [`AshenLivingJournalMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenLivingJournalMasterBridge.h) |
-| **Domain 7** | Garrett's Alchemy & World Traversal | `FAlchemicalInventoryPouch`, `Caltrops` | [`AshenAlchemicalMatrixMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Source/AshenOath/Orchestration/AshenAlchemicalMatrixMasterBridge.h) |
+| **Domain 1** | Soul, Memory & Epistemic Grounding | `FCanonicalSoulStateVector`, `FCanonicalCombatEvent` | [`AshenSoulConstellationMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenSoulConstellationMasterBridge.h) |
+| **Domain 2** | Combat, Trial of Will & Relational GAS | `ETrialOfWillChoice`, `0.75s` Dilation, `CostlyPresence` | [`AshenExistentialMeaningMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenExistentialMeaningMasterBridge.h) |
+| **Domain 3** | Companion AI & Ecology of Fellowship | `Faith Under Uncertainty`, `Synarchy Ratio` | [`AshenRelationalEcologyMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenRelationalEcologyMasterBridge.h) |
+| **Domain 4** | Inner Voice Compiler & Cognitive Firewall | `IVC-001`, `4-Stage Zero-Entropy Firewall` | [`AshenInnerVoiceMasterOrchestratorBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenInnerVoiceMasterOrchestratorBridge.h) |
+| **Domain 5** | Campfire Marginalia & Living Journal | `CMM-001`, `Spatial Anti-Collision Engine` | [`AshenCampfireMarginaliaMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenCampfireMarginaliaMasterBridge.h) |
+| **Domain 6** | Diegetic Audio, Haptics & Friction | `3-Channel Proximity`, `50% Trigger Lock` | [`AshenControllerFrictionMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenControllerFrictionMasterBridge.h) |
+| **Domain 7** | Somatic Shaders & Mesh Provenance | `Nightsteel Stain`, `Ash-Soot Overlays` | [`AshenSomaticMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenSomaticMasterBridge.h) |
+| **Domain 8** | Garrett's Alchemy & World Traversal | `FAlchemicalInventoryPouch`, `Caltrops` | [`AshenAlchemicalMatrixMasterBridge.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Orchestration/AshenAlchemicalMatrixMasterBridge.h) |
 
 ---
 
 ### 🛡️ Production Verification Status
-* **Total Clean Production Builds**: **2,235 Builds** (0 Errors, 0 Warnings).
+* **Total Clean Production Builds**: **2,295 Builds** (0 Errors, 0 Warnings).
 * **Deterministic Automated QA Coverage**: **100%** (Value-asserting test suites for every master batch).
 * **Architecture Map Synchronization**: **Synchronized** ([`Docs/ARCHITECTURE_MAP.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/ARCHITECTURE_MAP.md)).
