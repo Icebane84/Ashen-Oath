@@ -1,0 +1,25 @@
+# .clang-format
+BasedOnStyle: LLVM
+Language: Cpp
+Standard: Latest
+
+# Unreal Engine Formatting Conventions
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
+ColumnLimit: 120
+
+# Bracing and Layout
+BreakBeforeBraces: Allman
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+# Pointer and Reference Alignment
+PointerAlignment: Left
+
+# Spacing Rules
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements

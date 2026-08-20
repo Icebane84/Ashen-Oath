@@ -1,0 +1,33 @@
+# =============================================================================
+# Unreal Engine 5.8 + Ashen Oath Git Ignore Policy
+# =============================================================================
+
+# Build outputs and engine generated folders
+**/Binaries/
+**/DerivedDataCache/
+**/Intermediate/
+**/Saved/
+**/Build/
+
+# Visual Studio & IDE artifacts
+**/.vs/
+**/.vscode/
+**/.idea/
+*.sln
+*.slnx
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Temporary caches and archives
+**/.cache/
+*.zip
+*.7z
+*.tar.gz
+*.log
+*.tmp
+compile_commands.json
+
+# Content directory binary assets (uasset/umap large binaries managed via LFS if needed)
+# Uncomment if managing source/docs only:
+# **/Content/

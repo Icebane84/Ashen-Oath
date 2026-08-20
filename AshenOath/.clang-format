@@ -1,0 +1,63 @@
+# Copyright Phoenix Protocol. All rights reserved.
+BasedOnStyle: LLVM
+Language: Cpp
+Standard: Latest
+
+# Unreal Engine Column and Tab Conventions
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always # Epic standards strictly mandate real tabs over spaces
+ColumnLimit: 120 # Epic standard line-width constraint
+
+# Bracing and Layout (Allman style per Epic standard)
+BreakBeforeBraces: Allman
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+# Pointer and Reference Alignment (Unreal-style Left: AActor* MyActor)
+PointerAlignment: Left
+
+# Spacing Rules
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeSquareBrackets: false
+
+# Access Modifier Alignment (Ensures public/protected/private align with class braces)
+AccessModifierOffset: -4
+IndentAccessModifiers: false # FIXED: Prevents conflict with AccessModifierOffset
+
+# Prevent Breaking String Literals (Critical to prevent corrupting TEXT() and LOCTEXT() macros)
+BreakStringLiterals: false # Unreal string layouts are sensitive to wrapping
+
+# Critical: Prevent Alphabetical Sorting from breaking *.generated.h placement
+SortIncludes: true
+IncludeCategories:
+  - Regex: '.*(PCH).*'
+    Priority: -1           # Force precompiled headers to the absolute top of the file
+  - Regex: '^<.*\.(h)>'
+    Priority: 1            # System / C++ Standard headers
+  - Regex: '^<.*>'
+    Priority: 2            # Other system frameworks
+  - Regex: '".*"'
+    Priority: 3            # FIXED: Project local headers go after system headers
+  - Regex: '.*\.generated\.h'
+    Priority: 100          # Force generated headers to the absolute bottom of the file
+
+# Critical: Prevent mangling of Unreal Engine Reflection & Utility Macros
+Macros:
+  - UCLASS
+  - USTRUCT
+  - UFUNCTION
+  - UPROPERTY
+  - UENUM
+  - UMETA
+  - GENERATED_BODY
+  - GENERATED_UCLASS_BODY
+  - GENERATED_USTRUCT_BODY
+  - check
+  - checkf
+  - ensure
+  - ensureAlways
