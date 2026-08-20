@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2355: Master Batch #117 — The Somatic Silence Classifier & Ambient Intent Reading Matrix (MIND-SPEC-058)
+**Domain:** Companions / AI / Combat / Audio / UI / Narrative / World / Core / Orchestration / QA  
+**Status:** 2,355 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2336 | `AshenSomaticSilenceTypes.h` | `AshenSomaticSilenceTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Companions |
+| 2337 | `AshenSomaticSilenceSubsystem.h/.cpp` | `UAshenSomaticSilenceSubsystem` — Subsystem coordinating silence, support & boundary events | Companions |
+| 2338 | `AshenSilenceClassifierComponent.h/.cpp` | `UAshenSilenceClassifierComponent` — Classifies silence into Contemplative, Aftermath & Crisis | Companions |
+| 2339 | `AshenWordlessSupportEvaluatorComponent.h/.cpp` | `UAshenWordlessSupportEvaluatorComponent` — Evaluates proactive obstacle clearance actions | Companions |
+| 2340 | `AshenBoundaryRefusalEvaluatorComponent.h/.cpp` | `UAshenBoundaryRefusalEvaluatorComponent` — Evaluates boundary standoff state during suicidal charges | Companions |
+| 2341 | `AshenWordlessObstacleClearGASAbility.h/.cpp` | `UAshenWordlessObstacleClearGASAbility` — Garrett proactive ability clearing civilian debris/rubble | Combat |
+| 2342 | `AshenPaceMatchingSupportGASAbility.h/.cpp` | `UAshenPaceMatchingSupportGASAbility` — Companion ability syncing locomotion speed with Kaelen | Combat |
+| 2343 | `AshenBoundaryHaltDisengageGASAbility.h/.cpp` | `UAshenBoundaryHaltDisengageGASAbility` — Ability executing companion boundary standoff halt | Combat |
+| 2344 | `AshenTakePointShieldingGASAbility.h/.cpp` | `UAshenTakePointShieldingGASAbility` — Companion ability moving ahead to take point in cognitive crisis | Combat |
+| 2345 | `AshenGroundedPresenceGASAbility.h/.cpp` | `UAshenGroundedPresenceGASAbility` — Companion aura granting +0.05 Resolve regen during silent accompaniment | Combat |
+| 2346 | `BTTask_AshenEvaluateSomaticSilence.h/.cpp` | `UBTTask_AshenEvaluateSomaticSilence` — Behavior Tree Task setting companion spacing on Blackboard | AI |
+| 2347 | `BTTask_AshenExecuteWordlessSupport.h/.cpp` | `UBTTask_AshenExecuteWordlessSupport` — Behavior Tree Task dispatching pathfinding to world obstacles | AI |
+| 2348 | `AshenSilenceAudioFilterComponent.h/.cpp` | `UAshenSilenceAudioFilterComponent` — Modulates low-pass acoustic filters based on silence type | Audio |
+| 2349 | `AshenUserWidget_WordlessResonanceHUD.h/.cpp` | `UAshenUserWidget_WordlessResonanceHUD` — Minimalist UI displaying reticle stabilization | UI |
+| 2350 | `AshenWorldObstacleAnchorActor.h/.cpp` | `AAshenWorldObstacleAnchorActor` — 3D world obstacle entity (rubble/debris) | World |
+| 2351 | `AshenSilenceSaveGameAdapter.h/.cpp` | `UAshenSilenceSaveGameAdapter` — Serializes wordless support statistics and boundary refusal logs | Core |
+| 2352 | `AshenBoundaryReflectionDialogueBridge.h/.cpp` | `UAshenBoundaryReflectionDialogueBridge` — Formats campfire reflections on past boundary refusals | Narrative |
+| 2353 | `AshenCompanionSilenceMeshAdapter.h/.cpp` | `UAshenCompanionSilenceMeshAdapter` — Modulates companion head tracking gaze weight toward Kaelen | Companions |
+| 2354 | `AshenSomaticSilenceMasterBridge.h/.cpp` | `UAshenSomaticSilenceMasterBridge` — Master bridge coordinating silence events, state updates & audio | Orchestration |
+| 2355 | `AshenMasterBatch117AutomationTest.cpp` | `FAshenMasterBatch117AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2335: Master Batch #116 — The Empathic Transference & Shadow Burnout Matrix (BURDEN-SPEC-057)
 **Domain:** Companions / Combat / AI / Audio / UI / Narrative / World / Core / Orchestration / QA  
 **Status:** 2,335 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
