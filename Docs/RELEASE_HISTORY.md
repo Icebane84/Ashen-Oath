@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2375: Master Batch #118 — Long-Term Canonical Promise Resolution & Campfire Marginalia Incursions (PROMISE-SPEC-059)
+**Domain:** Narrative / Companions / Combat / UI / Audio / AI / World / Core / Orchestration / QA  
+**Status:** 2,375 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2356 | `AshenCanonicalPromiseTypes.h` | `AshenCanonicalPromiseTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Narrative |
+| 2357 | `AshenCanonicalPromiseSubsystem.h/.cpp` | `UAshenCanonicalPromiseSubsystem` — Central subsystem coordinating promises & marginalia | Narrative |
+| 2358 | `AshenPromiseLedgerComponent.h/.cpp` | `UAshenPromiseLedgerComponent` — Stores active, fulfilled, and broken canonical promises | Narrative |
+| 2359 | `AshenSemanticContextMatcherComponent.h/.cpp` | `UAshenSemanticContextMatcherComponent` — Evaluates crisis context tags against registered promises | Narrative |
+| 2360 | `AshenRetroactiveMarginaliaInscriberComponent.h/.cpp` | `UAshenRetroactiveMarginaliaInscriberComponent` — Inscribes secret companion annotations on past pages | Narrative |
+| 2361 | `AshenSteadfastVowWillpowerSurgeGASAbility.h/.cpp` | `UAshenSteadfastVowWillpowerSurgeGASAbility` — Vow ability granting +40% Poise and +25% Willpower | Combat |
+| 2362 | `AshenSacredOathReckoningStrikeGASAbility.h/.cpp` | `UAshenSacredOathReckoningStrikeGASAbility` — High-damage holy strike empowered by remembered vows | Combat |
+| 2363 | `AshenPromiseBetrayalPoiseCrackGASAbility.h/.cpp` | `UAshenPromiseBetrayalPoiseCrackGASAbility` — Debuff ability shattering posture upon breaking a vow | Combat |
+| 2364 | `AshenPromiseBondStealtheadAuraGASAbility.h/.cpp` | `UAshenPromiseBondStealtheadAuraGASAbility` — Passive aura granting +15% damage mitigation on promise alignment | Combat |
+| 2365 | `AshenCompanionPromiseGroundingGASAbility.h/.cpp` | `UAshenCompanionPromiseGroundingGASAbility` — Companion grounding ability invoking vows to clear corruption | Combat |
+| 2366 | `BTTask_AshenEvaluatePromiseContext.h/.cpp` | `UBTTask_AshenEvaluatePromiseContext` — Behavior Tree Task checking promise reactivation in combat | AI |
+| 2367 | `BTTask_AshenEnforcePromiseLoyalty.h/.cpp` | `UBTTask_AshenEnforcePromiseLoyalty` — Behavior Tree Task locking companion to Kaelen's side | AI |
+| 2368 | `AshenPromiseVowAudioEmitterComponent.h/.cpp` | `UAshenPromiseVowAudioEmitterComponent` — Emits sacred chimes and sub-bass resonance on vow activations | Audio |
+| 2369 | `AshenUserWidget_JournalRetroactiveMarginaliaHUD.h/.cpp` | `UAshenUserWidget_JournalRetroactiveMarginaliaHUD` — UMG widget rendering companion annotations | UI |
+| 2370 | `AshenPromiseVowAnchorActor.h/.cpp` | `AAshenPromiseVowAnchorActor` — 3D world landmark entity marking a sworn vow | World |
+| 2371 | `AshenPromiseSaveGameAdapter.h/.cpp` | `UAshenPromiseSaveGameAdapter` — Serializes promises and retroactive marginalia records | Core |
+| 2372 | `AshenPromiseReflectionDialogueBridge.h/.cpp` | `UAshenPromiseReflectionDialogueBridge` — Injects promise history into campfire dialogues | Narrative |
+| 2373 | `AshenCompanionPromiseBondMeshAdapter.h/.cpp` | `UAshenCompanionPromiseBondMeshAdapter` — Modulates companion hand-on-chest and resolute posture | Companions |
+| 2374 | `AshenCanonicalPromiseMasterBridge.h/.cpp` | `UAshenCanonicalPromiseMasterBridge` — Master bridge coordinating promise events, state updates & UI | Orchestration |
+| 2375 | `AshenMasterBatch118AutomationTest.cpp` | `FAshenMasterBatch118AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2355: Master Batch #117 — The Somatic Silence Classifier & Ambient Intent Reading Matrix (MIND-SPEC-058)
 **Domain:** Companions / AI / Combat / Audio / UI / Narrative / World / Core / Orchestration / QA  
 **Status:** 2,355 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
