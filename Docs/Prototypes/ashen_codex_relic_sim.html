@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Ashen Codex & 3D Relic Examination Simulator</title>
+    <!-- Traceability: ARCHIVE-SPEC-067 | UAshenCodexArchiveSubsystem | Builds 2516-2535 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-cyan: #39c5cf;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --parchment-bg: #f5f0e6;
+            --parchment-ink: #2c2523;
+            --marginalia-ink: #8b2500;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1080px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #1a1e24 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 380px;
+            cursor: grab;
+        }
+
+        canvas:active {
+            cursor: grabbing;
+        }
+
+        .codex-page {
+            background: #eadecc;
+            color: var(--parchment-ink);
+            padding: 24px;
+            height: 380px;
+            overflow-y: auto;
+            border-left: 6px solid #8b7355;
+            box-shadow: inset 4px 0 10px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: "Georgia", "Times New Roman", serif;
+        }
+
+        .codex-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4a3525;
+            border-bottom: 2px solid #b8977e;
+            padding-bottom: 6px;
+        }
+
+        .codex-lore {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2c2523;
+        }
+
+        .codex-marginalia {
+            background: rgba(210, 153, 34, 0.12);
+            border-left: 3px dashed var(--marginalia-ink);
+            padding: 8px 12px;
+            font-style: italic;
+            font-size: 12px;
+            color: var(--marginalia-ink);
+            line-height: 1.4;
+            margin-top: auto;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-gold {
+            background: #9e6a03;
+            border-color: #d29922;
+            color: #fff;
+        }
+
+        .btn-gold:hover {
+            background: #d29922;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>ASHEN CODEX & 3D RELIC EXAMINATION SIMULATOR</h1>
+                <p>3D Orbital Inspection, Secret Glyph Alignment (180°) & Companion Marginalia (ARCHIVE-SPEC-067)</p>
+            </div>
+            <div class="badge">Milestone 2,535 Builds Clean</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="card">
+                <canvas id="relicCanvas" width="520" height="380"></canvas>
+            </div>
+
+            <div class="card">
+                <div class="codex-page" id="codexPage">
+                    <div class="codex-title" id="entryTitle">SACRED HEIRLOOM: PYRE CENSER</div>
+                    <div class="codex-lore" id="entryLore">
+                        "Consecrated during the Siege of the White Flame. Its inner chamber once burned with everlasting embers, emitting a sacred resonance that shielded knights from the soul-blight."
+                    </div>
+                    <div class="codex-marginalia" id="entryMarginalia">
+                        [Garrett's Margin Note]: 'The tension wires in their joints are vulnerable to flanking strikes. Remember this.'
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-card">
+            <div class="control-group">
+                <div class="control-label">
+                    <span>RELIC ORBIT YAW (Drag Canvas to Rotate)</span>
+                    <span class="control-value" id="yawVal">0° (Target: 180° ± 15°)</span>
+                </div>
+                <input type="range" id="yawSlider" min="0" max="360" value="0" step="1">
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">
+                    <span>FELLOWSHIP TRUST (Marginalia Depth)</span>
+                    <span class="control-value" id="trustVal">0.75 (High Fellowship)</span>
+                </div>
+                <input type="range" id="trustSlider" min="0.0" max="1.0" value="0.75" step="0.05">
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-gold" id="cycleRelicBtn" style="flex: 1;">🔄 CYCLE ARTIFACT RARITY</button>
+                <button class="btn" id="flipPageBtn" style="flex: 1;">📖 FLIP CODEX PAGE</button>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+                <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-gold);">📋 COPY SELT TELEMETRY</button>
+                <button class="btn" id="resetBtn" style="flex: 1;">RESET EXAMINATION</button>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Relic Rarity Tier</div>
+                <div class="telemetry-val" id="rarityVal">Sacred Heirloom</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Solfeggio Hum</div>
+                <div class="telemetry-val" id="humVal">741 Hz (Intuition)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Secret Glyph Alignment</div>
+                <div class="telemetry-val" id="alignVal">Unaligned (0%)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Decoded Progress</div>
+                <div class="telemetry-val" id="decodedVal">0.00 / 1.00</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer for Solfeggio Relic Resonance & Page Flips
+        let audioCtx = null;
+        let humOsc = null;
+        let humGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function setRelicHum(freqHz, volume) {
+            initAudio();
+            if (!audioCtx) return;
+
+            if (!humOsc) {
+                humOsc = audioCtx.createOscillator();
+                humGain = audioCtx.createGain();
+                humOsc.type = 'sine';
+                humOsc.frequency.setValueAtTime(freqHz, audioCtx.currentTime);
+                humGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+                humOsc.connect(humGain);
+                humGain.connect(audioCtx.destination);
+                humOsc.start();
+            } else {
+                humOsc.frequency.exponentialRampToValueAtTime(Math.max(50, freqHz), audioCtx.currentTime + 0.1);
+            }
+
+            humGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, volume), audioCtx.currentTime + 0.1);
+        }
+
+        function playPageFlipTone() {
+            initAudio();
+            if (!audioCtx) return;
+            const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.15, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < noiseBuffer.length; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+
+            const whiteNoise = audioCtx.createBufferSource();
+            whiteNoise.buffer = noiseBuffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.14);
+
+            whiteNoise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            whiteNoise.start();
+        }
+
+        function playSecretRevealedChime() {
+            initAudio();
+            if (!audioCtx) return;
+            [528, 741, 852].forEach((f, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.06);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime + i * 0.06);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.06 + 0.5);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + i * 0.06);
+                osc.stop(audioCtx.currentTime + i * 0.06 + 0.55);
+            });
+        }
+
+        // State
+        let relicYaw = 0;
+        let fellowshipTrust = 0.75;
+        let rarityIndex = 2; // 0: Common, 1: Rare, 2: Sacred, 3: Titan Core
+        let decodedProgress = 0.0;
+        let isSecretRevealed = false;
+        let isDragging = false;
+        let lastMouseX = 0;
+
+        const rarities = [
+            { name: "Common Relic", hum: 396, note: "Grounding (396 Hz)", color: "#8b949e" },
+            { name: "Rare Artifact", hum: 528, note: "Repair (528 Hz)", color: "#58a6ff" },
+            { name: "Sacred Heirloom", hum: 741, note: "Intuition (741 Hz)", color: "#d29922" },
+            { name: "Titan Core Relic", hum: 852, note: "Spiritual Order (852 Hz)", color: "#f85149" }
+        ];
+
+        const yawSlider = document.getElementById('yawSlider');
+        const trustSlider = document.getElementById('trustSlider');
+        const cycleRelicBtn = document.getElementById('cycleRelicBtn');
+        const flipPageBtn = document.getElementById('flipPageBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        const entryTitle = document.getElementById('entryTitle');
+        const entryLore = document.getElementById('entryLore');
+        const entryMarginalia = document.getElementById('entryMarginalia');
+
+        function updateArchiveMath() {
+            // Secret Alignment at Yaw = 180° ± 15°
+            const delta = Math.abs(((relicYaw - 180 + 180) % 360) - 180);
+            const isAligned = delta <= 15;
+
+            if (isAligned) {
+                if (!isSecretRevealed) {
+                    isSecretRevealed = true;
+                    playSecretRevealedChime();
+                }
+                decodedProgress = Math.min(1.0, decodedProgress + 0.02);
+            } else {
+                isSecretRevealed = false;
+            }
+
+            const currentRarity = rarities[rarityIndex];
+            const humVol = isAligned ? 0.25 : 0.05;
+            setRelicHum(currentRarity.hum, humVol);
+
+            // Update Companion Marginalia based on Fellowship Trust
+            if (fellowshipTrust >= 0.60) {
+                entryMarginalia.innerHTML = `<strong>[Garrett's Margin Note]:</strong> 'The tension wires in their joints are vulnerable to flanking strikes. Remember this.'<br><br><strong>[Serafina's Inscription]:</strong> 'The White Flame sanctified this relic long before the Fall. Its resonance still echoes.'`;
+            } else {
+                entryMarginalia.innerHTML = `<strong>[Garrett's Margin Note]:</strong> '...Seen too many good soldiers fall to this thing.'<br><br><strong>[Serafina's Inscription]:</strong> 'A sacred text desecrated by the ash.'`;
+            }
+
+            document.getElementById('yawVal').innerText = `${relicYaw}° (Target: 180° ± 15°)`;
+            document.getElementById('trustVal').innerText = `${fellowshipTrust.toFixed(2)} (${fellowshipTrust >= 0.60 ? 'High Fellowship' : 'Guarded'})`;
+            document.getElementById('rarityVal').innerText = currentRarity.name;
+            document.getElementById('humVal').innerText = currentRarity.note;
+            document.getElementById('alignVal').innerText = isAligned ? "✨ ALIGNED (GLYPH REVEALED)" : "Unaligned";
+            document.getElementById('decodedVal').innerText = `${decodedProgress.toFixed(2)} / 1.00`;
+        }
+
+        yawSlider.oninput = (e) => {
+            relicYaw = parseInt(e.target.value);
+            updateArchiveMath();
+        };
+
+        trustSlider.oninput = (e) => {
+            fellowshipTrust = parseFloat(e.target.value);
+            updateArchiveMath();
+        };
+
+        cycleRelicBtn.onclick = () => {
+            initAudio();
+            rarityIndex = (rarityIndex + 1) % rarities.length;
+            entryTitle.innerText = `${rarities[rarityIndex].name.toUpperCase()}: PYRE CENSER`;
+            updateArchiveMath();
+        };
+
+        flipPageBtn.onclick = () => {
+            playPageFlipTone();
+            decodedProgress = 0.0;
+            relicYaw = 0;
+            yawSlider.value = 0;
+            updateArchiveMath();
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "CODEX_RELIC_EXAMINATION",
+                relic_id: "Relic_Pyre_Censer",
+                rarity_tier: rarities[rarityIndex].name,
+                orbit_yaw_degrees: relicYaw,
+                secret_glyph_aligned: isSecretRevealed,
+                decoded_progress: parseFloat(decodedProgress.toFixed(3)),
+                solfeggio_hum_hz: rarities[rarityIndex].hum,
+                fellowship_trust: fellowshipTrust
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        resetBtn.onclick = () => {
+            relicYaw = 0;
+            fellowshipTrust = 0.75;
+            rarityIndex = 2;
+            decodedProgress = 0.0;
+            yawSlider.value = 0;
+            trustSlider.value = 0.75;
+            updateArchiveMath();
+        };
+
+        // Canvas 3D Relic Visualizer
+        const canvas = document.getElementById('relicCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.onmousedown = (e) => {
+            isDragging = true;
+            lastMouseX = e.clientX;
+        };
+
+        window.onmouseup = () => {
+            isDragging = false;
+        };
+
+        window.onmousemove = (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - lastMouseX;
+            lastMouseX = e.clientX;
+
+            relicYaw = (relicYaw + deltaX + 360) % 360;
+            yawSlider.value = relicYaw;
+            updateArchiveMath();
+        };
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = 260;
+            const cy = 190;
+
+            const rad = (relicYaw * Math.PI) / 180;
+            const cosY = Math.cos(rad);
+            const sinY = Math.sin(rad);
+
+            // Draw Pedestal Base
+            ctx.fillStyle = '#1c2128';
+            ctx.strokeStyle = '#30363d';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(cx, cy + 120, 100, 24, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Relic Censer Wireframe (3D Octahedron / Censer shape)
+            const relicColor = rarities[rarityIndex].color;
+            ctx.strokeStyle = relicColor;
+            ctx.lineWidth = 3;
+
+            const topP = { x: cx, y: cy - 90 };
+            const bottomP = { x: cx, y: cy + 70 };
+            const p1 = { x: cx + cosY * 65 - sinY * 0, y: cy + sinY * 15 };
+            const p2 = { x: cx - sinY * 65 - cosY * 0, y: cy - cosY * 15 };
+            const p3 = { x: cx - cosY * 65 + sinY * 0, y: cy - sinY * 15 };
+            const p4 = { x: cx + sinY * 65 + cosY * 0, y: cy + cosY * 15 };
+
+            // Draw Wireframe Faces
+            [p1, p2, p3, p4].forEach(p => {
+                ctx.beginPath();
+                ctx.moveTo(topP.x, topP.y);
+                ctx.lineTo(p.x, p.y);
+                ctx.lineTo(bottomP.x, bottomP.y);
+                ctx.stroke();
+            });
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineTo(p3.x, p3.y);
+            ctx.lineTo(p4.x, p4.y);
+            ctx.closePath();
+            ctx.stroke();
+
+            // Secret Inscription Glyph (Revealed on back face at 180°)
+            if (isSecretRevealed) {
+                ctx.fillStyle = `rgba(210, 153, 34, ${0.4 + Math.sin(Date.now() * 0.005) * 0.3})`;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 22, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 12px serif';
+                ctx.fillText("᚛ᚉᚑᚋ᚜", cx - 18, cy + 4);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateArchiveMath();
+        animate();
+    </script>
+</body>
+</html>
