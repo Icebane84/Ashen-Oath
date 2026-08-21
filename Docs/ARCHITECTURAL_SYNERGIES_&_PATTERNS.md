@@ -29,10 +29,29 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-007`** | **Multi-Tier Chaos Sunder Obstruction Scaling** | `ARENA-SPEC-063` / World / Chaos / Boss | Structural pillar fracture plane ($Ax + By + Cz + D = 0$) directly driving arena obstruction scalars ($0\% \to 50\% \to 100\%$) and companion pinning crisis windows. |
 | **`SYN-008`** | **Runic Mass-Momentum & Poise Scaling Invariant** | `RELIQUARY-SPEC-064` / `KINETIC-SPEC-060` / Crafting / Combat | Boss core and trauma hilt socketing dynamically scaling effective weapon mass ($45\text{kg} \leftrightarrow 220\text{kg}$), kinetic strike Joules, and Solfeggio harmonic chimes. |
 | **`SYN-009`** | **Adaptive Trigger Priority & Directional Tactile Invariant** | `HAPTIC-SPEC-065` / Haptics / Narrative / Combat | Enforcing strict Priority 1 Dialogue Lockout ($100\%$) over combat stagger and ambient somatic resistance, with directional grip threat motor bias. |
+| **`SYN-010`** | **Temporal Bullet-Time Dilation & Finisher Multiplier** | `TACTICAL-SPEC-066` / Tactics / Combat / Audio | Squad command wheel smoothly ramping time dilation ($1.00\times \to 0.20\times$) and low-pass audio ($450\text{ Hz}$), with $2.50\times$ synchronized finisher burst damage. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-010`: Temporal Bullet-Time Dilation & Finisher Multiplier
+
+* **Target Subsystems:** `UAshenSquadTacticalSubsystem`, `UAshenTemporalDilationEvaluatorComponent`, `UAshenCoOpComboSynchronizerComponent`, `UAshenTacticalAudioSubsystem`
+* **Related Specifications:** [`TACTICAL-SPEC-066`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/TACTICAL-SPEC-066%20%28THE%20TEMPORAL%20CO-OP%20COMBO%20SYNCHRONIZER%20&%20SQUAD%20COMMAND%20WHEEL%29.md), [`TRIO-SPEC-061`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/TRIO-SPEC-061%20%28THE%20TRIPARTITE%20RESONANCE%20&%20HARMONIZED%20FINISHER%20MATRIX%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{TimeDilation}(t) = \begin{cases} 0.20, & \text{if Squad Command Wheel Open} \\ 0.05, & \text{if Synchronized Tripartite Impact Freeze} \\ 1.00, & \text{otherwise (Realtime)} \end{cases}$$
+$$\text{DamageMultiplier}(N, \Delta t) = \begin{cases} 2.50\times, & \text{if } N=3 \land \Delta t \le 0.60\text{s} \\ 1.80\times, & \text{if } N=2 \land \Delta t \le 0.60\text{s} \\ 1.00\times, & \text{otherwise} \end{cases}$$
+$$\text{AudioCutoff}(t) = \text{MapRangeClamped}(\text{TimeDilation}, 0.20 \to 1.00, 450\text{ Hz} \to 20,000\text{ Hz})$$
+
+#### 💡 Architectural Insight & Impact:
+* **Tactical Agency Without Interruption:** Rather than pausing gameplay, temporal bullet-time preserves the visceral kinetic momentum of combat while providing exact tactical control.
+* **Audio-Visual Submersion:** Sweeping the audio filter down to $450\text{ Hz}$ when the wheel opens gives an immediate psychoacoustic sensation of deep tactical focus.
+
+---
 
 ---
 
