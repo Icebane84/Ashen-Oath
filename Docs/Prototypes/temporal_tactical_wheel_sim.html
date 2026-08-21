@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Temporal Co-Op Combo Synchronizer & Squad Command Wheel Simulator</title>
+    <!-- Traceability: TACTICAL-SPEC-066 | UAshenSquadTacticalSubsystem | Builds 2496-2515 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-cyan: #39c5cf;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1050px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #101c2a 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 440px;
+            cursor: crosshair;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-wheel {
+            background: #1f6feb;
+            border-color: #388bfd;
+            color: #fff;
+        }
+
+        .btn-wheel:hover {
+            background: #388bfd;
+        }
+
+        .btn-finisher {
+            background: #8957e5;
+            border-color: #a371f7;
+            color: #fff;
+        }
+
+        .btn-finisher:hover {
+            background: #a371f7;
+        }
+
+        .bark-box {
+            background: #1c2128;
+            border: 1px dashed var(--accent-cyan);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>TEMPORAL CO-OP COMBO & SQUAD COMMAND WHEEL SIMULATOR</h1>
+                <p>8-Sector Radial Wheel, 0.20x Bullet-Time Dilation & Synchronized Finisher Damage (TACTICAL-SPEC-066)</p>
+            </div>
+            <div class="badge">Milestone 2,515 Builds Clean</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <button class="btn btn-wheel" id="toggleWheelBtn">⏱️ TOGGLE COMMAND WHEEL (0.20x BULLET TIME)</button>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>COMBO TIMING DELTA</span>
+                        <span class="control-value" id="timingVal">0.35s (Sync Window: 0.60s)</span>
+                    </div>
+                    <input type="range" id="timingSlider" min="0.05" max="1.00" value="0.35" step="0.05">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>ACTIVE PARTICIPANTS</span>
+                        <span class="control-value" id="partVal">3 (Tripartite)</span>
+                    </div>
+                    <input type="range" id="partSlider" min="1" max="3" value="3" step="1">
+                </div>
+
+                <button class="btn btn-finisher" id="execComboBtn">⚔️ EXECUTE SYNCHRONIZED COMBO</button>
+
+                <div class="bark-box" id="barkBox">
+                    "Squad Standing By. Hold Command Wheel to issue tactical companion orders."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-cyan);">📋 COPY SELT TELEMETRY</button>
+                    <button class="btn" id="resetBtn" style="flex: 1;">RESET TACTICS</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Time Dilation</div>
+                <div class="telemetry-val" id="dilationVal">1.00x (Realtime)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Audio Filter Cutoff</div>
+                <div class="telemetry-val" id="filterVal">20,000 Hz</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Selected Command</div>
+                <div class="telemetry-val" id="selectedCmdVal">None</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Combo Multiplier</div>
+                <div class="telemetry-val" id="multiplierVal">2.50x (Synchronized)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer with Dynamic Low-Pass Bullet-Time Filter
+        let audioCtx = null;
+        let masterFilter = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                masterFilter = audioCtx.createBiquadFilter();
+                masterFilter.type = 'lowpass';
+                masterFilter.frequency.setValueAtTime(20000, audioCtx.currentTime);
+                masterFilter.connect(audioCtx.destination);
+            }
+        }
+
+        function setAudioFilter(targetFreq, rampTime = 0.15) {
+            initAudio();
+            if (masterFilter && audioCtx) {
+                masterFilter.frequency.exponentialRampToValueAtTime(Math.max(100, targetFreq), audioCtx.currentTime + rampTime);
+            }
+        }
+
+        function playTacticalTick() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.05);
+
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+
+            osc.connect(gain);
+            gain.connect(masterFilter);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.06);
+        }
+
+        function playComboExplosion() {
+            initAudio();
+            if (!audioCtx) return;
+            // Deep sub blast
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.4);
+
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+
+            osc.connect(gain);
+            gain.connect(masterFilter);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.55);
+
+            // Solfeggio Tripartite chime
+            [528, 741, 852].forEach((freq, i) => {
+                const chime = audioCtx.createOscillator();
+                const chimeGain = audioCtx.createGain();
+                chime.type = 'sine';
+                chime.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.08);
+                chimeGain.gain.setValueAtTime(0.15, audioCtx.currentTime + i * 0.08);
+                chimeGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.08 + 0.6);
+
+                chime.connect(chimeGain);
+                chimeGain.connect(masterFilter);
+                chime.start(audioCtx.currentTime + i * 0.08);
+                chime.stop(audioCtx.currentTime + i * 0.08 + 0.65);
+            });
+        }
+
+        // State Machine
+        let isWheelOpen = false;
+        let currentDilation = 1.00;
+        let targetDilation = 1.00;
+        let selectedSector = 0;
+        let timingDelta = 0.35;
+        let participantCount = 3;
+        let freezeFrames = 0;
+
+        const commands = [
+            { name: "Garrett: Wire Snare", bark: "[Garrett]: Wire set! Pulling tension now!", color: "#3fb950" },
+            { name: "Serafina: Aegis Bulwark", bark: "[Serafina]: White Flame shields us! Hold the line!", color: "#d29922" },
+            { name: "Lyra: Shadow Volley", bark: "[Lyra]: Shadow volley incoming! Strike on my mark!", color: "#a371f7" },
+            { name: "Squad: Tripartite Strike", bark: "[Squad]: All together! Now!", color: "#39c5cf" },
+            { name: "Regroup: Fall Back", bark: "[Squad]: Falling back to defensive perimeter!", color: "#f85149" },
+            { name: "Hold Position", bark: "[Squad]: Holding ground.", color: "#8b949e" },
+            { name: "Focus Marked Target", bark: "[Squad]: Target acquired!", color: "#58a6ff" },
+            { name: "Cancel Order", bark: "[Kaelen]: Hold commands.", color: "#6e7681" }
+        ];
+
+        const toggleWheelBtn = document.getElementById('toggleWheelBtn');
+        const timingSlider = document.getElementById('timingSlider');
+        const partSlider = document.getElementById('partSlider');
+        const execComboBtn = document.getElementById('execComboBtn');
+        const barkBox = document.getElementById('barkBox');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function updateTacticalMath() {
+            targetDilation = isWheelOpen ? 0.20 : 1.00;
+            const targetFilter = isWheelOpen ? 450 : 20000;
+            setAudioFilter(targetFilter);
+
+            let multiplier = 1.00;
+            let isSync = false;
+
+            if (timingDelta <= 0.60 && participantCount >= 2) {
+                isSync = true;
+                multiplier = (participantCount === 3) ? 2.50 : 1.80;
+            }
+
+            document.getElementById('timingVal').innerText = `${timingDelta.toFixed(2)}s (Sync Window: 0.60s)`;
+            document.getElementById('partVal').innerText = `${participantCount} (${participantCount === 3 ? 'Tripartite' : (participantCount === 2 ? 'Co-Op Duo' : 'Solo')})`;
+            document.getElementById('dilationVal').innerText = isWheelOpen ? "0.20x (Slow-Mo)" : "1.00x (Realtime)";
+            document.getElementById('filterVal').innerText = isWheelOpen ? "450 Hz (Muffled Focus)" : "20,000 Hz (Full)";
+            document.getElementById('selectedCmdVal').innerText = isWheelOpen ? commands[selectedSector].name : "None";
+            document.getElementById('multiplierVal').innerText = isSync ? `${multiplier.toFixed(2)}x (SYNCHRONIZED)` : "1.00x (Missed Window)";
+        }
+
+        toggleWheelBtn.onclick = () => {
+            initAudio();
+            isWheelOpen = !isWheelOpen;
+            toggleWheelBtn.innerText = isWheelOpen ? "⏱️ CLOSE COMMAND WHEEL (1.00x REALTIME)" : "⏱️ TOGGLE COMMAND WHEEL (0.20x BULLET TIME)";
+            toggleWheelBtn.className = isWheelOpen ? "btn btn-finisher" : "btn btn-wheel";
+            if (isWheelOpen) {
+                barkBox.innerHTML = `<span style="color: ${commands[selectedSector].color}; font-weight: bold;">${commands[selectedSector].bark}</span>`;
+            }
+            updateTacticalMath();
+        };
+
+        timingSlider.oninput = (e) => {
+            timingDelta = parseFloat(e.target.value);
+            updateTacticalMath();
+        };
+
+        partSlider.oninput = (e) => {
+            participantCount = parseInt(e.target.value);
+            updateTacticalMath();
+        };
+
+        execComboBtn.onclick = () => {
+            initAudio();
+            freezeFrames = 15; // 0.05x freeze impact
+            playComboExplosion();
+            const isSync = (timingDelta <= 0.60 && participantCount >= 2);
+            const mult = (participantCount === 3) ? "2.50x TRIPARTITE BURST" : "1.80x CO-OP BURST";
+            barkBox.innerHTML = isSync
+                ? `<span style="color: #39c5cf; font-weight: bold;">💥 SYNCHRONIZED COMBO IMPACT! [${mult}]</span><br>Target posture shattered! 0.05x micro-freeze frame executed.`
+                : `<span style="color: #f85149; font-weight: bold;">⚠️ MISSED COMBO SYNC WINDOW</span><br>Timing delta (${timingDelta.toFixed(2)}s) exceeded 0.60s window. Standard damage dealt.`;
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "TEMPORAL_TACTICAL_COMMAND",
+                wheel_open: isWheelOpen,
+                time_dilation: isWheelOpen ? 0.20 : 1.00,
+                audio_cutoff_hz: isWheelOpen ? 450 : 20000,
+                selected_command: commands[selectedSector].name,
+                timing_delta_seconds: timingDelta,
+                active_participants: participantCount,
+                combo_multiplier: (timingDelta <= 0.60 && participantCount >= 2) ? ((participantCount === 3) ? 2.50 : 1.80) : 1.00
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        resetBtn.onclick = () => {
+            isWheelOpen = false;
+            timingDelta = 0.35;
+            participantCount = 3;
+            timingSlider.value = 0.35;
+            partSlider.value = 3;
+            toggleWheelBtn.innerText = "⏱️ TOGGLE COMMAND WHEEL (0.20x BULLET TIME)";
+            toggleWheelBtn.className = "btn btn-wheel";
+            barkBox.innerText = "Squad Standing By. Hold Command Wheel to issue tactical companion orders.";
+            updateTacticalMath();
+        };
+
+        // Canvas Visualizer
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        for (let i = 0; i < 40; i++) {
+            particles.push({
+                x: Math.random() * 650,
+                y: Math.random() * 440,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                size: Math.random() * 3 + 1,
+                color: Math.random() > 0.5 ? '#39c5cf' : '#d29922'
+            });
+        }
+
+        canvas.onmousemove = (e) => {
+            if (!isWheelOpen) return;
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const my = e.clientY - rect.top;
+            const cx = 325;
+            const cy = 220;
+
+            const angleRad = Math.atan2(my - cy, mx - cx);
+            let angleDeg = angleRad * (180 / Math.PI);
+            if (angleDeg < 0) angleDeg += 360;
+
+            const newSector = Math.floor((angleDeg + 22.5) / 45) % 8;
+            if (newSector !== selectedSector) {
+                selectedSector = newSector;
+                playTacticalTick();
+                barkBox.innerHTML = `<span style="color: ${commands[selectedSector].color}; font-weight: bold;">${commands[selectedSector].bark}</span>`;
+                updateTacticalMath();
+            }
+        };
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const speedScale = (freezeFrames > 0) ? 0.05 : (isWheelOpen ? 0.20 : 1.00);
+            if (freezeFrames > 0) freezeFrames--;
+
+            // Update & Draw Ambient Dust Particles
+            particles.forEach(p => {
+                p.x += p.vx * speedScale;
+                p.y += p.vy * speedScale;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw Characters
+            const kaelenPos = { x: 220, y: 220 };
+            const garrettPos = { x: 180, y: 150 };
+            const serafinaPos = { x: 180, y: 290 };
+            const bossPos = { x: 480, y: 220 };
+
+            // Beam links to Boss
+            ctx.strokeStyle = isWheelOpen ? 'rgba(57, 197, 207, 0.4)' : 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(kaelenPos.x, kaelenPos.y);
+            ctx.lineTo(bossPos.x, bossPos.y);
+            ctx.moveTo(garrettPos.x, garrettPos.y);
+            ctx.lineTo(bossPos.x, bossPos.y);
+            ctx.moveTo(serafinaPos.x, serafinaPos.y);
+            ctx.lineTo(bossPos.x, bossPos.y);
+            ctx.stroke();
+
+            // Draw Boss Target Reticle
+            ctx.strokeStyle = '#f85149';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(bossPos.x, bossPos.y, 28, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = '#f85149';
+            ctx.fillText("NIGHTSTEEL TITAN", bossPos.x - 45, bossPos.y + 44);
+
+            // Kaelen
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(kaelenPos.x, kaelenPos.y, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Kaelen", kaelenPos.x - 16, kaelenPos.y + 25);
+
+            // Garrett
+            ctx.fillStyle = '#3fb950';
+            ctx.beginPath();
+            ctx.arc(garrettPos.x, garrettPos.y, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett", garrettPos.x - 18, garrettPos.y - 15);
+
+            // Serafina
+            ctx.fillStyle = '#d29922';
+            ctx.beginPath();
+            ctx.arc(serafinaPos.x, serafinaPos.y, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina", serafinaPos.x - 20, serafinaPos.y + 25);
+
+            // 8-Sector Radial Command Wheel Overlay
+            if (isWheelOpen) {
+                const cx = 325;
+                const cy = 220;
+                const innerRadius = 45;
+                const outerRadius = 135;
+
+                // Center wheel core
+                ctx.fillStyle = 'rgba(28, 33, 40, 0.85)';
+                ctx.strokeStyle = '#39c5cf';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(cx, cy, innerRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = '#39c5cf';
+                ctx.font = '11px monospace';
+                ctx.fillText("0.20x SLOW", cx - 30, cy + 4);
+
+                // Draw 8 Sectors
+                for (let i = 0; i < 8; i++) {
+                    const startAngle = (i * 45 - 22.5) * (Math.PI / 180);
+                    const endAngle = (i * 45 + 22.5) * (Math.PI / 180);
+                    const isSelected = (i === selectedSector);
+
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, outerRadius, startAngle, endAngle);
+                    ctx.arc(cx, cy, innerRadius, endAngle, startAngle, true);
+                    ctx.closePath();
+
+                    ctx.fillStyle = isSelected ? 'rgba(57, 197, 207, 0.45)' : 'rgba(22, 27, 34, 0.65)';
+                    ctx.fill();
+                    ctx.strokeStyle = isSelected ? '#39c5cf' : '#30363d';
+                    ctx.lineWidth = isSelected ? 3 : 1;
+                    ctx.stroke();
+
+                    // Sector Label
+                    const midAngle = (i * 45) * (Math.PI / 180);
+                    const textX = cx + Math.cos(midAngle) * 90;
+                    const textY = cy + Math.sin(midAngle) * 90;
+
+                    ctx.fillStyle = isSelected ? '#fff' : '#8b949e';
+                    ctx.font = isSelected ? 'bold 10px sans-serif' : '9px sans-serif';
+                    ctx.fillText(commands[i].name.split(':')[0], textX - 18, textY + 3);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateTacticalMath();
+        animate();
+    </script>
+</body>
+</html>
