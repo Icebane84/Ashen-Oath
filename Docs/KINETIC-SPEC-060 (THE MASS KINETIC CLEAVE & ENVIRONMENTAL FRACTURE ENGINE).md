@@ -98,3 +98,11 @@ The test suite `AshenOath.Combat.MasterBatch119_MassKineticCleave` verifies:
 * **Previous Milestone**: 2,375 Builds (`PROMISE-SPEC-059`)
 * **Current Milestone**: **2,395 Builds (`KINETIC-SPEC-060`)**
 * **Compilation Status**: **0 Errors, 0 Warnings** via UnrealBuildTool (UE 5.8 Development Win64).
+
+---
+
+## 📜 6. Architectural Provenance & Canonical Lineage
+* **Foundational Design Protocol**: [`PRS-001-SYS-024 Design Protocol`](file:///c:/Users/Chris/Where%20Light%20Fades/Ashen%20Oath/Design%20and%20Technical/Combat%20Design/PRS-001_Kinetic_Berserk_Engine/PRS-001-SYS-024%20Design%20Protocol.md)
+* **Synchronized Runtime Pipeline**: [`PRS-001-SYS-038 Execution Lifecycle Architecture`](file:///c:/Users/Chris/Where%20Light%20Fades/Ashen%20Oath/Design%20and%20Technical/Combat%20Design/PRS-001_Kinetic_Berserk_Engine/PRS-001%20Synchronized%20Execution%20Lifecycle%20Architecture.md)
+* **Raw C++ Prototype Suite**: [`PRS-001_Kinetic_Berserk_Engine/`](file:///c:/Users/Chris/Where%20Light%20Fades/Ashen%20Oath/Design%20and%20Technical/Combat%20Design/PRS-001_Kinetic_Berserk_Engine)
+* **UE 5.8 Production Source**: [`Source/AshenOath/Combat/AshenMassKineticCleaveComponent.h`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Combat/AshenMassKineticCleaveComponent.h)
