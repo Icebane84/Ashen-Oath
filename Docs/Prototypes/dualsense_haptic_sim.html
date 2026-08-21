@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — DualSense Somatic Tactile Whisper & Trigger Simulator</title>
+    <!-- Traceability: HAPTIC-SPEC-065 | UAshenDualSenseHapticSubsystem | Builds 2476-2495 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-cyan: #39c5cf;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1050px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-blue);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #111d2e 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-blue);
+        }
+
+        .btn-lockout {
+            background: #da3633;
+            border-color: #f85149;
+            color: #fff;
+        }
+
+        .btn-lockout:hover {
+            background: #f85149;
+        }
+
+        .btn-whisper {
+            background: #238636;
+            border-color: #2ea043;
+            color: #fff;
+        }
+
+        .btn-whisper:hover {
+            background: #2ea043;
+        }
+
+        .whisper-box {
+            background: #1c2128;
+            border: 1px dashed var(--accent-blue);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>DUALSENSE SOMATIC TACTILE WHISPER & TRIGGER SIMULATOR</h1>
+                <p>3-Tier Trigger Arbitration, Directional Flank Ticks & Controller Speaker Audio (HAPTIC-SPEC-065)</p>
+            </div>
+            <div class="badge">DualSense Hardware Actuation Parity</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>WEAPON MASS (R2 Blade Drag)</span>
+                        <span class="control-value" id="massVal">155 kg (Nightsteel Heavy)</span>
+                    </div>
+                    <input type="range" id="massSlider" min="45" max="220" value="155" step="5">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>THREAT FLANK ANGLE (Grip Ticks)</span>
+                        <span class="control-value" id="angleVal">0° (Forward)</span>
+                    </div>
+                    <input type="range" id="angleSlider" min="-180" max="180" value="0" step="5">
+                </div>
+
+                <button class="btn btn-lockout" id="toggleLockoutBtn">🔒 ENGAGE PRIORITY 1 WILL LOCKOUT (R2)</button>
+                
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-whisper" id="garrettWhisperBtn" style="flex: 1;">📻 GARRETT FLANK WHISPER</button>
+                    <button class="btn" id="serafinaPrayerBtn" style="flex: 1; color: var(--accent-gold);">✨ SERAFINA PRAYER</button>
+                </div>
+
+                <div class="whisper-box" id="whisperBox">
+                    "Controller Speaker Ready. Awaiting companion tactical whisper..."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-blue);">📋 COPY SELT TELEMETRY</button>
+                    <button class="btn" id="resetBtn" style="flex: 1;">RESET HAPTICS</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">L2 Trigger (Garrett)</div>
+                <div class="telemetry-val" id="l2Val">0.20 (Spring)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">R2 Trigger (Kaelen)</div>
+                <div class="telemetry-val" id="r2Val">0.72 (Heavy Drag)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Grip Motors (L / R)</div>
+                <div class="telemetry-val" id="motorsVal">0.60 / 0.60</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Speaker Submix</div>
+                <div class="telemetry-val" id="speakerVal">Ready (0.0 dB)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer for Controller Speaker Whispers & Motor Rumble
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playWhisperTone(freq1, freq2) {
+            initAudio();
+            if (!audioCtx) return;
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc1.type = 'sawtooth';
+            osc1.frequency.setValueAtTime(freq1, audioCtx.currentTime);
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(freq2, audioCtx.currentTime);
+
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            filter.Q.value = 3.0;
+
+            gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+
+            osc1.connect(filter);
+            osc2.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc1.start();
+            osc2.start();
+            osc1.stop(audioCtx.currentTime + 0.65);
+            osc2.stop(audioCtx.currentTime + 0.65);
+        }
+
+        function playHapticMotorThump(isLeft) {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(55, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(25, audioCtx.currentTime + 0.2);
+
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.22);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        }
+
+        // State Machine
+        let weaponMass = 155;
+        let flankAngle = 0;
+        let isLockoutActive = false;
+        let leftMotorIntensity = 0.60;
+        let rightMotorIntensity = 0.60;
+        let speakerGlow = 0.0;
+
+        const massSlider = document.getElementById('massSlider');
+        const angleSlider = document.getElementById('angleSlider');
+        const toggleLockoutBtn = document.getElementById('toggleLockoutBtn');
+        const garrettWhisperBtn = document.getElementById('garrettWhisperBtn');
+        const serafinaPrayerBtn = document.getElementById('serafinaPrayerBtn');
+        const whisperBox = document.getElementById('whisperBox');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function updateHapticMath() {
+            // R2 Resistance (Mass-based 45 -> 220kg mapped to 0.10 -> 0.95)
+            let r2Resistance = 0.10 + ((weaponMass - 45) / 175) * 0.85;
+            let r2Mode = "Feedback";
+
+            if (isLockoutActive) {
+                r2Resistance = 1.00;
+                r2Mode = "HARD LOCKOUT (P1)";
+            }
+
+            // Directional Flank Motor Bias
+            // flankAngle: -180 (Behind-Left) to 0 (Forward) to +180 (Behind-Right)
+            if (flankAngle < -15) {
+                // Threat Left
+                leftMotorIntensity = 0.85;
+                rightMotorIntensity = 0.15;
+            } else if (flankAngle > 15) {
+                // Threat Right
+                leftMotorIntensity = 0.15;
+                rightMotorIntensity = 0.85;
+            } else {
+                // Center
+                leftMotorIntensity = 0.50;
+                rightMotorIntensity = 0.50;
+            }
+
+            document.getElementById('massVal').innerText = `${weaponMass} kg (${weaponMass >= 150 ? 'Nightsteel Heavy' : 'Agile Blade'})`;
+            document.getElementById('angleVal').innerText = `${flankAngle}° (${flankAngle < -15 ? 'Left Flank' : (flankAngle > 15 ? 'Right Flank' : 'Forward')})`;
+            document.getElementById('r2Val').innerText = `${r2Resistance.toFixed(2)} (${r2Mode})`;
+            document.getElementById('l2Val').innerText = "0.35 (Wire Spring)";
+            document.getElementById('motorsVal').innerText = `${leftMotorIntensity.toFixed(2)} / ${rightMotorIntensity.toFixed(2)}`;
+        }
+
+        massSlider.oninput = (e) => {
+            weaponMass = parseFloat(e.target.value);
+            updateHapticMath();
+        };
+
+        angleSlider.oninput = (e) => {
+            flankAngle = parseFloat(e.target.value);
+            updateHapticMath();
+            playHapticMotorThump(flankAngle < 0);
+        };
+
+        toggleLockoutBtn.onclick = () => {
+            initAudio();
+            isLockoutActive = !isLockoutActive;
+            toggleLockoutBtn.innerText = isLockoutActive ? "🔓 DISENGAGE WILL LOCKOUT" : "🔒 ENGAGE PRIORITY 1 WILL LOCKOUT (R2)";
+            toggleLockoutBtn.className = isLockoutActive ? "btn btn-whisper" : "btn btn-lockout";
+            updateHapticMath();
+        };
+
+        garrettWhisperBtn.onclick = () => {
+            initAudio();
+            speakerGlow = 1.0;
+            playWhisperTone(280, 420);
+            whisperBox.innerHTML = '<span style="color: #3fb950; font-weight: bold;">[CONTROLLER SPEAKER: GARRETT]</span><br>"Flank left, Kaelen! I have the wire set on the pillar."';
+            document.getElementById('speakerVal').innerText = "Garrett (Active)";
+        };
+
+        serafinaPrayerBtn.onclick = () => {
+            initAudio();
+            speakerGlow = 1.0;
+            playWhisperTone(528, 741);
+            whisperBox.innerHTML = '<span style="color: #d29922; font-weight: bold;">[CONTROLLER SPEAKER: SERAFINA]</span><br>"The White Flame shields your grip. Stand unbroken."';
+            document.getElementById('speakerVal').innerText = "Serafina (Active)";
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "DUALSENSE_HAPTIC_ARBITRATION",
+                r2_resistance: isLockoutActive ? 1.0 : parseFloat((0.10 + ((weaponMass - 45) / 175) * 0.85).toFixed(3)),
+                l2_resistance: 0.35,
+                lockout_engaged: isLockoutActive,
+                left_grip_motor: parseFloat(leftMotorIntensity.toFixed(3)),
+                right_grip_motor: parseFloat(rightMotorIntensity.toFixed(3)),
+                flank_angle: flankAngle
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        resetBtn.onclick = () => {
+            weaponMass = 155;
+            flankAngle = 0;
+            isLockoutActive = false;
+            massSlider.value = 155;
+            angleSlider.value = 0;
+            toggleLockoutBtn.innerText = "🔒 ENGAGE PRIORITY 1 WILL LOCKOUT (R2)";
+            toggleLockoutBtn.className = "btn btn-lockout";
+            whisperBox.innerText = "Controller Speaker Ready. Awaiting companion tactical whisper...";
+            document.getElementById('speakerVal').innerText = "Ready (0.0 dB)";
+            updateHapticMath();
+        };
+
+        // Canvas DualSense Visualizer
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 325;
+            const centerY = 230;
+
+            if (speakerGlow > 0) {
+                speakerGlow -= 0.02;
+            }
+
+            // Draw Controller Body (Sleek Obsidian & White shell)
+            ctx.fillStyle = '#1c2128';
+            ctx.strokeStyle = '#30363d';
+            ctx.lineWidth = 3;
+
+            // Controller Shape
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, 160, 110, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Grips
+            // Left Grip Motor Wave
+            ctx.strokeStyle = `rgba(57, 197, 207, ${leftMotorIntensity})`;
+            ctx.lineWidth = 4 + leftMotorIntensity * 8;
+            ctx.beginPath();
+            ctx.arc(centerX - 130, centerY + 50, 45, 0.8, 2.5);
+            ctx.stroke();
+
+            // Right Grip Motor Wave
+            ctx.strokeStyle = `rgba(248, 81, 73, ${rightMotorIntensity})`;
+            ctx.lineWidth = 4 + rightMotorIntensity * 8;
+            ctx.beginPath();
+            ctx.arc(centerX + 130, centerY + 50, 45, 0.6, 2.3, true);
+            ctx.stroke();
+
+            // L2 Trigger (Left Top)
+            ctx.fillStyle = '#238636';
+            ctx.strokeStyle = '#2ea043';
+            ctx.lineWidth = 2;
+            ctx.fillRect(centerX - 110, centerY - 130, 40, 24);
+            ctx.strokeRect(centerX - 110, centerY - 130, 40, 24);
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px monospace';
+            ctx.fillText("L2: 0.35", centerX - 105, centerY - 114);
+
+            // R2 Trigger (Right Top - Shows Lockout or Drag)
+            ctx.fillStyle = isLockoutActive ? '#da3633' : '#8957e5';
+            ctx.strokeStyle = isLockoutActive ? '#f85149' : '#a371f7';
+            ctx.lineWidth = 2;
+            ctx.fillRect(centerX + 70, centerY - 130, 40, 24);
+            ctx.strokeRect(centerX + 70, centerY - 130, 40, 24);
+            ctx.fillStyle = '#fff';
+            ctx.fillText(isLockoutActive ? "LOCKED" : "R2: DRAG", centerX + 72, centerY - 114);
+
+            // Touchpad
+            ctx.fillStyle = '#161b22';
+            ctx.strokeStyle = '#30363d';
+            ctx.fillRect(centerX - 50, centerY - 80, 100, 50);
+            ctx.strokeRect(centerX - 50, centerY - 80, 100, 50);
+
+            // Controller Speaker (Center Mesh)
+            ctx.fillStyle = speakerGlow > 0 ? `rgba(88, 166, 255, ${speakerGlow})` : '#30363d';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 10, 12, 0, Math.PI * 2);
+            ctx.fill();
+            if (speakerGlow > 0) {
+                ctx.strokeStyle = '#58a6ff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            // Directional Threat Arrow Indicator
+            const rad = (flankAngle - 90) * (Math.PI / 180);
+            const arrowDist = 180;
+            const arrowX = centerX + Math.cos(rad) * arrowDist;
+            const arrowY = centerY + Math.sin(rad) * arrowDist;
+
+            ctx.fillStyle = '#f85149';
+            ctx.beginPath();
+            ctx.arc(arrowX, arrowY, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#e6edf3';
+            ctx.fillText(`Threat (${flankAngle}°)`, arrowX - 25, arrowY + 20);
+
+            requestAnimationFrame(animate);
+        }
+
+        updateHapticMath();
+        animate();
+    </script>
+</body>
+</html>
