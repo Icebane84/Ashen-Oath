@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Scenario 2: The Sentinel's Gambit Simulator</title>
+    <!-- Traceability: SCENARIO-SPEC-069 | UAshenScenario2MissionSubsystem | Builds 2556-2575 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-green: #3fb950;
+            --accent-amber: #e3b341;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-purple: #a371f7;
+            --accent-cyan: #39c5cf;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1080px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-green);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-green);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #101c18 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 440px;
+            cursor: crosshair;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .trap-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-green);
+        }
+
+        .btn.active {
+            background: #238636;
+            border-color: #3fb950;
+            color: #fff;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .dialogue-box {
+            background: #1c2128;
+            border: 1px solid #238636;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 56px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-green);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SCENARIO 2: THE SENTINEL'S GAMBIT SIMULATOR</h1>
+                <p>Garrett's Architect of Chaos Trap Network & LAW-001 Pathfinding Disruption (SCENARIO-SPEC-069)</p>
+            </div>
+            <div class="badge">Milestone 2,575 Builds Clean</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-label">SELECT TRAP TO DEPLOY (Click on Canvas)</div>
+                <div class="trap-selector">
+                    <button class="btn active" id="wireBtn">🪤 WIRE</button>
+                    <button class="btn" id="flareBtn">✨ FLARE</button>
+                    <button class="btn" id="lureBtn">🔊 LURE</button>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>CORRUPTION LEVEL (Left Rumble)</span>
+                        <span class="control-value" id="corruptVal">0.40</span>
+                    </div>
+                    <input type="range" id="corruptSlider" min="0.0" max="1.0" value="0.40" step="0.05">
+                </div>
+
+                <button class="btn" id="spawnGhoulBtn" style="background: #388bfd; color: #fff;">🧟 SPAWN GHOUL PATROL</button>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Garrett]: "Keep low. Traps set in the choke points."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT TELEMETRY</button>
+                    <button class="btn" id="clearTrapsBtn" style="flex: 1;">CLEAR TRAPS</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Navmesh Utility</div>
+                <div class="telemetry-val" id="utilityVal">1.00 (Normal)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">LAW-001 Breaker</div>
+                <div class="telemetry-val" id="breakerVal">ARMED</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense Haptics</div>
+                <div class="telemetry-val" id="hapticVal">L: 0.34 | R: 0.05</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Ghouls In Ravine</div>
+                <div class="telemetry-val" id="funnelVal">0 Funneled</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer with Dual-Channel Stereo Panning
+        let audioCtx = null;
+        let leftPanner = null;
+        let rightPanner = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playWireSnap() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const panner = audioCtx.createStereoPanner();
+
+            panner.pan.setValueAtTime(-0.5, audioCtx.currentTime); // Left biased
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);
+
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.09);
+
+            osc.connect(gain);
+            gain.connect(panner);
+            panner.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function playPhosphorFlare() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const panner = audioCtx.createStereoPanner();
+
+            panner.pan.setValueAtTime(0.7, audioCtx.currentTime); // Right channel spark
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(1800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(450, audioCtx.currentTime + 0.35);
+
+            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+            osc.connect(gain);
+            gain.connect(panner);
+            panner.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.42);
+        }
+
+        // State Machine
+        let selectedTrapType = 'wire'; // 'wire', 'flare', 'lure'
+        let corruptionLevel = 0.40;
+        let traps = [];
+        let ghouls = [
+            { x: 180, y: 120, vx: 1.2, vy: 0, state: 'normal' },
+            { x: 220, y: 300, vx: 1.0, vy: 0, state: 'normal' }
+        ];
+        let funneledCount = 0;
+        let isFlareActive = false;
+
+        const wireBtn = document.getElementById('wireBtn');
+        const flareBtn = document.getElementById('flareBtn');
+        const lureBtn = document.getElementById('lureBtn');
+        const corruptSlider = document.getElementById('corruptSlider');
+        const spawnGhoulBtn = document.getElementById('spawnGhoulBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const clearTrapsBtn = document.getElementById('clearTrapsBtn');
+
+        function setTrapSelection(type) {
+            selectedTrapType = type;
+            wireBtn.className = (type === 'wire') ? 'btn active' : 'btn';
+            flareBtn.className = (type === 'flare') ? 'btn active' : 'btn';
+            lureBtn.className = (type === 'lure') ? 'btn active' : 'btn';
+        }
+
+        wireBtn.onclick = () => setTrapSelection('wire');
+        flareBtn.onclick = () => setTrapSelection('flare');
+        lureBtn.onclick = () => setTrapSelection('lure');
+
+        corruptSlider.oninput = (e) => {
+            corruptionLevel = parseFloat(e.target.value);
+            updateTacticalMath();
+        };
+
+        spawnGhoulBtn.onclick = () => {
+            ghouls.push({ x: 80, y: 150 + Math.random() * 150, vx: 1.2, vy: 0, state: 'normal' });
+            updateTacticalMath();
+        };
+
+        clearTrapsBtn.onclick = () => {
+            traps = [];
+            updateTacticalMath();
+        };
+
+        function updateTacticalMath() {
+            // Degraded Utility: 1.0 - (traps.length * 0.25)
+            const navUtility = Math.max(0.0, 1.0 - (traps.length * 0.25));
+            const isBreakerTripped = (navUtility < 0.15);
+
+            const leftRumble = (corruptionLevel * 0.85).toFixed(2);
+            const rightSpark = isFlareActive ? '0.90' : '0.05';
+
+            if (isBreakerTripped) {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> 'Their routing just collapsed. Funnel the panic right off the edge.'`;
+            } else if (traps.length > 0) {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> 'Wire tension holding. They're breaking formation.'`;
+            } else {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> 'Keep low. Traps set in the choke points.'`;
+            }
+
+            document.getElementById('corruptVal').innerText = corruptionLevel.toFixed(2);
+            document.getElementById('utilityVal').innerText = `${navUtility.toFixed(2)} (${isBreakerTripped ? 'FAILED RECOVERY' : (navUtility < 0.70 ? 'Degraded' : 'Normal')})`;
+            document.getElementById('breakerVal').innerText = isBreakerTripped ? "⚡ TRIPPED (PANIC)" : "ARMED";
+            document.getElementById('breakerVal').style.color = isBreakerTripped ? "#f85149" : "#3fb950";
+            document.getElementById('hapticVal').innerText = `L: ${leftRumble} | R: ${rightSpark}`;
+            document.getElementById('funnelVal').innerText = `${funneledCount} Funneled`;
+        }
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SCENARIO_2_SENTINELS_GAMBIT",
+                traps_deployed_count: traps.length,
+                navmesh_utility_score: Math.max(0.0, 1.0 - (traps.length * 0.25)),
+                law001_circuit_breaker_tripped: (1.0 - (traps.length * 0.25) < 0.15),
+                ghouls_funneled_to_ravine: funneledCount,
+                garrett_tactical_profile: "Calculated_Pragmatic",
+                dual_channel_haptics: {
+                    left_channel_corruption_rumble: parseFloat((corruptionLevel * 0.85).toFixed(2)),
+                    right_channel_white_flame_spark: isFlareActive ? 0.90 : 0.05
+                }
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Traps & AI Simulation
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.onclick = (e) => {
+            initAudio();
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const my = e.clientY - rect.top;
+
+            if (mx < 500) { // Can only place in vault, not in ravine
+                traps.push({ x: mx, y: my, type: selectedTrapType, radius: 45, triggered: false });
+                if (selectedTrapType === 'wire') playWireSnap();
+                if (selectedTrapType === 'flare') {
+                    isFlareActive = true;
+                    playPhosphorFlare();
+                    setTimeout(() => { isFlareActive = false; updateTacticalMath(); }, 2000);
+                }
+                updateTacticalMath();
+            }
+        };
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const navUtility = Math.max(0.0, 1.0 - (traps.length * 0.25));
+            const isBreakerTripped = (navUtility < 0.15);
+
+            // Draw Vault Ground
+            ctx.fillStyle = '#161b22';
+            ctx.fillRect(0, 0, 500, canvas.height);
+
+            // Draw Ravine Cliff
+            ctx.fillStyle = '#0a0d12';
+            ctx.fillRect(500, 0, 150, canvas.height);
+            ctx.strokeStyle = '#f85149';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(500, 0);
+            ctx.lineTo(500, canvas.height);
+            ctx.stroke();
+
+            ctx.fillStyle = '#f85149';
+            ctx.font = '11px monospace';
+            ctx.fillText("CRUMBLING RAVINE EDGE", 510, 25);
+
+            // Draw Traps
+            traps.forEach(t => {
+                ctx.strokeStyle = (t.type === 'wire') ? '#3fb950' : (t.type === 'flare' ? '#e3b341' : '#39c5cf');
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = ctx.strokeStyle;
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Update & Draw Ghouls
+            for (let i = ghouls.length - 1; i >= 0; i--) {
+                const g = ghouls[i];
+
+                if (isBreakerTripped) {
+                    // Panic state: run erratically right toward the ravine cliff
+                    g.x += 2.5;
+                    g.y += (Math.random() - 0.5) * 4;
+                } else {
+                    g.x += g.vx;
+                }
+
+                // Check trap triggers
+                traps.forEach(t => {
+                    const distSq = (g.x - t.x) ** 2 + (g.y - t.y) ** 2;
+                    if (distSq <= t.radius ** 2) {
+                        g.vx = 0.4; // slowed by snare
+                    }
+                });
+
+                // Check Ravine Fall
+                if (g.x >= 500) {
+                    funneledCount++;
+                    ghouls.splice(i, 1);
+                    updateTacticalMath();
+                    continue;
+                }
+
+                // Draw Ghoul
+                ctx.fillStyle = isBreakerTripped ? '#f85149' : '#a371f7';
+                ctx.beginPath();
+                ctx.arc(g.x, g.y, 10, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText(isBreakerTripped ? "PANIC!" : "Ghoul", g.x - 14, g.y - 14);
+            }
+
+            // Draw Garrett
+            ctx.fillStyle = '#3fb950';
+            ctx.beginPath();
+            ctx.arc(60, 220, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett", 40, 245);
+
+            requestAnimationFrame(animate);
+        }
+
+        updateTacticalMath();
+        animate();
+    </script>
+</body>
+</html>
