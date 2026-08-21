@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2575: Master Batch #128 — Scenario 2: The Sentinel's Gambit (SCENARIO-SPEC-069)
+**Domain:** Scenarios / AI / Combat / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,575 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2556 | `AshenScenario2SentinelsGambitTypes.h` | `AshenScenario2SentinelsGambitTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Scenarios |
+| 2557 | `AshenScenario2MissionSubsystem.h/.cpp` | `UAshenScenario2MissionSubsystem` — Subsystem managing Spire jailbreak & trap network | Scenarios |
+| 2558 | `AshenGarrettTrapGridEvaluatorComponent.h/.cpp` | `UAshenGarrettTrapGridEvaluatorComponent` — Computes trap placement & detonation | Scenarios |
+| 2559 | `AshenPathfindingDisruptionEvaluatorComponent.h/.cpp` | `UAshenPathfindingDisruptionEvaluatorComponent` — AI navigation & LAW-001 Circuit Breaker | Scenarios |
+| 2560 | `AshenWhisperingSicknessEvaluatorComponent.h/.cpp` | `UAshenWhisperingSicknessEvaluatorComponent` — Modulates Whispering Sickness overlays | Scenarios |
+| 2561 | `UAshenStateTreeTask_GarrettDeployTrap.h/.cpp` | `UUAshenStateTreeTask_GarrettDeployTrap` — StateTree Task driving Garrett trap placement | AI |
+| 2562 | `AshenGarrettCaltropSnareGASAbility.h/.cpp` | `UAshenGarrettCaltropSnareGASAbility` — Deploys tension wire Caltrop Snares | Combat |
+| 2563 | `AshenGarrettPhosphorFlareGASAbility.h/.cpp` | `UAshenGarrettPhosphorFlareGASAbility` — Launches blinding White Flame phosphor flares | Combat |
+| 2564 | `AshenRavineLureBaitGASAbility.h/.cpp` | `UAshenRavineLureBaitGASAbility` — Deploys sonic lures funneling ghouls to ravines | Combat |
+| 2565 | `AshenStealthTakedownSilentGASAbility.h/.cpp` | `UAshenStealthTakedownSilentGASAbility` — Synchronized silent garrote takedown (+0.15 Trust) | Combat |
+| 2566 | `BTTask_AshenGhoulPathfindingPanic.h/.cpp` | `UBTTask_AshenGhoulPathfindingPanic` — AI Task routing panicked ghouls off ravine ledges | AI |
+| 2567 | `AshenGarrettPhysicalTrapWorldActor.h/.cpp` | `AAshenGarrettPhysicalTrapWorldActor` — Physicalized trap actor with tension cables | World |
+| 2568 | `UAshenUserWidget_SentinelsGambitHUD.h/.cpp` | `UAshenUserWidget_SentinelsGambitHUD` — UMG widget displaying trap slots & AI utility | UI |
+| 2569 | `AshenSpireAudioSubsystem.h/.cpp` | `UAshenSpireAudioSubsystem` — MetaSounds vault echoes & wire snap acoustics | Audio |
+| 2570 | `AshenPhosphorSilhouetteVFXComponent.h/.cpp` | `UAshenPhosphorSilhouetteVFXComponent` — Modulates high-contrast shadow silhouettes | Scenarios |
+| 2571 | `AshenScenario2SaveGameAdapter.h/.cpp` | `UAshenScenario2SaveGameAdapter` — Serializes jailbreak outcome & Garrett tactical profile | Core |
+| 2572 | `AshenScenario2DialogueBridge.h/.cpp` | `UAshenScenario2DialogueBridge` — Injects Garrett's 'Calculated_Pragmatic' dialogue | Narrative |
+| 2573 | `AshenScenario2HapticBridge.h/.cpp` | `UAshenScenario2HapticBridge` — Maps dual-channel DualSense haptics (Left/Right) | Scenarios |
+| 2574 | `AshenScenario2MasterBridge.h/.cpp` | `UAshenScenario2MasterBridge` — Master bridge coordinating StateTree, traps & audio | Orchestration |
+| 2575 | `AshenMasterBatch128AutomationTest.cpp` | `FAshenMasterBatch128AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2555: Master Batch #127 — Scenario 1: The Cauterized Heart (SCENARIO-SPEC-068)
 **Domain:** Scenarios / Combat / Audio / UI / AI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,555 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
