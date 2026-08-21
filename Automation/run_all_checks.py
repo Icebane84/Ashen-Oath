@@ -67,6 +67,11 @@ def main():
     if not run_step("SELT Telemetry & Coherence Log Audit", f'"{sys.executable}" "{selt_script}"'):
         success = False
 
+    # 5. Anti-Hallucination Symbol Verifier Gate
+    symbol_script = os.path.join(auto_dir, "symbol_verifier.py")
+    if not run_step("API Surface Symbol Verifier (Anti-Hallucination Gate)", f'"{sys.executable}" "{symbol_script}"'):
+        success = False
+
     print("\n=================================================================")
     if success:
         print("  [SUCCESS] ALL TIER-0 PRE-FLIGHT CHECKS PASSED WITH ZERO ENTROPY  ")

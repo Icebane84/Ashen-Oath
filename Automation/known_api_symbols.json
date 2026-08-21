@@ -1,0 +1,28 @@
+{
+  "_comment": "Ashen Oath API Ground-Truth Manifest. Maps Unreal Engine 5.8 classes to confirmed real vs confirmed hallucinated/fake methods.",
+  "UFieldSystemComponent": {
+    "known_methods": ["ApplyPhysicsField"],
+    "known_hallucinated": [
+      "ApplyStrainField",
+      "ApplyLinearVelocityField",
+      "ApplyRadialForce",
+      "ApplyDestructionField"
+    ]
+  },
+  "URadialFalloff": {
+    "known_methods": ["SetRadialFalloff"],
+    "known_hallucinated": []
+  },
+  "URadialVector": {
+    "known_methods": ["SetRadialVector"],
+    "known_hallucinated": []
+  },
+  "UFieldSystemMetaData": {
+    "known_methods": [],
+    "known_hallucinated": []
+  },
+  "UGeometryCollectionComponent": {
+    "known_methods": ["ApplyPhysicsField", "SetRestCollection"],
+    "known_hallucinated": ["ApplyDirectStrain", "ShatterInstantaneously"]
+  }
+}
