@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2535: Master Batch #126 — The Ashen Codex & Historical Relic Repository (ARCHIVE-SPEC-067)
+**Domain:** Archive / Combat / Audio / UI / AI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,535 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2516 | `AshenCodexArchiveTypes.h` | `AshenCodexArchiveTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Archive |
+| 2517 | `AshenCodexArchiveSubsystem.h/.cpp` | `UAshenCodexArchiveSubsystem` — Subsystem managing lore catalog & relic discovery | Archive |
+| 2518 | `AshenRelicInspectionEvaluatorComponent.h/.cpp` | `UAshenRelicInspectionEvaluatorComponent` — Computes 3D inspection angles & decoding | Archive |
+| 2519 | `AshenCodexMarginaliaEvaluatorComponent.h/.cpp` | `UAshenCodexMarginaliaEvaluatorComponent` — Injects companion handwritten margin notes | Archive |
+| 2520 | `AshenHistoricalLoreRegistryComponent.h/.cpp` | `UAshenHistoricalLoreRegistryComponent` — Manages master canonical lore dictionary | Archive |
+| 2521 | `AshenInspectRelicGASAbility.h/.cpp` | `UAshenInspectRelicGASAbility` — Engages 3D relic examination mode & orbital camera | Combat |
+| 2522 | `AshenDecodeRunicInscriptionGASAbility.h/.cpp` | `UAshenDecodeRunicInscriptionGASAbility` — Deciphers ancient runic scripts on relics | Combat |
+| 2523 | `AshenTriggerMemoryVignetteGASAbility.h/.cpp` | `UAshenTriggerMemoryVignetteGASAbility` — Initiates flashback vignette cutscenes | Combat |
+| 2524 | `AshenCodexBookmarkAnnotationGASAbility.h/.cpp` | `UAshenCodexBookmarkAnnotationGASAbility` — Places player bookmarks & marginalia pins | Combat |
+| 2525 | `AshenRelicResonancePurgeGASAbility.h/.cpp` | `UAshenRelicResonancePurgeGASAbility` — Purges relic blight to yield soul embers | Combat |
+| 2526 | `BTTask_AshenCompanionExamineLoreRelic.h/.cpp` | `UBTTask_AshenCompanionExamineLoreRelic` — AI Task directing companion to inspect relics | AI |
+| 2527 | `AshenHistoricalRelicPedestalWorldActor.h/.cpp` | `AAshenHistoricalRelicPedestalWorldActor` — Interactive relic pedestal world actor | World |
+| 2528 | `AshenUserWidget_CodexRepositoryHUD.h/.cpp` | `UAshenUserWidget_CodexRepositoryHUD` — UMG widget displaying codex chronicle & notes | UI |
+| 2529 | `AshenCodexAudioSubsystem.h/.cpp` | `UAshenCodexAudioSubsystem` — Synthesizes parchment page flips & Solfeggio hums | Audio |
+| 2530 | `AshenRelicGlowVFXComponent.h/.cpp` | `UAshenRelicGlowVFXComponent` — Modulates dynamic emissive pulse on relics | Archive |
+| 2531 | `AshenCodexSaveGameAdapter.h/.cpp` | `UAshenCodexSaveGameAdapter` — Serializes unlocked lore catalog & discovered relics | Core |
+| 2532 | `AshenCodexDialogueBridge.h/.cpp` | `UAshenCodexDialogueBridge` — Generates Campfire conversation prompts from lore | Narrative |
+| 2533 | `AshenCodexHapticBridge.h/.cpp` | `UAshenCodexHapticBridge` — Maps page turns & secret glyph alignment to haptics | Archive |
+| 2534 | `AshenCodexMasterBridge.h/.cpp` | `UAshenCodexMasterBridge` — Master bridge coordinating codex UI, world actors & audio | Orchestration |
+| 2535 | `AshenMasterBatch126AutomationTest.cpp` | `FAshenMasterBatch126AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2515: Master Batch #125 — The Temporal Co-Op Combo Synchronizer & Squad Command Wheel (TACTICAL-SPEC-066)
 **Domain:** Tactics / Combat / UI / Audio / AI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,515 Builds Clean (0 Errors, 0 Warnings) — *THE HISTORIC 2,500 BUILDS MILESTONE CROSSED*

@@ -30,10 +30,29 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-008`** | **Runic Mass-Momentum & Poise Scaling Invariant** | `RELIQUARY-SPEC-064` / `KINETIC-SPEC-060` / Crafting / Combat | Boss core and trauma hilt socketing dynamically scaling effective weapon mass ($45\text{kg} \leftrightarrow 220\text{kg}$), kinetic strike Joules, and Solfeggio harmonic chimes. |
 | **`SYN-009`** | **Adaptive Trigger Priority & Directional Tactile Invariant** | `HAPTIC-SPEC-065` / Haptics / Narrative / Combat | Enforcing strict Priority 1 Dialogue Lockout ($100\%$) over combat stagger and ambient somatic resistance, with directional grip threat motor bias. |
 | **`SYN-010`** | **Temporal Bullet-Time Dilation & Finisher Multiplier** | `TACTICAL-SPEC-066` / Tactics / Combat / Audio | Squad command wheel smoothly ramping time dilation ($1.00\times \to 0.20\times$) and low-pass audio ($450\text{ Hz}$), with $2.50\times$ synchronized finisher burst damage. |
+| **`SYN-011`** | **3D Relic Orbital Deciphering & Companion Marginalia Invariant** | `ARCHIVE-SPEC-067` / Archive / Narrative / Audio | 3D relic examination angle alignment ($|\Delta\theta| \le 15^\circ$) revealing hidden inscriptions, triggering Solfeggio hums and trust-scaled companion marginalia. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-011`: 3D Relic Orbital Deciphering & Companion Marginalia Invariant
+
+* **Target Subsystems:** `UAshenCodexArchiveSubsystem`, `UAshenRelicInspectionEvaluatorComponent`, `UAshenCodexMarginaliaEvaluatorComponent`, `UAshenCodexAudioSubsystem`
+* **Related Specifications:** [`ARCHIVE-SPEC-067`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/ARCHIVE-SPEC-067%20%28THE%20ASHEN%20CODEX%20&%20HISTORICAL%20RELIC%20REPOSITORY%29.md), [`JOURNAL-SPEC-055`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/JOURNAL-SPEC-055%20%28THE%20CAMPFIRE%20MARGINALIA%20&%20PHYSICALIZED%20RELATIONAL%20INSCRIPTION%20MATRIX%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{InscriptionAlignment}(\theta_{\text{yaw}}, \theta_{\text{target}}) = \begin{cases} \text{true}, & \text{if } |\text{NormalizeAxis}(\theta_{\text{yaw}} - \theta_{\text{target}})| \le 15^\circ \\ \text{false}, & \text{otherwise} \end{cases}$$
+$$\text{DecodedProgress}(t) = \text{clamp}\left(\frac{t_{\text{dwell}}}{t_{\text{required}}}, 0.0, 1.0\right)$$
+$$f_{\text{relic}}(Rarity) = \begin{cases} 396\text{ Hz}, & \text{Common Relic} \\ 528\text{ Hz}, & \text{Rare Artifact} \\ 741\text{ Hz}, & \text{Sacred Heirloom} \\ 852\text{ Hz}, & \text{Titan Core Relic} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Living Codex:** Codex pages are not sterile encyclopedias—they are living companion dialogue surfaces. As trust rises ($\ge 0.60$), companions actively annotate pages with strategic boss weaknesses and emotional admissions.
+* **Tactile Archival Archaeology:** Rotating 3D relics to align ancient light glyphs creates tactile, discovery-driven gameplay that rewards attentive examination.
+
+---
 
 ---
 
