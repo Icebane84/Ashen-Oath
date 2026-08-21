@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Scenario 1: The Cauterized Heart Simulator</title>
+    <!-- Traceability: SCENARIO-SPEC-068 | UAshenScenario1MissionSubsystem | Builds 2536-2555 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-amber: #e3b341;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-purple: #a371f7;
+            --accent-cyan: #39c5cf;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1080px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #1b1610 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-amber);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .btn-channel {
+            background: #9e6a03;
+            border-color: #e3b341;
+            color: #fff;
+        }
+
+        .btn-channel:hover {
+            background: #e3b341;
+            color: #000;
+        }
+
+        .btn-smash {
+            background: #8e1519;
+            border-color: #f85149;
+            color: #fff;
+        }
+
+        .btn-smash:hover {
+            background: #f85149;
+        }
+
+        .btn-parry {
+            background: #1f6feb;
+            border-color: #388bfd;
+            color: #fff;
+        }
+
+        .btn-parry:hover {
+            background: #388bfd;
+        }
+
+        .dialogue-box {
+            background: #1c2128;
+            border: 1px solid #4a3525;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 64px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SCENARIO 1: THE CAUTERIZED HEART SIMULATOR</h1>
+                <p>Oakhaven Chapel Climax, Brother Malakor Void Smash & Reluctant Knife Evaluation (SCENARIO-SPEC-068)</p>
+            </div>
+            <div class="badge">Milestone 2,555 Builds Clean</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <button class="btn btn-channel" id="channelBtn">🔥 HOLD TO CHANNEL CLARITY OF HEART RITUAL</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-smash" id="smashBtn" style="flex: 1;">⚡ MALAKOR VOID SMASH</button>
+                    <button class="btn btn-parry" id="parryBtn" style="flex: 1;">🛡️ TITAN'S STAND PARRY</button>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>MALAKOR BOSS PHASE</span>
+                        <span class="control-value" id="phaseVal">Phase 1: Inquisitor Smash</span>
+                    </div>
+                    <input type="range" id="phaseSlider" min="1" max="3" value="1" step="1">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>INTEGRATION DEBT (Shadow Seepage)</span>
+                        <span class="control-value" id="debtVal">0.00 (Safe Buffer)</span>
+                    </div>
+                    <input type="range" id="debtSlider" min="0.0" max="1.0" value="0.00" step="0.05">
+                </div>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Elder Valerius]: "Focus your breathing, boy. We do what we must—not what is easy."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-amber);">📋 COPY SELT TELEMETRY</button>
+                    <button class="btn" id="resetBtn" style="flex: 1;">RESET ENCOUNTER</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Ritual Progress</div>
+                <div class="telemetry-val" id="ritualVal">0% (Incomplete)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Audio Filter Cutoff</div>
+                <div class="telemetry-val" id="filterVal">20,000 Hz</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense Parry Resistance</div>
+                <div class="telemetry-val" id="hapticVal">10 / 100</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Reluctant Knife Ethos</div>
+                <div class="telemetry-val" id="ethosVal">Controlled Mitigation</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer with 320 Hz Null Zone Filter & Shadow Whispers
+        let audioCtx = null;
+        let masterFilter = null;
+        let whisperNoise = null;
+        let whisperGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                masterFilter = audioCtx.createBiquadFilter();
+                masterFilter.type = 'lowpass';
+                masterFilter.frequency.setValueAtTime(20000, audioCtx.currentTime);
+                masterFilter.connect(audioCtx.destination);
+            }
+        }
+
+        function setAudioCutoff(freqHz) {
+            initAudio();
+            if (masterFilter && audioCtx) {
+                masterFilter.frequency.exponentialRampToValueAtTime(Math.max(100, freqHz), audioCtx.currentTime + 0.15);
+            }
+        }
+
+        function playVoidSmashBlast() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(90, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(25, audioCtx.currentTime + 0.45);
+
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+
+            osc.connect(gain);
+            gain.connect(masterFilter);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.55);
+        }
+
+        function playParryClang() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(1400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + 0.25);
+
+            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+
+            osc.connect(gain);
+            gain.connect(masterFilter);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.32);
+        }
+
+        function playWhisperDrone(volume) {
+            initAudio();
+            if (!audioCtx) return;
+            if (!whisperGain) {
+                whisperGain = audioCtx.createGain();
+                whisperGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(110, audioCtx.currentTime); // Deep somatic hum
+                osc.connect(whisperGain);
+                whisperGain.connect(masterFilter);
+                osc.start();
+            }
+            whisperGain.gain.exponentialRampToValueAtTime(Math.max(0.0001, volume), audioCtx.currentTime + 0.1);
+        }
+
+        // State Machine
+        let ritualProgress = 0.0;
+        let isChanneling = false;
+        let bossPhase = 1; // 1, 2, 3
+        let integrationDebt = 0.0;
+        let isParrying = false;
+        let isNullZone = false;
+        let cameraTrauma = 0;
+
+        const channelBtn = document.getElementById('channelBtn');
+        const smashBtn = document.getElementById('smashBtn');
+        const parryBtn = document.getElementById('parryBtn');
+        const phaseSlider = document.getElementById('phaseSlider');
+        const debtSlider = document.getElementById('debtSlider');
+        const dialogueBox = document.getElementById('dialogueBox');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function updateScenarioMath() {
+            const phaseNames = [
+                "Phase 1: Inquisitor Void Smash",
+                "Phase 2: Purist Zealot & Null Zone",
+                "Phase 3: Shattered Cage Abomination"
+            ];
+            document.getElementById('phaseVal').innerText = phaseNames[bossPhase - 1];
+
+            isNullZone = (bossPhase >= 2);
+            setAudioCutoff(isNullZone ? 320 : 20000);
+
+            // Whisper Volume (>50% Debt)
+            const whisperVol = (integrationDebt > 0.50) ? (integrationDebt - 0.50) * 0.40 : 0.0;
+            playWhisperDrone(whisperVol);
+
+            // Reluctant Knife Dialogue & Ethos
+            let ethos = "Controlled Mitigation";
+            if (integrationDebt >= 0.60 || bossPhase === 3) {
+                ethos = "Hardened Resignation";
+                dialogueBox.innerHTML = `<strong>[Elder Valerius]:</strong> 'Forgive me, Kaelen... The cage must hold, even if the vessel cracks.'`;
+            } else if (integrationDebt >= 0.30 || bossPhase === 2) {
+                ethos = "Desperate Containment";
+                dialogueBox.innerHTML = `<strong>[Elder Valerius]:</strong> 'Hold the circle! If the flame dies here, the entire valley burns!'`;
+            } else {
+                ethos = "Controlled Mitigation";
+                dialogueBox.innerHTML = `<strong>[Elder Valerius]:</strong> 'Focus your breathing, boy. We do what we must—not what is easy.'`;
+            }
+
+            // DualSense Haptic Trigger Resistance
+            let hapticResistance = 10;
+            if (isParrying) {
+                hapticResistance = (bossPhase === 3) ? 100 : (bossPhase === 2 ? 85 : 70);
+            }
+
+            document.getElementById('debtVal').innerText = `${integrationDebt.toFixed(2)} (${integrationDebt >= 0.75 ? 'Runtime Noise' : (integrationDebt >= 0.50 ? 'Memory Bleed' : 'Buffer')})`;
+            document.getElementById('ritualVal').innerText = `${Math.floor(ritualProgress * 100)}% ${ritualProgress >= 1.0 ? '(CONSECRATED)' : ''}`;
+            document.getElementById('filterVal').innerText = isNullZone ? "320 Hz (Null Zone Isolation)" : "20,000 Hz (Normal)";
+            document.getElementById('hapticVal').innerText = `${hapticResistance} / 100 ${hapticResistance === 100 ? '(HARD STOP)' : ''}`;
+            document.getElementById('ethosVal').innerText = ethos;
+        }
+
+        channelBtn.onmousedown = () => {
+            initAudio();
+            isChanneling = true;
+        };
+
+        window.onmouseup = () => {
+            isChanneling = false;
+            isParrying = false;
+            updateScenarioMath();
+        };
+
+        smashBtn.onclick = () => {
+            initAudio();
+            cameraTrauma = 25;
+            playVoidSmashBlast();
+
+            if (isChanneling || ritualProgress < 1.0) {
+                // Ritual Disruption Debt Spike: 0.15 + (progress * 0.30)
+                const spike = 0.15 + (ritualProgress * 0.30);
+                integrationDebt = Math.min(1.0, integrationDebt + spike);
+                debtSlider.value = integrationDebt;
+                dialogueBox.innerHTML = `<span style="color: #f85149; font-weight: bold;">⚡ RITUAL DISRUPTED BY MALAKOR! (+${(spike * 100).toFixed(0)}% Integration Debt)</span><br>` + dialogueBox.innerHTML;
+            }
+            updateScenarioMath();
+        };
+
+        parryBtn.onmousedown = () => {
+            initAudio();
+            isParrying = true;
+            cameraTrauma = 10;
+            playParryClang();
+            dialogueBox.innerHTML = `<span style="color: #58a6ff; font-weight: bold;">🛡️ TITAN'S STAND PARRY EXECUTED! [Trigger Resistance: ${bossPhase === 3 ? '100' : (bossPhase === 2 ? '85' : '70')}]</span><br>` + dialogueBox.innerHTML;
+            updateScenarioMath();
+        };
+
+        phaseSlider.oninput = (e) => {
+            bossPhase = parseInt(e.target.value);
+            updateScenarioMath();
+        };
+
+        debtSlider.oninput = (e) => {
+            integrationDebt = parseFloat(e.target.value);
+            updateScenarioMath();
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SCENARIO_1_CAUTERIZED_HEART",
+                boss_phase: bossPhase,
+                ritual_progress_percent: parseFloat(ritualProgress.toFixed(2)),
+                integration_debt: parseFloat(integrationDebt.toFixed(2)),
+                null_zone_active: isNullZone,
+                reluctant_knife_ethos: document.getElementById('ethosVal').innerText,
+                titans_stand_trigger_resistance: document.getElementById('hapticVal').innerText
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        resetBtn.onclick = () => {
+            ritualProgress = 0.0;
+            bossPhase = 1;
+            integrationDebt = 0.0;
+            isChanneling = false;
+            isParrying = false;
+            phaseSlider.value = 1;
+            debtSlider.value = 0.0;
+            dialogueBox.innerHTML = `[Elder Valerius]: "Focus your breathing, boy. We do what we must—not what is easy."`;
+            updateScenarioMath();
+        };
+
+        // Canvas Simulation
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Camera Trauma Jitter
+            let jitterX = 0;
+            let jitterY = 0;
+            if (cameraTrauma > 0) {
+                jitterX = (Math.random() - 0.5) * (cameraTrauma * 0.5);
+                jitterY = (Math.random() - 0.5) * (cameraTrauma * 0.5);
+                cameraTrauma--;
+            }
+
+            ctx.save();
+            ctx.translate(jitterX, jitterY);
+
+            // Draw Altar Sanctuary
+            const altarPos = { x: 325, y: 220 };
+            ctx.fillStyle = '#1c2128';
+            ctx.strokeStyle = '#e3b341';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(altarPos.x, altarPos.y, 45, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Amber Flames at Altar
+            const flameIntensity = isChanneling ? (0.8 + Math.sin(Date.now() * 0.01) * 0.2) : 0.4;
+            ctx.fillStyle = `rgba(227, 179, 65, ${flameIntensity})`;
+            ctx.beginPath();
+            ctx.arc(altarPos.x, altarPos.y, 35, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Channeling Progress
+            if (isChanneling && ritualProgress < 1.0) {
+                ritualProgress = Math.min(1.0, ritualProgress + 0.003);
+                updateScenarioMath();
+            }
+
+            // Kaelen
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(altarPos.x, altarPos.y + 20, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px sans-serif';
+            ctx.fillText("Kaelen (Channeling)", altarPos.x - 48, altarPos.y + 50);
+
+            // Elder Valerius
+            const valeriusPos = { x: 230, y: 200 };
+            ctx.fillStyle = '#d29922';
+            ctx.beginPath();
+            ctx.arc(valeriusPos.x, valeriusPos.y, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Elder Valerius", valeriusPos.x - 35, valeriusPos.y - 18);
+
+            // Brother Malakor
+            const malakorPos = { x: 450, y: 220 };
+            ctx.fillStyle = (bossPhase === 3) ? '#8e1519' : '#f85149';
+            ctx.beginPath();
+            ctx.arc(malakorPos.x, malakorPos.y, 22, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#f85149';
+            ctx.fillText("Brother Malakor", malakorPos.x - 40, malakorPos.y - 28);
+
+            // Null Zone Ripple
+            if (isNullZone) {
+                ctx.strokeStyle = 'rgba(163, 113, 247, 0.35)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(malakorPos.x, malakorPos.y, 120 + Math.sin(Date.now() * 0.005) * 20, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+            requestAnimationFrame(animate);
+        }
+
+        updateScenarioMath();
+        animate();
+    </script>
+</body>
+</html>
