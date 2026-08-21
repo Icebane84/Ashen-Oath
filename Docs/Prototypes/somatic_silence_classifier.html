@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Somatic Silence Classifier & Intent Matrix Simulator</title>
+    <!-- Traceability: MIND-SPEC-058 | UAshenSomaticSilenceClassifierSubsystem | Builds 2336-2355 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-cyan: #39c5cf;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1050px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #132328 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-charge {
+            background: #da3633;
+            border-color: #f85149;
+            color: #fff;
+        }
+
+        .btn-charge:hover {
+            background: #f85149;
+        }
+
+        .btn-support {
+            background: #238636;
+            border-color: #2ea043;
+            color: #fff;
+        }
+
+        .btn-support:hover {
+            background: #2ea043;
+        }
+
+        .status-box {
+            background: #1c2128;
+            border: 1px dashed var(--accent-cyan);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SOMATIC SILENCE CLASSIFIER & INTENT MATRIX</h1>
+                <p>3 Silence Modes, Wordless Support & Companion Boundary Refusal Gates (MIND-SPEC-058)</p>
+            </div>
+            <div class="badge">Phenomenological Intent Parser</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>INTEGRATION DEBT (Trauma)</span>
+                        <span class="control-value" id="debtVal">0.25 (Contemplative)</span>
+                    </div>
+                    <input type="range" id="debtSlider" min="0" max="100" value="25">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>ISOLATION / FRICTION</span>
+                        <span class="control-value" id="isolationVal">0.20 (Low)</span>
+                    </div>
+                    <input type="range" id="isolationSlider" min="0" max="100" value="20">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>FELLOWSHIP TRUST</span>
+                        <span class="control-value" id="trustVal">0.70 (High)</span>
+                    </div>
+                    <input type="range" id="trustSlider" min="0" max="100" value="70">
+                </div>
+
+                <button class="btn btn-charge" id="chargeHazardBtn">⚡ SUICIDAL CHARGE INTO HAZARD</button>
+                <button class="btn btn-support" id="wordlessSupportBtn">🤝 TRIGGER WORDLESS SUPPORT ACTION</button>
+
+                <div class="status-box" id="statusBox">
+                    "Quiet strides through the sundered ruins. The fellowship moves in synchronized calm."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-blue);">📋 COPY SELT TELEMETRY</button>
+                    <button class="btn" id="resetBtn" style="flex: 1;">RESET STATE</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Somatic Silence State</div>
+                <div class="telemetry-val" id="silenceStateVal">Contemplative</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Formation Distance</div>
+                <div class="telemetry-val" id="distanceVal">250 uu (Intimate)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Boundary Refusal Gate</div>
+                <div class="telemetry-val" id="refusalVal">PASSIVE</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Wordless Action</div>
+                <div class="telemetry-val" id="actionVal">None</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer for Ambient Silence & Low-Pass Shock Filter
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSupportSound() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(660, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.26);
+        }
+
+        function playRefusalWarning() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.36);
+        }
+
+        // State Machine
+        let debt = 0.25;
+        let isolation = 0.20;
+        let trust = 0.70;
+
+        let isCharging = false;
+        let isRefusing = false;
+        let wordlessActive = false;
+        let supportActionText = "None";
+
+        const debtSlider = document.getElementById('debtSlider');
+        const isolationSlider = document.getElementById('isolationSlider');
+        const trustSlider = document.getElementById('trustSlider');
+        const statusBox = document.getElementById('statusBox');
+
+        const chargeHazardBtn = document.getElementById('chargeHazardBtn');
+        const wordlessSupportBtn = document.getElementById('wordlessSupportBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function updateState() {
+            let state = "Contemplative";
+            if (debt >= 0.70 || isolation >= 0.70) {
+                state = "DestabilizingCrisis";
+            } else if (debt >= 0.30 || isolation >= 0.40) {
+                state = "TraumaticAftermath";
+            }
+
+            document.getElementById('silenceStateVal').innerText = state;
+
+            // Formation Distance
+            let dist = 250;
+            if (state === "DestabilizingCrisis") dist = 800;
+            else if (state === "TraumaticAftermath") dist = 450;
+            else dist = 250;
+
+            document.getElementById('distanceVal').innerText = `${dist} uu (${state === "Contemplative" ? "Intimate" : (state === "TraumaticAftermath" ? "Supportive" : "Standoff")})`;
+
+            // Status message
+            if (state === "DestabilizingCrisis") {
+                statusBox.innerHTML = '<span style="color: #f85149; font-weight: bold;">[DESTABILIZING CRISIS]</span> Companions stand at 800uu perimeter. Dialogue is choked. Boundary standoff active.';
+            } else if (state === "TraumaticAftermath") {
+                statusBox.innerHTML = '<span style="color: #39c5cf; font-weight: bold;">[TRAUMATIC AFTERMATH]</span> Somatic silence engaged. Garrett quietly clears rubble path without spoken commands.';
+            } else {
+                statusBox.innerHTML = '"Quiet strides through the sundered ruins. The fellowship moves in synchronized calm."';
+            }
+
+            document.getElementById('debtVal').innerText = `${debt.toFixed(2)}`;
+            document.getElementById('isolationVal').innerText = `${isolation.toFixed(2)}`;
+            document.getElementById('trustVal').innerText = `${trust.toFixed(2)}`;
+
+            return state;
+        }
+
+        debtSlider.oninput = (e) => {
+            debt = e.target.value / 100;
+            updateState();
+        };
+
+        isolationSlider.oninput = (e) => {
+            isolation = e.target.value / 100;
+            updateState();
+        };
+
+        trustSlider.oninput = (e) => {
+            trust = e.target.value / 100;
+            updateState();
+        };
+
+        chargeHazardBtn.onclick = () => {
+            initAudio();
+            const state = updateState();
+
+            if (state === "DestabilizingCrisis" || trust < 0.40) {
+                // Refusal Gate Triggered!
+                isRefusing = true;
+                playRefusalWarning();
+                document.getElementById('refusalVal').innerText = "REFUSAL: NOBODY FOLLOWS";
+                statusBox.innerHTML = '<span style="color: #f85149; font-weight: bold;">⚠️ COMPANION BOUNDARY REFUSAL:</span><br>"The Most Dangerous Moment: Nobody Follows." Garrett and Serafina refuse to rush into certain death!';
+            } else {
+                isRefusing = false;
+                document.getElementById('refusalVal').innerText = "FELLOWSHIP FOLLOWS";
+                statusBox.innerHTML = '<span style="color: #3fb950; font-weight: bold;">⚡ FELLOWSHIP ADVANCES:</span> High trust allows Garrett and Serafina to follow Kaelen despite the hazard.';
+            }
+        };
+
+        wordlessSupportBtn.onclick = () => {
+            initAudio();
+            wordlessActive = true;
+            playSupportSound();
+            supportActionText = "Clearing Rubble (800uu)";
+            document.getElementById('actionVal').innerText = supportActionText;
+            statusBox.innerHTML = '<span style="color: #3fb950; font-weight: bold;">🤝 WORDLESS SUPPORT TRIGGERED:</span><br>Garrett steps forward in silence, clearing 3 heavy stone obstacles from Kaelen\'s path without a word.';
+            setTimeout(() => {
+                wordlessActive = false;
+            }, 3000);
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SOMATIC_SILENCE_CLASSIFICATION",
+                silence_state: document.getElementById('silenceStateVal').innerText,
+                integration_debt: parseFloat(debt.toFixed(3)),
+                isolation: parseFloat(isolation.toFixed(3)),
+                fellowship_trust: parseFloat(trust.toFixed(3)),
+                boundary_refusal: isRefusing
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        resetBtn.onclick = () => {
+            debt = 0.25;
+            isolation = 0.20;
+            trust = 0.70;
+            debtSlider.value = 25;
+            isolationSlider.value = 20;
+            trustSlider.value = 70;
+            isRefusing = false;
+            wordlessActive = false;
+            supportActionText = "None";
+            document.getElementById('refusalVal').innerText = "PASSIVE";
+            document.getElementById('actionVal').innerText = "None";
+            updateState();
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 325;
+            const centerY = 220;
+
+            const state = (debt >= 0.70 || isolation >= 0.70) ? "DestabilizingCrisis" : ((debt >= 0.30 || isolation >= 0.40) ? "TraumaticAftermath" : "Contemplative");
+            const distScale = (state === "DestabilizingCrisis") ? 160 : ((state === "TraumaticAftermath") ? 100 : 60);
+
+            // Kaelen Position
+            const kaelenPos = { x: centerX, y: centerY };
+
+            // Companions
+            const garrettPos = { x: centerX - distScale, y: centerY - distScale * 0.5 };
+            const serafinaPos = { x: centerX - distScale, y: centerY + distScale * 0.5 };
+
+            // Standoff Perimeter Ring
+            ctx.strokeStyle = (state === "DestabilizingCrisis") ? 'rgba(248, 81, 73, 0.4)' : 'rgba(57, 197, 207, 0.25)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, distScale, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Kaelen
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(kaelenPos.x, kaelenPos.y, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.fillText("Kaelen", kaelenPos.x - 18, kaelenPos.y + 32);
+
+            // Garrett
+            ctx.fillStyle = isRefusing ? '#f85149' : '#3fb950';
+            ctx.beginPath();
+            ctx.arc(garrettPos.x, garrettPos.y, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText(isRefusing ? "REFUSES" : "Garrett", garrettPos.x - 22, garrettPos.y - 24);
+
+            // Serafina
+            ctx.fillStyle = isRefusing ? '#f85149' : '#d29922';
+            ctx.beginPath();
+            ctx.arc(serafinaPos.x, serafinaPos.y, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText(isRefusing ? "REFUSES" : "Serafina", serafinaPos.x - 22, serafinaPos.y + 32);
+
+            // Wordless Support Arc
+            if (wordlessActive) {
+                ctx.strokeStyle = '#39c5cf';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(garrettPos.x, garrettPos.y);
+                ctx.lineTo(centerX + 60, centerY);
+                ctx.stroke();
+                ctx.fillStyle = '#39c5cf';
+                ctx.fillText("✨ Clearing Rubble", centerX + 70, centerY + 4);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateState();
+        animate();
+    </script>
+</body>
+</html>
