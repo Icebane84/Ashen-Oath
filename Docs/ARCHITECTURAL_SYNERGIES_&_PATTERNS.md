@@ -28,10 +28,28 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-006`** | **Tripartite 60 BPM DualSense Haptic Resonance** | `TRIO-SPEC-061` / Combat / Haptics / Audio | Synchronizing 60 BPM ($1.0\text{ Hz}$) auditory pulses with DualSense adaptive trigger resistance ($0.20 \to 0.60 \to 0.75 \to 1.00$) for 3-person finishers. |
 | **`SYN-007`** | **Multi-Tier Chaos Sunder Obstruction Scaling** | `ARENA-SPEC-063` / World / Chaos / Boss | Structural pillar fracture plane ($Ax + By + Cz + D = 0$) directly driving arena obstruction scalars ($0\% \to 50\% \to 100\%$) and companion pinning crisis windows. |
 | **`SYN-008`** | **Runic Mass-Momentum & Poise Scaling Invariant** | `RELIQUARY-SPEC-064` / `KINETIC-SPEC-060` / Crafting / Combat | Boss core and trauma hilt socketing dynamically scaling effective weapon mass ($45\text{kg} \leftrightarrow 220\text{kg}$), kinetic strike Joules, and Solfeggio harmonic chimes. |
+| **`SYN-009`** | **Adaptive Trigger Priority & Directional Tactile Invariant** | `HAPTIC-SPEC-065` / Haptics / Narrative / Combat | Enforcing strict Priority 1 Dialogue Lockout ($100\%$) over combat stagger and ambient somatic resistance, with directional grip threat motor bias. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-009`: Adaptive Trigger Priority & Directional Tactile Invariant
+
+* **Target Subsystems:** `UAshenDualSenseHapticSubsystem`, `UAshenAdaptiveTriggerArbitratorComponent`, `UAshenDirectionalTactileTickComponent`, `UAshenControllerSpeakerWhisperComponent`
+* **Related Specifications:** [`HAPTIC-SPEC-065`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/HAPTIC-SPEC-065%20%28THE%20DUALSENSE%20SOMATIC%20TACTILE%20WHISPER%20&%20CONTROLLER%20FEEDBACK%20ENGINE%29.md), [`SOMATIC-SPEC-050`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SOMATIC-SPEC-050%20%28SOMATIC%20FRICTION%20&%20INPUT%20DELAY%20MATRIX%29.md)
+
+#### 📐 Mathematical Invariant:
+$$\text{WinningTriggerMode} = \begin{cases} \text{WeaponLockout (100\% hard stop)}, & \text{if Priority 1 (Dialogue Will Struggle)} \\ \text{SpringCollapse (0\% give-way)}, & \text{if Priority 2 (Poise Break)} \\ \text{SomaticFeedback}(m_{\text{weapon}}, \text{Dysreg}), & \text{if Priority 3 (Ambient Somatic)} \end{cases}$$
+$$\text{DirectionalBias}(L, R) = \text{Norm}(\vec{F}_{\text{forward}} \times \vec{T}_{\text{threat}})_Z \implies \begin{cases} L = 1.0, R = 0.2, & \text{if Threat Left} \\ L = 0.2, R = 1.0, & \text{if Threat Right} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Physicalized Impasse:** When Kaelen enters a crisis dialogue, the player's physical trigger locks solid, converting emotional and narrative resistance into literal physical impedance.
+* **Directional Subconscious Warning:** Off-screen flanking enemies pulse the corresponding controller grip motor before visual UI markers appear, creating instinctive player dodges based on tactile reflexes.
+
+---
 
 ---
 

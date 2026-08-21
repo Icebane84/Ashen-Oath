@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2495: Master Batch #124 — The DualSense Somatic Tactile Whisper & Controller Feedback Engine (HAPTIC-SPEC-065)
+**Domain:** Haptics / Combat / Audio / UI / AI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,495 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2476 | `AshenDualSenseHapticTypes.h` | `AshenDualSenseHapticTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Haptics |
+| 2477 | `AshenDualSenseHapticSubsystem.h/.cpp` | `UAshenDualSenseHapticSubsystem` — Subsystem managing triggers, haptics & speaker | Haptics |
+| 2478 | `AshenAdaptiveTriggerArbitratorComponent.h/.cpp` | `UAshenAdaptiveTriggerArbitratorComponent` — Arbitrates P1 Lockout > P2 Stagger > P3 Somatic | Haptics |
+| 2479 | `AshenControllerSpeakerWhisperComponent.h/.cpp` | `UAshenControllerSpeakerWhisperComponent` — Routes companion whispers to controller speaker | Haptics |
+| 2480 | `AshenDirectionalTactileTickComponent.h/.cpp` | `UAshenDirectionalTactileTickComponent` — Computes Left/Right threat motor vibration bias | Haptics |
+| 2481 | `AshenTriggerLockoutGASAbility.h/.cpp` | `UAshenTriggerLockoutGASAbility` — Actuates 100% trigger hard-stop during will struggles | Combat |
+| 2482 | `AshenHapticPulseBurstGASAbility.h/.cpp` | `UAshenHapticPulseBurstGASAbility` — High-frequency haptic pulses during parries & hits | Combat |
+| 2483 | `AshenGarrettWireTensionHapticGASAbility.h/.cpp` | `UAshenGarrettWireTensionHapticGASAbility` — Stepped spring resistance on L2 during wire snare | Combat |
+| 2484 | `AshenSerafinaSacredAuraHapticGASAbility.h/.cpp` | `UAshenSerafinaSacredAuraHapticGASAbility` — Smooth harmonic rumble during bulwark shields | Combat |
+| 2485 | `AshenSomaticHeartbeatRumbleGASAbility.h/.cpp` | `UAshenSomaticHeartbeatRumbleGASAbility` — Grip rumble matching Kaelen heart rate (60-140 BPM) | Combat |
+| 2486 | `BTTask_AshenEmitCompanionHapticCue.h/.cpp` | `UBTTask_AshenEmitCompanionHapticCue` — AI Task triggering speaker whisper & haptic click | AI |
+| 2487 | `AshenTactileCalibrationBeaconActor.h/.cpp` | `AAshenTactileCalibrationBeaconActor` — Interactive calibration beacon world actor | World |
+| 2488 | `AshenUserWidget_DualSenseHapticHUD.h/.cpp` | `UAshenUserWidget_DualSenseHapticHUD` — UMG widget displaying live L2/R2 curves & speaker | UI |
+| 2489 | `AshenDualSenseMetaSoundsSubsystem.h/.cpp` | `UAshenDualSenseMetaSoundsSubsystem` — MetaSounds audio submix routing for controller speaker | Audio |
+| 2490 | `AshenControllerVibrationAdapterComponent.h/.cpp` | `UAshenControllerVibrationAdapterComponent` — Modulates dynamic motor amplitude for footfalls | Haptics |
+| 2491 | `AshenDualSenseSaveGameAdapter.h/.cpp` | `UAshenDualSenseSaveGameAdapter` — Serializes player haptic preferences & speaker volume | Core |
+| 2492 | `AshenTactileDialogueBridge.h/.cpp` | `UAshenTactileDialogueBridge` — Injects tactile feedback cues into narrative sequences | Narrative |
+| 2493 | `AshenSomaticFrictionHapticBridge.h/.cpp` | `UAshenSomaticFrictionHapticBridge` — Maps somatic friction and weapon mass into trigger curves | Haptics |
+| 2494 | `AshenDualSenseMasterBridge.h/.cpp` | `UAshenDualSenseMasterBridge` — Master bridge coordinating triggers, audio & UI HUD | Orchestration |
+| 2495 | `AshenMasterBatch124AutomationTest.cpp` | `FAshenMasterBatch124AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2475: Master Batch #123 — The Runic Reliquary & Soul-Forged Weapon Transmutation Matrix (RELIQUARY-SPEC-064)
 **Domain:** Crafting / Combat / World / AI / Companions / Audio / UI / Narrative / Core / Orchestration / QA  
 **Status:** 2,475 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
