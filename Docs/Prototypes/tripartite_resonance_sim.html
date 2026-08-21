@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Tripartite 60 BPM Resonance Simulator</title>
+    <!-- Traceability: TRIO-SPEC-061 | UAshenTripartiteResonanceSubsystem | Builds 2396-2415 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-green);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #161b22 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-step {
+            background: #238636;
+            border-color: #2ea043;
+            color: #fff;
+        }
+
+        .btn-step:hover {
+            background: #2ea043;
+        }
+
+        .btn-finisher {
+            background: #8957e5;
+            border-color: #a371f7;
+            color: #fff;
+        }
+
+        .btn-finisher:hover {
+            background: #a371f7;
+        }
+
+        .bpm-indicator {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(22, 27, 34, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: monospace;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            opacity: 0.2;
+            transition: opacity 0.1s ease;
+        }
+
+        .pulse-dot.active {
+            opacity: 1.0;
+            box-shadow: 0 0 8px var(--accent-gold);
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>TRIPARTITE 60 BPM RESONANCE SIMULATOR</h1>
+                <p>3-Step Combo Progression & Harmonized Radiant Finisher Matrix (TRIO-SPEC-061)</p>
+            </div>
+            <div class="badge">60 BPM Cadence / 1.0 Hz Metronome</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <div class="bpm-indicator">
+                    <div class="pulse-dot" id="pulseDot"></div>
+                    <span>Resonance Cadence: 60 BPM (1.0 Hz)</span>
+                </div>
+                <canvas id="simCanvas" width="600" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <button class="btn btn-step" id="step1Btn">1. KAELEN HEAVY STAGGER (SPACE)</button>
+                <button class="btn btn-step" id="step2Btn" disabled>2. GARRETT WIRE SNARE (G)</button>
+                <button class="btn btn-step" id="step3Btn" disabled>3. SERAFINA HOLY BURST (S)</button>
+                <button class="btn btn-finisher" id="finisherBtn" disabled>⚡ EXECUTE HARMONIZED FINISHER (F)</button>
+                <button class="btn" id="resetBtn">RESET COMBO STATE</button>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Active Combo Phase</div>
+                <div class="telemetry-val" id="phaseVal">Neutral</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Window Remaining</div>
+                <div class="telemetry-val" id="timeVal">0.00 s</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense Trigger L/R</div>
+                <div class="telemetry-val" id="triggerVal">0.20 / 0.20</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Finisher Damage</div>
+                <div class="telemetry-val" id="damageVal">3,500.0 (3.5x)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer for 60 BPM Metronome & Finisher Chord
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playMetronomeClick(pitch = 440) {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(pitch, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.09);
+        }
+
+        function playFinisherChord() {
+            initAudio();
+            if (!audioCtx) return;
+            const freqs = [220, 277.18, 329.63, 440]; // A Major triad
+            freqs.forEach(f => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.85);
+            });
+        }
+
+        // Metronome 60 BPM (every 1000ms)
+        const pulseDot = document.getElementById('pulseDot');
+        setInterval(() => {
+            pulseDot.classList.add('active');
+            playMetronomeClick(currentPhase === "FinisherReady" ? 880 : 440);
+            setTimeout(() => pulseDot.classList.remove('active'), 120);
+        }, 1000);
+
+        // State Machine
+        let currentPhase = "Inactive"; // Inactive, Step1, Step2, Step3, FinisherReady
+        let windowTimer = 0.0;
+        const maxWindow = 2.5;
+
+        const step1Btn = document.getElementById('step1Btn');
+        const step2Btn = document.getElementById('step2Btn');
+        const step3Btn = document.getElementById('step3Btn');
+        const finisherBtn = document.getElementById('finisherBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function setPhase(phase) {
+            currentPhase = phase;
+            if (phase === "Step1") {
+                windowTimer = maxWindow;
+                step1Btn.disabled = true;
+                step2Btn.disabled = false;
+                step3Btn.disabled = true;
+                finisherBtn.disabled = true;
+            } else if (phase === "Step2") {
+                windowTimer = maxWindow;
+                step2Btn.disabled = true;
+                step3Btn.disabled = false;
+            } else if (phase === "Step3" || phase === "FinisherReady") {
+                currentPhase = "FinisherReady";
+                windowTimer = maxWindow;
+                step3Btn.disabled = true;
+                finisherBtn.disabled = false;
+            } else {
+                currentPhase = "Inactive";
+                windowTimer = 0.0;
+                step1Btn.disabled = false;
+                step2Btn.disabled = true;
+                step3Btn.disabled = true;
+                finisherBtn.disabled = true;
+            }
+            updateTelemetry();
+        }
+
+        step1Btn.onclick = () => setPhase("Step1");
+        step2Btn.onclick = () => setPhase("Step2");
+        step3Btn.onclick = () => setPhase("FinisherReady");
+        finisherBtn.onclick = () => {
+            playFinisherChord();
+            alert("💥 HARMONIZED RADIANT FINISHER EXECUTED!\n• Damage: 3,500.0 (3.5x Holy-Kinetic)\n• Trust Gained: +0.15\n• Dysregulation Cleansed: 30%\n• Logged to Living Journal!");
+            setPhase("Inactive");
+        };
+        resetBtn.onclick = () => setPhase("Inactive");
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !step1Btn.disabled) setPhase("Step1");
+            if (e.key.toLowerCase() === 'g' && !step2Btn.disabled) setPhase("Step2");
+            if (e.key.toLowerCase() === 's' && !step3Btn.disabled) setPhase("FinisherReady");
+            if (e.key.toLowerCase() === 'f' && !finisherBtn.disabled) finisherBtn.click();
+        });
+
+        function updateTelemetry() {
+            document.getElementById('phaseVal').innerText = currentPhase;
+            document.getElementById('timeVal').innerText = `${windowTimer.toFixed(2)} s`;
+            if (currentPhase === "FinisherReady") {
+                document.getElementById('triggerVal').innerText = "1.00 / 1.00 (Max Click)";
+                document.getElementById('damageVal').innerText = "3,500.0 (3.5x Radiant)";
+            } else if (currentPhase === "Step2") {
+                document.getElementById('triggerVal').innerText = "0.75 / 0.60";
+            } else if (currentPhase === "Step1") {
+                document.getElementById('triggerVal').innerText = "0.60 / 0.40";
+            } else {
+                document.getElementById('triggerVal').innerText = "0.20 / 0.20";
+            }
+        }
+
+        // Canvas Visualizer
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Timer countdown
+            if (windowTimer > 0) {
+                windowTimer -= 0.016;
+                if (windowTimer <= 0) {
+                    setPhase("Inactive");
+                }
+            }
+
+            const centerX = 300;
+            const centerY = 210;
+
+            // Draw Resonance Reticle Rings
+            ctx.lineWidth = 4;
+            
+            // Ring 1: Kaelen
+            ctx.strokeStyle = (currentPhase !== "Inactive") ? '#58a6ff' : '#30363d';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Ring 2: Garrett
+            ctx.strokeStyle = (currentPhase === "Step2" || currentPhase === "FinisherReady") ? '#3fb950' : '#30363d';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 90, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Ring 3: Serafina
+            ctx.strokeStyle = (currentPhase === "FinisherReady") ? '#d29922' : '#30363d';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 130, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Party Positions (120-deg Tripartite Formation)
+            const radius = 130;
+            const kaelenPos = { x: centerX, y: centerY - radius };
+            const garrettPos = { x: centerX - radius * 0.866, y: centerY + radius * 0.5 };
+            const serafinaPos = { x: centerX + radius * 0.866, y: centerY + radius * 0.5 };
+
+            // Kaelen
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(kaelenPos.x, kaelenPos.y, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Kaelen", kaelenPos.x - 18, kaelenPos.y - 22);
+
+            // Garrett
+            ctx.fillStyle = '#3fb950';
+            ctx.beginPath();
+            ctx.arc(garrettPos.x, garrettPos.y, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett", garrettPos.x - 18, garrettPos.y + 30);
+
+            // Serafina
+            ctx.fillStyle = '#d29922';
+            ctx.beginPath();
+            ctx.arc(serafinaPos.x, serafinaPos.y, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina", serafinaPos.x - 18, serafinaPos.y + 30);
+
+            // Center Enemy
+            ctx.fillStyle = '#f85149';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '12px monospace';
+            ctx.fillText("BOSS", centerX - 14, centerY + 4);
+
+            updateTelemetry();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

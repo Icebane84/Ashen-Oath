@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Campfire Soul Recovery & Integration Hearth Simulator</title>
+    <!-- Traceability: CAMPFIRE-SPEC-062 | UAshenCampfireHearthSubsystem | Builds 2416-2435 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #2d1810 0%, #0d1117 75%);
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-rest {
+            background: #d29922;
+            border-color: #d29922;
+            color: #0d1117;
+            font-weight: 700;
+        }
+
+        .btn-rest:hover {
+            background: #e3b341;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+
+        .journal-box {
+            background: #1c2128;
+            border: 1px dashed var(--accent-gold);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>CAMPFIRE SOUL RECOVERY & INTEGRATION HEARTH</h1>
+                <p>Diegetic Rest Loop, Trauma Transmutation & Proximity Seating (CAMPFIRE-SPEC-062)</p>
+            </div>
+            <div class="badge">Integration Debt Transmuter</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="600" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>INTEGRATION DEBT</span>
+                        <span class="control-value" id="debtVal">0.45 (Moderate)</span>
+                    </div>
+                    <input type="range" id="debtSlider" min="0" max="100" value="45">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>FELLOWSHIP TRUST</span>
+                        <span class="control-value" id="trustVal">0.75 (High Trust)</span>
+                    </div>
+                    <input type="range" id="trustSlider" min="0" max="100" value="75">
+                </div>
+
+                <button class="btn btn-rest" id="restBtn">COMMENCE REST & TRANSMUTE TRAUMA</button>
+
+                <div class="journal-box" id="journalBox">
+                    "The White Flame held today... but Kaelen's sword arm trembled when the dust settled."<br>
+                    <span style="color: #d29922; font-weight: bold;">— Serafina (Golden Ink Marginalia)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Rest Tier</div>
+                <div class="telemetry-val" id="tierVal">Reflective Transmute</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Seating Spacing</div>
+                <div class="telemetry-val" id="seatingVal">250 uu (Intimate)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Transmuted Trait</div>
+                <div class="telemetry-val" id="traitVal">+10% Poise</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Catharsis Dialogue</div>
+                <div class="telemetry-val" id="catharsisVal">Ready</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer for Crackling Embers
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                startCampfireAudio();
+            }
+        }
+
+        function startCampfireAudio() {
+            if (!audioCtx) return;
+            // Generate crackling noise buffer
+            const bufferSize = audioCtx.sampleRate * 2;
+            const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = (Math.random() * 2 - 1) * 0.05;
+            }
+
+            const whiteNoise = audioCtx.createBufferSource();
+            whiteNoise.buffer = noiseBuffer;
+            whiteNoise.loop = true;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 600;
+
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0.2;
+
+            whiteNoise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            whiteNoise.start();
+        }
+
+        // State
+        let integrationDebt = 0.45;
+        let fellowshipTrust = 0.75;
+
+        const debtSlider = document.getElementById('debtSlider');
+        const trustSlider = document.getElementById('trustSlider');
+        const restBtn = document.getElementById('restBtn');
+
+        debtSlider.oninput = (e) => {
+            integrationDebt = e.target.value / 100;
+            document.getElementById('debtVal').innerText = `${integrationDebt.toFixed(2)} (${integrationDebt >= 0.7 ? 'Crisis' : (integrationDebt >= 0.3 ? 'Moderate' : 'Minor')})`;
+            updateEvaluation();
+        };
+
+        trustSlider.oninput = (e) => {
+            fellowshipTrust = e.target.value / 100;
+            document.getElementById('trustVal').innerText = `${fellowshipTrust.toFixed(2)} (${fellowshipTrust >= 0.65 ? 'High Trust' : 'Guarded'})`;
+            updateEvaluation();
+        };
+
+        restBtn.onclick = () => {
+            initAudio();
+            alert("🔥 CAMPFIRE REST COMPLETED!\n• Trait Transmuted: +10% Poise ('Unbroken Resolve')\n• Dysregulation Cleansed: 100%\n• Living Journal Inscribed with Campfire Marginalia!");
+        };
+
+        function updateEvaluation() {
+            // Tier
+            if (integrationDebt >= 0.70) {
+                document.getElementById('tierVal').innerText = "Solemn Vigil";
+                document.getElementById('traitVal').innerText = "+15% Willpower";
+                document.getElementById('catharsisVal').innerText = "REQUIRED";
+            } else if (integrationDebt >= 0.30) {
+                document.getElementById('tierVal').innerText = "Reflective Transmute";
+                document.getElementById('traitVal').innerText = "+10% Poise / Faith";
+                document.getElementById('catharsisVal').innerText = "Ready";
+            } else {
+                document.getElementById('tierVal').innerText = "Minor Rest";
+                document.getElementById('traitVal').innerText = "+5% Stamina Regen";
+                document.getElementById('catharsisVal').innerText = "Passive";
+            }
+
+            // Seating
+            if (fellowshipTrust >= 0.65 && integrationDebt < 0.40) {
+                document.getElementById('seatingVal').innerText = "250 uu (Intimate)";
+            } else if (integrationDebt >= 0.70 || fellowshipTrust < 0.35) {
+                document.getElementById('seatingVal').innerText = "800 uu (Guarded)";
+            } else {
+                document.getElementById('seatingVal').innerText = "450 uu (Standard)";
+            }
+        }
+
+        // Canvas Flame & Seating Animation
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 300;
+            const centerY = 210;
+
+            // Seating Distance
+            let seatingDist = 450;
+            if (fellowshipTrust >= 0.65 && integrationDebt < 0.40) seatingDist = 250;
+            else if (integrationDebt >= 0.70 || fellowshipTrust < 0.35) seatingDist = 800;
+
+            const scaleDist = (seatingDist / 800) * 140;
+
+            // Draw Hearth Warmth Radius
+            ctx.strokeStyle = 'rgba(210, 153, 34, 0.25)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 140, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Animated Campfire Fire
+            ctx.fillStyle = '#f85149';
+            ctx.beginPath();
+            const flameFlicker = Math.sin(Date.now() * 0.01) * 4;
+            ctx.arc(centerX, centerY, 20 + flameFlicker, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#d29922';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 12 + flameFlicker * 0.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Companions
+            // Kaelen (Fixed fireside)
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(centerX - scaleDist, centerY, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Kaelen", centerX - scaleDist - 16, centerY + 28);
+
+            // Garrett
+            ctx.fillStyle = '#3fb950';
+            ctx.beginPath();
+            ctx.arc(centerX + scaleDist * 0.7, centerY - scaleDist * 0.7, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett", centerX + scaleDist * 0.7 - 16, centerY - scaleDist * 0.7 - 18);
+
+            // Serafina
+            ctx.fillStyle = '#d29922';
+            ctx.beginPath();
+            ctx.arc(centerX + scaleDist * 0.7, centerY + scaleDist * 0.7, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina", centerX + scaleDist * 0.7 - 16, centerY + scaleDist * 0.7 + 28);
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

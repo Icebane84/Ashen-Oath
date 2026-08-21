@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Kinetic Cleave & Environmental Fracture Sandbox</title>
+    <!-- Traceability: KINETIC-SPEC-060 | UAshenMassKineticCleaveComponent | Builds 2376-2395 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-blue);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #1a202c 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-primary {
+            background: #8957e5;
+            border-color: #8957e5;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #a371f7;
+            border-color: #a371f7;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+
+        .fov-indicator {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(22, 27, 34, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: monospace;
+            color: var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>KINETIC CLEAVE & ENVIRONMENTAL FRACTURE SANDBOX</h1>
+                <p>Real-Time Volume Resistance Drag & FOV Dilation Simulator (KINETIC-SPEC-060)</p>
+            </div>
+            <div class="badge">Unreal Engine 5.8 C++ Math Parity</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <div class="fov-indicator" id="fovIndicator">Camera FOV: 90.0°</div>
+                <canvas id="simCanvas" width="600" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>WEAPON MASS (kg)</span>
+                        <span class="control-value" id="massVal">180 kg (Nightsteel)</span>
+                    </div>
+                    <input type="range" id="massSlider" min="45" max="180" value="180" step="5">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>SUBMERGED VOLUME (cm³)</span>
+                        <span class="control-value" id="volumeVal">12,500 cm³</span>
+                    </div>
+                    <input type="range" id="volumeSlider" min="0" max="25000" value="12500" step="500">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>PLAYRATE FLOOR CLAMP</span>
+                        <span class="control-value" id="floorVal">0.08x</span>
+                    </div>
+                    <input type="range" id="floorSlider" min="0.05" max="0.30" value="0.08" step="0.01">
+                </div>
+
+                <button class="btn btn-primary" id="swingBtn">EXECUTE MASS KINETIC CLEAVE (SPACE)</button>
+                <button class="btn" id="sunderPillarBtn">SPAWN DESTRUCTIBLE PILLAR</button>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Kinetic Energy (Ek)</div>
+                <div class="telemetry-val" id="ekVal">2,450.0 J</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Anim Montage Play-Rate</div>
+                <div class="telemetry-val" id="playrateVal">1.00x</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Drag Resistance</div>
+                <div class="telemetry-val" id="dragVal">0.00 N</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Fracture Strain</div>
+                <div class="telemetry-val" id="strainVal">0.00 MPa</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer for Blade Whoosh & Impact
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playWhoosh(mass, velocity) {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc.type = 'sawtooth';
+            const baseFreq = 80 + (180 - mass) * 0.8;
+            osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(baseFreq * 2.2, audioCtx.currentTime + 0.15);
+            osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.35);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(400, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.35, audioCtx.currentTime + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.36);
+        }
+
+        function playImpactSound() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.2);
+
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        }
+
+        // Simulation State
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let mass = 180;
+        let volume = 12500;
+        let playrateFloor = 0.08;
+
+        let swingAngle = -Math.PI * 0.75;
+        let targetAngle = Math.PI * 0.75;
+        let currentAngle = swingAngle;
+        let isSwinging = false;
+        let swingProgress = 0;
+        let currentPlayrate = 1.0;
+        let currentFov = 90.0;
+        let targetFov = 90.0;
+
+        let hasPillar = true;
+        let pillarX = 400;
+        let pillarY = 210;
+        let pillarSundered = false;
+
+        // UI Sliders
+        const massSlider = document.getElementById('massSlider');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const floorSlider = document.getElementById('floorSlider');
+        const swingBtn = document.getElementById('swingBtn');
+        const sunderPillarBtn = document.getElementById('sunderPillarBtn');
+
+        massSlider.oninput = (e) => {
+            mass = parseFloat(e.target.value);
+            document.getElementById('massVal').innerText = mass >= 150 ? `${mass} kg (Nightsteel)` : `${mass} kg (Agile Longsword)`;
+            updateTelemetry();
+        };
+
+        volumeSlider.oninput = (e) => {
+            volume = parseFloat(e.target.value);
+            document.getElementById('volumeVal').innerText = `${volume.toLocaleString()} cm³`;
+            updateTelemetry();
+        };
+
+        floorSlider.oninput = (e) => {
+            playrateFloor = parseFloat(e.target.value);
+            document.getElementById('floorVal').innerText = `${playrateFloor.toFixed(2)}x`;
+        };
+
+        function startSwing() {
+            if (isSwinging) return;
+            isSwinging = true;
+            swingProgress = 0;
+            playWhoosh(mass, 1200);
+        }
+
+        swingBtn.onclick = startSwing;
+        sunderPillarBtn.onclick = () => {
+            hasPillar = true;
+            pillarSundered = false;
+        };
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                startSwing();
+            }
+        });
+
+        function updateTelemetry() {
+            const v = isSwinging ? 1200 * currentPlayrate : 0;
+            const ek = 0.5 * mass * Math.pow(v / 100, 2);
+            document.getElementById('ekVal').innerText = `${ek.toFixed(1)} J`;
+            document.getElementById('playrateVal').innerText = `${currentPlayrate.toFixed(2)}x`;
+            const drag = (volume / 1000) * (mass / 45) * 12.5;
+            document.getElementById('dragVal').innerText = isSwinging ? `${drag.toFixed(1)} N` : "0.00 N";
+            document.getElementById('strainVal').innerText = pillarSundered ? "84.5 MPa (FRACTURED)" : "0.00 MPa";
+        }
+
+        // Render Loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 200;
+            const centerY = 210;
+            const swordLength = mass >= 150 ? 160 : 120;
+
+            // Draw Pillar
+            if (hasPillar) {
+                ctx.save();
+                ctx.translate(pillarX, pillarY);
+                if (pillarSundered) {
+                    ctx.fillStyle = '#8b949e';
+                    ctx.fillRect(-15, -60, 30, 50);
+                    ctx.rotate(0.3);
+                    ctx.fillStyle = '#f85149';
+                    ctx.fillRect(-12, 10, 30, 50);
+                } else {
+                    ctx.fillStyle = '#8b949e';
+                    ctx.strokeStyle = '#d29922';
+                    ctx.lineWidth = 2;
+                    ctx.fillRect(-20, -70, 40, 140);
+                    ctx.strokeRect(-20, -70, 40, 140);
+                }
+                ctx.restore();
+            }
+
+            // Swing Logic
+            if (isSwinging) {
+                // Calculate drag resistance
+                const inImpactZone = (swingProgress > 0.4 && swingProgress < 0.65);
+                if (inImpactZone && hasPillar && !pillarSundered) {
+                    // Volume drag warps playrate down to floor
+                    const targetPlayrate = Math.max(playrateFloor, 1.0 - (volume / 25000) * 0.92);
+                    currentPlayrate += (targetPlayrate - currentPlayrate) * 0.2;
+                    targetFov = 76.0; // Compress FOV on heavy blade drag
+                    
+                    if (swingProgress > 0.55 && !pillarSundered) {
+                        pillarSundered = true;
+                        playImpactSound();
+                        targetFov = 96.0; // Snap FOV on environmental release
+                    }
+                } else {
+                    currentPlayrate += (1.0 - currentPlayrate) * 0.1;
+                    targetFov = 90.0;
+                }
+
+                swingProgress += 0.025 * currentPlayrate;
+                currentAngle = swingAngle + (targetAngle - swingAngle) * swingProgress;
+
+                if (swingProgress >= 1.0) {
+                    isSwinging = false;
+                    swingProgress = 0;
+                    currentAngle = swingAngle;
+                    currentPlayrate = 1.0;
+                    targetFov = 90.0;
+                }
+            }
+
+            // FOV Interpolation
+            currentFov += (targetFov - currentFov) * 0.15;
+            document.getElementById('fovIndicator').innerText = `Camera FOV: ${currentFov.toFixed(1)}°`;
+
+            // Draw Kaelen Character Base
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 24, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Sweeping Blade
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(currentAngle);
+
+            // Blade Trail
+            if (isSwinging) {
+                ctx.strokeStyle = mass >= 150 ? 'rgba(210, 153, 34, 0.4)' : 'rgba(88, 166, 255, 0.4)';
+                ctx.lineWidth = mass >= 150 ? 28 : 14;
+                ctx.beginPath();
+                ctx.arc(0, 0, swordLength, -0.4, 0);
+                ctx.stroke();
+            }
+
+            // Blade
+            ctx.fillStyle = mass >= 150 ? '#30363d' : '#8b949e';
+            ctx.strokeStyle = mass >= 150 ? '#d29922' : '#e6edf3';
+            ctx.lineWidth = mass >= 150 ? 6 : 3;
+            ctx.fillRect(10, -8, swordLength, 16);
+            ctx.strokeRect(10, -8, swordLength, 16);
+
+            // Hilt
+            ctx.fillStyle = '#f85149';
+            ctx.fillRect(-10, -6, 20, 12);
+
+            ctx.restore();
+
+            updateTelemetry();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
