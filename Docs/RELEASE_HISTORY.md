@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2435: Master Batch #121 — The Soul Recovery & Integration Hearth Engine (CAMPFIRE-SPEC-062)
+**Domain:** Narrative / Companions / Audio / UI / AI / World / Core / Orchestration / QA  
+**Status:** 2,435 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2416 | `AshenCampfireHearthTypes.h` | `AshenCampfireHearthTypes` — Enums (2), Structs (2), Multicast Delegates (4) | Narrative |
+| 2417 | `AshenCampfireHearthSubsystem.h/.cpp` | `UAshenCampfireHearthSubsystem` — Subsystem coordinating rest sessions & seating | Narrative |
+| 2418 | `AshenSoulRecoveryEvaluatorComponent.h/.cpp` | `UAshenSoulRecoveryEvaluatorComponent` — Evaluates integration debt & rest tiers | Narrative |
+| 2419 | `AshenProximitySeatingStagingComponent.h/.cpp` | `UAshenProximitySeatingStagingComponent` — Computes companion seating spacing (250-800uu) | Narrative |
+| 2420 | `AshenTraumaTransmutationEngineComponent.h/.cpp` | `UAshenTraumaTransmutationEngineComponent` — Forges permanent trait rewards from trauma | Narrative |
+| 2421 | `AshenSolemnVigilRestGASAbility.h/.cpp` | `UAshenSolemnVigilRestGASAbility` — Solemn vigil rest ability resetting dysregulation | Combat |
+| 2422 | `AshenTraumaTransmutationSurgeGASAbility.h/.cpp` | `UAshenTraumaTransmutationSurgeGASAbility` — Applies permanent trait buffs upon reflection | Combat |
+| 2423 | `AshenReflectiveResonanceCommunionGASAbility.h/.cpp` | `UAshenReflectiveResonanceCommunionGASAbility` — Group communion granting +15% Holy Res / +10% Poise | Combat |
+| 2424 | `AshenHearthEmberGroundingGASAbility.h/.cpp` | `UAshenHearthEmberGroundingGASAbility` — Passive grounding aura active within 800uu of hearth | Combat |
+| 2425 | `AshenDeepRestorativeRenewalGASAbility.h/.cpp` | `UAshenDeepRestorativeRenewalGASAbility` — Full recovery restoring 100% Resolve | Combat |
+| 2426 | `BTTask_AshenSelectCampfireSeat.h/.cpp` | `UBTTask_AshenSelectCampfireSeat` — Behavior Tree Task directing companion to hearth seat | AI |
+| 2427 | `BTTask_AshenPerformCampfireIdle.h/.cpp` | `UBTTask_AshenPerformCampfireIdle` — Behavior Tree Task driving companion campfire idles | AI |
+| 2428 | `AshenCampfireAudioFilterComponent.h/.cpp` | `UAshenCampfireAudioFilterComponent` — Modulates acoustic warmth & flame crackle | Audio |
+| 2429 | `AshenUserWidget_LivingJournalReaderHUD.h/.cpp` | `UAshenUserWidget_LivingJournalReaderHUD` — Interactive UMG widget for living journal reading | UI |
+| 2430 | `AshenCampfireHearthAnchorActor.h/.cpp` | `AAshenCampfireHearthAnchorActor` — 3D world landmark managing hearth warmth & triggers | World |
+| 2431 | `AshenCampfireSaveGameAdapter.h/.cpp` | `UAshenCampfireSaveGameAdapter` — Serializes campfire rests, unlocked traits & journal stats | Core |
+| 2432 | `AshenCampfireTraumaDialogueBridge.h/.cpp` | `UAshenCampfireTraumaDialogueBridge` — Injects seating context & trauma history into dialogue | Narrative |
+| 2433 | `AshenCompanionSeatingPoseMeshAdapter.h/.cpp` | `UAshenCompanionSeatingPoseMeshAdapter` — Modulates companion sitting blendspace weights | Companions |
+| 2434 | `AshenCampfireHearthMasterBridge.h/.cpp` | `UAshenCampfireHearthMasterBridge` — Master bridge connecting rest events, UI & audio | Orchestration |
+| 2435 | `AshenMasterBatch121AutomationTest.cpp` | `FAshenMasterBatch121AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2415: Master Batch #120 — The Tripartite Resonance & Harmonized Finisher Matrix (TRIO-SPEC-061)
 **Domain:** Combat / Companions / Audio / UI / AI / Narrative / World / Core / Orchestration / QA  
 **Status:** 2,415 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density (2,400 Milestone Crossed)*
