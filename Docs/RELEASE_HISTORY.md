@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2475: Master Batch #123 — The Runic Reliquary & Soul-Forged Weapon Transmutation Matrix (RELIQUARY-SPEC-064)
+**Domain:** Crafting / Combat / World / AI / Companions / Audio / UI / Narrative / Core / Orchestration / QA  
+**Status:** 2,475 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2456 | `AshenRunicReliquaryTypes.h` | `AshenRunicReliquaryTypes` — Enums (2), Structs (2), Multicast Delegates (4) | Crafting |
+| 2457 | `AshenRunicReliquarySubsystem.h/.cpp` | `UAshenRunicReliquarySubsystem` — Subsystem managing runic catalog & weapon states | Crafting |
+| 2458 | `AshenSoulForgeTransmuterComponent.h/.cpp` | `UAshenSoulForgeTransmuterComponent` — Transmutes boss shards & trauma memories | Crafting |
+| 2459 | `AshenWeaponAttunementEvaluatorComponent.h/.cpp` | `UAshenWeaponAttunementEvaluatorComponent` — Computes weapon mass, kinetic energy & stamina costs | Crafting |
+| 2460 | `AshenRunicSocketRegistryComponent.h/.cpp` | `UAshenRunicSocketRegistryComponent` — Manages per-weapon socket slots | Crafting |
+| 2461 | `AshenSoulForgeAttunementGASAbility.h/.cpp` | `UAshenSoulForgeAttunementGASAbility` — Ability executing forge ritual at campfire | Combat |
+| 2462 | `AshenRunicResonanceSurgeGASAbility.h/.cpp` | `UAshenRunicResonanceSurgeGASAbility` — Active combat ability triggering overcharged runic burst | Combat |
+| 2463 | `AshenNightsteelCoreInfusionGASAbility.h/.cpp` | `UAshenNightsteelCoreInfusionGASAbility` — Ability infusing boss core (+40% poise, +35kg mass) | Combat |
+| 2464 | `AshenMemoryCrystallizationGASAbility.h/.cpp` | `UAshenMemoryCrystallizationGASAbility` — Converts companion trauma into hilt relic | Combat |
+| 2465 | `AshenRunicOverloadDischargeGASAbility.h/.cpp` | `UAshenRunicOverloadDischargeGASAbility` — Vents excess runic heat to prevent lockout | Combat |
+| 2466 | `BTTask_AshenCompanionInspectForge.h/.cpp` | `UBTTask_AshenCompanionInspectForge` — AI Task directing companion to inspect forged runes | AI |
+| 2467 | `AshenRunicAnvilWorldActor.h/.cpp` | `AAshenRunicAnvilWorldActor` — Physicalized campfire forge anvil actor | World |
+| 2468 | `AshenUserWidget_RunicReliquaryForgeHUD.h/.cpp` | `UAshenUserWidget_RunicReliquaryForgeHUD` — UMG widget displaying socket grid & weapon mass | UI |
+| 2469 | `AshenRunicChimeAudioSubsystem.h/.cpp` | `UAshenRunicChimeAudioSubsystem` — Synthesizes Solfeggio chimes (528Hz/741Hz/852Hz) | Audio |
+| 2470 | `AshenRunicVFXWeaponAdapterComponent.h/.cpp` | `UAshenRunicVFXWeaponAdapterComponent` — Modulates weapon mesh emissive & runic glow | Combat |
+| 2471 | `AshenRunicForgeSaveGameAdapter.h/.cpp` | `UAshenRunicForgeSaveGameAdapter` — Serializes socketed weapon states & boss core infusions | Core |
+| 2472 | `AshenRunicDialogueBridge.h/.cpp` | `UAshenRunicDialogueBridge` — Injects companion reactions to weapon attunements | Narrative |
+| 2473 | `AshenWeaponWeightSomaticAdapter.h/.cpp` | `UAshenWeaponWeightSomaticAdapter` — Bridges weapon mass into gamepad somatic friction | Crafting |
+| 2474 | `AshenRunicReliquaryMasterBridge.h/.cpp` | `UAshenRunicReliquaryMasterBridge` — Master bridge coordinating forge events, UI & audio | Orchestration |
+| 2475 | `AshenMasterBatch123AutomationTest.cpp` | `FAshenMasterBatch123AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2455: Master Batch #122 — The Sundered Sanctuary Boss Encounter Engine (ARENA-SPEC-063)
 **Domain:** Boss / Combat / World / AI / Companions / Audio / UI / Narrative / Core / Orchestration / QA  
 **Status:** 2,455 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

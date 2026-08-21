@@ -27,10 +27,32 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-005`** | **Kinetic Cleave Play-Rate Floor & FOV Dilation** | `KINETIC-SPEC-060` / Combat / Animation / Camera | Clamping weapon drag play-rate strictly to $\ge 0.08$ with dynamic FOV snap ($90^\circ \to 76^\circ \to 96^\circ$) to deliver massive weight without animation lockups. |
 | **`SYN-006`** | **Tripartite 60 BPM DualSense Haptic Resonance** | `TRIO-SPEC-061` / Combat / Haptics / Audio | Synchronizing 60 BPM ($1.0\text{ Hz}$) auditory pulses with DualSense adaptive trigger resistance ($0.20 \to 0.60 \to 0.75 \to 1.00$) for 3-person finishers. |
 | **`SYN-007`** | **Multi-Tier Chaos Sunder Obstruction Scaling** | `ARENA-SPEC-063` / World / Chaos / Boss | Structural pillar fracture plane ($Ax + By + Cz + D = 0$) directly driving arena obstruction scalars ($0\% \to 50\% \to 100\%$) and companion pinning crisis windows. |
+| **`SYN-008`** | **Runic Mass-Momentum & Poise Scaling Invariant** | `RELIQUARY-SPEC-064` / `KINETIC-SPEC-060` / Crafting / Combat | Boss core and trauma hilt socketing dynamically scaling effective weapon mass ($45\text{kg} \leftrightarrow 220\text{kg}$), kinetic strike Joules, and Solfeggio harmonic chimes. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-008`: Runic Mass-Momentum & Poise Scaling Invariant
+
+* **Target Subsystems:** `UAshenRunicReliquarySubsystem`, `UAshenWeaponAttunementEvaluatorComponent`, `UAshenWeaponWeightSomaticAdapter`, `UAshenRunicChimeAudioSubsystem`
+* **Related Specifications:** [`RELIQUARY-SPEC-064`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/RELIQUARY-SPEC-064%20%28THE%20RUNIC%20RELIQUARY%20&%20SOUL-FORGED%20WEAPON%20TRANSMUTATION%20MATRIX%29.md), [`KINETIC-SPEC-060`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/KINETIC-SPEC-060%20%28THE%20MASS%20KINETIC%20CLEAVE%20&%20ENVIRONMENTAL%20FRACTURE%20ENGINE%29.md)
+
+#### 📐 Mathematical Invariants:
+$$m_{\text{effective}} = \text{clamp}\left(m_{\text{base}} + \sum \Delta m_{\text{runes}}, 45.0\text{ kg}, 220.0\text{ kg}\right)$$
+$$E_k = \frac{1}{2} \cdot m_{\text{effective}} \cdot \left(\frac{v}{100}\right)^2 \cdot \prod \text{PoiseMultiplier}$$
+$$\text{SomaticResistance} = \text{MapRangeClamped}(m_{\text{effective}}, 45\text{kg}\to 200\text{kg}, 0.10 \to 0.95)$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Transmutation Loop:** When a player defeats a boss, the raw kinetic thrill translates into permanent weapon weight and poise mastery.
+* **Harmonic Resonance Tones:** Socketing attunement tiers emit pure Solfeggio harmonic frequencies in MetaSounds:
+  * Resonant Tier 1: $528\text{ Hz}$ (Somatic Repair Tone)
+  * Overcharged Tier 2: $741\text{ Hz}$ (Intuition / Clarity Tone)
+  * Master-Forged Tier 3: $852\text{ Hz}$ (Boss Core Spiritual Transcendence)
+
+---
 
 ---
 
