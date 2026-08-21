@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Empathic Transference & Shadow Burnout Simulator</title>
+    <!-- Traceability: BURDEN-SPEC-057 | UAshenEmpathicTransferenceSubsystem | Builds 2316-2335 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1050px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #1b1424 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .bar-track {
+            width: 100%;
+            height: 10px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            transition: width 0.2s ease;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-transfer {
+            background: #8957e5;
+            border-color: #a371f7;
+            color: #fff;
+        }
+
+        .btn-transfer:hover {
+            background: #a371f7;
+        }
+
+        .dialogue-box {
+            background: #1c2128;
+            border: 1px dashed var(--accent-purple);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>EMPATHIC TRANSFERENCE & SHADOW BURNOUT SIMULATOR</h1>
+                <p>Self-Sacrificial Damage Absorption, Burnout Strain & Fellowship Trust Surges (BURDEN-SPEC-057)</p>
+            </div>
+            <div class="badge">Psychological Kernel Bound</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <!-- Kaelen Burnout Bar -->
+                <div class="bar-group">
+                    <div class="bar-header">
+                        <span style="color: var(--accent-purple);">KAELEN SHADOW BURNOUT</span>
+                        <span id="burnoutVal">0.0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill" id="burnoutFill" style="width: 0%; background: #a371f7;"></div>
+                    </div>
+                </div>
+
+                <!-- Garrett Health -->
+                <div class="bar-group">
+                    <div class="bar-header">
+                        <span style="color: var(--accent-green);">GARRETT HEALTH</span>
+                        <span id="garrettHpVal">100.0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill" id="garrettHpFill" style="width: 100%; background: #3fb950;"></div>
+                    </div>
+                </div>
+
+                <!-- Serafina Health -->
+                <div class="bar-group">
+                    <div class="bar-header">
+                        <span style="color: var(--accent-gold);">SERAFINA HEALTH</span>
+                        <span id="serafinaHpVal">100.0%</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill" id="serafinaHpFill" style="width: 100%; background: #d29922;"></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="damageGarrettBtn" style="flex: 1;">⚔️ DAMAGE GARRETT</button>
+                    <button class="btn" id="damageSerafinaBtn" style="flex: 1;">⚔️ DAMAGE SERAFINA</button>
+                </div>
+
+                <button class="btn btn-transfer" id="transferenceBtn">🛡️ CHANNEL EMPATHIC TRANSFERENCE (SPACE)</button>
+                
+                <div class="dialogue-box" id="dialogueBox">
+                    "We share the breath between us. Your wounds are my wounds."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-blue);">📋 COPY SELT TELEMETRY</button>
+                    <button class="btn" id="resetBtn" style="flex: 1;">RESET STATE</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Somatic State</div>
+                <div class="telemetry-val" id="somaticStateVal">Contemplative</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Garrett Trust</div>
+                <div class="telemetry-val" id="garrettTrustVal">0.50 (+0.00)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Serafina Trust</div>
+                <div class="telemetry-val" id="serafinaTrustVal">0.50 (+0.00)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Tinnitus Ringing</div>
+                <div class="telemetry-val" id="tinnitusVal">Muted</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer for Transference Glow & High-Frequency Tinnitus
+        let audioCtx = null;
+        let tinnitusOsc = null;
+        let tinnitusGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Continuous Tinnitus Ringing Node (3500 Hz)
+                tinnitusOsc = audioCtx.createOscillator();
+                tinnitusGain = audioCtx.createGain();
+                tinnitusOsc.type = 'sine';
+                tinnitusOsc.frequency.value = 3500;
+                tinnitusGain.gain.value = 0.0; // Muted initially
+                tinnitusOsc.connect(tinnitusGain);
+                tinnitusGain.connect(audioCtx.destination);
+                tinnitusOsc.start();
+            }
+        }
+
+        function playTransferenceWhoosh() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(750, audioCtx.currentTime + 0.25);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.32);
+        }
+
+        // State Machine
+        let kaelenBurnout = 0.0;
+        let garrettHp = 1.0;
+        let serafinaHp = 1.0;
+        let garrettTrust = 0.50;
+        let serafinaTrust = 0.50;
+
+        let channelBeamTarget = null; // 'garrett' or 'serafina'
+        let beamProgress = 0.0;
+
+        const burnoutFill = document.getElementById('burnoutFill');
+        const burnoutVal = document.getElementById('burnoutVal');
+        const garrettHpFill = document.getElementById('garrettHpFill');
+        const garrettHpVal = document.getElementById('garrettHpVal');
+        const serafinaHpFill = document.getElementById('serafinaHpFill');
+        const serafinaHpVal = document.getElementById('serafinaHpVal');
+        const dialogueBox = document.getElementById('dialogueBox');
+
+        const damageGarrettBtn = document.getElementById('damageGarrettBtn');
+        const damageSerafinaBtn = document.getElementById('damageSerafinaBtn');
+        const transferenceBtn = document.getElementById('transferenceBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        damageGarrettBtn.onclick = () => {
+            initAudio();
+            garrettHp = Math.max(0.1, garrettHp - 0.25);
+            updateUI();
+        };
+
+        damageSerafinaBtn.onclick = () => {
+            initAudio();
+            serafinaHp = Math.max(0.1, serafinaHp - 0.25);
+            updateUI();
+        };
+
+        function executeTransference() {
+            initAudio();
+            let transferred = false;
+
+            if (garrettHp < 1.0) {
+                const missing = 1.0 - garrettHp;
+                garrettHp = 1.0;
+                kaelenBurnout = Math.min(1.0, kaelenBurnout + missing * 0.5);
+                garrettTrust = Math.min(1.0, garrettTrust + 0.15);
+                channelBeamTarget = 'garrett';
+                beamProgress = 1.0;
+                playTransferenceWhoosh();
+                dialogueBox.innerHTML = '"You took that for me, Kaelen? Don\'t die on my account."<br><span style="color: #3fb950;">— Garrett (+0.15 Trust)</span>';
+                transferred = true;
+            } else if (serafinaHp < 1.0) {
+                const missing = 1.0 - serafinaHp;
+                serafinaHp = 1.0;
+                kaelenBurnout = Math.min(1.0, kaelenBurnout + missing * 0.5);
+                serafinaTrust = Math.min(1.0, serafinaTrust + 0.15);
+                channelBeamTarget = 'serafina';
+                beamProgress = 1.0;
+                playTransferenceWhoosh();
+                dialogueBox.innerHTML = '"The White Flame feels your sacrifice. Let me shield your spirit."<br><span style="color: #d29922;">— Serafina (+0.15 Faith)</span>';
+                transferred = true;
+            }
+
+            if (!transferred) {
+                dialogueBox.innerText = "Both companions are currently at full health. No damage to transfer.";
+            }
+
+            updateUI();
+        }
+
+        transferenceBtn.onclick = executeTransference;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                executeTransference();
+            }
+        });
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "EMPATHIC_TRANSFERENCE_INTERCEPT",
+                actor: "Kaelen",
+                burnout_level: parseFloat(kaelenBurnout.toFixed(3)),
+                garrett_trust: parseFloat(garrettTrust.toFixed(3)),
+                serafina_trust: parseFloat(serafinaTrust.toFixed(3)),
+                coherence_index: parseFloat(((garrettTrust + serafinaTrust) / 2.0 - (kaelenBurnout * 0.3)).toFixed(3))
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        resetBtn.onclick = () => {
+            kaelenBurnout = 0.0;
+            garrettHp = 1.0;
+            serafinaHp = 1.0;
+            garrettTrust = 0.50;
+            serafinaTrust = 0.50;
+            channelBeamTarget = null;
+            beamProgress = 0.0;
+            dialogueBox.innerText = "State reset to baseline.";
+            updateUI();
+        };
+
+        function updateUI() {
+            burnoutFill.style.width = `${(kaelenBurnout * 100).toFixed(0)}%`;
+            burnoutVal.innerText = `${(kaelenBurnout * 100).toFixed(1)}%`;
+
+            garrettHpFill.style.width = `${(garrettHp * 100).toFixed(0)}%`;
+            garrettHpVal.innerText = `${(garrettHp * 100).toFixed(1)}%`;
+
+            serafinaHpFill.style.width = `${(serafinaHp * 100).toFixed(0)}%`;
+            serafinaHpVal.innerText = `${(serafinaHp * 100).toFixed(1)}%`;
+
+            document.getElementById('garrettTrustVal').innerText = `${garrettTrust.toFixed(2)}`;
+            document.getElementById('serafinaTrustVal').innerText = `${serafinaTrust.toFixed(2)}`;
+
+            // Somatic State
+            if (kaelenBurnout >= 0.70) {
+                document.getElementById('somaticStateVal').innerText = "DestabilizingCrisis";
+                document.getElementById('tinnitusVal').innerText = "3500 Hz (Severe)";
+                if (tinnitusGain && audioCtx) {
+                    tinnitusGain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                }
+            } else if (kaelenBurnout >= 0.30) {
+                document.getElementById('somaticStateVal').innerText = "TraumaticAftermath";
+                document.getElementById('tinnitusVal').innerText = "3500 Hz (Mild)";
+                if (tinnitusGain && audioCtx) {
+                    tinnitusGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                }
+            } else {
+                document.getElementById('somaticStateVal').innerText = "Contemplative";
+                document.getElementById('tinnitusVal').innerText = "Muted";
+                if (tinnitusGain && audioCtx) {
+                    tinnitusGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
+                }
+            }
+        }
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 325;
+            const centerY = 220;
+
+            const kaelenPos = { x: centerX, y: centerY + 60 };
+            const garrettPos = { x: centerX - 140, y: centerY - 60 };
+            const serafinaPos = { x: centerX + 140, y: centerY - 60 };
+
+            // Draw Transference Beam
+            if (beamProgress > 0) {
+                beamProgress -= 0.03;
+                const targetPos = (channelBeamTarget === 'garrett') ? garrettPos : serafinaPos;
+                ctx.strokeStyle = `rgba(163, 113, 247, ${beamProgress})`;
+                ctx.lineWidth = 6 * beamProgress;
+                ctx.beginPath();
+                ctx.moveTo(kaelenPos.x, kaelenPos.y);
+                ctx.lineTo(targetPos.x, targetPos.y);
+                ctx.stroke();
+            }
+
+            // Draw Kaelen (Screen Tremor if Crisis)
+            let tremorX = 0;
+            let tremorY = 0;
+            if (kaelenBurnout >= 0.70) {
+                tremorX = (Math.random() - 0.5) * 6;
+                tremorY = (Math.random() - 0.5) * 6;
+            }
+
+            // Kaelen Base
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(kaelenPos.x + tremorX, kaelenPos.y + tremorY, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Burnout Aura Ring
+            if (kaelenBurnout > 0) {
+                ctx.strokeStyle = `rgba(163, 113, 247, ${kaelenBurnout})`;
+                ctx.lineWidth = 4 + kaelenBurnout * 8;
+                ctx.beginPath();
+                ctx.arc(kaelenPos.x + tremorX, kaelenPos.y + tremorY, 26 + kaelenBurnout * 10, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = '#fff';
+            ctx.fillText("Kaelen (Sacrifice)", kaelenPos.x - 45 + tremorX, kaelenPos.y + 40 + tremorY);
+
+            // Garrett
+            ctx.fillStyle = '#3fb950';
+            ctx.beginPath();
+            ctx.arc(garrettPos.x, garrettPos.y, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett", garrettPos.x - 18, garrettPos.y - 28);
+
+            // Serafina
+            ctx.fillStyle = '#d29922';
+            ctx.beginPath();
+            ctx.arc(serafinaPos.x, serafinaPos.y, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina", serafinaPos.x - 22, serafinaPos.y - 28);
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
