@@ -31,10 +31,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-009`** | **Adaptive Trigger Priority & Directional Tactile Invariant** | `HAPTIC-SPEC-065` / Haptics / Narrative / Combat | Enforcing strict Priority 1 Dialogue Lockout ($100\%$) over combat stagger and ambient somatic resistance, with directional grip threat motor bias. |
 | **`SYN-010`** | **Temporal Bullet-Time Dilation & Finisher Multiplier** | `TACTICAL-SPEC-066` / Tactics / Combat / Audio | Squad command wheel smoothly ramping time dilation ($1.00\times \to 0.20\times$) and low-pass audio ($450\text{ Hz}$), with $2.50\times$ synchronized finisher burst damage. |
 | **`SYN-011`** | **3D Relic Orbital Deciphering & Companion Marginalia Invariant** | `ARCHIVE-SPEC-067` / Archive / Narrative / Audio | 3D relic examination angle alignment ($|\Delta\theta| \le 15^\circ$) revealing hidden inscriptions, triggering Solfeggio hums and trust-scaled companion marginalia. |
+| **`SYN-012`** | **Ritual Disruption Debt Spike & Reluctant Knife Invariant** | `SCENARIO-SPEC-068` / Scenarios / Combat / Audio / Haptics | Ritual interruption spiking Integration Debt ($+15\% \to +45\%$), triggering $320\text{ Hz}$ Null Zone muffling, controller whispers, and Valerius's exhausted dialogue progression. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-012`: Ritual Disruption Debt Spike & Reluctant Knife Invariant
+
+* **Target Subsystems:** `UAshenScenario1MissionSubsystem`, `UAshenRitualClarityOfHeartSubsystem`, `UAshenReluctantKnifeEvaluatorComponent`, `UAshenOakhavenAudioSubsystem`, `UAshenScenario1HapticBridge`
+* **Related Specifications:** [`SCENARIO-SPEC-068`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SCENARIO-SPEC-068%20%28SCENARIO%201%20%E2%80%94%20THE%20CAUTERIZED%20HEART%29.md), `Ashen Oath_ Vertical Slice Scenario Reference Guide.md`
+
+#### 📐 Mathematical Invariants:
+$$\Delta\text{Debt}_{\text{interrupt}}(P) = 0.15 + 0.30 \cdot P_{\text{ritual}} \quad (0.15 \le \Delta\text{Debt} \le 0.45)$$
+$$\text{ValeriusStance}(t, L) = \begin{cases} \text{HardenedResignation}, & \text{if } L \ge 0.50 \lor t \ge 120\text{s} \\ \text{DesperateContainment}, & \text{if } L \ge 0.25 \lor t \ge 60\text{s} \\ \text{ControlledMitigation}, & \text{otherwise} \end{cases}$$
+$$R_{\text{parry}}(\text{Phase}) = \begin{cases} 70.0, & \text{Phase 1 (Inquisitor)} \\ 85.0, & \text{Phase 2 (Zealot)} \\ 100.0, & \text{Phase 3 (Abomination Hard Stop)} \end{cases}$$
+$$\text{AudioCutoff}(NullZone) = \begin{cases} 320\text{ Hz}, & \text{if Null Zone Active} \\ 20,000\text{ Hz}, & \text{if Inactive} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Consequence as Gameplay Mechanic:** Interrupting the sacred ritual isn't just an animation restart—it delivers a massive psychic blow to Kaelen's soul contract ($+45\%$ Debt), immediately crossing the $50\%$ threshold into auditory isolation and controller speaker whispers.
+* **The Principle of the Reluctant Knife:** Elder Valerius's dialogue shifts dynamically based on battle duration and ritual attrition, ensuring player empathy for his tragic choices.
+
+---
 
 ---
 

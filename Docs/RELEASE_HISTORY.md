@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2555: Master Batch #127 — Scenario 1: The Cauterized Heart (SCENARIO-SPEC-068)
+**Domain:** Scenarios / Combat / Audio / UI / AI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,555 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2536 | `AshenScenario1CauterizedHeartTypes.h` | `AshenScenario1CauterizedHeartTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Scenarios |
+| 2537 | `AshenScenario1MissionSubsystem.h/.cpp` | `UAshenScenario1MissionSubsystem` — Subsystem managing Oakhaven Chapel encounter | Scenarios |
+| 2538 | `AshenMalakorEncounterComponent.h/.cpp` | `UAshenMalakorEncounterComponent` — Evaluates Malakor boss phases & Void Smash | Scenarios |
+| 2539 | `AshenReluctantKnifeEvaluatorComponent.h/.cpp` | `UAshenReluctantKnifeEvaluatorComponent` — Principle of Reluctant Knife evaluator | Scenarios |
+| 2540 | `AshenRitualClarityOfHeartSubsystem.h/.cpp` | `UAshenRitualClarityOfHeartSubsystem` — Evaluates ritual progress & debt spikes | Scenarios |
+| 2541 | `AshenKaelenClarityOfHeartGASAbility.h/.cpp` | `UAshenKaelenClarityOfHeartGASAbility` — Kaelen's ritual purification ability | Combat |
+| 2542 | `AshenMalakorVoidSmashGASAbility.h/.cpp` | `UAshenMalakorVoidSmashGASAbility` — Malakor's ritual-breaking Void Smash | Combat |
+| 2543 | `AshenValeriusReluctantInterveneGASAbility.h/.cpp` | `UAshenValeriusReluctantInterveneGASAbility` — Valerius's exhausted intervention parry | Combat |
+| 2544 | `AshenTitansStandParryGASAbility.h/.cpp` | `UAshenTitansStandParryGASAbility` — Kaelen's Titan's Stand parry with haptics | Combat |
+| 2545 | `AshenNullZoneCascadeGASAbility.h/.cpp` | `UAshenNullZoneCascadeGASAbility` — Initiates Null Zone cascade, stripping buffs | Combat |
+| 2546 | `BTTask_AshenMalakorExecuteVoidSmash.h/.cpp` | `UBTTask_AshenMalakorExecuteVoidSmash` — AI Task directing Malakor Void Smash | AI |
+| 2547 | `AshenOakhavenChapelRitualAltarWorldActor.h/.cpp` | `AAshenOakhavenChapelRitualAltarWorldActor` — Interactive altar with amber braziers | World |
+| 2548 | `AshenUserWidget_OakhavenEncounterHUD.h/.cpp` | `UAshenUserWidget_OakhavenEncounterHUD` — UMG HUD displaying boss health & debt | UI |
+| 2549 | `AshenOakhavenAudioSubsystem.h/.cpp` | `UAshenOakhavenAudioSubsystem` — MetaSounds amber flames & controller whispers | Audio |
+| 2550 | `AshenShadowVeinMaterialModulatorComponent.h/.cpp` | `UAshenShadowVeinMaterialModulatorComponent` — Modulates shadow veins & trauma jitter | Scenarios |
+| 2551 | `AshenScenario1SaveGameAdapter.h/.cpp` | `UAshenScenario1SaveGameAdapter` — Serializes chapel resolution & debt state | Core |
+| 2552 | `AshenScenario1DialogueBridge.h/.cpp` | `UAshenScenario1DialogueBridge` — Injects Malakor & Valerius dialogue confrontations | Narrative |
+| 2553 | `AshenScenario1HapticBridge.h/.cpp` | `UAshenScenario1HapticBridge` — Maps Titan's Stand trigger resistance (70-100) | Scenarios |
+| 2554 | `AshenScenario1MasterBridge.h/.cpp` | `UAshenScenario1MasterBridge` — Master bridge coordinating encounter & audio | Orchestration |
+| 2555 | `AshenMasterBatch127AutomationTest.cpp` | `FAshenMasterBatch127AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2535: Master Batch #126 — The Ashen Codex & Historical Relic Repository (ARCHIVE-SPEC-067)
 **Domain:** Archive / Combat / Audio / UI / AI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,535 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
