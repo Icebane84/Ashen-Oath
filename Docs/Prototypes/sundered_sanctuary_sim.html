@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Sundered Sanctuary Boss Encounter Simulator</title>
+    <!-- Traceability: ARENA-SPEC-063 | UAshenBossEncounterSubsystem | Builds 2436-2455 -->
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --panel-bg: #1c2128;
+            --border-color: #30363d;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1050px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-red);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #261219 0%, #0d1117 80%);
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .boss-bar-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .boss-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-red);
+        }
+
+        .boss-bar-track {
+            width: 100%;
+            height: 14px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .boss-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #f85149, #d29922);
+            transition: width 0.2s ease;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-attack {
+            background: #da3633;
+            border-color: #f85149;
+            color: #fff;
+        }
+
+        .btn-attack:hover {
+            background: #f85149;
+        }
+
+        .btn-rescue {
+            background: #238636;
+            border-color: #2ea043;
+            color: #fff;
+        }
+
+        .btn-rescue:hover {
+            background: #2ea043;
+        }
+
+        .crisis-box {
+            background: rgba(248, 81, 73, 0.12);
+            border: 1px solid var(--accent-red);
+            border-radius: 6px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .crisis-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-red);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .crisis-desc {
+            font-size: 11px;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SUNDERED SANCTUARY BOSS ENCOUNTER SIMULATOR</h1>
+                <p>3-Phase Escalation, Chaos Pillar Fracture & Companion Pinning Rescue (ARENA-SPEC-063)</p>
+            </div>
+            <div class="badge">Chaos Geometry & Relational Dilemmas</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="boss-bar-wrap">
+                    <div class="boss-bar-label">
+                        <span id="bossNameLabel">SANCTUARY GUARDIAN</span>
+                        <span id="bossHpPercent">100.0%</span>
+                    </div>
+                    <div class="boss-bar-track">
+                        <div class="boss-bar-fill" id="bossHpFill"></div>
+                    </div>
+                </div>
+
+                <button class="btn btn-attack" id="attackBossBtn">⚔️ KAELEN HEAVY STRIKE (-15% HP)</button>
+                <button class="btn" id="sunderPillarsBtn">💥 TRIGGER PILLAR SUNDER (CHAOS)</button>
+
+                <div class="crisis-box" id="crisisPanel" style="display: none;">
+                    <div class="crisis-title">
+                        <span>⚠️ COMPANION PINNED IN EXECUTION!</span>
+                        <span id="crisisTimer">3.00s</span>
+                    </div>
+                    <div class="crisis-desc">
+                        Boss has pinned Garrett in lethal posture. Choose your intervention:
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-top: 4px;">
+                        <button class="btn btn-rescue" id="transferenceBtn" style="flex: 1;">TRANSFERENCE INTERCEPT (+0.20 TRUST)</button>
+                        <button class="btn" id="fallbackBtn" style="flex: 1;">FALL BACK</button>
+                    </div>
+                </div>
+
+                <button class="btn" id="resetBossBtn">RESET ENCOUNTER</button>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Active Phase</div>
+                <div class="telemetry-val" id="phaseVal">Phase 1: Guardian</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Intact Pillars</div>
+                <div class="telemetry-val" id="pillarsVal">4 / 4</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Arena Obstruction</div>
+                <div class="telemetry-val" id="obstructionVal">0.0% (Clear)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Audio Tension / BPM</div>
+                <div class="telemetry-val" id="audioVal">1.0x (Calm)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer for Dynamic Tension & Impacts
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playBossImpact() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.36);
+        }
+
+        function playPillarSunderAudio() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 0.6);
+            gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.65);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.7);
+        }
+
+        // Encounter State
+        let bossHp = 1.0; // 1.0 = 100%
+        let currentPhase = "Phase1"; // Phase1, Phase2, Phase3, Defeated
+        let intactPillars = 4;
+        let obstructionScalar = 0.0;
+        let isCrisisActive = false;
+        let crisisTimer = 0.0;
+
+        const bossHpFill = document.getElementById('bossHpFill');
+        const bossHpPercent = document.getElementById('bossHpPercent');
+        const bossNameLabel = document.getElementById('bossNameLabel');
+        const crisisPanel = document.getElementById('crisisPanel');
+        const crisisTimerLabel = document.getElementById('crisisTimer');
+
+        const attackBossBtn = document.getElementById('attackBossBtn');
+        const sunderPillarsBtn = document.getElementById('sunderPillarsBtn');
+        const transferenceBtn = document.getElementById('transferenceBtn');
+        const fallbackBtn = document.getElementById('fallbackBtn');
+        const resetBossBtn = document.getElementById('resetBossBtn');
+
+        function updateBossHp(delta) {
+            initAudio();
+            bossHp = Math.max(0.0, bossHp + delta);
+            playBossImpact();
+
+            // Phase Evaluation
+            const prevPhase = currentPhase;
+            if (bossHp <= 0.0) {
+                currentPhase = "Defeated";
+            } else if (bossHp <= 0.30) {
+                currentPhase = "Phase3";
+            } else if (bossHp <= 0.65) {
+                currentPhase = "Phase2";
+            } else {
+                currentPhase = "Phase1";
+            }
+
+            // Trigger Phase 2 Sunder Event
+            if (prevPhase === "Phase1" && currentPhase === "Phase2") {
+                sunderPillar();
+                sunderPillar();
+                triggerCrisis();
+            }
+
+            // Trigger Phase 3 Meltdown Event
+            if (prevPhase === "Phase2" && currentPhase === "Phase3") {
+                sunderPillar();
+                sunderPillar();
+                triggerCrisis();
+            }
+
+            updateUI();
+        }
+
+        function sunderPillar() {
+            if (intactPillars > 0) {
+                intactPillars--;
+                obstructionScalar = (4 - intactPillars) * 0.25;
+                playPillarSunderAudio();
+                updateUI();
+            }
+        }
+
+        function triggerCrisis() {
+            isCrisisActive = true;
+            crisisTimer = 3.0;
+            crisisPanel.style.display = 'flex';
+        }
+
+        attackBossBtn.onclick = () => updateBossHp(-0.15);
+        sunderPillarsBtn.onclick = sunderPillar;
+
+        transferenceBtn.onclick = () => {
+            isCrisisActive = false;
+            crisisPanel.style.display = 'none';
+            alert("🛡️ EMPATHIC TRANSFERENCE INTERCEPT SUCCESSFUL!\n• Kaelen absorbs the lethal blow\n• Garrett Rescued (+0.20 Trust Reward)\n• Boss Staggered!");
+            updateUI();
+        };
+
+        fallbackBtn.onclick = () => {
+            isCrisisActive = false;
+            crisisPanel.style.display = 'none';
+            alert("⚠️ INTERVENTION FAILED: Companion wounded and entered Traumatic Aftermath silence!");
+            updateUI();
+        };
+
+        resetBossBtn.onclick = () => {
+            bossHp = 1.0;
+            currentPhase = "Phase1";
+            intactPillars = 4;
+            obstructionScalar = 0.0;
+            isCrisisActive = false;
+            crisisPanel.style.display = 'none';
+            updateUI();
+        };
+
+        function updateUI() {
+            bossHpFill.style.width = `${(bossHp * 100).toFixed(1)}%`;
+            bossHpPercent.innerText = `${(bossHp * 100).toFixed(1)}%`;
+
+            if (currentPhase === "Phase1") {
+                bossNameLabel.innerText = "SANCTUARY GUARDIAN";
+                document.getElementById('phaseVal').innerText = "Phase 1: Guardian";
+                document.getElementById('audioVal').innerText = "1.0x (Standard)";
+            } else if (currentPhase === "Phase2") {
+                bossNameLabel.innerText = "CORRUPTED NIGHTSTEEL TITAN";
+                document.getElementById('phaseVal').innerText = "Phase 2: Titan";
+                document.getElementById('audioVal').innerText = "1.4x (Heavy Tension)";
+            } else if (currentPhase === "Phase3") {
+                bossNameLabel.innerText = "UMBRAL CATACLYSM MELTDOWN";
+                document.getElementById('phaseVal').innerText = "Phase 3: Meltdown";
+                document.getElementById('audioVal').innerText = "2.0x (Frantic Crescendo)";
+            } else {
+                bossNameLabel.innerText = "TITAN DEFEATED";
+                document.getElementById('phaseVal').innerText = "Victory (Resolved)";
+                document.getElementById('audioVal').innerText = "0.5x (Catharsis)";
+            }
+
+            document.getElementById('pillarsVal').innerText = `${intactPillars} / 4`;
+            document.getElementById('obstructionVal').innerText = `${(obstructionScalar * 100).toFixed(0)}% (Rubble)`;
+        }
+
+        // Canvas Simulation
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 325;
+            const centerY = 220;
+
+            // Crisis Timer
+            if (isCrisisActive && crisisTimer > 0) {
+                crisisTimer -= 0.016;
+                crisisTimerLabel.innerText = `${Math.max(0, crisisTimer).toFixed(2)}s`;
+                if (crisisTimer <= 0) {
+                    fallbackBtn.click();
+                }
+            }
+
+            // Draw Arena Circle
+            ctx.strokeStyle = (currentPhase === "Phase3") ? '#f85149' : '#30363d';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 180, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Draw 4 Chaos Pillars
+            const pillarPositions = [
+                { x: centerX - 110, y: centerY - 110 },
+                { x: centerX + 110, y: centerY - 110 },
+                { x: centerX - 110, y: centerY + 110 },
+                { x: centerX + 110, y: centerY + 110 }
+            ];
+
+            pillarPositions.forEach((pos, idx) => {
+                const isSundered = (idx >= intactPillars);
+                if (isSundered) {
+                    // Draw fractured rubble
+                    ctx.fillStyle = '#8b949e';
+                    ctx.fillRect(pos.x - 12, pos.y - 12, 10, 10);
+                    ctx.fillRect(pos.x + 4, pos.y + 2, 14, 8);
+                    ctx.fillStyle = '#f85149';
+                    ctx.fillRect(pos.x - 4, pos.y + 6, 8, 8);
+                } else {
+                    // Intact pillar
+                    ctx.fillStyle = '#1c2128';
+                    ctx.strokeStyle = '#d29922';
+                    ctx.lineWidth = 2;
+                    ctx.fillRect(pos.x - 16, pos.y - 16, 32, 32);
+                    ctx.strokeRect(pos.x - 16, pos.y - 16, 32, 32);
+                }
+            });
+
+            // Draw Boss Actor
+            ctx.fillStyle = (currentPhase === "Phase3") ? '#a371f7' : (currentPhase === "Phase2" ? '#f85149' : '#8b949e');
+            ctx.beginPath();
+            const bossSize = (currentPhase === "Phase2" || currentPhase === "Phase3") ? 32 : 24;
+            ctx.arc(centerX, centerY, bossSize, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px monospace';
+            ctx.fillText(currentPhase === "Defeated" ? "DEFEATED" : "BOSS", centerX - 14, centerY + 4);
+
+            // Draw Player & Companions
+            // Kaelen
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(centerX - 90, centerY + 60, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Kaelen", centerX - 105, centerY + 88);
+
+            // Garrett (Pinned in crisis)
+            ctx.fillStyle = isCrisisActive ? '#f85149' : '#3fb950';
+            ctx.beginPath();
+            ctx.arc(centerX + 60, centerY - 60, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText(isCrisisActive ? "PINNED!" : "Garrett", centerX + 45, centerY - 80);
+
+            // Serafina
+            ctx.fillStyle = '#d29922';
+            ctx.beginPath();
+            ctx.arc(centerX + 80, centerY + 60, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina", centerX + 65, centerY + 88);
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
