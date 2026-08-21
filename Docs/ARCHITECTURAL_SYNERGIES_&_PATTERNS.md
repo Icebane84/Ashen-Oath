@@ -33,10 +33,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-011`** | **3D Relic Orbital Deciphering & Companion Marginalia Invariant** | `ARCHIVE-SPEC-067` / Archive / Narrative / Audio | 3D relic examination angle alignment ($|\Delta\theta| \le 15^\circ$) revealing hidden inscriptions, triggering Solfeggio hums and trust-scaled companion marginalia. |
 | **`SYN-012`** | **Ritual Disruption Debt Spike & Reluctant Knife Invariant** | `SCENARIO-SPEC-068` / Scenarios / Combat / Audio / Haptics | Ritual interruption spiking Integration Debt ($+15\% \to +45\%$), triggering $320\text{ Hz}$ Null Zone muffling, controller whispers, and Valerius's exhausted dialogue progression. |
 | **`SYN-013`** | **AI Pathfinding Disruption, LAW-001 & Dual-Channel Tactile Invariant** | `SCENARIO-SPEC-069` / AI / Scenarios / Haptics | Choke point trap density degrading navmesh utility ($\text{Utility} = \text{Base} - 0.25 \cdot N$), tripping LAW-001 Circuit Breaker ($<0.15$), with dual-channel Left Corruption vs Right White Flame haptics. |
+| **`SYN-014`** | **Companion Grounding Parity, Sanity Chromatics & Touchpad Soot Invariant** | `SCENARIO-SPEC-070` / Scenarios / AI / UI / Haptics | Companion skeletal gaze alignment ($\theta \le 35^\circ$) mathematically invalidating hallucinations, Sanity-driven chromatic aberration ($(1-\text{Sanity})\cdot 5.0$), and DualSense touchpad soot wiping. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-014`: Companion Grounding Parity, Sanity Chromatics & Touchpad Soot Invariant
+
+* **Target Subsystems:** `UAshenScenario4MissionSubsystem`, `UAshenCompanionGroundingEvaluatorComponent`, `UAshenSanityChromaticEvaluatorComponent`, `UAshenScenario4HapticBridge`
+* **Related Specifications:** [`SCENARIO-SPEC-070`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SCENARIO-SPEC-070%20%28SCENARIO%204%20%E2%80%94%20YOU%20MISTAKE%20THE%20WOUND%20FOR%20THE%20WORLD%29.md), `Ashen Oath_ Vertical Slice Scenario Reference Guide.md`
+
+#### 📐 Mathematical Invariants:
+$$\text{GroundingState} = \begin{cases} \text{VerifiedPhysicalThreat}, & \text{if } \text{LOS} \land \text{CompanionTargeting} \land \theta \le 35^\circ \\ \text{InvalidatedHallucination}, & \text{otherwise} \end{cases}$$
+$$\text{ChromaticAberration}(\text{Sanity}) = (1.0 - \text{clamp}(\text{Sanity}, 0.0, 1.0)) \cdot 5.0$$
+$$\text{SootOpacity}_{t+1} = \text{clamp}(\text{SootOpacity}_t - \Delta_{\text{swipe}}, 0.0, 1.0)$$
+$$H_{\text{touchpad}} = \text{clamp}(0.50 \cdot v_{\text{swipe}} + 0.40 \cdot \text{SootOpacity}, 0.0, 0.90)$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Companion as a Reality Anchor:** Rather than relying on UI indicators, players look directly at Garrett's physical behavior. If Garrett doesn't look at or raise weapons against an approaching shadow, it mathematically does not exist, dissolving into ash.
+* **Diegetic Somatic Interaction:** Player tactile gestures on the DualSense touchpad directly scrub soot artifacts off the camera lens, grounding psychological distress into somatic interaction.
+
+---
 
 ---
 

@@ -1,6 +1,6 @@
 # Ashen Oath — Architecture Map & Vertical Slices
-**Status:** Clean Production Architecture | **2,575 Builds Clean** (0 Errors, 0 Warnings)
-**Unreal Engine Version:** 5.8 | **Master Milestone:** 2575 (Master Batches #1–#128)
+**Status:** Clean Production Architecture | **2,595 Builds Clean** (0 Errors, 0 Warnings)
+**Unreal Engine Version:** 5.8 | **Master Milestone:** 2595 (Master Batches #1–#129)
 
 ---
 
@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Master Batch #129 (Builds 2576–2595)**: Scenario 4: You Mistake the Wound for the World (SCENARIO-SPEC-070) (100% Pure Gameplay Density)
 - **Master Batch #128 (Builds 2556–2575)**: Scenario 2: The Sentinel's Gambit (SCENARIO-SPEC-069) (100% Pure Gameplay Density)
 - **Master Batch #127 (Builds 2536–2555)**: Scenario 1: The Cauterized Heart (SCENARIO-SPEC-068) (100% Pure Gameplay Density)
 - **Master Batch #126 (Builds 2516–2535)**: The Ashen Codex & Historical Relic Repository (ARCHIVE-SPEC-067) (100% Pure Gameplay Density)

@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2595: Master Batch #129 — Scenario 4: You Mistake the Wound for the World (SCENARIO-SPEC-070)
+**Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,595 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2576 | `AshenScenario4WhisperwoodTypes.h` | `AshenScenario4WhisperwoodTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Scenarios |
+| 2577 | `AshenScenario4MissionSubsystem.h/.cpp` | `UAshenScenario4MissionSubsystem` — Subsystem managing Whisperwood & loci state | Scenarios |
+| 2578 | `AshenCompanionGroundingEvaluatorComponent.h/.cpp` | `UAshenCompanionGroundingEvaluatorComponent` — Companion gaze & grounding raycasts | Scenarios |
+| 2579 | `AshenSanityChromaticEvaluatorComponent.h/.cpp` | `UAshenSanityChromaticEvaluatorComponent` — Scales Chromatic Aberration from Sanity | Scenarios |
+| 2580 | `AshenCognitiveLociRegistryComponent.h/.cpp` | `UAshenCognitiveLociRegistryComponent` — Registers Memory Palace cognitive loci | Scenarios |
+| 2581 | `AshenWipeSootTouchpadGASAbility.h/.cpp` | `UAshenWipeSootTouchpadGASAbility` — DualSense touchpad gesture clearing soot blur | Combat |
+| 2582 | `AshenGroundingCheckGASAbility.h/.cpp` | `UAshenGroundingCheckGASAbility` — Locks eyes with companion to verify reality | Combat |
+| 2583 | `AshenWhisperingWindsGustGASAbility.h/.cpp` | `UAshenWhisperingWindsGustGASAbility` — Triggers purple mist gusts & auditory whispers | Combat |
+| 2584 | `AshenCognitiveLocusAttuneGASAbility.h/.cpp` | `UAshenCognitiveLocusAttuneGASAbility` — Attunes to memory locus (+0.20 Sanity) | Combat |
+| 2585 | `AshenPhantomSlashDisperseGASAbility.h/.cpp` | `UAshenPhantomSlashDisperseGASAbility` — Cleaves through hallucinations to disperse ash | Combat |
+| 2586 | `UBTTask_AshenCompanionGroundingGaze.h/.cpp` | `UBTTask_AshenCompanionGroundingGaze` — AI Task aligning companion gaze to real threats | AI |
+| 2587 | `AshenPhantomMirageWorldActor.h/.cpp` | `AAshenPhantomMirageWorldActor` — Hallucinatory phantom entity world actor | World |
+| 2588 | `UAshenUserWidget_WhisperwoodHUD.h/.cpp` | `UAshenUserWidget_WhisperwoodHUD` — UMG widget rendering soot blur & loci tracker | UI |
+| 2589 | `AshenWhisperwoodAudioSubsystem.h/.cpp` | `UAshenWhisperwoodAudioSubsystem` — MetaSounds whispering winds & pitch warbles | Audio |
+| 2590 | `AshenPurpleMistVolumeActor.h/.cpp` | `AAshenPurpleMistVolumeActor` — Volumetric fog actor modulating purple mist | Scenarios |
+| 2591 | `AshenScenario4SaveGameAdapter.h/.cpp` | `UAshenScenario4SaveGameAdapter` — Serializes Whisperwood completion & loci count | Core |
+| 2592 | `AshenScenario4DialogueBridge.h/.cpp` | `UAshenScenario4DialogueBridge` — Injects Garrett's reality-grounding dialogue barks | Narrative |
+| 2593 | `AshenScenario4HapticBridge.h/.cpp` | `UAshenScenario4HapticBridge` — Maps DualSense touchpad swipe friction haptics | Scenarios |
+| 2594 | `AshenScenario4MasterBridge.h/.cpp` | `UAshenScenario4MasterBridge` — Master bridge coordinating grounding, audio & HUD | Orchestration |
+| 2595 | `AshenMasterBatch129AutomationTest.cpp` | `FAshenMasterBatch129AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2575: Master Batch #128 — Scenario 2: The Sentinel's Gambit (SCENARIO-SPEC-069)
 **Domain:** Scenarios / AI / Combat / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,575 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
