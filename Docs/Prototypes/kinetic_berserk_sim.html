@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — PRS-001 Kinetic Berserk Engine & Angular Riposte Simulator</title>
+    <!-- Traceability: KINETIC-SPEC-072 | UAshenKineticBerserkSubsystem | Builds 2616-2635 -->
+    <style>
+        :root {
+            --bg-primary: #0d0f12;
+            --bg-secondary: #14181f;
+            --panel-bg: #1c222c;
+            --border-color: #2e3846;
+            --accent-cyan: #38bdf8;
+            --accent-red: #f85149;
+            --accent-amber: #e3b341;
+            --accent-purple: #a855f7;
+            --accent-green: #3fb950;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1080px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #1b2330 0%, #10151e 70%, #080b10 100%);
+            display: block;
+            width: 100%;
+            height: 440px;
+            cursor: crosshair;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-cleave {
+            background: #0284c7;
+            border-color: #38bdf8;
+            color: #fff;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-cleave:hover {
+            background: #38bdf8;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .audio-box {
+            background: #111e29;
+            border: 1px solid #0284c7;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .dialogue-box {
+            background: #161c24;
+            border: 1px solid #2e3846;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>PRS-001 KINETIC BERSERK ENGINE SIMULATOR</h1>
+                <p>Angular Riposte Clock-Plane Mapping, Chaos Rubble Audio Occlusion & Back-Face Exit Shearing (KINETIC-SPEC-072)</p>
+            </div>
+            <div class="badge">Milestone 2,635 Builds Clean</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <button class="btn btn-cleave" id="triggerStrikeBtn">⚔️ TRIGGER INCOMING STRIKE & DEFLECT</button>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>INCOMING STRIKE ANGLE (θ)</span>
+                        <span class="control-value" id="angleVal">45° (Right Cleave)</span>
+                    </div>
+                    <input type="range" id="angleSlider" min="0" max="360" value="45" step="15">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>CHAOS DEBRIS RUBBLE COUNT (N)</span>
+                        <span class="control-value" id="rubbleVal">0 Chunks</span>
+                    </div>
+                    <input type="range" id="rubbleSlider" min="0" max="6" value="0" step="1">
+                </div>
+
+                <div class="audio-box">
+                    <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+                        <span>METASOUNDS ACOUSTIC LPF CUTOFF</span>
+                        <span style="color: var(--accent-cyan); font-family: monospace;" id="lpfCutoffText">20,000 Hz</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--accent-amber); font-weight: bold;" id="occlusionStateText">Unoccluded (Full Spectrum)</div>
+                </div>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Garrett]: "Wait for their blade—invert the seam and follow through!"
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="fracturePillarBtn" style="flex: 1; color: var(--accent-amber);">💥 FRACTURE PILLAR</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Counter Zone</div>
+                <div class="telemetry-val" id="zoneVal">HorizontalRight</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Kinetic Energy</div>
+                <div class="telemetry-val" id="joulesVal">5,200 Joules</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Play-Rate Floor</div>
+                <div class="telemetry-val" id="playRateVal">0.08x (Drag)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Camera FOV</div>
+                <div class="telemetry-val" id="fovVal">90.0°</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer with Dynamic Debris LPF Filter
+        let audioCtx = null;
+        let biquadFilter = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                biquadFilter = audioCtx.createBiquadFilter();
+                biquadFilter.type = 'lowpass';
+                biquadFilter.frequency.setValueAtTime(20000, audioCtx.currentTime);
+                biquadFilter.connect(audioCtx.destination);
+            }
+        }
+
+        function updateAudioLPF(cutoff) {
+            if (biquadFilter && audioCtx) {
+                biquadFilter.frequency.setTargetAtTime(cutoff, audioCtx.currentTime, 0.05);
+            }
+        }
+
+        function playClashAndTransient(pitchHz, bHeavy) {
+            initAudio();
+            if (!audioCtx) return;
+
+            // 1. High Metal Clash
+            const clashOsc = audioCtx.createOscillator();
+            const clashGain = audioCtx.createGain();
+            clashOsc.type = 'triangle';
+            clashOsc.frequency.setValueAtTime(pitchHz, audioCtx.currentTime);
+            clashOsc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.12);
+
+            clashGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            clashGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+
+            clashOsc.connect(clashGain);
+            clashGain.connect(biquadFilter);
+            clashOsc.start();
+            clashOsc.stop(audioCtx.currentTime + 0.16);
+
+            // 2. Sub-Bass Transient (45 Hz)
+            if (bHeavy) {
+                const subOsc = audioCtx.createOscillator();
+                const subGain = audioCtx.createGain();
+                subOsc.type = 'sine';
+                subOsc.frequency.setValueAtTime(45, audioCtx.currentTime);
+                subOsc.frequency.exponentialRampToValueAtTime(25, audioCtx.currentTime + 0.3);
+
+                subGain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                subGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+
+                subOsc.connect(subGain);
+                subGain.connect(biquadFilter);
+                subOsc.start();
+                subOsc.stop(audioCtx.currentTime + 0.36);
+            }
+        }
+
+        // State Machine
+        let strikeAngle = 45; // Degrees
+        let rubbleCount = 0;
+        let kineticJoules = 5200;
+        let currentFOV = 90.0;
+        let currentPlayRate = 1.0;
+        let counterZone = "HorizontalRight";
+        let riposteActive = false;
+        let riposteTimer = 0;
+
+        let pillar = { x: 420, y: 220, w: 60, h: 140, cleaved: false };
+        let exitShearParticles = [];
+
+        // UI References
+        const triggerStrikeBtn = document.getElementById('triggerStrikeBtn');
+        const angleSlider = document.getElementById('angleSlider');
+        const rubbleSlider = document.getElementById('rubbleSlider');
+        const fracturePillarBtn = document.getElementById('fracturePillarBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+
+        angleSlider.oninput = (e) => {
+            strikeAngle = parseInt(e.target.value);
+            evaluateAngularCounterMath();
+        };
+
+        rubbleSlider.oninput = (e) => {
+            rubbleCount = parseInt(e.target.value);
+            document.getElementById('rubbleVal').innerText = `${rubbleCount} Chunks`;
+            evaluateDebrisOcclusionMath();
+        };
+
+        function evaluateAngularCounterMath() {
+            // Invert attack vector & calculate clock face
+            const invertedAngle = (strikeAngle + 180) % 360;
+
+            // 4-Zone Mapping:
+            // Overhead: 315° to 45°
+            // Right Cleave: 45° to 135°
+            // Underhand Lift: 135° to 225°
+            // Left Cleave: 225° to 315°
+            if (invertedAngle >= 45 && invertedAngle < 135) {
+                counterZone = "HorizontalRight";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Right-to-left cleave! Turned their blade aside—follow the seam!"`;
+            } else if (invertedAngle >= 135 && invertedAngle < 225) {
+                counterZone = "DiagonalUnderhand";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Underhand lift! Catch them off-balance!"`;
+            } else if (invertedAngle >= 225 && invertedAngle < 315) {
+                counterZone = "HorizontalLeft";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Left-to-right cleave! Split their guard!"`;
+            } else {
+                counterZone = "VerticalOverhead";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Clean overhead redirect! Split them in two!"`;
+            }
+
+            document.getElementById('angleVal').innerText = `${strikeAngle}° (${counterZone})`;
+            document.getElementById('zoneVal').innerText = counterZone;
+        }
+
+        function evaluateDebrisOcclusionMath() {
+            // LPF(N) = Lerp(20000Hz, 400Hz, (N / 6)^0.65)
+            const ratio = Math.min(Math.max(rubbleCount / 6.0, 0.0), 1.0);
+            const alpha = Math.pow(ratio, 0.65);
+            const lpfCutoff = 20000.0 - (alpha * (20000.0 - 400.0));
+
+            let stateText = "Unoccluded (Full Spectrum)";
+            let stateColor = "var(--accent-cyan)";
+            if (rubbleCount >= 5) {
+                stateText = "Buried Under Rubble (LPF 400 Hz Muffled)";
+                stateColor = "var(--accent-red)";
+            } else if (rubbleCount >= 1) {
+                stateText = `Partial Debris Occlusion (${lpfCutoff.toFixed(0)} Hz)`;
+                stateColor = "var(--accent-amber)";
+            }
+
+            document.getElementById('lpfCutoffText').innerText = `${lpfCutoff.toFixed(0)} Hz`;
+            document.getElementById('occlusionStateText').innerText = stateText;
+            document.getElementById('occlusionStateText').style.color = stateColor;
+
+            updateAudioLPF(lpfCutoff);
+        }
+
+        triggerStrikeBtn.onclick = () => {
+            initAudio();
+            riposteActive = true;
+            riposteTimer = 1.0;
+            playClashAndTransient(580, true);
+
+            // Trigger FOV Compression
+            currentFOV = 76.0;
+            currentPlayRate = 0.08;
+            document.getElementById('playRateVal').innerText = "0.08x (Drag Floor)";
+            document.getElementById('fovVal').innerText = "76.0° (Lens Compress)";
+        };
+
+        fracturePillarBtn.onclick = () => {
+            initAudio();
+            pillar.cleaved = true;
+            playClashAndTransient(320, true);
+
+            // Spawn back-face exit Niagara shearing particles
+            const entryX = pillar.x;
+            const exitX = pillar.x + pillar.w;
+            const exitY = pillar.y + 70;
+
+            for (let i = 0; i < 35; i++) {
+                exitShearParticles.push({
+                    x: exitX,
+                    y: exitY,
+                    vx: 3.5 + Math.random() * 4.0,
+                    vy: (Math.random() - 0.5) * 4.0,
+                    life: 1.0
+                });
+            }
+
+            // Snap FOV to overshoot (96°) then baseline
+            currentFOV = 96.0;
+            currentPlayRate = 1.0;
+            document.getElementById('playRateVal').innerText = "1.00x (Normal)";
+            document.getElementById('fovVal').innerText = "96.0° (Elastic Snap)";
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "PRS001_KINETIC_BERSERK_CONVERGENCE",
+                incoming_strike_angle_deg: strikeAngle,
+                counter_attack_zone: counterZone,
+                obstructing_rubble_count: rubbleCount,
+                calculated_lpf_cutoff_hz: parseFloat(document.getElementById('lpfCutoffText').innerText),
+                kinetic_energy_joules: kineticJoules,
+                playback_speed_floor: 0.08,
+                camera_lens_compression_fov: currentFOV
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        let lastTime = performance.now();
+
+        function animate(now) {
+            const dt = (now - lastTime) / 1000;
+            lastTime = now;
+
+            // Elastic FOV recovery
+            if (currentFOV !== 90.0) {
+                currentFOV += (90.0 - currentFOV) * dt * 4.0;
+                document.getElementById('fovVal').innerText = `${currentFOV.toFixed(1)}°`;
+            }
+
+            if (riposteActive) {
+                riposteTimer -= dt;
+                if (riposteTimer <= 0) {
+                    riposteActive = false;
+                }
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Compass Clock Plane (0° to 360°)
+            const cx = 220;
+            const cy = 220;
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 110, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Draw 4-Zone Quadrant Dividers
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.beginPath();
+            ctx.moveTo(cx - 110, cy - 110);
+            ctx.lineTo(cx + 110, cy + 110);
+            ctx.moveTo(cx - 110, cy + 110);
+            ctx.lineTo(cx + 110, cy - 110);
+            ctx.stroke();
+
+            // Draw Incoming Strike Vector
+            const strikeRad = (strikeAngle * Math.PI) / 180;
+            const sx = cx + Math.cos(strikeRad) * 110;
+            const sy = cy + Math.sin(strikeRad) * 110;
+
+            ctx.strokeStyle = '#f85149';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(cx, cy);
+            ctx.stroke();
+
+            ctx.fillStyle = '#f85149';
+            ctx.font = '11px monospace';
+            ctx.fillText(`Incoming Strike (${strikeAngle}°)`, sx - 40, sy - 10);
+
+            // Draw Inverted Angular Riposte Vector
+            const riposteRad = ((strikeAngle + 180) % 360 * Math.PI) / 180;
+            const rx = cx + Math.cos(riposteRad) * 110;
+            const ry = cy + Math.sin(riposteRad) * 110;
+
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(rx, ry);
+            ctx.stroke();
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.fillText(`Mirrored Riposte (${counterZone})`, rx - 60, ry + 20);
+
+            // Draw Kaelen
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText("Kaelen", cx - 18, cy + 32);
+
+            // Draw Chaos Stone Pillar
+            ctx.fillStyle = pillar.cleaved ? 'rgba(248, 81, 73, 0.4)' : '#2b3a4a';
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2;
+            ctx.fillRect(pillar.x, pillar.y, pillar.w, pillar.h);
+            ctx.strokeRect(pillar.x, pillar.y, pillar.w, pillar.h);
+
+            ctx.fillStyle = '#e6edf3';
+            ctx.font = '11px monospace';
+            ctx.fillText(pillar.cleaved ? "CLEAVED PILLAR" : "CHAOS PILLAR", pillar.x - 10, pillar.y - 12);
+
+            // Draw Back-Face Exit Vector Line
+            if (pillar.cleaved) {
+                ctx.strokeStyle = '#e3b341';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.moveTo(pillar.x, pillar.y + 70);
+                ctx.lineTo(pillar.x + pillar.w, pillar.y + 70);
+                ctx.lineTo(pillar.x + pillar.w + 60, pillar.y + 70);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = '#e3b341';
+                ctx.fillText("Back-Face Exit Point ->", pillar.x + pillar.w + 10, pillar.y + 65);
+            }
+
+            // Draw & Update Back-Face Niagara Dust Particles
+            exitShearParticles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= dt * 1.5;
+
+                ctx.fillStyle = `rgba(227, 179, 65, ${p.life})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            exitShearParticles = exitShearParticles.filter(p => p.life > 0);
+
+            // Draw Rubble Obstruction Chunks
+            for (let i = 0; i < rubbleCount; i++) {
+                const rx = 520 + (i % 2) * 35;
+                const ry = 180 + (i * 30);
+                ctx.fillStyle = '#4a5568';
+                ctx.beginPath();
+                ctx.arc(rx, ry, 12, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#2e3846';
+                ctx.stroke();
+                ctx.fillStyle = '#8b949e';
+                ctx.font = '9px monospace';
+                ctx.fillText(`Rubble ${i+1}`, rx - 18, ry + 20);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        evaluateAngularCounterMath();
+        evaluateDebrisOcclusionMath();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
