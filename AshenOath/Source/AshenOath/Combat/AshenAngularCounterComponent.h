@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Combat/AshenMassKineticTypes.h"
+#include "Combat/AshenKineticBerserkTypes.h"
 #include "AshenAngularCounterComponent.generated.h"
 
 /**
  * UAshenAngularCounterComponent
  * 
- * Maps 3D attack vectors to 2D local plane angles (0 to 360 deg) for precision
- * directional counter-slashing.
+ * Inverts incoming strike vectors and computes 2D clock-face angles to drive matching counter-riposte montages.
  */
 UCLASS(ClassGroup=(Ashen), meta=(BlueprintSpawnableComponent))
 class ASHENOATH_API UAshenAngularCounterComponent : public UActorComponent
@@ -21,7 +20,10 @@ class ASHENOATH_API UAshenAngularCounterComponent : public UActorComponent
 public:
 	UAshenAngularCounterComponent();
 
-	/** Calculates local counter angle from incoming strike direction */
-	UFUNCTION(BlueprintPure, Category = "Ashen|Combat|Kinetic")
-	float CalculateCounterAngle(const FVector& ForwardVector, const FVector& IncomingVector) const;
+	/** Calculates 4-zone counter trajectory and blend angle from incoming strike */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|KineticBerserk")
+	EAshenCounterAttackZone CalculateCounterTrajectory(
+		const FVector& AttackerLocation,
+		const FVector& AttackDirection,
+		float& OutTargetBlendAngleDegrees) const;
 };

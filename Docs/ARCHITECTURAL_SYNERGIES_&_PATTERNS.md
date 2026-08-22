@@ -35,10 +35,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-013`** | **AI Pathfinding Disruption, LAW-001 & Dual-Channel Tactile Invariant** | `SCENARIO-SPEC-069` / AI / Scenarios / Haptics | Choke point trap density degrading navmesh utility ($\text{Utility} = \text{Base} - 0.25 \cdot N$), tripping LAW-001 Circuit Breaker ($<0.15$), with dual-channel Left Corruption vs Right White Flame haptics. |
 | **`SYN-014`** | **Companion Grounding Parity, Sanity Chromatics & Touchpad Soot Invariant** | `SCENARIO-SPEC-070` / Scenarios / AI / UI / Haptics | Companion skeletal gaze alignment ($\theta \le 35^\circ$) mathematically invalidating hallucinations, Sanity-driven chromatic aberration ($(1-\text{Sanity})\cdot 5.0$), and DualSense touchpad soot wiping. |
 | **`SYN-015`** | **Unchained Kinetic Power-Through, Mud Drag & Palpitation Pulse Invariant** | `SCENARIO-SPEC-071` / Combat / Scenarios / Haptics / Audio | Unchained mode scaling $+50\%$ damage ($1.50\times$) and mud power-through ($0.85\times$ vs $0.50\times$), with $130 \leftrightarrow 170\text{ BPM}$ haptic palpitations and 400cm boundary defense. |
+| **`SYN-016`** | **Angular Clock-Face Riposte, Dynamic Rubble LPF & Back-Face Shearing Invariant** | `KINETIC-SPEC-072` / Combat / Audio / Niagara / Chaos | Strike vector inversion mapping 4-zone counter montages ($0^\circ-360^\circ$), continuous rubble LPF ($400\text{ Hz} \leftrightarrow 20,000\text{ Hz}$), and back-face particle exit shearing. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-016`: Angular Clock-Face Riposte, Dynamic Rubble LPF & Back-Face Shearing Invariant
+
+* **Target Subsystems:** `UAshenKineticBerserkSubsystem`, `UAshenAngularCounterComponent`, `UAshenDynamicDebrisOcclusionAudioLinker`, `UAshenMassKineticNiagaraBridgeComponent`, `UAshenBerserkTargetTrackingComponent`
+* **Related Specifications:** [`KINETIC-SPEC-072`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/KINETIC-SPEC-072%20%28PRS-001%20KINETIC%20BERSERK%20ENGINE%20%26%20ANGULAR%20RIPOSTE%20MATRIX%29.md), `PRS-001 Synchronized Execution Lifecycle Architecture.md`
+
+#### 📐 Mathematical Invariants:
+$$\theta = \text{atan2}(v_{\text{right}}, v_{\text{fwd}}) \pmod{360^\circ}$$
+$$\text{Zone}(\theta) = \begin{cases} \text{VerticalOverhead}, & 315^\circ \le \theta < 45^\circ \\ \text{HorizontalRight}, & 45^\circ \le \theta < 135^\circ \\ \text{DiagonalUnderhand}, & 135^\circ \le \theta < 225^\circ \\ \text{HorizontalLeft}, & 225^\circ \le \theta < 315^\circ \end{cases}$$
+$$\text{LPF}(N_{\text{rubble}}) = \text{Lerp}\left(20000\text{ Hz}, 400\text{ Hz}, \left(\text{clamp}\left(\frac{N_{\text{rubble}}}{6}, 0, 1\right)\right)^{0.65}\right)$$
+$$\vec{P}_{\text{exit}} = \vec{P}_{\text{entry}} + \left(\hat{v}_{\text{swing}} \cdot D_{\text{mesh}}\right)$$
+
+#### 💡 Architectural Insight & Impact:
+* **Mirrored Plane Deflection:** Inverting the enemy's attack vector in real-time aligns Kaelen's riposte along the exact plane of the incoming blade, transforming defensive parries into seamless, kinetic counter-assaults.
+* **Continuous Physicalized Rubble Occlusion:** Rather than fixed low-pass filters, raycasting through dynamic Chaos stone debris creates real acoustic depth—enemies buried under fallen masonry sound authentically muffled until they claw their way free.
+
+---
 
 ---
 
