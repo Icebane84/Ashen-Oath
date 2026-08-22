@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Scenario 4: Whisperwood Grounding Simulator</title>
+    <!-- Traceability: SCENARIO-SPEC-070 | UAshenScenario4MissionSubsystem | Builds 2576-2595 -->
+    <style>
+        :root {
+            --bg-primary: #0a0c10;
+            --bg-secondary: #14161f;
+            --panel-bg: #1c1f2b;
+            --border-color: #2e3446;
+            --accent-purple: #a371f7;
+            --accent-violet: #8957e5;
+            --accent-cyan: #39c5cf;
+            --accent-amber: #e3b341;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1080px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at top center, #23122c 0%, #0d0a14 70%, #05040a 100%);
+            display: block;
+            width: 100%;
+            height: 440px;
+            cursor: crosshair;
+        }
+
+        .soot-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(15,10,20,0.3) 0%, rgba(5,5,10,0.95) 100%);
+            transition: opacity 0.1s ease;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-purple);
+        }
+
+        .btn.active {
+            background: var(--accent-violet);
+            border-color: var(--accent-purple);
+            color: #fff;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .control-value {
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--panel-bg);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            cursor: pointer;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .touchpad-box {
+            background: #10131a;
+            border: 2px dashed #404859;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            cursor: grab;
+            transition: border-color 0.2s;
+        }
+
+        .touchpad-box:hover {
+            border-color: var(--accent-purple);
+        }
+
+        .dialogue-box {
+            background: #181424;
+            border: 1px solid var(--accent-purple);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 56px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 4px;
+            font-family: monospace;
+            color: var(--accent-purple);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SCENARIO 4: WHISPERWOOD GROUNDING SIMULATOR</h1>
+                <p>Companion Skeletal Gaze Validation, Sanity Chromatics & Touchpad Soot Clearance (SCENARIO-SPEC-070)</p>
+            </div>
+            <div class="badge">Milestone 2,595 Builds Clean</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="650" height="440"></canvas>
+                <div class="soot-overlay" id="sootOverlay"></div>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>PLAYER SANITY (Chromatic Aberration)</span>
+                        <span class="control-value" id="sanityVal">0.45</span>
+                    </div>
+                    <input type="range" id="sanitySlider" min="0.0" max="1.0" value="0.45" step="0.05">
+                </div>
+
+                <button class="btn" id="groundingBtn" style="background: #8957e5; color: #fff; font-size: 13px;">👁️ EXECUTE COMPANION GROUNDING CHECK</button>
+                <button class="btn" id="spawnPhantomBtn">👻 SPAWN PHANTOM MIRAGE</button>
+
+                <div class="touchpad-box" id="touchpadArea">
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">🎮 DUALSENSE TOUCHPAD SIMULATOR</div>
+                    <div style="font-size: 13px; font-weight: 600; color: var(--accent-purple);">SWIPE HERE TO WIPE SOOT</div>
+                    <div style="font-size: 10px; color: #6e7681; margin-top: 4px;" id="swipeFeedback">Remaining Soot: 60%</div>
+                </div>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Garrett]: "Stay close. Don't lose sight of my back."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="attuneLocusBtn" style="flex: 1; color: var(--accent-amber);">✨ ATTUNE LOCUS</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-purple);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Chromatic Aberration</div>
+                <div class="telemetry-val" id="chromaVal">2.75 px</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Grounding State</div>
+                <div class="telemetry-val" id="groundingVal">Pending Check</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Lens Soot Opacity</div>
+                <div class="telemetry-val" id="sootVal">0.60</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Cognitive Loci</div>
+                <div class="telemetry-val" id="lociVal">0 Discovered</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playWhisperWind(sanity) {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            const pitchWarble = (1.0 - sanity) * 120;
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(140 + pitchWarble, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 1.2);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(400, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.3);
+        }
+
+        function playSootWipe() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
+
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.16);
+        }
+
+        function playDissolveAsh() {
+            initAudio();
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(320, audioCtx.currentTime + 0.4);
+
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.42);
+        }
+
+        // State variables
+        let playerSanity = 0.45;
+        let sootOpacity = 0.60;
+        let cognitiveLociCount = 0;
+        let lastGroundingResult = "PendingAlignment";
+
+        // Entities
+        let companion = { x: 140, y: 220, targetThreat: null };
+        let threats = [
+            { id: "Ghoul_Real_1", x: 480, y: 150, isReal: true, label: "Corrupted Ghoul" },
+            { id: "Phantom_Delusion_1", x: 420, y: 300, isReal: false, label: "Phantom Shadow" }
+        ];
+
+        // Companion initially targets the real ghoul
+        companion.targetThreat = threats[0];
+
+        // UI elements
+        const sanitySlider = document.getElementById('sanitySlider');
+        const groundingBtn = document.getElementById('groundingBtn');
+        const spawnPhantomBtn = document.getElementById('spawnPhantomBtn');
+        const touchpadArea = document.getElementById('touchpadArea');
+        const attuneLocusBtn = document.getElementById('attuneLocusBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+        const sootOverlay = document.getElementById('sootOverlay');
+
+        sanitySlider.oninput = (e) => {
+            playerSanity = parseFloat(e.target.value);
+            updatePsychology();
+        };
+
+        function updatePsychology() {
+            const chromaAberration = ((1.0 - playerSanity) * 5.0).toFixed(2);
+            document.getElementById('sanityVal').innerText = playerSanity.toFixed(2);
+            document.getElementById('chromaVal').innerText = `${chromaAberration} px`;
+            document.getElementById('sootVal').innerText = sootOpacity.toFixed(2);
+            document.getElementById('lociVal').innerText = `${cognitiveLociCount} Discovered`;
+            document.getElementById('swipeFeedback').innerText = `Remaining Soot: ${(sootOpacity * 100).toFixed(0)}%`;
+
+            sootOverlay.style.opacity = sootOpacity;
+        }
+
+        groundingBtn.onclick = () => {
+            initAudio();
+            playWhisperWind(playerSanity);
+
+            // Check each threat against companion targeting
+            let dissolvedAny = false;
+            for (let i = threats.length - 1; i >= 0; i--) {
+                const t = threats[i];
+                if (!t.isReal) {
+                    // Dissolve phantom
+                    threats.splice(i, 1);
+                    dissolvedAny = true;
+                }
+            }
+
+            if (dissolvedAny) {
+                playDissolveAsh();
+                lastGroundingResult = "InvalidatedHallucination";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "There's nothing there, Kaelen. It's the purple mist playing tricks on your eyes. Look at me."`;
+                document.getElementById('groundingVal').innerText = "Invalidated Mirage";
+                document.getElementById('groundingVal').style.color = "#39c5cf";
+            } else {
+                lastGroundingResult = "VerifiedPhysicalThreat";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "I see it too. Real flesh and steel. Take the flank!"`;
+                document.getElementById('groundingVal').innerText = "Verified Threat";
+                document.getElementById('groundingVal').style.color = "#f85149";
+            }
+        };
+
+        spawnPhantomBtn.onclick = () => {
+            threats.push({
+                id: `Phantom_${Math.floor(Math.random() * 100)}`,
+                x: 350 + Math.random() * 180,
+                y: 100 + Math.random() * 240,
+                isReal: false,
+                label: "Phantom Shadow"
+            });
+        };
+
+        // Touchpad Swipe Handling
+        let isSwiping = false;
+        touchpadArea.onmousedown = () => { isSwiping = true; };
+        window.onmouseup = () => { isSwiping = false; };
+        touchpadArea.onmousemove = (e) => {
+            if (isSwiping && sootOpacity > 0.0) {
+                sootOpacity = Math.max(0.0, sootOpacity - 0.04);
+                playSootWipe();
+                updatePsychology();
+            }
+        };
+
+        attuneLocusBtn.onclick = () => {
+            cognitiveLociCount++;
+            playerSanity = Math.min(1.0, playerSanity + 0.20);
+            sanitySlider.value = playerSanity;
+            dialogueBox.innerHTML = `<strong>[Cognitive Locus Discovered]:</strong> Memory trace anchored in the mindscape. (+0.20 Sanity)`;
+            updatePsychology();
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SCENARIO_4_WHISPERWOOD_GROUNDING",
+                player_sanity: parseFloat(playerSanity.toFixed(2)),
+                chromatic_aberration_px: parseFloat(((1.0 - playerSanity) * 5.0).toFixed(2)),
+                soot_layer_opacity: parseFloat(sootOpacity.toFixed(2)),
+                last_grounding_state: lastGroundingResult,
+                discovered_cognitive_loci: cognitiveLociCount,
+                threat_entities_remaining: threats.map(t => ({ id: t.id, is_real: t.isReal }))
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering with Chromatic Aberration Shift
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        for (let i = 0; i < 40; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: 0.2 + Math.random() * 0.5,
+                radius: 8 + Math.random() * 20,
+                alpha: 0.1 + Math.random() * 0.25
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const chromaShift = (1.0 - playerSanity) * 4.0;
+
+            // Draw Purple Mist Particles
+            particles.forEach(p => {
+                p.x += p.vx;
+                if (p.x > canvas.width + 30) p.x = -30;
+
+                ctx.fillStyle = `rgba(137, 87, 229, ${p.alpha})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw Twisted Whisperwood Trees
+            ctx.strokeStyle = '#231836';
+            ctx.lineWidth = 12;
+            ctx.beginPath();
+            ctx.moveTo(80, 440);
+            ctx.quadraticCurveTo(60, 200, 90, 0);
+            ctx.moveTo(300, 440);
+            ctx.quadraticCurveTo(340, 240, 290, 0);
+            ctx.stroke();
+
+            // Draw Garrett's Gaze Cone (Green / Verification Raycast)
+            ctx.strokeStyle = 'rgba(63, 185, 80, 0.4)';
+            ctx.fillStyle = 'rgba(63, 185, 80, 0.08)';
+            ctx.beginPath();
+            ctx.moveTo(companion.x, companion.y);
+            ctx.lineTo(companion.x + 350, companion.y - 120);
+            ctx.lineTo(companion.x + 350, companion.y + 60);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw Companion (Garrett)
+            ctx.fillStyle = '#3fb950';
+            ctx.beginPath();
+            ctx.arc(companion.x, companion.y, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.font = '11px monospace';
+            ctx.fillText("Garrett (Anchor)", companion.x - 45, companion.y - 18);
+
+            // Draw Kaelen
+            ctx.fillStyle = '#58a6ff';
+            ctx.beginPath();
+            ctx.arc(companion.x - 50, companion.y + 30, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Kaelen", companion.x - 70, companion.y + 55);
+
+            // Draw Threats / Phantoms with Chromatic Aberration
+            threats.forEach(t => {
+                if (chromaShift > 0.5) {
+                    // Red Channel Split
+                    ctx.fillStyle = t.isReal ? 'rgba(248, 81, 73, 0.6)' : 'rgba(163, 113, 247, 0.6)';
+                    ctx.beginPath();
+                    ctx.arc(t.x - chromaShift, t.y, 12, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Cyan Channel Split
+                    ctx.fillStyle = 'rgba(57, 197, 207, 0.6)';
+                    ctx.beginPath();
+                    ctx.arc(t.x + chromaShift, t.y, 12, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Main Body
+                ctx.fillStyle = t.isReal ? '#f85149' : '#a371f7';
+                ctx.beginPath();
+                ctx.arc(t.x, t.y, 11, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText(t.label, t.x - 35, t.y - 15);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        updatePsychology();
+        animate();
+    </script>
+</body>
+</html>
