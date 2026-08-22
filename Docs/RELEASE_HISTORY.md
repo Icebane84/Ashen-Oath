@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2615: Master Batch #130 — Scenario 5: The Unchained Vessel (SCENARIO-SPEC-071)
+**Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,615 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2596 | `AshenScenario5WeepingMireTypes.h` | `AshenScenario5WeepingMireTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Scenarios |
+| 2597 | `AshenScenario5MissionSubsystem.h/.cpp` | `UAshenScenario5MissionSubsystem` — Subsystem managing Weeping Mire skirmish | Scenarios |
+| 2598 | `AshenUnchainedCombatEvaluatorComponent.h/.cpp` | `UAshenUnchainedCombatEvaluatorComponent` — Computes Unchained damage (+50%) & lunges | Scenarios |
+| 2599 | `AshenMireHazardEvaluatorComponent.h/.cpp` | `UAshenMireHazardEvaluatorComponent` — Evaluates mud drag (0.50x) & gas blast falloff | Scenarios |
+| 2600 | `AshenHeartPalpitationEvaluatorComponent.h/.cpp` | `UAshenHeartPalpitationEvaluatorComponent` — Computes heart rate BPM (130-170 BPM) | Scenarios |
+| 2601 | `AshenActivateUnchainedModeGASAbility.h/.cpp` | `UAshenActivateUnchainedModeGASAbility` — Kaelen's ability entering Unchained Frenzy | Combat |
+| 2602 | `AshenUnchainedLungeCleaveGASAbility.h/.cpp` | `UAshenUnchainedLungeCleaveGASAbility` — Explosive lunge strike ignoring mud drag | Combat |
+| 2603 | `AshenIgniteGasPocketGASAbility.h/.cpp` | `UAshenIgniteGasPocketGASAbility` — Ignites methane gas pockets with White Flame | Combat |
+| 2604 | `AshenGarrettBoundaryDefenseGASAbility.h/.cpp` | `UAshenGarrettBoundaryDefenseGASAbility` — Companion ability forming 400cm defense zone | Combat |
+| 2605 | `AshenMireMudWadeGASAbility.h/.cpp` | `UAshenMireMudWadeGASAbility` — Environmental ability applying mud drag | Combat |
+| 2606 | `UBTTask_AshenGarrettBoundaryDefense.h/.cpp` | `UBTTask_AshenGarrettBoundaryDefense` — AI Task directing companion boundary defense | AI |
+| 2607 | `AAshenVolatileGasPocketWorldActor.h/.cpp` | `AAshenVolatileGasPocketWorldActor` — Flammable swamp methane gas vent actor | World |
+| 2608 | `UAshenUserWidget_WeepingMireHUD.h/.cpp` | `UAshenUserWidget_WeepingMireHUD` — UMG widget displaying Unchained meter & BPM pulse | UI |
+| 2609 | `AshenWeepingMireAudioSubsystem.h/.cpp` | `UAshenWeepingMireAudioSubsystem` — MetaSounds swamp squelches & heart thumps | Audio |
+| 2610 | `AAshenMireMudSludgeVolumeActor.h/.cpp` | `AAshenMireMudSludgeVolumeActor` — Trigger volume applying deep mud friction | World |
+| 2611 | `AshenScenario5SaveGameAdapter.h/.cpp` | `UAshenScenario5SaveGameAdapter` — Serializes Weeping Mire completion & gas detonations | Core |
+| 2612 | `AshenScenario5DialogueBridge.h/.cpp` | `UAshenScenario5DialogueBridge` — Injects companion boundary defense & rage barks | Narrative |
+| 2613 | `AshenScenario5HapticBridge.h/.cpp` | `UAshenScenario5HapticBridge` — Maps 140 BPM palpitations & mud trigger resistance | Scenarios |
+| 2614 | `AshenScenario5MasterBridge.h/.cpp` | `UAshenScenario5MasterBridge` — Master bridge coordinating Unchained combat & hazards | Orchestration |
+| 2615 | `AshenMasterBatch130AutomationTest.cpp` | `FAshenMasterBatch130AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2595: Master Batch #129 — Scenario 4: You Mistake the Wound for the World (SCENARIO-SPEC-070)
 **Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,595 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

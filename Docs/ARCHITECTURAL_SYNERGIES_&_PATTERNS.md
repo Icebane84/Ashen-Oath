@@ -34,10 +34,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-012`** | **Ritual Disruption Debt Spike & Reluctant Knife Invariant** | `SCENARIO-SPEC-068` / Scenarios / Combat / Audio / Haptics | Ritual interruption spiking Integration Debt ($+15\% \to +45\%$), triggering $320\text{ Hz}$ Null Zone muffling, controller whispers, and Valerius's exhausted dialogue progression. |
 | **`SYN-013`** | **AI Pathfinding Disruption, LAW-001 & Dual-Channel Tactile Invariant** | `SCENARIO-SPEC-069` / AI / Scenarios / Haptics | Choke point trap density degrading navmesh utility ($\text{Utility} = \text{Base} - 0.25 \cdot N$), tripping LAW-001 Circuit Breaker ($<0.15$), with dual-channel Left Corruption vs Right White Flame haptics. |
 | **`SYN-014`** | **Companion Grounding Parity, Sanity Chromatics & Touchpad Soot Invariant** | `SCENARIO-SPEC-070` / Scenarios / AI / UI / Haptics | Companion skeletal gaze alignment ($\theta \le 35^\circ$) mathematically invalidating hallucinations, Sanity-driven chromatic aberration ($(1-\text{Sanity})\cdot 5.0$), and DualSense touchpad soot wiping. |
+| **`SYN-015`** | **Unchained Kinetic Power-Through, Mud Drag & Palpitation Pulse Invariant** | `SCENARIO-SPEC-071` / Combat / Scenarios / Haptics / Audio | Unchained mode scaling $+50\%$ damage ($1.50\times$) and mud power-through ($0.85\times$ vs $0.50\times$), with $130 \leftrightarrow 170\text{ BPM}$ haptic palpitations and 400cm boundary defense. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-015`: Unchained Kinetic Power-Through, Mud Drag & Palpitation Pulse Invariant
+
+* **Target Subsystems:** `UAshenScenario5MissionSubsystem`, `UAshenUnchainedCombatEvaluatorComponent`, `UAshenMireHazardEvaluatorComponent`, `UAshenHeartPalpitationEvaluatorComponent`, `UAshenScenario5HapticBridge`
+* **Related Specifications:** [`SCENARIO-SPEC-071`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SCENARIO-SPEC-071%20%28SCENARIO%205%20%E2%80%94%20THE%20UNCHAINED%20VESSEL%29.md), `Ashen Oath_ Vertical Slice Scenario Reference Guide.md`
+
+#### 📐 Mathematical Invariants:
+$$\text{DamageMult}(\text{Phase}) = \begin{cases} 1.50\times, & \text{UnchainedFrenzy} \\ 0.70\times, & \text{ExhaustedVulnerable} \\ 1.00\times, & \text{Dormant} \end{cases}$$
+$$v_{\text{mud}}(\text{DeepMud}, \text{Unchained}) = \begin{cases} 0.85\times, & \text{if DeepMud } \land \text{ Unchained} \\ 0.50\times, & \text{if DeepMud } \land \neg\text{Unchained} \\ 1.00\times, & \text{otherwise} \end{cases}$$
+$$\text{BPM}(\text{Frenzy}, S) = 130.0 + 40.0 \cdot \text{clamp}(S, 0.0, 1.0) \quad (130 \le \text{BPM} \le 170)$$
+$$\text{BlastDamage}(d, R) = \text{BaseDamage} \cdot \left(1.0 - \frac{d}{R}\right) \quad (d \le R = 450\text{cm})$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Cost of Absolute Power:** Unleashing Unchained Mode shatters the deep mud movement drag penalty ($0.50\times \to 0.85\times$) and delivers $+50\%$ damage, but guarantees a punishing vulnerability window where Kaelen's safety depends entirely on Garrett's Boundary Defense perimeter.
+* **Visceral Somatic Telemetry:** Pounding 140–170 BPM heart palpitation pulses in the DualSense triggers and sub-bass audio physically immerse the player in Kaelen's bodily toll.
+
+---
 
 ---
 
