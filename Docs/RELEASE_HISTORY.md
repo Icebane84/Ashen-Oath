@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2655: Master Batch #132 — The Bleeding Waystation 7-Minute Vertical Slice (DEMO-SPEC-073)
+**Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,655 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2636 | `AshenBleedingWaystationTypes.h` | `AshenBleedingWaystationTypes` — Enums (4), Structs (1), Multicast Delegates (4) | Scenarios |
+| 2637 | `AshenBleedingWaystationSubsystem.h/.cpp` | `UAshenBleedingWaystationSubsystem` — Subsystem managing 7-minute loop & 4 runs | Scenarios |
+| 2638 | `AshenCompanionFormationSpacingEvaluator.h/.cpp` | `UAshenCompanionFormationSpacingEvaluator` — Evaluates formation spacing (300uu-1200uu) | Scenarios |
+| 2639 | `AshenStateTreeReactionDelayEvaluator.h/.cpp` | `UAshenStateTreeReactionDelayEvaluator` — Computes support hesitation delays (0ms-600ms) | Scenarios |
+| 2640 | `AshenAvoidantMercyDiagnosisEvaluator.h/.cpp` | `UAshenAvoidantMercyDiagnosisEvaluator` — Diagnoses Run D dissociated avoidance | Scenarios |
+| 2641 | `AshenShadowHarvestGASAbility.h/.cpp` | `UAshenShadowHarvestGASAbility` — Kaelen's ability draining residual taint (+35% dmg) | Combat |
+| 2642 | `AshenMercifulReleaseGASAbility.h/.cpp` | `UAshenMercifulReleaseGASAbility` — Kaelen grants clean death and burial (+0.15 Resolve) | Combat |
+| 2643 | `AshenGarrettTwinBladeXLockGASAbility.h/.cpp` | `UAshenGarrettTwinBladeXLockGASAbility` — Garrett's dual-wield cross-parry deflect | Combat |
+| 2644 | `AshenSerafinaTransferenceWardGASAbility.h/.cpp` | `UAshenSerafinaTransferenceWardGASAbility` — Instant recovery ward deployed when tight | Combat |
+| 2645 | `AshenPanicFlashStrikeGASAbility.h/.cpp` | `UAshenPanicFlashStrikeGASAbility` — Involuntary panic swing under high integration debt | Combat |
+| 2646 | `UBTTask_AshenGarrettWaystationTactics.h/.cpp` | `UBTTask_AshenGarrettWaystationTactics` — AI task directing Garrett X-lock vs peel vs abort | AI |
+| 2647 | `AAshenPinnedScoutWorldActor.h/.cpp` | `AAshenPinnedScoutWorldActor` — Physicalized pinned Order scout actor | World |
+| 2648 | `UAshenUserWidget_WaystationCrucibleHUD.h/.cpp` | `UAshenUserWidget_WaystationCrucibleHUD` — UMG widget displaying formation radar | UI |
+| 2649 | `AshenWaystationAudioSubsystem.h/.cpp` | `UAshenWaystationAudioSubsystem` — MetaSounds twin-blade metal scrape & healing chimes | Audio |
+| 2650 | `AAshenWaystationCourtyardAnchorActor.h/.cpp` | `AAshenWaystationCourtyardAnchorActor` — Spatial anchor defining ruined courtyard (1500cm) | World |
+| 2651 | `AshenWaystationSaveGameAdapter.h/.cpp` | `UAshenWaystationSaveGameAdapter` — Serializes 4-run completion & formation metrics | Core |
+| 2652 | `AshenWaystationDialogueBridge.h/.cpp` | `UAshenWaystationDialogueBridge` — Injects Garrett's dual-wield barks & Serafina reactions | Narrative |
+| 2653 | `AshenWaystationHapticBridge.h/.cpp` | `UAshenWaystationHapticBridge` — Maps twin-blade X-lock torque & panic tremor | Scenarios |
+| 2654 | `AshenWaystationMasterBridge.h/.cpp` | `UAshenWaystationMasterBridge` — Master bridge coordinating all waystation subsystems | Orchestration |
+| 2655 | `AshenMasterBatch132AutomationTest.cpp` | `FAshenMasterBatch132AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2635: Master Batch #131 — Complete PRS-001 Kinetic Berserk Engine Convergence (KINETIC-SPEC-072)
 **Domain:** Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,635 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

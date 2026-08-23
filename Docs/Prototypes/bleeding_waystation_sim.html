@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — The Bleeding Waystation Simulator</title>
+    <!-- Traceability: DEMO-SPEC-073 | PRS-DOC-2026-0820-007 | Builds 2636-2655 -->
+    <style>
+        :root {
+            --bg-primary: #0a0b0e;
+            --bg-secondary: #12151b;
+            --panel-bg: #181d26;
+            --border-color: #2b3545;
+            --accent-cyan: #38bdf8;
+            --accent-red: #f85149;
+            --accent-amber: #e3b341;
+            --accent-purple: #a855f7;
+            --accent-green: #3fb950;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .run-selector-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .run-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+
+        .run-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--text-main);
+        }
+
+        .run-btn.active {
+            background: var(--panel-bg);
+            border-color: var(--accent-cyan);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .run-btn-title {
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .run-btn-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #18202c 0%, #0d121a 70%, #06080c 100%);
+            display: block;
+            width: 100%;
+            height: 420px;
+            cursor: crosshair;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .btn-action {
+            background: #b45309;
+            border-color: #f59e0b;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-action:hover {
+            background: #f59e0b;
+        }
+
+        .dialogue-box {
+            background: #151a22;
+            border: 1px solid #2b3545;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .journal-box {
+            background: #11141a;
+            border: 1px dashed #4b5563;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 11px;
+            font-family: monospace;
+            line-height: 1.4;
+            color: #d1d5db;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>THE BLEEDING WAYSTATION — 7-MINUTE VERTICAL SLICE SIMULATOR</h1>
+                <p>Causal Propagation over Branching: 4-Run Relational Matrix & Garrett's Twin-Blade Deflect (DEMO-SPEC-073)</p>
+            </div>
+            <div class="badge">PRS-DOC-2026-0822-001</div>
+        </header>
+
+        <div class="run-selector-bar">
+            <div class="run-btn active" id="runABtn">
+                <div class="run-btn-title" style="color: var(--accent-red);">⚡ RUN A: SHADOW HARVEST</div>
+                <div class="run-btn-desc">Execute & absorb taint. Garrett pragmatic, Serafina alienated.</div>
+            </div>
+            <div class="run-btn" id="runBBtn">
+                <div class="run-btn-title" style="color: var(--accent-green);">🕊️ RUN B: PURE GRACE</div>
+                <div class="run-btn-desc">Merciful death & burial. Tight wedge, instant healing aura.</div>
+            </div>
+            <div class="run-btn" id="runCBtn">
+                <div class="run-btn-title" style="color: var(--accent-purple);">🌪️ RUN C: THE SPIRAL</div>
+                <div class="run-btn-desc">Debt >= 0.75. Panic flash strike, companions horrified.</div>
+            </div>
+            <div class="run-btn" id="runDBtn">
+                <div class="run-btn-title" style="color: var(--accent-amber);">👁️ RUN D: AVOIDANT MERCY</div>
+                <div class="run-btn-desc">Same action as B, but Debt 0.85. Diagnosed as dissociation.</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="670" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <button class="btn btn-action" id="triggerKneeBtn">💥 TRIGGER UNIVERSAL "KNOCKED TO ONE KNEE" BENCHMARK</button>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Garrett]: "Cold, but efficient. We needed that edge."
+                </div>
+
+                <div class="journal-box" id="journalBox">
+                    <strong>[LIVING JOURNAL AT CAMP]:</strong><br>
+                    <span style="color: var(--text-main);">"Weakness is a luxury we burned at Oakhaven."</span><br>
+                    <span style="color: #9ca3af;">• [Garrett]: Charcoal mark of approval [✓].</span><br>
+                    <span style="color: #ef4444;">• [Serafina]: [Empty margin — refused to write].</span>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="resetPositionBtn" style="flex: 1;">🔄 RESET POSITIONS</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Serafina Spacing</div>
+                <div class="telemetry-val" id="serafinaDistVal">1000 uu (Distant)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">StateTree Hesitation</div>
+                <div class="telemetry-val" id="hesitationVal">300 ms (Delay)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Garrett Action</div>
+                <div class="telemetry-val" id="garrettActionVal">Dagger Peel</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Integration Debt</div>
+                <div class="telemetry-val" id="debtVal">0.20 (Low)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            if (type === 'xlock') {
+                // Garrett Twin-Blade X-Lock Clang & Torque Scrape
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(680, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(240, audioCtx.currentTime + 0.22);
+                gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+            } else if (type === 'heal') {
+                // Serafina Transference Chime
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(528, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(660, audioCtx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+            } else if (type === 'panic') {
+                // Panic Heart Thump & Discordant Tone
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(55, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.32);
+            }
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.46);
+        }
+
+        // State Machine
+        let activeRun = 'A'; // 'A', 'B', 'C', 'D'
+        let benchmarkActive = false;
+        let benchmarkTimer = 0;
+
+        // Combat Positions
+        let kaelen = { x: 260, y: 220, knee: false };
+        let garrett = { x: 220, y: 270, dualWieldXLock: false };
+        let serafina = { x: 180, y: 150, healingAura: false };
+        let brute = { x: 380, y: 220, attacking: false };
+        let scout = { x: 120, y: 340, status: "Harvested" };
+
+        const runABtn = document.getElementById('runABtn');
+        const runBBtn = document.getElementById('runBBtn');
+        const runCBtn = document.getElementById('runCBtn');
+        const runDBtn = document.getElementById('runDBtn');
+        const triggerKneeBtn = document.getElementById('triggerKneeBtn');
+        const resetPositionBtn = document.getElementById('resetPositionBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+        const journalBox = document.getElementById('journalBox');
+
+        function setRun(run) {
+            activeRun = run;
+            [runABtn, runBBtn, runCBtn, runDBtn].forEach(b => b.classList.remove('active'));
+            benchmarkActive = false;
+            kaelen.knee = false;
+            garrett.dualWieldXLock = false;
+            serafina.healingAura = false;
+            brute.attacking = false;
+
+            if (run === 'A') {
+                runABtn.classList.add('active');
+                serafina.x = 140; serafina.y = 130; // Distant
+                garrett.x = 220; garrett.y = 290;
+                scout.status = "Harvested (Taint Drained)";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Cold, but efficient. We needed that edge."<br><em>(Serafina steps back, hands trembling, refusing to look).</em>`;
+                journalBox.innerHTML = `<strong>[LIVING JOURNAL AT CAMP]:</strong><br><span style="color: var(--text-main);">"Weakness is a luxury we burned at Oakhaven."</span><br><span style="color: #9ca3af;">• [Garrett]: Charcoal mark of approval [✓].</span><br><span style="color: #ef4444;">• [Serafina]: [Empty margin — refused to write].</span>`;
+                document.getElementById('serafinaDistVal').innerText = "1000 uu (Distant)";
+                document.getElementById('hesitationVal').innerText = "300 ms (Delay)";
+                document.getElementById('garrettActionVal').innerText = "Dagger Flank Peel";
+                document.getElementById('debtVal').innerText = "0.20 (Low)";
+            } else if (run === 'B') {
+                runBBtn.classList.add('active');
+                serafina.x = 220; serafina.y = 180; // Close wedge
+                garrett.x = 220; garrett.y = 260;
+                scout.status = "Mercifully Released & Buried";
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> <em>(Quiet prayer in the ash, stepping close into unified formation).</em><br><strong>[Garrett]:</strong> "Noble. Hope that kindness doesn't get us ambushed."`;
+                journalBox.innerHTML = `<strong>[LIVING JOURNAL AT CAMP]:</strong><br><span style="color: var(--text-main);">"We buried him beneath the stone."</span><br><span style="color: #38bdf8;">• [Serafina]: Fluid ink annotation: <em>'The light held.'</em></span><br><span style="color: #e3b341;">• [Garrett]: Cautious note on medical supply preservation.</span>`;
+                document.getElementById('serafinaDistVal').innerText = "300 uu (Tight Wedge)";
+                document.getElementById('hesitationVal').innerText = "0 ms (Instant)";
+                document.getElementById('garrettActionVal').innerText = "Twin-Blade X-Lock";
+                document.getElementById('debtVal').innerText = "0.15 (Stable)";
+            } else if (run === 'C') {
+                runCBtn.classList.add('active');
+                serafina.x = 120; serafina.y = 120;
+                garrett.x = 190; garrett.y = 300;
+                scout.status = "Slain in Blind Panic Swing";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "God damn it, Kaelen! He was pinned! He wasn't a threat!"<br><em>(Garrett's twin daggers reflexively drawn against Kaelen).</em>`;
+                journalBox.innerHTML = `<strong>[LIVING JOURNAL AT CAMP]:</strong><br><span style="color: #ef4444; text-decoration: line-through;">"THEY WERE IN THE TREES AMBUSH OAKHAVEN"</span><br><span style="color: #ef4444;">• Fractured, bleeding smudged text.</span><br><span style="color: #9ca3af;">• [Garrett]: Violent heavy charcoal scratch: <em>'He is losing his grip.'</em></span>`;
+                document.getElementById('serafinaDistVal').innerText = "1200 uu (Terrified)";
+                document.getElementById('hesitationVal').innerText = "600 ms (Panic Lock)";
+                document.getElementById('garrettActionVal').innerText = "Defensive Blade Abort";
+                document.getElementById('debtVal').innerText = "0.85 (Critical Spiral)";
+            } else if (run === 'D') {
+                runDBtn.classList.add('active');
+                serafina.x = 170; serafina.y = 150;
+                garrett.x = 200; garrett.y = 290;
+                scout.status = "Buried (Avoidant Restraint)";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "You gave him a clean death, but you couldn't even look him in the eye, Kaelen. That wasn't mercy—it was dissociation."`;
+                journalBox.innerHTML = `<strong>[LIVING JOURNAL AT CAMP]:</strong><br><span style="color: var(--text-main);">"The ground was hard. Nobody spoke."</span><br><span style="color: #9ca3af;">• [Garrett]: Guarded tactical warning: <em>'Hesitation kills.'</em></span><br><span style="color: #d1d5db;">• [Serafina]: [Tentative prayer, blotched ink].</span>`;
+                document.getElementById('serafinaDistVal').innerText = "750 uu (Guarded)";
+                document.getElementById('hesitationVal').innerText = "150 ms (Uncertain)";
+                document.getElementById('garrettActionVal').innerText = "Hesitant Hold";
+                document.getElementById('debtVal').innerText = "0.80 (Dissociated)";
+            }
+        }
+
+        runABtn.onclick = () => setRun('A');
+        runBBtn.onclick = () => setRun('B');
+        runCBtn.onclick = () => setRun('C');
+        runDBtn.onclick = () => setRun('D');
+
+        triggerKneeBtn.onclick = () => {
+            benchmarkActive = true;
+            benchmarkTimer = 2.5;
+            kaelen.knee = true;
+            brute.attacking = true;
+
+            if (activeRun === 'B') {
+                // Garrett executes twin-blade X-lock cross-deflect
+                garrett.x = kaelen.x + 40;
+                garrett.y = kaelen.y;
+                garrett.dualWieldXLock = true;
+                serafina.healingAura = true;
+                playSound('xlock');
+                setTimeout(() => playSound('heal'), 150);
+            } else if (activeRun === 'A') {
+                // Garrett throws dagger peel; Serafina stays back
+                garrett.x = kaelen.x - 20;
+                garrett.y = kaelen.y + 70;
+                playSound('xlock');
+            } else if (activeRun === 'C') {
+                // Garrett draws blades defensively against Kaelen
+                garrett.x = kaelen.x - 60;
+                garrett.y = kaelen.y + 40;
+                playSound('panic');
+            } else if (activeRun === 'D') {
+                // Garrett holds distant stance
+                garrett.x = kaelen.x - 50;
+                garrett.y = kaelen.y + 60;
+            }
+        };
+
+        resetPositionBtn.onclick = () => {
+            setRun(activeRun);
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "BLEEDING_WAYSTATION_CRUCIBLE",
+                active_run: activeRun,
+                scout_status: scout.status,
+                serafina_spacing_uu: (activeRun === 'B') ? 300 : ((activeRun === 'A') ? 1000 : ((activeRun === 'D') ? 750 : 1200)),
+                statetree_hesitation_ms: (activeRun === 'B') ? 0 : ((activeRun === 'A') ? 300 : ((activeRun === 'D') ? 150 : 600)),
+                garrett_dual_wield_response: document.getElementById('garrettActionVal').innerText,
+                integration_debt: (activeRun === 'C' || activeRun === 'D') ? 0.85 : 0.20
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        let lastTime = performance.now();
+
+        function animate(now) {
+            const dt = (now - lastTime) / 1000;
+            lastTime = now;
+
+            if (benchmarkTimer > 0) {
+                benchmarkTimer -= dt;
+                if (benchmarkTimer <= 0) {
+                    benchmarkActive = false;
+                }
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Heartstone Waystation Ruins
+            ctx.fillStyle = '#1c2430';
+            ctx.strokeStyle = '#2b3545';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(50, 40, 180, 80);
+            ctx.fillStyle = '#8b949e';
+            ctx.font = '10px monospace';
+            ctx.fillText("DORMANT HEARTSTONE WAYSTATION", 60, 85);
+
+            // Draw Pinned Scout
+            ctx.fillStyle = (activeRun === 'A') ? '#ef4444' : (activeRun === 'C' ? '#a855f7' : '#3fb950');
+            ctx.beginPath();
+            ctx.arc(scout.x, scout.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText(`Pinned Scout [${scout.status}]`, scout.x - 60, scout.y + 22);
+
+            // Draw Heavy Brute
+            ctx.fillStyle = '#f85149';
+            ctx.beginPath();
+            ctx.arc(brute.x, brute.y, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Heavy Brute AI", brute.x - 30, brute.y - 20);
+
+            // Draw 3 Grunts
+            const grunts = [
+                { x: 440, y: 160 },
+                { x: 470, y: 240 },
+                { x: 430, y: 310 }
+            ];
+            grunts.forEach((g, i) => {
+                ctx.fillStyle = '#fb7185';
+                ctx.beginPath();
+                ctx.arc(g.x, g.y, 11, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText(`Grunt ${i+1}`, g.x - 18, g.y + 20);
+            });
+
+            // Draw Serafina & Aura
+            ctx.fillStyle = '#a855f7';
+            ctx.beginPath();
+            ctx.arc(serafina.x, serafina.y, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina", serafina.x - 20, serafina.y + 24);
+
+            if (serafina.healingAura) {
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.15)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(kaelen.x, kaelen.y, 60, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillText("Instant Transference Aura", kaelen.x - 60, kaelen.y - 45);
+            }
+
+            // Draw Garrett (Dual Wield)
+            ctx.fillStyle = '#3fb950';
+            ctx.beginPath();
+            ctx.arc(garrett.x, garrett.y, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett (Dual-Wield)", garrett.x - 45, garrett.y + 24);
+
+            // Garrett Twin Blade Visualization
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 3;
+            if (garrett.dualWieldXLock) {
+                // Crossed Twin Blades (X-Lock)
+                ctx.beginPath();
+                ctx.moveTo(garrett.x - 12, garrett.y - 12);
+                ctx.lineTo(garrett.x + 12, garrett.y + 12);
+                ctx.moveTo(garrett.x + 12, garrett.y - 12);
+                ctx.lineTo(garrett.x - 12, garrett.y + 12);
+                ctx.stroke();
+                ctx.fillStyle = '#e3b341';
+                ctx.fillText("TWIN-BLADE X-LOCK DEFLECT!", garrett.x - 70, garrett.y - 20);
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(garrett.x + 5, garrett.y - 8);
+                ctx.lineTo(garrett.x + 18, garrett.y - 12);
+                ctx.moveTo(garrett.x + 5, garrett.y + 8);
+                ctx.lineTo(garrett.x + 18, garrett.y + 12);
+                ctx.stroke();
+            }
+
+            // Draw Kaelen
+            ctx.fillStyle = kaelen.knee ? '#e3b341' : '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(kaelen.x, kaelen.y, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText(kaelen.knee ? "Kaelen (Knocked to Knee)" : "Kaelen", kaelen.x - 30, kaelen.y - 18);
+
+            // Formation Spacing Lines
+            ctx.strokeStyle = (activeRun === 'B') ? 'rgba(63, 185, 80, 0.4)' : 'rgba(239, 68, 68, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(kaelen.x, kaelen.y);
+            ctx.lineTo(serafina.x, serafina.y);
+            ctx.moveTo(kaelen.x, kaelen.y);
+            ctx.lineTo(garrett.x, garrett.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            requestAnimationFrame(animate);
+        }
+
+        setRun('A');
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

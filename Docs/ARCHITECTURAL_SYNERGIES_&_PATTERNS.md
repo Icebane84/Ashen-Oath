@@ -36,10 +36,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-014`** | **Companion Grounding Parity, Sanity Chromatics & Touchpad Soot Invariant** | `SCENARIO-SPEC-070` / Scenarios / AI / UI / Haptics | Companion skeletal gaze alignment ($\theta \le 35^\circ$) mathematically invalidating hallucinations, Sanity-driven chromatic aberration ($(1-\text{Sanity})\cdot 5.0$), and DualSense touchpad soot wiping. |
 | **`SYN-015`** | **Unchained Kinetic Power-Through, Mud Drag & Palpitation Pulse Invariant** | `SCENARIO-SPEC-071` / Combat / Scenarios / Haptics / Audio | Unchained mode scaling $+50\%$ damage ($1.50\times$) and mud power-through ($0.85\times$ vs $0.50\times$), with $130 \leftrightarrow 170\text{ BPM}$ haptic palpitations and 400cm boundary defense. |
 | **`SYN-016`** | **Angular Clock-Face Riposte, Dynamic Rubble LPF & Back-Face Shearing Invariant** | `KINETIC-SPEC-072` / Combat / Audio / Niagara / Chaos | Strike vector inversion mapping 4-zone counter montages ($0^\circ-360^\circ$), continuous rubble LPF ($400\text{ Hz} \leftrightarrow 20,000\text{ Hz}$), and back-face particle exit shearing. |
+| **`SYN-017`** | **4-Run Formation Spacing, Twin-Blade X-Lock Deflect & Run D Dissociation Invariant** | `DEMO-SPEC-073` / Scenarios / AI / Combat / Haptics | Causal propagation governing 4-run formation spacing ($300\text{uu} \leftrightarrow 1200\text{uu}$), StateTree support hesitation ($0\text{ms} \leftrightarrow 600\text{ms}$), Garrett's twin-blade X-lock deflect, and Run D dissociation diagnosis. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-017`: 4-Run Formation Spacing, Twin-Blade X-Lock Deflect & Run D Dissociation Invariant
+
+* **Target Subsystems:** `UAshenBleedingWaystationSubsystem`, `UAshenCompanionFormationSpacingEvaluator`, `UAshenStateTreeReactionDelayEvaluator`, `UAshenAvoidantMercyDiagnosisEvaluator`, `UAshenGarrettTwinBladeXLockGASAbility`
+* **Related Specifications:** [`DEMO-SPEC-073`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/DEMO-SPEC-073%20%28THE%20BLEEDING%20WAYSTATION%20VERTICAL%20SLICE%29.md), `PRS-DOC-2026-0820-007`, `PRS-DOC-2026-0822-001`
+
+#### 📐 Mathematical Invariants:
+$$D_{\text{Serafina}}(\text{Run}) = \begin{cases} 300\text{uu}, & \text{Run B (Pure Grace)} \\ 750\text{uu}, & \text{Run D (Avoidant Mercy)} \\ 1000\text{uu}, & \text{Run A (Shadow Harvest)} \\ 1200\text{uu}, & \text{Run C (The Spiral)} \end{cases}$$
+$$\Delta t_{\text{hesitation}}(\text{Run}) = \begin{cases} 0\text{ms}, & \text{Run B} \\ 150\text{ms}, & \text{Run D} \\ 300\text{ms}, & \text{Run A} \\ 600\text{ms}, & \text{Run C} \end{cases}$$
+$$\text{Diagnosis}(\text{Sparing}, \text{Debt}) = \begin{cases} \text{AvoidantMercy (Dissociation)}, & \text{if Debt} \ge 0.75 \\ \text{PureGrace (Solidarity)}, & \text{otherwise} \end{cases}$$
+$$\text{BenchmarkResponse}(\text{KnockedToKnee}, \text{Run}) = \begin{cases} \text{TwinBladeXLockDeflect}, & \text{Run B} \\ \text{DaggerFlankPeel}, & \text{Run A} \\ \text{DefensiveBladeAbort}, & \text{Run C} \\ \text{HesitantGuardedHold}, & \text{Run D} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Run D Invariant (Same Choice, Different Meaning):** When the player chooses to spare the scout, the engine evaluates whether Kaelen possesses low debt ($0.15 \to$ Pure Grace) or high debt ($0.80 \to$ Avoidant Mercy). Companions react not to the button string, but to the *moral provenance of the actor*.
+* **Garrett's Twin-Blade X-Lock:** Rather than a generic shield block, Garrett executes an agile dual-wield cross-parry, hooking heavy descending strikes upward between crossed blades with torque scrape audio and a point-blank kick!
+
+---
 
 ---
 
