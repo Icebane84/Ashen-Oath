@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Forensic Campfire Journal & Multi-Author Marginalia Simulator</title>
+    <!-- Traceability: JOURNAL-SPEC-082 | Builds 2816-2835 -->
+    <style>
+        :root {
+            --bg-primary: #0a0907;
+            --bg-parchment: #1c1813;
+            --parchment-border: #3b3024;
+            --ink-kaelen: #e2e8f0;
+            --ink-garrett: #4ade80;
+            --ink-serafina: #fbbf24;
+            --ink-canon: #d4a373;
+            --accent-fire: #ea580c;
+            --text-main: #fefae0;
+            --text-muted: #a8a29e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1160px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--parchment-border);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            color: var(--ink-canon);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .badge {
+            background: var(--bg-parchment);
+            border: 1px solid var(--parchment-border);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--ink-serafina);
+            font-family: monospace;
+        }
+
+        .scenario-selector {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+        }
+
+        .scenario-tab {
+            background: var(--bg-parchment);
+            border: 1px solid var(--parchment-border);
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text-muted);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+        }
+
+        .scenario-tab:hover {
+            border-color: var(--ink-canon);
+            color: var(--text-main);
+        }
+
+        .scenario-tab.active {
+            background: #2b2319;
+            border-color: var(--ink-canon);
+            color: var(--ink-canon);
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(212, 163, 115, 0.3);
+        }
+
+        .journal-book {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #14110d;
+            border: 2px solid var(--parchment-border);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 10px 30px rgba(0,0,0,0.7);
+            position: relative;
+        }
+
+        .page-col {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .page-header {
+            font-size: 17px;
+            color: var(--ink-canon);
+            border-bottom: 1px dashed var(--parchment-border);
+            padding-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .page-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d6d3d1;
+            font-style: italic;
+        }
+
+        .marginalia-card {
+            border-left: 3px solid #57534e;
+            padding-left: 12px;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .marginalia-author {
+            font-size: 11px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .marginalia-content {
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            background: var(--bg-parchment);
+            border: 1px solid var(--parchment-border);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--ink-serafina);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--ink-serafina);
+        }
+
+        .btn {
+            background: #241d16;
+            border: 1px solid var(--parchment-border);
+            color: var(--text-main);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--parchment-border);
+            border-color: var(--ink-canon);
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .telemetry-box {
+            background: var(--bg-parchment);
+            border: 1px solid var(--parchment-border);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--ink-canon);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>CAMPFIRE FORENSIC JOURNAL & MULTI-AUTHOR MARGINALIA</h1>
+                <p>10-Scenario Historical Reconstruction, Weapon Soot Provenance & Somatic Attunement (JOURNAL-SPEC-082)</p>
+            </div>
+            <div class="badge">BUILD 2835</div>
+        </header>
+
+        <div class="scenario-selector" id="scenarioSelector">
+            <!-- Populated dynamically 1-10 -->
+        </div>
+
+        <div class="journal-book">
+            <!-- Left Page: Canonical History & Kaelen's Martial Log -->
+            <div class="page-col">
+                <div class="page-header" id="pageLeftHeader">Scenario 1: The Bleeding Waystation</div>
+                <div class="page-text" id="canonicalSummary">
+                    The party made their stand at the crossroads tavern, testing Garrett's twin-blade X-lock deflect and learning that blood alone cannot bind an oath.
+                </div>
+
+                <div class="marginalia-card" style="border-left-color: var(--ink-kaelen);">
+                    <div class="marginalia-author" style="color: var(--ink-kaelen);">✒️ KAELEN (BLACK IRON CARBON INK)</div>
+                    <div class="marginalia-content" id="kaelenMarginalia" style="color: var(--ink-kaelen);">
+                        "The tavern floor was soaked in mud and black slag. Garrett hesitated on the flank—I felt his blade waver before the lock."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Page: Garrett & Serafina Marginalia -->
+            <div class="page-col">
+                <div class="page-header">Companion Marginalia & Soot Ledger</div>
+                
+                <div class="marginalia-card" id="garrettCard" style="border-left-color: var(--ink-garrett);">
+                    <div class="marginalia-author" style="color: var(--ink-garrett);">🍃 GARRETT (VERDANT GALL INK - REQUIRES ≥40% TRUST)</div>
+                    <div class="marginalia-content" id="garrettMarginalia" style="color: var(--ink-garrett);">
+                        "I did not waver from cowardice, Kaelen. I was watching the exit in case your unchained berserk brought the rafters down on us all."
+                    </div>
+                </div>
+
+                <div class="marginalia-card" id="serafinaCard" style="border-left-color: var(--ink-serafina);">
+                    <div class="marginalia-author" style="color: var(--ink-serafina);">✨ SERAFINA (GOLDEN RADIANT INK - REQUIRES ≥70% TRUST)</div>
+                    <div class="marginalia-content" id="serafinaMarginalia" style="color: var(--ink-serafina);">
+                        "The White Flame held the perimeter. Neither of your blades would have mattered if the ritual ward had collapsed in those first seconds."
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-row">
+            <div class="control-group">
+                <div class="control-header">
+                    <span>Companion Trust Attunement:</span>
+                    <span class="control-val" id="trustDisplay">85%</span>
+                </div>
+                <input type="range" id="trustSlider" min="0" max="100" step="1" value="85">
+            </div>
+
+            <div class="control-group">
+                <div class="control-header">
+                    <span>Cumulative Weapon Soot:</span>
+                    <span class="control-val" id="sootDisplay">145 μm</span>
+                </div>
+                <input type="range" id="sootSlider" min="0" max="300" step="5" value="145">
+            </div>
+
+            <div style="display: flex; gap: 8px; align-items: flex-end;">
+                <button class="btn" id="burnishBtn" style="flex: 1; color: var(--ink-canon);">🔥 BURNISH SOOT (CLEANSE)</button>
+                <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--ink-serafina);">📋 COPY SELT</button>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Unlocked Entries</div>
+                <div class="telemetry-val" id="unlockedVal">10 / 10</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Campfire Mood</div>
+                <div class="telemetry-val" id="moodVal" style="color: var(--ink-serafina);">Shared Catharsis</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Blade Luster</div>
+                <div class="telemetry-val" id="lusterVal">52%</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense Page Snap</div>
+                <div class="telemetry-val" id="hapticVal" style="color: var(--ink-canon);">0.70 (Active)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Parchment Rustle & Campfire Ember Audio)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playPageTurnAudio() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(320, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.16);
+        }
+
+        // Scenario Database (1-10)
+        const scenarioDB = [
+            {
+                id: 1, title: "1. The Bleeding Waystation",
+                summary: "The party made their stand at the crossroads tavern, testing Garrett's twin-blade X-lock deflect and learning that blood alone cannot bind an oath.",
+                kaelen: "\"The tavern floor was soaked in mud and black slag. Garrett hesitated on the flank—I felt his blade waver before the lock.\"",
+                garrett: "\"I did not waver from cowardice, Kaelen. I was watching the exit in case your unchained berserk brought the rafters down on us all.\"",
+                serafina: "\"The White Flame held the perimeter. Neither of your blades would have mattered if the ritual ward had collapsed in those first seconds.\"",
+                soot: 12
+            },
+            {
+                id: 2, title: "2. The Sundered Gates",
+                summary: "Ancient titan gates deciphered through 3D orbital relic inspection, revealing Solfeggio harmonic frequencies.",
+                kaelen: "\"The iron mechanisms groaned under 200kg of rusted counterweights. Kinetic force alone could not breach them.\"",
+                garrett: "\"A lock is just a puzzle that wants to kill you. Serafina's alignment saved us ten broken lockpicks.\"",
+                serafina: "\"The runes spoke of a three-fold harmony. We had to listen before we struck.\"",
+                soot: 18
+            },
+            {
+                id: 3, title: "3. The Ashen Sepulchre",
+                summary: "Ritual disruption in the catacombs, spiking integration debt and muffling reality with a 320Hz null-zone barrier.",
+                kaelen: "\"The void tendrils choked the chamber. My blade grew heavier with every severed conduit.\"",
+                garrett: "\"Valerius looked terrified. Not of the monsters—of what Kaelen was turning into.\"",
+                serafina: "\"Integration debt is not just a wound on the mind; it poisons the resonance between our souls.\"",
+                soot: 24
+            },
+            {
+                id: 4, title: "4. The Sunken Parish",
+                summary: "Sanity erosion and chromatic hallucinations in the flooded sanctuary, grounded by companion skeletal eye contact.",
+                kaelen: "\"The water smelled of rot. I saw shades of fallen legionnaires lunging from the murk.\"",
+                garrett: "\"I grabbed your collar and forced you to look at me. Remember that when you write your battle memoirs.\"",
+                serafina: "\"Gaze alignment is sacred. When we look upon each other, false illusions have no purchase.\"",
+                soot: 32
+            },
+            {
+                id: 5, title: "5. The Unchained Vessel",
+                summary: "Unchained kinetic berserk activation, powering through swamp mud while managing 170 BPM cardiac strain.",
+                kaelen: "\"The power was intoxicating. Bone and iron splintered like dry pine under my swing.\"",
+                garrett: "\"You were swinging at shadows half the time. I had to parry three stray blows meant for the enemy.\"",
+                serafina: "\"Unchained mode burns the life force itself. We cannot rely on madness to save us.\"",
+                soot: 45
+            },
+            {
+                id: 6, title: "6. The Sanctified Hearth",
+                summary: "Sub-zero blizzard survival in the northern marches, expanding the ancient hearth brazier sanctuary to 2500uu.",
+                kaelen: "\"My fingers were numb on the hilt. The frostbite nearly locked my arms in place.\"",
+                garrett: "\"We huddled shoulder-to-shoulder for an hour just to keep the embers alive. Best sleep I had all week.\"",
+                serafina: "\"The brazier is proof that sacred fire can push back even the coldest void.\"",
+                soot: 60
+            },
+            {
+                id: 7, title: "7. The Ashen Crucible",
+                summary: "Volcanic caldera thermodynamics and molten weapon tempering at 800°C amid 15-second magma surges.",
+                kaelen: "\"The heat baked through our armor. Tempering the greatsword in magma gave it an unstoppable edge.\"",
+                garrett: "\"My cloaks singed into cinders. I smelled like burnt pitch for three days.\"",
+                serafina: "\"The magma surges tested our rhythm. One misstep and the crucible would have claimed us.\"",
+                soot: 85
+            },
+            {
+                id: 8, title: "8. The Searing Abyss",
+                summary: "Pitch-black darkness blindness and 120s torch endurance navigated solely by acoustic echolocation sonar pings.",
+                kaelen: "\"Blind in the dark, I had to slam my blade into the stone just to map the cave walls.\"",
+                garrett: "\"My twin-blade tap was quieter and faster. You just liked making noise.\"",
+                serafina: "\"The radiant flare lit the abyss like a falling star. The stalkers scattered instantly.\"",
+                soot: 110
+            },
+            {
+                id: 9, title: "9. The Whispering Citadel",
+                summary: "Void gravity manipulation (0.10g to 1.50g), 45 m/s wind shear drift, and 528Hz telekinetic light bridges.",
+                kaelen: "\"Leaping across 1500uu chasms felt like flying. The downward graviton cleave split the automaton clean in two.\"",
+                garrett: "\"The gale nearly threw me into the bottomless void. My anchor piton barely caught the bedrock.\"",
+                serafina: "\"Channelling the light bridge required total focus. I could feel both your steps across my mind.\"",
+                soot: 130
+            },
+            {
+                id: 10, title: "10. The Sovereign Convergence",
+                summary: "Tripartite apotheosis at the Grand Zenith apex altar, unleashing 4.0x combo damage and resolving the campaign consequence.",
+                kaelen: "\"At the apex, our three souls moved as one. There was no hesitation, no doubt, only sovereign will.\"",
+                garrett: "\"Whatever comes next in New Game+, we wrote this ending with our own hands.\"",
+                serafina: "\"The chronicle is complete. Our oath echoes across eternity.\"",
+                soot: 145
+            }
+        ];
+
+        let selectedScenarioIdx = 0;
+        let partyTrust = 0.85;
+        let cumulativeSoot = 145;
+
+        const selectorContainer = document.getElementById('scenarioSelector');
+        const trustSlider = document.getElementById('trustSlider');
+        const trustDisplay = document.getElementById('trustDisplay');
+        const sootSlider = document.getElementById('sootSlider');
+        const sootDisplay = document.getElementById('sootDisplay');
+        const burnishBtn = document.getElementById('burnishBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+
+        // Populate Scenario Tabs
+        scenarioDB.forEach((sc, idx) => {
+            const btn = document.createElement('div');
+            btn.className = `scenario-tab ${idx === 0 ? 'active' : ''}`;
+            btn.innerText = `Scenario ${sc.id}`;
+            btn.onclick = () => {
+                playPageTurnAudio();
+                document.querySelectorAll('.scenario-tab').forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+                selectedScenarioIdx = idx;
+                renderJournal();
+            };
+            selectorContainer.appendChild(btn);
+        });
+
+        function renderJournal() {
+            const sc = scenarioDB[selectedScenarioIdx];
+            document.getElementById('pageLeftHeader').innerText = sc.title;
+            document.getElementById('canonicalSummary').innerText = sc.summary;
+            document.getElementById('kaelenMarginalia').innerText = sc.kaelen;
+
+            const garrettCard = document.getElementById('garrettCard');
+            const garrettText = document.getElementById('garrettMarginalia');
+            if (partyTrust >= 0.40) {
+                garrettCard.style.opacity = "1.0";
+                garrettText.innerText = sc.garrett;
+            } else {
+                garrettCard.style.opacity = "0.35";
+                garrettText.innerText = "[Locked — Requires ≥40% Companion Trust to Decipher]";
+            }
+
+            const serafinaCard = document.getElementById('serafinaCard');
+            const serafinaText = document.getElementById('serafinaMarginalia');
+            if (partyTrust >= 0.70) {
+                serafinaCard.style.opacity = "1.0";
+                serafinaText.innerText = sc.serafina;
+            } else {
+                serafinaCard.style.opacity = "0.35";
+                serafinaText.innerText = "[Locked — Requires ≥70% Companion Trust to Decipher]";
+            }
+
+            // Telemetry
+            trustDisplay.innerText = Math.round(partyTrust * 100) + "%";
+            sootDisplay.innerText = cumulativeSoot + " μm";
+
+            const luster = Math.max(0, Math.round((1.0 - (cumulativeSoot / 300)) * 100)) + "%";
+            document.getElementById('lusterVal').innerText = luster;
+
+            let mood = "Tempered Resolve";
+            if (partyTrust >= 0.75) mood = "Shared Catharsis";
+            else if (partyTrust < 0.40) mood = "Somber Silence";
+            document.getElementById('moodVal').innerText = mood;
+        }
+
+        trustSlider.oninput = () => {
+            partyTrust = parseFloat(trustSlider.value) / 100;
+            renderJournal();
+        };
+
+        sootSlider.oninput = () => {
+            cumulativeSoot = parseInt(sootSlider.value);
+            renderJournal();
+        };
+
+        burnishBtn.onclick = () => {
+            cumulativeSoot = Math.max(0, cumulativeSoot - 50);
+            sootSlider.value = cumulativeSoot;
+            renderJournal();
+            alert("🔥 WEAPON SOOT BURNISHED AT CAMPFIRE!\n\n• Removed: 50 μm slag\n• Blade Luster Restored\n• Edge Sharpness Refreshed");
+        };
+
+        copySeltBtn.onclick = () => {
+            const sc = scenarioDB[selectedScenarioIdx];
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "CAMPFIRE_FORENSIC_JOURNAL_AUDIT",
+                inspected_scenario_id: sc.id,
+                scenario_title: sc.title,
+                party_trust_score: Math.round(partyTrust * 100),
+                garrett_marginalia_unlocked: partyTrust >= 0.40,
+                serafina_marginalia_unlocked: partyTrust >= 0.70,
+                cumulative_soot_microns: cumulativeSoot,
+                blade_luster_percentage: document.getElementById('lusterVal').innerText
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        renderJournal();
+    </script>
+</body>
+</html>

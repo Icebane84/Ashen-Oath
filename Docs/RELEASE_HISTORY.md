@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2835: Master Batch #141 — The Grand Campaign Forensic Campfire Journal (JOURNAL-SPEC-082)
+**Domain:** Narrative / Scenarios / Combat / AI / Audio / UI / World / Core / Orchestration / QA  
+**Status:** 2,835 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2816 | `AshenJournalTypes.h` | `AshenJournalTypes` — Enums (3), Structs (1), Multicast Delegates (4) | Narrative |
+| 2817 | `AshenForensicJournalSubsystem.h/.cpp` | `UAshenForensicJournalSubsystem` — Central subsystem managing 10-scenario chronicles | Narrative |
+| 2818 | `AshenMultiAuthorMarginaliaEvaluator.h/.cpp` | `UAshenMultiAuthorMarginaliaEvaluator` — Evaluates 3-author marginalia trust gating & ink | Narrative |
+| 2819 | `AshenSootProvenanceLedgerEvaluator.h/.cpp` | `UAshenSootProvenanceLedgerEvaluator` — Computes cumulative soot microns & blade luster | Narrative |
+| 2820 | `AshenCampfireContemplationDirectorComponent.h/.cpp` | `UAshenCampfireContemplationDirectorComponent` — Component managing campfire rest states & mood | Narrative |
+| 2821 | `AshenCampfireContemplationGASAbility.h/.cpp` | `UAshenCampfireContemplationGASAbility` — Campfire rest recovering +25% sanity | Combat |
+| 2822 | `AshenMarginaliaDecipherGASAbility.h/.cpp` | `UAshenMarginaliaDecipherGASAbility` — Lore deciphering applying +5% studied damage buff | Combat |
+| 2823 | `AshenSootPurgeCleansingGASAbility.h/.cpp` | `UAshenSootPurgeCleansingGASAbility` — Weapon maintenance burnishing soot layer | Combat |
+| 2824 | `AshenContemplativeSilenceBuffGASAbility.h/.cpp` | `UAshenContemplativeSilenceBuffGASAbility` — Aura buff granting +15% poise recovery | Combat |
+| 2825 | `AshenForensicMemoryEchoGASAbility.h/.cpp` | `UAshenForensicMemoryEchoGASAbility` — Replays 5s phantom echo of scenario decisions | Combat |
+| 2826 | `UBTService_AshenCampfireBanterTactics.h/.cpp` | `UBTService_AshenCampfireBanterTactics` — AI service for companion seated posture & gaze | AI |
+| 2827 | `AshenUserWidget_ForensicJournalHUD.h/.cpp` | `UAshenUserWidget_ForensicJournalHUD` — UMG 2-page illuminated journal & marginalia sidebars | UI |
+| 2828 | `AshenJournalAudioSubsystem.h/.cpp` | `UAshenJournalAudioSubsystem` — MetaSounds parchment rustles, 400Hz quill & ember crackle | Audio |
+| 2829 | `AshenCampfireWarmthPostProcessAdapter.h/.cpp` | `UAshenCampfireWarmthPostProcessAdapter` — Post-process amber grading & parchment sepia | Narrative |
+| 2830 | `AAshenForensicCampfireActor.h/.cpp` | `AAshenForensicCampfireActor` — Spatial interactive campfire actor (600uu zone) | World |
+| 2831 | `AshenJournalSaveGameAdapter.h/.cpp` | `UAshenJournalSaveGameAdapter` — Serializes 10 scenario records & unlocked marginalia | Core |
+| 2832 | `AshenJournalDialogueBridge.h/.cpp` | `UAshenJournalDialogueBridge` — Companion campfire barks debating past scenario choices | Narrative |
+| 2833 | `AshenJournalHapticBridge.h/.cpp` | `UAshenJournalHapticBridge` — Maps DualSense page-turn snap, 400Hz quill vibe & embers | Narrative |
+| 2834 | `AshenJournalMasterBridge.h/.cpp` | `UAshenJournalMasterBridge` — Master bridge orchestrating journal UI, soot ledger & rest | Orchestration |
+| 2835 | `AshenMasterBatch141AutomationTest.cpp` | `FAshenMasterBatch141AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2815: Master Batch #140 — Scenario 10: The Sovereign Convergence (SCENARIO-SPEC-081)
 **Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,815 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density (10-Scenario Matrix 100% Complete)*

@@ -45,10 +45,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-023`** | **Subterranean Darkness Blindness, Torch Fuel Endurance & Acoustic Echolocation Sonar Invariant** | `SCENARIO-SPEC-079` / Scenarios / Combat / Audio / UI / Haptics | Subterranean darkness blindness, torch fuel decay ($100\text{uu} \leftrightarrow 800\text{uu}$), darkness attack miss penalty ($60\%$), acoustic echolocation pulse propagation ($350\text{uu} \leftrightarrow 1800\text{uu}$), White Flame radiant flares, and $40\text{ Hz}$ lurker heartbeat haptics. |
 | **`SYN-024`** | **Void Gravity Manipulation, High-Altitude Wind Shear Drift & Telekinetic Light Bridge Invariant** | `SCENARIO-SPEC-080` / Scenarios / Combat / Audio / UI / Haptics | Void gravity jump arc scaling ($1.00\times \to 3.00\times$), downward kinetic slam force ($2.50\times$), lateral wind shear drift ($15\text{ m/s} \leftrightarrow 45\text{ m/s}$), Garrett anchor pitons, and $528\text{ Hz}$ telekinetic light bridge manifestation. |
 | **`SYN-025`** | **Tripartite Apotheosis Resonance, Closed-Loop Consequence Resolution & Grand Zenith Choral Triad Invariant** | `SCENARIO-SPEC-081` / Scenarios / Combat / Audio / UI / Haptics | Tripartite apotheosis resonance buildup ($0.0 \leftrightarrow 1.0$), synchronized combo multipliers ($1.00\times \to 4.00\times$), 4-branch consequence resolution matrix, Solfeggio choral triad ($396\text{ Hz} + 528\text{ Hz} + 639\text{ Hz}$), and 60 BPM DualSense trigger pulses. |
+| **`SYN-026`** | **Multi-Author Marginalia Inscription, Campfire Forensic Reconstruction & Trauma Soot Provenance Ledger Invariant** | `JOURNAL-SPEC-082` / Narrative / Scenarios / Combat / Audio / UI / Haptics | Multi-author marginalia trust gating (Kaelen $0\%$, Garrett $\ge 40\%$, Serafina $\ge 70\%$), cumulative soot provenance ($\sum \text{Soot}_{\mu\text{m}}$), campfire sanity restoration ($0.05/\text{s} \to 25\%$), and DualSense page-turn snap ($0.70$) & 400Hz quill vibration. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-026`: Multi-Author Marginalia Inscription, Campfire Forensic Reconstruction & Trauma Soot Provenance Ledger Invariant
+
+* **Target Subsystems:** `UAshenForensicJournalSubsystem`, `UAshenMultiAuthorMarginaliaEvaluator`, `UAshenSootProvenanceLedgerEvaluator`, `UAshenCampfireContemplationDirectorComponent`, `UAshenJournalHapticBridge`
+* **Related Specifications:** [`JOURNAL-SPEC-082`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/JOURNAL-SPEC-082%20%28THE%20GRAND%20CAMPAIGN%20FORENSIC%20CAMPFIRE%20JOURNAL%20%26%20MULTI-AUTHOR%20MARGINALIA%20SYSTEM%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{IsAuthorMarginaliaVisible}(\text{Author}, \text{Trust}) = \begin{cases} \text{true}, & \text{if } \text{Author} = \text{Kaelen} \lor \text{Author} = \text{SystemCanon} \\ \text{Trust} \ge 0.40, & \text{if } \text{Author} = \text{Garrett} \\ \text{Trust} \ge 0.70, & \text{if } \text{Author} = \text{Serafina} \end{cases}$$
+$$\text{BladeLuster}(\text{Soot}, \text{MaxSoot}) = \text{clamp}\left(1.0 - \frac{\text{Soot}}{\text{MaxSoot}}, 0.0, 1.0\right) \quad [0\% \longleftrightarrow 100\%]$$
+$$\text{SanityRestored}(t_{\text{rest}}) = \text{clamp}(t_{\text{rest}} \cdot 0.05/\text{s}, 0.0, 0.25) \quad [0\% \longleftrightarrow 25\%]$$
+$$\text{PageTurnHapticSnap}(bPageTurned) = \begin{cases} 0.70, & \text{if } bPageTurned \\ 0.05, & \text{otherwise} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Relational Forensic Commentary:** The journal transitions from a simple quest log into an intimate, multi-perspective psychological forensic document where companion trust directly decrypts hidden marginalia commentary and provides $+5\%$ combat advantages against studied adversaries.
+* **Tactile Materiality of the Codex:** Integrating 400Hz quill vibrations and adaptive trigger page-turn resistance brings physical texture to contemplative narrative reflection.
+
+---
 
 ---
 
