@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2775: Master Batch #138 — Scenario 8: The Searing Abyss (SCENARIO-SPEC-079)
+**Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,775 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2756 | `AshenScenario8Types.h` | `AshenScenario8Types` — Enums (3), Structs (1), Multicast Delegates (4) | Scenarios |
+| 2757 | `AshenScenario8MissionSubsystem.h/.cpp` | `UAshenScenario8MissionSubsystem` — Subsystem managing torch fuel & echolocation | Scenarios |
+| 2758 | `AshenDarknessIlluminationEvaluator.h/.cpp` | `UAshenDarknessIlluminationEvaluator` — Evaluates light radius (100uu-800uu) & miss penalty (60%) | Scenarios |
+| 2759 | `AshenAcousticEcholocationEvaluator.h/.cpp` | `UAshenAcousticEcholocationEvaluator` — Computes sound propagation (350uu-1800uu) & echo opacity | Scenarios |
+| 2760 | `AshenTorchEnduranceComponent.h/.cpp` | `UAshenTorchEnduranceComponent` — Component managing 120s torch fuel burn & resin rekindle | Scenarios |
+| 2761 | `AshenGroundSlamEcholocationGASAbility.h/.cpp` | `UAshenGroundSlamEcholocationGASAbility` — Kaelen's sword strike sending 1800uu sonar wave | Combat |
+| 2762 | `AshenGarrettEcholocationTapGASAbility.h/.cpp` | `UAshenGarrettEcholocationTapGASAbility` — Garrett's twin-blade tap pinging lurking enemies (900uu) | Combat |
+| 2763 | `AshenSerafinaRadiantFlareGASAbility.h/.cpp` | `UAshenSerafinaRadiantFlareGASAbility` — Radiant White Flame flare illuminating 1200uu for 6s | Combat |
+| 2764 | `AshenPitchBlackBlindnessDebuffGASAbility.h/.cpp` | `UAshenPitchBlackBlindnessDebuffGASAbility` — Somatic debuff in pitch black (+60% miss chance) | Combat |
+| 2765 | `AshenAbyssShadowStrikeGASAbility.h/.cpp` | `UAshenAbyssShadowStrikeGASAbility` — Ambush strike dealing +75% critical damage on tagged prey | Combat |
+| 2766 | `UBTService_AshenAbyssLurkerStalk.h/.cpp` | `UBTService_AshenAbyssLurkerStalk` — AI service for abyss lurkers stalking outside light | AI |
+| 2767 | `AshenUserWidget_Scenario8AbyssHUD.h/.cpp` | `UAshenUserWidget_Scenario8AbyssHUD` — UMG widget displaying Torch Fuel gauge & sonar radius | UI |
+| 2768 | `AshenScenario8AudioSubsystem.h/.cpp` | `UAshenScenario8AudioSubsystem` — MetaSounds cavern reverberation, dripping & sonar pings | Audio |
+| 2769 | `AshenPitchBlackPostProcessAdapter.h/.cpp` | `UAshenPitchBlackPostProcessAdapter` — Post-process darkness mask & sonar contour wireframe | Scenarios |
+| 2770 | `AAshenSubterraneanChasmActor.h/.cpp` | `AAshenSubterraneanChasmActor` — Spatial catacomb chasm actor for echo reflection boundaries | World |
+| 2771 | `AshenScenario8SaveGameAdapter.h/.cpp` | `UAshenScenario8SaveGameAdapter` — Serializes Scenario 8 completion state & remaining fuel | Core |
+| 2772 | `AshenScenario8DialogueBridge.h/.cpp` | `UAshenScenario8DialogueBridge` — Contextual companion whispers & echolocation barks | Narrative |
+| 2773 | `AshenScenario8HapticBridge.h/.cpp` | `UAshenScenario8HapticBridge` — Maps sonar ticks, lurking heartbeats (40Hz) & darkness fear | Scenarios |
+| 2774 | `AshenScenario8MasterBridge.h/.cpp` | `UAshenScenario8MasterBridge` — Master bridge orchestrating darkness, sonar pings & quest flow | Orchestration |
+| 2775 | `AshenMasterBatch138AutomationTest.cpp` | `FAshenMasterBatch138AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2755: Master Batch #137 — Scenario 7: The Ashen Crucible (SCENARIO-SPEC-078)
 **Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,755 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Scenario 8: The Searing Abyss Simulator</title>
+    <!-- Traceability: SCENARIO-SPEC-079 | Builds 2756-2775 -->
+    <style>
+        :root {
+            --bg-primary: #050608;
+            --bg-secondary: #0c0e14;
+            --panel-bg: #121620;
+            --border-color: #242c3d;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #fbbf24;
+            --accent-purple: #a855f7;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .light-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .light-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+
+        .light-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--text-main);
+        }
+
+        .light-btn.active {
+            background: var(--panel-bg);
+            border-color: var(--accent-cyan);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .light-title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .light-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #020305;
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-cyan);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-sonar {
+            background: #0369a1;
+            border-color: #38bdf8;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-sonar:hover {
+            background: #0284c7;
+        }
+
+        .dialogue-box {
+            background: #090b10;
+            border: 1px solid #242c3d;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #f8fafc;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SCENARIO 8: THE SEARING ABYSS SIMULATOR</h1>
+                <p>Subterranean Catacombs, Pitch-Black Blindness & Acoustic Echolocation Sonar (SCENARIO-SPEC-079)</p>
+            </div>
+            <div class="badge">BUILD 2775</div>
+        </header>
+
+        <div class="light-bar">
+            <div class="light-btn active" id="tierRadiantBtn">
+                <div class="light-title" style="color: var(--accent-amber);">✨ RADIANT (800uu)</div>
+                <div class="light-desc">100% Torch Fuel | 0% Miss Penalty</div>
+            </div>
+            <div class="light-btn" id="tierFlickerBtn">
+                <div class="light-title" style="color: #38bdf8;">🕯️ FLICKERING (450uu)</div>
+                <div class="light-desc">50% Torch Fuel | 15% Miss Penalty</div>
+            </div>
+            <div class="light-btn" id="tierGloomBtn">
+                <div class="light-title" style="color: #a855f7;">🌒 GLOOM (180uu)</div>
+                <div class="light-desc">15% Torch Fuel | 35% Miss Penalty</div>
+            </div>
+            <div class="light-btn" id="tierPitchBtn">
+                <div class="light-title" style="color: #ef4444;">🌑 PITCH BLACK (100uu)</div>
+                <div class="light-desc">0% Fuel | 60% Miss & Fear Spike</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="670" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Torch Fuel Endurance:</span>
+                        <span class="control-val" id="fuelDisplay">100%</span>
+                    </div>
+                    <input type="range" id="fuelSlider" min="0" max="100" step="1" value="100">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Lurker Proximity Distance (uu):</span>
+                        <span class="control-val" id="lurkerDisplay">350 uu</span>
+                    </div>
+                    <input type="range" id="lurkerSlider" min="50" max="800" step="10" value="350">
+                </div>
+
+                <button class="btn btn-sonar" id="groundSlamSonarBtn">🔊 EMIT GROUND SLAM ECHOLOCATION SONAR</button>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Garrett]: "Watch the chasm edges. The floor drops off without warning."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="radiantFlareBtn" style="flex: 1; color: var(--accent-amber);">✨ WHITE FLAME FLARE</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Light Radius</div>
+                <div class="telemetry-val" id="lightRadiusVal">800 uu</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Darkness Miss Penalty</div>
+                <div class="telemetry-val" id="missPenaltyVal" style="color: var(--accent-green);">0%</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Sonar Wave Radius</div>
+                <div class="telemetry-val" id="sonarRadiusVal">0 uu</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense 40Hz Heartbeat</div>
+                <div class="telemetry-val" id="heartbeatVal">0.48</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSonarPing() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.6);
+            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.7);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.75);
+        }
+
+        function playFlareIgnite() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(639, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.9);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.95);
+        }
+
+        // State Machine
+        let torchFuel = 1.0;
+        let lurkerDist = 350;
+        let bFlareActive = false;
+        let sonarPulseRadius = 0;
+        let sonarPulseAlpha = 0;
+
+        const tierRadiantBtn = document.getElementById('tierRadiantBtn');
+        const tierFlickerBtn = document.getElementById('tierFlickerBtn');
+        const tierGloomBtn = document.getElementById('tierGloomBtn');
+        const tierPitchBtn = document.getElementById('tierPitchBtn');
+        const fuelSlider = document.getElementById('fuelSlider');
+        const fuelDisplay = document.getElementById('fuelDisplay');
+        const lurkerSlider = document.getElementById('lurkerSlider');
+        const lurkerDisplay = document.getElementById('lurkerDisplay');
+        const groundSlamSonarBtn = document.getElementById('groundSlamSonarBtn');
+        const radiantFlareBtn = document.getElementById('radiantFlareBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+
+        function setFuelTier(fuel, btn) {
+            torchFuel = fuel;
+            fuelSlider.value = Math.round(fuel * 100);
+            [tierRadiantBtn, tierFlickerBtn, tierGloomBtn, tierPitchBtn].forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            torchFuel = parseFloat(fuelSlider.value) / 100;
+            lurkerDist = parseFloat(lurkerSlider.value);
+
+            fuelDisplay.innerText = Math.round(torchFuel * 100) + "%";
+            lurkerDisplay.innerText = lurkerDist + " uu";
+
+            const lightRad = bFlareActive ? 1200 : Math.round(100 + 700 * torchFuel);
+            document.getElementById('lightRadiusVal').innerText = lightRad + " uu";
+
+            let missPenalty = 0;
+            if (!bFlareActive) {
+                if (lightRad <= 100) missPenalty = 60;
+                else if (lightRad < 600) missPenalty = Math.round((1.0 - (lightRad - 100) / 500) * 60);
+            }
+            const penaltyColor = (missPenalty > 30) ? "var(--accent-red)" : (missPenalty > 0 ? "var(--accent-amber)" : "var(--accent-green)");
+            document.getElementById('missPenaltyVal').innerHTML = `<span style="color: ${penaltyColor}">${missPenalty}%</span>`;
+
+            if (bFlareActive) {
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "Behold the White Flame! The abyss cannot conceal them now!"`;
+            } else if (sonarPulseRadius > 0) {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Echo return received! Abyss lurker detected lurking at ${lurkerDist}uu!"`;
+            } else if (torchFuel <= 0.05) {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Torch is out... stay back-to-back, listen for their breathing!"`;
+            } else if (torchFuel <= 0.25) {
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "Our resin is dwindling. The shadows are pressing in."`;
+            } else {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Watch the chasm edges. The floor drops off without warning."`;
+            }
+
+            const heartbeat = ((1.0 - (lurkerDist / 800)) * 0.85).toFixed(2);
+            document.getElementById('heartbeatVal').innerText = heartbeat;
+        }
+
+        tierRadiantBtn.onclick = () => setFuelTier(1.0, tierRadiantBtn);
+        tierFlickerBtn.onclick = () => setFuelTier(0.50, tierFlickerBtn);
+        tierGloomBtn.onclick = () => setFuelTier(0.15, tierGloomBtn);
+        tierPitchBtn.onclick = () => setFuelTier(0.0, tierPitchBtn);
+
+        fuelSlider.oninput = updateSimulation;
+        lurkerSlider.oninput = updateSimulation;
+
+        groundSlamSonarBtn.onclick = () => {
+            sonarPulseRadius = 10;
+            sonarPulseAlpha = 1.0;
+            playSonarPing();
+            updateSimulation();
+        };
+
+        radiantFlareBtn.onclick = () => {
+            bFlareActive = true;
+            playFlareIgnite();
+            updateSimulation();
+            setTimeout(() => { bFlareActive = false; updateSimulation(); }, 5000);
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SCENARIO_8_SEARING_ABYSS_STATE",
+                torch_fuel_percentage: Math.round(torchFuel * 100),
+                light_radius_uu: bFlareActive ? 1200 : Math.round(100 + 700 * torchFuel),
+                lurker_distance_uu: lurkerDist,
+                darkness_miss_penalty_percentage: document.getElementById('missPenaltyVal').innerText,
+                sonar_active_radius_uu: Math.round(sonarPulseRadius)
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let kaelen = { x: 260, y: 210 };
+        let chasmLeft = 450;
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Chasm Void on Right
+            ctx.fillStyle = '#010204';
+            ctx.fillRect(chasmLeft, 0, canvas.width - chasmLeft, canvas.height);
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(chasmLeft, 0);
+            ctx.lineTo(chasmLeft, canvas.height);
+            ctx.stroke();
+
+            // Draw Light Field
+            const lightRadiusPx = bFlareActive ? 280 : Math.max(35, Math.round(35 + 160 * torchFuel));
+            const lightGrad = ctx.createRadialGradient(kaelen.x, kaelen.y, 10, kaelen.x, kaelen.y, lightRadiusPx);
+            lightGrad.addColorStop(0, bFlareActive ? 'rgba(254, 240, 138, 0.85)' : 'rgba(251, 191, 36, 0.65)');
+            lightGrad.addColorStop(0.5, bFlareActive ? 'rgba(254, 240, 138, 0.35)' : 'rgba(245, 158, 11, 0.25)');
+            lightGrad.addColorStop(1, 'transparent');
+
+            ctx.fillStyle = lightGrad;
+            ctx.beginPath();
+            ctx.arc(kaelen.x, kaelen.y, lightRadiusPx, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Animate Sonar Wave
+            if (sonarPulseAlpha > 0) {
+                sonarPulseRadius += 8;
+                sonarPulseAlpha -= 0.015;
+                ctx.strokeStyle = `rgba(56, 189, 248, ${sonarPulseAlpha})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(kaelen.x, kaelen.y, sonarPulseRadius, 0, Math.PI * 2);
+                ctx.stroke();
+                document.getElementById('sonarRadiusVal').innerText = Math.round(sonarPulseRadius * 3.5) + " uu";
+
+                // Highlight Chasm Edge Wireframe on echo
+                if (sonarPulseRadius >= (chasmLeft - kaelen.x)) {
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${sonarPulseAlpha * 0.9})`;
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(chasmLeft, 40, 150, 340);
+                }
+            } else {
+                document.getElementById('sonarRadiusVal').innerText = "0 uu";
+            }
+
+            // Draw Lurker in Shadows
+            const lurkerX = kaelen.x + (lurkerDist * 0.35);
+            const lurkerY = 170;
+            const distFromKaelen = Math.hypot(lurkerX - kaelen.x, lurkerY - kaelen.y);
+
+            if (distFromKaelen <= lightRadiusPx || (sonarPulseAlpha > 0 && Math.abs(sonarPulseRadius - distFromKaelen) < 60)) {
+                ctx.fillStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.arc(lurkerX, lurkerY, 12, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#f87171';
+                ctx.font = 'bold 11px monospace';
+                ctx.fillText("Abyss Lurker (Stalking)", lurkerX - 60, lurkerY - 16);
+            }
+
+            // Draw Party
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(kaelen.x, kaelen.y, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px monospace';
+            ctx.fillText("Kaelen", kaelen.x - 20, kaelen.y - 18);
+
+            ctx.fillStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.arc(kaelen.x - 30, kaelen.y - 30, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett", kaelen.x - 50, kaelen.y - 45);
+
+            ctx.fillStyle = '#a855f7';
+            ctx.beginPath();
+            ctx.arc(kaelen.x - 30, kaelen.y + 30, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina", kaelen.x - 50, kaelen.y + 50);
+
+            requestAnimationFrame(animate);
+        }
+
+        updateSimulation();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

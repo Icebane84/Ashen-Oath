@@ -42,10 +42,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-020`** | **Blizzard Thermodynamics, Companion Warming Radius & Hearth Sanctuary Expansion Invariant** | `SCENARIO-SPEC-076` / Scenarios / Combat / Audio / UI / Haptics | Sub-zero blizzard temperature decay ($-5^\circ\text{C} \leftrightarrow -35^\circ\text{C}$), somatic frostbite speed slow ($1.00\times \to 0.40\times$), companion warming proximity ($350\text{uu}$), and ancient Hearth Brazier sanctuary expansion ($500\text{uu} \leftrightarrow 2500\text{uu}$). |
 | **`SYN-021`** | **Chaos Geometry Fracture Navmesh Cutting, Acoustic Impulse Groan & Low-Frequency Collapse Rumble Invariant** | `CHAOS-SPEC-077` / World / Chaos / Audio / Haptics | Dynamic Recast navmesh obstacle cutting ($150\text{uu} \leftrightarrow 800\text{uu}$), material impulse acoustic resonance ($120\text{ Hz} \leftrightarrow 4500\text{ Hz}$), rubble sound occlusion ($20000\text{ Hz} \to 500\text{ Hz}$), and $30\text{ Hz}$ collapse rumble haptics. |
 | **`SYN-022`** | **Volcanic Caldera Thermodynamics, Magma Surge Hazard Cycles & Molten Blade Tempering Invariant** | `SCENARIO-SPEC-078` / Scenarios / Combat / Audio / UI / Haptics | Ambient caldera temperature decay ($+45^\circ\text{C} \leftrightarrow +95^\circ\text{C}$), Heat Exhaustion stamina scaling ($1.00\times \to 2.00\times$), 15-second magma surge hazard cycles ($150\text{ Dmg/s}$), molten weapon tempering ($800^\circ\text{C}$, $+40\%$ fire), and cryo mist cooling sanctuaries ($-0.05/\text{s}$). |
+| **`SYN-023`** | **Subterranean Darkness Blindness, Torch Fuel Endurance & Acoustic Echolocation Sonar Invariant** | `SCENARIO-SPEC-079` / Scenarios / Combat / Audio / UI / Haptics | Subterranean darkness blindness, torch fuel decay ($100\text{uu} \leftrightarrow 800\text{uu}$), darkness attack miss penalty ($60\%$), acoustic echolocation pulse propagation ($350\text{uu} \leftrightarrow 1800\text{uu}$), White Flame radiant flares, and $40\text{ Hz}$ lurker heartbeat haptics. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-023`: Subterranean Darkness Blindness, Torch Fuel Endurance & Acoustic Echolocation Sonar Invariant
+
+* **Target Subsystems:** `UAshenScenario8MissionSubsystem`, `UAshenDarknessIlluminationEvaluator`, `UAshenAcousticEcholocationEvaluator`, `UAshenTorchEnduranceComponent`, `UAshenScenario8HapticBridge`
+* **Related Specifications:** [`SCENARIO-SPEC-079`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SCENARIO-SPEC-079%20%28SCENARIO%208%20%E2%80%94%20THE%20SEARING%20ABYSS%20%28SUBTERRANEAN%20CATACOMBS%29%29.md)
+
+#### 📐 Mathematical Invariants:
+$$R_{\text{light}}(\text{Fuel}) = \text{clamp}(100\text{uu} + 700\text{uu} \cdot \text{Fuel01}, 100\text{uu}, 800\text{uu})$$
+$$\text{MissPenalty}(R_{\text{light}}) = \begin{cases} 0.0, & \text{if } R_{\text{light}} \ge 600\text{uu} \\ \left(1.0 - \frac{R_{\text{light}} - 100}{500}\right) \cdot 0.60, & \text{otherwise} \end{cases} \quad [0\% \longleftrightarrow 60\%]$$
+$$\text{FearDebtRate}(R_{\text{light}}) = \begin{cases} 0.0/\text{s}, & \text{if } R_{\text{light}} \ge 250\text{uu} \\ \left(1.0 - \frac{R_{\text{light}} - 100}{150}\right) \cdot 0.02/\text{s}, & \text{otherwise} \end{cases}$$
+$$\text{Heartbeat40Hz}(D_{\text{lurker}}) = \text{clamp}\left(1.0 - \frac{D_{\text{lurker}}}{800\text{uu}}, 0.0, 1.0\right) \cdot 0.85 \quad [40\text{ Hz Motor}]$$
+
+#### 💡 Architectural Insight & Impact:
+* **Audio-Spatial Navigation Replacement:** In total pitch-black darkness ($R_{\text{light}} \le 100\text{uu}$), players must navigate solely by acoustic echolocation pulses (Ground Slams, Twin-Blade Taps, and White Flame Flares) that reveal wireframe cave contours and enemy positions.
+* **Tactile Darkness Sonar:** DualSense motors provide tactile sonar ticks synchronized with acoustic wave bounces, transforming the controller into an echolocation instrument.
+
+---
 
 ---
 
