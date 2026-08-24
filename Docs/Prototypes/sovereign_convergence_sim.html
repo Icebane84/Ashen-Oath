@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Scenario 10: The Sovereign Convergence Simulator</title>
+    <!-- Traceability: SCENARIO-SPEC-081 | Builds 2796-2815 -->
+    <style>
+        :root {
+            --bg-primary: #05060b;
+            --bg-secondary: #0d0f1c;
+            --panel-bg: #14172a;
+            --border-color: #272f54;
+            --accent-gold: #fbbf24;
+            --accent-cyan: #38bdf8;
+            --accent-purple: #c084fc;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-family: monospace;
+        }
+
+        .ending-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .ending-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+
+        .ending-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--text-main);
+        }
+
+        .ending-btn.active {
+            background: var(--panel-bg);
+            border-color: var(--accent-gold);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+        }
+
+        .ending-title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .ending-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #020308;
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-gold);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-gold);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-apotheosis {
+            background: #b45309;
+            border-color: #fbbf24;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+        }
+
+        .btn-apotheosis:hover {
+            background: #d97706;
+        }
+
+        .dialogue-box {
+            background: #080914;
+            border: 1px solid #272f54;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #f8fafc;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SCENARIO 10: THE SOVEREIGN CONVERGENCE SIMULATOR</h1>
+                <p>Grand Zenith Apex, Tripartite Apotheosis & Consequence Resolution (SCENARIO-SPEC-081)</p>
+            </div>
+            <div class="badge">BUILD 2815</div>
+        </header>
+
+        <div class="ending-bar">
+            <div class="ending-btn active" id="endingTransBtn">
+                <div class="ending-title" style="color: var(--accent-gold);">✨ TRANSFIGURATION</div>
+                <div class="ending-desc">High Trust (≥75%) | Low Debt | 4.0x Burst</div>
+            </div>
+            <div class="ending-btn" id="endingHegemonyBtn">
+                <div class="ending-title" style="color: #ef4444;">⚔️ HEGEMONY</div>
+                <div class="ending-desc">Martial Dominance | Iron Will</div>
+            </div>
+            <div class="ending-btn" id="endingFractureBtn">
+                <div class="ending-title" style="color: #94a3b8;">💔 FRACTURE</div>
+                <div class="ending-desc">Low Trust (&lt;40%) | Broken Oath</div>
+            </div>
+            <div class="ending-btn" id="endingEclipseBtn">
+                <div class="ending-title" style="color: #c084fc;">🌑 ECLIPSE</div>
+                <div class="ending-desc">High Debt (≥85%) | Void Ascendancy</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="670" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Apotheosis Resonance:</span>
+                        <span class="control-val" id="resonanceDisplay">100%</span>
+                    </div>
+                    <input type="range" id="resonanceSlider" min="0" max="100" step="1" value="100">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Combined Party Trust:</span>
+                        <span class="control-val" id="trustDisplay">90%</span>
+                    </div>
+                    <input type="range" id="trustSlider" min="10" max="100" step="1" value="90">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Integration Debt:</span>
+                        <span class="control-val" id="debtDisplay">15%</span>
+                    </div>
+                    <input type="range" id="debtSlider" min="0" max="100" step="1" value="15">
+                </div>
+
+                <button class="btn btn-apotheosis" id="unleashFinisherBtn">🌟 UNLEASH TRIPARTITE SOVEREIGN FINISHER (4.0x)</button>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Serafina & Garrett]: "The White Flame burns pure. The three of us stand whole—our Oath is fulfilled."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="consequenceResolveBtn" style="flex: 1; color: var(--accent-gold);">📜 RESOLVE CONSEQUENCE</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Combo Damage Mult</div>
+                <div class="telemetry-val" id="damageMultVal">4.0x</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Party Damage Reduction</div>
+                <div class="telemetry-val" id="reductionVal">75%</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Resolved Ending</div>
+                <div class="telemetry-val" id="endingVal" style="color: var(--accent-gold); font-size: 11px;">Transfiguration</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense LED Spectrum</div>
+                <div class="telemetry-val" id="ledVal" style="color: #fbbf24;">#FBBF24 (Gold)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Solfeggio Triad: 396Hz + 528Hz + 639Hz)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSolfeggioTriad() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const freqs = [396, 528, 639];
+            freqs.forEach((f, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2.0);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 2.1);
+            });
+        }
+
+        // State Machine
+        let resonance = 1.0;
+        let trust = 0.90;
+        let debt = 0.15;
+        let bBerserkDominant = false;
+
+        const endingTransBtn = document.getElementById('endingTransBtn');
+        const endingHegemonyBtn = document.getElementById('endingHegemonyBtn');
+        const endingFractureBtn = document.getElementById('endingFractureBtn');
+        const endingEclipseBtn = document.getElementById('endingEclipseBtn');
+        const resonanceSlider = document.getElementById('resonanceSlider');
+        const resonanceDisplay = document.getElementById('resonanceDisplay');
+        const trustSlider = document.getElementById('trustSlider');
+        const trustDisplay = document.getElementById('trustDisplay');
+        const debtSlider = document.getElementById('debtSlider');
+        const debtDisplay = document.getElementById('debtDisplay');
+        const unleashFinisherBtn = document.getElementById('unleashFinisherBtn');
+        const consequenceResolveBtn = document.getElementById('consequenceResolveBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+
+        function setEndingPreset(t, d, berserk, btn) {
+            trust = t;
+            debt = d;
+            bBerserkDominant = berserk;
+            trustSlider.value = Math.round(t * 100);
+            debtSlider.value = Math.round(d * 100);
+            [endingTransBtn, endingHegemonyBtn, endingFractureBtn, endingEclipseBtn].forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            resonance = parseFloat(resonanceSlider.value) / 100;
+            trust = parseFloat(trustSlider.value) / 100;
+            debt = parseFloat(debtSlider.value) / 100;
+
+            resonanceDisplay.innerText = Math.round(resonance * 100) + "%";
+            trustDisplay.innerText = Math.round(trust * 100) + "%";
+            debtDisplay.innerText = Math.round(debt * 100) + "%";
+
+            const dmgMult = (1.0 + 3.0 * resonance).toFixed(1) + "x";
+            const dmgRed = Math.round(resonance * 75) + "%";
+            document.getElementById('damageMultVal').innerText = dmgMult;
+            document.getElementById('reductionVal').innerText = dmgRed;
+
+            // Resolve Ending
+            let endingName = "Radiant Transfiguration";
+            let ledColor = "#FBBF24 (Gold)";
+            if (debt >= 0.85) {
+                endingName = "The Ashen Eclipse";
+                ledColor = "#C084FC (Purple)";
+                dialogueBox.innerHTML = `<strong>[The Void Sovereign]:</strong> "The flesh has surrendered. A new age of eclipse awakens across the cosmos."`;
+            } else if (trust < 0.40) {
+                endingName = "The Bleeding Fracture";
+                ledColor = "#94A3B8 (Grey)";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "We survived... but the cost was our humanity. We walk alone from here."`;
+            } else if (bBerserkDominant || trust < 0.75) {
+                endingName = "The Cauterized Hegemony";
+                ledColor = "#EF4444 (Red)";
+                dialogueBox.innerHTML = `<strong>[Kaelen]:</strong> "Through blood and iron, the Void is subjugated. Stand with me or step aside."`;
+            } else {
+                endingName = "Radiant Transfiguration";
+                ledColor = "#FBBF24 (Gold)";
+                dialogueBox.innerHTML = `<strong>[Serafina & Garrett]:</strong> "The White Flame burns pure. The three of us stand whole—our Oath is fulfilled."`;
+            }
+
+            document.getElementById('endingVal').innerText = endingName;
+            document.getElementById('ledVal').innerText = ledColor;
+        }
+
+        endingTransBtn.onclick = () => setEndingPreset(0.90, 0.15, false, endingTransBtn);
+        endingHegemonyBtn.onclick = () => setEndingPreset(0.60, 0.30, true, endingHegemonyBtn);
+        endingFractureBtn.onclick = () => setEndingPreset(0.30, 0.50, false, endingFractureBtn);
+        endingEclipseBtn.onclick = () => setEndingPreset(0.80, 0.90, false, endingEclipseBtn);
+
+        resonanceSlider.oninput = updateSimulation;
+        trustSlider.oninput = updateSimulation;
+        debtSlider.oninput = updateSimulation;
+
+        unleashFinisherBtn.onclick = () => {
+            playSolfeggioTriad();
+            alert("🌟 TRIPARTITE SOVEREIGN FINISHER UNLEASHED!\n\n• Damage Multiplier: 4.0x\n• Time Dilation: 0.10x\n• Solfeggio Choral Triad (396Hz + 528Hz + 639Hz)\n• DualSense 60 BPM Apotheosis Pulse");
+        };
+
+        consequenceResolveBtn.onclick = () => {
+            alert(`📜 GRAND ZENITH CONSEQUENCE RESOLUTION:\n\n• Outcome: ${document.getElementById('endingVal').innerText}\n• Combined Trust: ${Math.round(trust*100)}%\n• Integration Debt: ${Math.round(debt*100)}%\n• New Game+ Modifiers: UNLOCKED`);
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SCENARIO_10_SOVEREIGN_CONVERGENCE_STATE",
+                apotheosis_resonance_percentage: Math.round(resonance * 100),
+                combined_trust_score: Math.round(trust * 100),
+                integration_debt_percentage: Math.round(debt * 100),
+                resolved_consequence_ending: document.getElementById('endingVal').innerText,
+                combo_damage_multiplier: document.getElementById('damageMultVal').innerText
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let centerAltar = { x: 335, y: 210, r: 140 };
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Altar Circle
+            ctx.fillStyle = '#0f172a';
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(centerAltar.x, centerAltar.y, centerAltar.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw Apotheosis Aura Bloom
+            if (resonance > 0) {
+                const auraGrad = ctx.createRadialGradient(centerAltar.x, centerAltar.y, 20, centerAltar.x, centerAltar.y, centerAltar.r * (0.8 + 0.4 * resonance));
+                auraGrad.addColorStop(0, `rgba(251, 191, 36, ${0.4 * resonance})`);
+                auraGrad.addColorStop(0.6, `rgba(192, 132, 252, ${0.25 * resonance})`);
+                auraGrad.addColorStop(1, 'transparent');
+
+                ctx.fillStyle = auraGrad;
+                ctx.beginPath();
+                ctx.arc(centerAltar.x, centerAltar.y, centerAltar.r * (0.8 + 0.4 * resonance), 0, Math.PI * 2);
+                ctx.fill();
+
+                // Tripartite Resonant Connecting Lines
+                const t = Date.now() * 0.002;
+                const p1 = { x: centerAltar.x + Math.cos(t) * 70, y: centerAltar.y + Math.sin(t) * 70 };
+                const p2 = { x: centerAltar.x + Math.cos(t + 2.094) * 70, y: centerAltar.y + Math.sin(t + 2.094) * 70 };
+                const p3 = { x: centerAltar.x + Math.cos(t + 4.188) * 70, y: centerAltar.y + Math.sin(t + 4.188) * 70 };
+
+                ctx.strokeStyle = `rgba(251, 191, 36, ${0.7 * resonance})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.lineTo(p3.x, p3.y);
+                ctx.closePath();
+                ctx.stroke();
+
+                // Draw Party Avatars
+                ctx.fillStyle = '#38bdf8'; // Kaelen
+                ctx.beginPath(); ctx.arc(p1.x, p1.y, 12, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#fff'; ctx.font = '10px monospace'; ctx.fillText("Kaelen", p1.x - 18, p1.y - 16);
+
+                ctx.fillStyle = '#22c55e'; // Garrett
+                ctx.beginPath(); ctx.arc(p2.x, p2.y, 11, 0, Math.PI*2); ctx.fill();
+                ctx.fillText("Garrett", p2.x - 18, p2.y - 15);
+
+                ctx.fillStyle = '#c084fc'; // Serafina
+                ctx.beginPath(); ctx.arc(p3.x, p3.y, 11, 0, Math.PI*2); ctx.fill();
+                ctx.fillText("Serafina", p3.x - 22, p3.y - 15);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateSimulation();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

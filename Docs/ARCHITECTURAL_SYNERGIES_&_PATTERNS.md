@@ -44,10 +44,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-022`** | **Volcanic Caldera Thermodynamics, Magma Surge Hazard Cycles & Molten Blade Tempering Invariant** | `SCENARIO-SPEC-078` / Scenarios / Combat / Audio / UI / Haptics | Ambient caldera temperature decay ($+45^\circ\text{C} \leftrightarrow +95^\circ\text{C}$), Heat Exhaustion stamina scaling ($1.00\times \to 2.00\times$), 15-second magma surge hazard cycles ($150\text{ Dmg/s}$), molten weapon tempering ($800^\circ\text{C}$, $+40\%$ fire), and cryo mist cooling sanctuaries ($-0.05/\text{s}$). |
 | **`SYN-023`** | **Subterranean Darkness Blindness, Torch Fuel Endurance & Acoustic Echolocation Sonar Invariant** | `SCENARIO-SPEC-079` / Scenarios / Combat / Audio / UI / Haptics | Subterranean darkness blindness, torch fuel decay ($100\text{uu} \leftrightarrow 800\text{uu}$), darkness attack miss penalty ($60\%$), acoustic echolocation pulse propagation ($350\text{uu} \leftrightarrow 1800\text{uu}$), White Flame radiant flares, and $40\text{ Hz}$ lurker heartbeat haptics. |
 | **`SYN-024`** | **Void Gravity Manipulation, High-Altitude Wind Shear Drift & Telekinetic Light Bridge Invariant** | `SCENARIO-SPEC-080` / Scenarios / Combat / Audio / UI / Haptics | Void gravity jump arc scaling ($1.00\times \to 3.00\times$), downward kinetic slam force ($2.50\times$), lateral wind shear drift ($15\text{ m/s} \leftrightarrow 45\text{ m/s}$), Garrett anchor pitons, and $528\text{ Hz}$ telekinetic light bridge manifestation. |
+| **`SYN-025`** | **Tripartite Apotheosis Resonance, Closed-Loop Consequence Resolution & Grand Zenith Choral Triad Invariant** | `SCENARIO-SPEC-081` / Scenarios / Combat / Audio / UI / Haptics | Tripartite apotheosis resonance buildup ($0.0 \leftrightarrow 1.0$), synchronized combo multipliers ($1.00\times \to 4.00\times$), 4-branch consequence resolution matrix, Solfeggio choral triad ($396\text{ Hz} + 528\text{ Hz} + 639\text{ Hz}$), and 60 BPM DualSense trigger pulses. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-025`: Tripartite Apotheosis Resonance, Closed-Loop Consequence Resolution & Grand Zenith Choral Triad Invariant
+
+* **Target Subsystems:** `UAshenScenario10MissionSubsystem`, `UAshenTripartiteApotheosisEvaluator`, `UAshenZenithConsequenceEvaluator`, `UAshenSoulUnificationDirectorComponent`, `UAshenScenario10HapticBridge`
+* **Related Specifications:** [`SCENARIO-SPEC-081`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SCENARIO-SPEC-081%20%28SCENARIO%2010%20%E2%80%94%20THE%20SOVEREIGN%20CONVERGENCE%20%28GRAND%20ZENITH%29%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{ComboDamageMultiplier}(\text{Resonance}) = 1.0 + 3.0 \cdot \text{clamp}(\text{Resonance}, 0.0, 1.0) \quad [1.00\times \longleftrightarrow 4.00\times]$$
+$$\text{PartyDamageReduction}(\text{Resonance}) = 0.75 \cdot \text{clamp}(\text{Resonance}, 0.0, 1.0) \quad [0\% \longleftrightarrow 75\%]$$
+$$\text{EndingResolution}(\text{Trust}, \text{Debt}, \text{Berserk}) = \begin{cases} \text{AshenEclipse}, & \text{if } \text{Debt} \ge 0.85 \\ \text{BleedingFracture}, & \text{if } \text{Trust} < 0.40 \\ \text{CauterizedHegemony}, & \text{if } \text{Berserk} \lor \text{Trust} < 0.75 \\ \text{RadiantTransfiguration}, & \text{otherwise} \end{cases}$$
+$$\text{TriggerPulse60BPM}(\text{Resonance}) = 0.95 \cdot \text{clamp}(\text{Resonance}, 0.0, 1.0) \quad [1.0\text{ Hz Haptic Rhythm}]$$
+
+#### 💡 Architectural Insight & Impact:
+* **Closed-Loop Campaign Consequence:** Scenario 10 does not evaluate a static multiple-choice ending; rather, the dynamic state vector built across all 10 preceding vertical slices mathematically determines the narrative epilogue, companion survival, and cosmetic world transformation.
+* **Unified Tri-Soul Apotheosis:** Reaching 100% resonance elevates the 3 companions into a seamless combat triad—granting $4.0\times$ burst damage and zero-latency formation execution.
+
+---
 
 ---
 
