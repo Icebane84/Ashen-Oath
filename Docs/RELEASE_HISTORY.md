@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2895: Master Batch #144 — The Shroud-Knight Boss Encounter & Creeping Paranoia System (CREATURE-SPEC-085)
+**Domain:** Combat / AI / Audio / UI / World / Core / Orchestration / Narrative / QA  
+**Status:** 2,895 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2876 | `AshenShroudKnightTypes.h` | `AshenShroudKnightTypes` — Enums (3), Structs (1), Multicast Delegates (4) | Combat |
+| 2877 | `AshenShroudKnightBossSubsystem.h/.cpp` | `UAshenShroudKnightBossSubsystem` — Subsystem managing boss phases & health gates | Combat |
+| 2878 | `AshenCreepingParanoiaEvaluator.h/.cpp` | `UAshenCreepingParanoiaEvaluator` — Evaluates peripheral phantom angles & grounding | Combat |
+| 2879 | `AshenPhaseShiftDitherEvaluator.h/.cpp` | `UAshenPhaseShiftDitherEvaluator` — Computes 0.15 dither mask & collision passability | Combat |
+| 2880 | `AshenTrinityStrikeCoordinatorComponent.h/.cpp` | `UAshenTrinityStrikeCoordinatorComponent` — Coordinates 3-step Trinity combo sequence | Combat |
+| 2881 | `AshenShroudKnightPhaseShiftGASAbility.h/.cpp` | `UAshenShroudKnightPhaseShiftGASAbility` — Boss ability dissolving into spectral mist | Combat |
+| 2882 | `AshenCreepingParanoiaInfectionGASAbility.h/.cpp` | `UAshenCreepingParanoiaInfectionGASAbility` — Boss attack inflicting +25% paranoia | Combat |
+| 2883 | `AshenTrinityGuardBreakGASAbility.h/.cpp` | `UAshenTrinityGuardBreakGASAbility` — Kaelen step 1 kinetic guard break cleave | Combat |
+| 2884 | `AshenGarrettShadowAnchorGASAbility.h/.cpp` | `UAshenGarrettShadowAnchorGASAbility` — Garrett step 2 shadow thread phase lockout | Combat |
+| 2885 | `AshenSerafinaTrinityPurgeGASAbility.h/.cpp` | `UAshenSerafinaTrinityPurgeGASAbility` — Serafina step 3 White Flame 3.5x purge beam | Combat |
+| 2886 | `UBTService_AshenShroudKnightAITactics.h/.cpp` | `UBTService_AshenShroudKnightAITactics` — AI service for glitch-lurch & wall phasing | AI |
+| 2887 | `AshenUserWidget_ShroudKnightBossHUD.h/.cpp` | `UAshenUserWidget_ShroudKnightBossHUD` — UMG 3-segment boss health & paranoia meter | UI |
+| 2888 | `AshenShroudKnightAudioSubsystem.h/.cpp` | `UAshenShroudKnightAudioSubsystem` — MetaSounds 3500Hz paranoia ringing & whispers | Audio |
+| 2889 | `AshenParanoiaPostProcessAdapter.h/.cpp` | `UAshenParanoiaPostProcessAdapter` — Post-process oily vignette & chromatic jitter | Combat |
+| 2890 | `AAshenShroudKnightEncounterBossActor.h/.cpp` | `AAshenShroudKnightEncounterBossActor` — 2.1m spatial boss actor with 5 visor eyes | World |
+| 2891 | `AshenShroudKnightSaveGameAdapter.h/.cpp` | `UAshenShroudKnightSaveGameAdapter` — Serializes boss defeat & Trinity metrics | Core |
+| 2892 | `AshenShroudKnightDialogueBridge.h/.cpp` | `UAshenShroudKnightDialogueBridge` — Contextual combat barks & Eldrin whispers | Narrative |
+| 2893 | `AshenShroudKnightHapticBridge.h/.cpp` | `UAshenShroudKnightHapticBridge` — DualSense trigger slack & paranoia jitter haptics | Combat |
+| 2894 | `AshenShroudKnightMasterBridge.h/.cpp` | `UAshenShroudKnightMasterBridge` — Master bridge orchestrating boss encounter & GAS | Orchestration |
+| 2895 | `AshenMasterBatch144AutomationTest.cpp` | `FAshenMasterBatch144AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2875: Master Batch #143 — The Quartz Dynamic 6-Stem Music Conductor & Symbiotic Flow State (QUARTZ-SPEC-084)
 **Domain:** Audio / Combat / Narrative / UI / World / Core / Orchestration / AI / QA  
 **Status:** 2,875 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

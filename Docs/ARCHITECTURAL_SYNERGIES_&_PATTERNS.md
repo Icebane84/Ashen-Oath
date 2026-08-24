@@ -48,10 +48,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-026`** | **Multi-Author Marginalia Inscription, Campfire Forensic Reconstruction & Trauma Soot Provenance Ledger Invariant** | `JOURNAL-SPEC-082` / Narrative / Scenarios / Combat / Audio / UI / Haptics | Multi-author marginalia trust gating (Kaelen $0\%$, Garrett $\ge 40\%$, Serafina $\ge 70\%$), cumulative soot provenance ($\sum \text{Soot}_{\mu\text{m}}$), campfire sanity restoration ($0.05/\text{s} \to 25\%$), and DualSense page-turn snap ($0.70$) & 400Hz quill vibration. |
 | **`SYN-027`** | **Parasitic Nightsteel Weight Scaling, Pommel Garnet Gaze Tracking & Gloomwood Chemical Stabilization Invariant** | `BLADE-SPEC-083` / Combat / Narrative / Audio / UI / Haptics | Living nightsteel mass scaling ($45.0\text{ kg} \leftrightarrow 220.0\text{ kg}$), swing drag floor ($1.00\times \to 0.45\times$), garnet pommel gaze & bile weeping ($>0.70$), and Garrett Gloomwood needle chemical cooling ($-12\text{ semitones}$, $-80\text{ kg}$). |
 | **`SYN-028`** | **Quartz Dynamic 6-Stem Transition Matrix, Symbiotic Resonance Bar Alignment & Afro-Pop Pack Convergence Invariant** | `QUARTZ-SPEC-084` / Audio / Combat / Narrative / UI / Haptics | 6-Stem dynamic gains ($0.0 \leftrightarrow 1.0$), complete silence of Stem 02 during Flow State, Garrett alchemical filters ($450\text{ Hz}$ LPF, $-24\text{ dB}$ tackle ducking, $-12\text{ ST}$ chill), and $+100\%$ stamina recovery. |
+| **`SYN-029`** | **Shroud-Knight Phase-Shift Dithering, Creeping Paranoia Peripheral Gaze Invalidation & Trinity Strike Finisher Invariant** | `CREATURE-SPEC-085` / Combat / AI / Audio / UI / Haptics | Phase-shifting dithering opacity mask ($1.00 \to 0.15$), peripheral phantom visibility gating ($\ge 45^\circ$), companion eye-contact grounding ($-0.15/\text{s}$), and 3-step Trinity Strike ($3.5\times$). |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-029`: Shroud-Knight Phase-Shift Dithering, Creeping Paranoia Peripheral Gaze Invalidation & Trinity Strike Finisher Invariant
+
+* **Target Subsystems:** `UAshenShroudKnightBossSubsystem`, `UAshenCreepingParanoiaEvaluator`, `UAshenPhaseShiftDitherEvaluator`, `UAshenTrinityStrikeCoordinatorComponent`, `UAshenShroudKnightHapticBridge`
+* **Related Specifications:** [`CREATURE-SPEC-085`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CREATURE-SPEC-085%20%28THE%20SHROUD-KNIGHT%20BOSS%20ENCOUNTER%20&%20CREEPING%20PARANOIA%20SYSTEM%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{DitherOpacity}(\text{Phase}) = \begin{cases} 0.15, & \text{if } \text{Phase} = \text{SpectralPhasing} \\ 1.00, & \text{otherwise} \end{cases}$$
+$$\text{PhantomVisibility}(\theta_{\text{gaze}}, \text{Inf}) = (\theta_{\text{gaze}} \ge 45^\circ \lor \theta_{\text{gaze}} \le -45^\circ) \land (\text{Inf} \ge 0.25)$$
+$$\text{GroundingRate}(b\text{EyeContact}) = \begin{cases} -0.15/\text{s}, & \text{if } b\text{EyeContact} \\ 0.00/\text{s}, & \text{otherwise} \end{cases}$$
+$$\text{TrinityFinisherMultiplier}(\text{Step}) = \begin{cases} 3.50\times, & \text{if } \text{Step} = \text{SerafinaPurgeBeam} \\ 1.75\times, & \text{if } \text{Step} = \text{GarrettThreadLock} \\ 1.25\times, & \text{if } \text{Step} = \text{KaelenGuardBreak} \\ 1.00\times, & \text{otherwise} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Psychological Sensory Gaslighting:** The Shroud-Knight manipulates the player's real-world optical gaze. Phantoms appear exclusively in peripheral camera angles; turning the stick to investigate physically cleanses them, forcing the player to fight through persistent sensory doubt.
+* **Coordinated Trio Synergy:** Phase-intangibility makes individual brute force futile. Only an unbroken tripartite sequence (Break $\to$ Anchor $\to$ Purge) can strip the knight of his shroud and deal decisive damage.
+
+---
 
 ---
 

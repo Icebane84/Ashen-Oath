@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Shroud-Knight Boss & Creeping Paranoia Simulator</title>
+    <!-- Traceability: CREATURE-SPEC-085 | WLF-CREA-SHROUD-KNIGHT | Builds 2876-2895 -->
+    <style>
+        :root {
+            --bg-primary: #05060a;
+            --bg-secondary: #0b0f19;
+            --panel-bg: #131929;
+            --border-color: #1f293d;
+            --accent-purple: #c084fc;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-gold: #fbbf24;
+            --accent-cyan: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #020308;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-purple);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-purple);
+        }
+
+        .btn-trinity {
+            background: #581c87;
+            border-color: #c084fc;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 12px rgba(192, 132, 252, 0.4);
+        }
+
+        .btn-trinity:hover {
+            background: #6b21a8;
+        }
+
+        .bark-box {
+            background: #080c18;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fbcfe8;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-purple);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>THE SHROUD-KNIGHT BOSS & CREEPING PARANOIA SIMULATOR</h1>
+                <p>2.1m Phasing Boss, 5 Twitching Visor Eyes, Peripheral Hallucinations & 3-Way Trinity Strike (WLF-CREA-SHROUD-KNIGHT)</p>
+            </div>
+            <div class="badge">BUILD 2895</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="bossCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Creeping Paranoia Infection:</span>
+                        <span class="control-val" id="paranoiaDisplay">15%</span>
+                    </div>
+                    <input type="range" id="paranoiaSlider" min="0" max="100" step="1" value="15">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Camera Look Angle:</span>
+                        <span class="control-val" id="cameraAngleDisplay" style="color: var(--accent-cyan);">0° (Centered)</span>
+                    </div>
+                    <input type="range" id="cameraSlider" min="-90" max="90" step="1" value="0">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn" id="togglePhaseBtn">👻 TOGGLE PHASE (0.15 Dither)</button>
+                    <button class="btn" id="groundingBtn" style="color: var(--accent-green);">👁️ EYE GROUNDING</button>
+                </div>
+
+                <button class="btn btn-trinity" id="trinityStepBtn">⚔️ STEP 1: KAELEN GUARD BREAK</button>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "Look at his eyes—five twitching void lenses. Don't look away!"
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="inflictParanoiaBtn" style="flex: 1; color: var(--accent-red);">⚠️ INFECT (+25%)</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Boss State</div>
+                <div class="telemetry-val" id="phaseVal">Physical Solid</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Dither Opacity</div>
+                <div class="telemetry-val" id="ditherVal">1.00</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Peripheral Phantom</div>
+                <div class="telemetry-val" id="phantomVal" style="color: var(--accent-red);">Hidden (0)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Trinity Step</div>
+                <div class="telemetry-val" id="trinityVal" style="color: var(--accent-gold);">None / Ready</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (High Frequency Paranoia Ringing & Glitch Phasing Clicks)
+        let audioCtx = null;
+        let ringOsc = null;
+        let ringGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                ringOsc = audioCtx.createOscillator();
+                ringGain = audioCtx.createGain();
+
+                ringOsc.type = 'sine';
+                ringOsc.frequency.setValueAtTime(3500, audioCtx.currentTime); // High frequency tinnitus
+                ringGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+
+                ringOsc.connect(ringGain);
+                ringGain.connect(audioCtx.destination);
+                ringOsc.start();
+            }
+        }
+
+        // State Machine
+        let paranoia = 0.15;
+        let cameraAngle = 0;
+        let bPhasing = false;
+        let trinityStep = 0; // 0: None, 1: GuardBreak, 2: ThreadLock, 3: PurgeBeam
+
+        const paranoiaSlider = document.getElementById('paranoiaSlider');
+        const cameraSlider = document.getElementById('cameraSlider');
+        const paranoiaDisplay = document.getElementById('paranoiaDisplay');
+        const cameraAngleDisplay = document.getElementById('cameraAngleDisplay');
+        const togglePhaseBtn = document.getElementById('togglePhaseBtn');
+        const groundingBtn = document.getElementById('groundingBtn');
+        const trinityStepBtn = document.getElementById('trinityStepBtn');
+        const inflictParanoiaBtn = document.getElementById('inflictParanoiaBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const barkBox = document.getElementById('barkBox');
+
+        function updateBossState() {
+            paranoia = parseFloat(paranoiaSlider.value) / 100;
+            cameraAngle = parseInt(cameraSlider.value);
+
+            paranoiaDisplay.innerText = Math.round(paranoia * 100) + "%";
+            cameraAngleDisplay.innerText = cameraAngle + "° " + (Math.abs(cameraAngle) >= 45 ? "(Periphery)" : "(Focused)");
+
+            const dither = bPhasing ? 0.15 : 1.00;
+            document.getElementById('ditherVal').innerText = dither.toFixed(2);
+            document.getElementById('phaseVal').innerText = bPhasing ? "Spectral Phasing (15%)" : "Physical Solid (100%)";
+            document.getElementById('phaseVal').style.color = bPhasing ? "var(--accent-purple)" : "var(--accent-green)";
+
+            // Peripheral Phantom Check (Visible only when angle >= 45 deg and paranoia >= 25%)
+            const bPhantomVisible = (Math.abs(cameraAngle) >= 45) && (paranoia >= 0.25);
+            document.getElementById('phantomVal').innerText = bPhantomVisible ? "VISIBLE (Periphery)" : "Hidden (Vanished)";
+            document.getElementById('phantomVal').style.color = bPhantomVisible ? "var(--accent-red)" : "var(--text-muted)";
+
+            if (ringGain && audioCtx) {
+                ringGain.gain.setValueAtTime(paranoia * 0.08, audioCtx.currentTime);
+            }
+        }
+
+        paranoiaSlider.oninput = updateBossState;
+        cameraSlider.oninput = updateBossState;
+
+        togglePhaseBtn.onclick = () => {
+            initAudio();
+            bPhasing = !bPhasing;
+            togglePhaseBtn.innerText = bPhasing ? "🛡️ SOLIDIFY (1.0 Opacity)" : "👻 TOGGLE PHASE (0.15 Dither)";
+            if (bPhasing) {
+                barkBox.innerHTML = `<strong>[Eldrin]:</strong> "He is already dead, boy. You cannot cut mist with cold iron."`;
+            } else {
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "He's solid! Hit him before he slips the stones!"`;
+            }
+            updateBossState();
+        };
+
+        groundingBtn.onclick = () => {
+            initAudio();
+            paranoiaSlider.value = Math.max(0, parseInt(paranoiaSlider.value) - 20);
+            updateBossState();
+            barkBox.innerHTML = `<strong>[Serafina]:</strong> "Look into my eyes, Kaelen. Breathe. The shadows have no power here."`;
+        };
+
+        inflictParanoiaBtn.onclick = () => {
+            initAudio();
+            paranoiaSlider.value = Math.min(100, parseInt(paranoiaSlider.value) + 25);
+            updateBossState();
+            barkBox.innerHTML = `<strong>[Nyx]:</strong> "Five eyes watching your hands shake. You will die alone in these catacombs."`;
+        };
+
+        trinityStepBtn.onclick = () => {
+            initAudio();
+            trinityStep = (trinityStep % 3) + 1;
+
+            if (trinityStep === 1) {
+                document.getElementById('trinityVal').innerText = "1: Guard Break (1.25x)";
+                trinityStepBtn.innerText = "🕸️ STEP 2: GARRETT THREAD ANCHOR";
+                barkBox.innerHTML = `<strong>[Kaelen]:</strong> "His guard is shattered! Garrett, pin him to the stones!"`;
+            } else if (trinityStep === 2) {
+                bPhasing = false;
+                document.getElementById('trinityVal').innerText = "2: Thread Anchored (1.75x)";
+                trinityStepBtn.innerText = "🔥 STEP 3: SERAFINA WHITE FLAME PURGE";
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Threads anchored! He can't phase! Serafina, burn him down!"`;
+            } else if (trinityStep === 3) {
+                document.getElementById('trinityVal').innerText = "3: PURGE FINISHER (3.50x)";
+                trinityStepBtn.innerText = "✨ TRINITY FINISHER EXECUTED! (Reset)";
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "By the White Flame... be cleansed of the dark!"`;
+                paranoiaSlider.value = 0; // Cleansed!
+            }
+            updateBossState();
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SHROUD_KNIGHT_BOSS_TELEMETRY",
+                boss_phase: bPhasing ? "SpectralPhasing" : "PhysicalSolid",
+                dither_opacity: bPhasing ? 0.15 : 1.00,
+                paranoia_infection_pct: Math.round(paranoia * 100) + "%",
+                camera_angle_deg: cameraAngle,
+                peripheral_phantom_active: (Math.abs(cameraAngle) >= 45) && (paranoia >= 0.25),
+                trinity_combo_step: document.getElementById('trinityVal').innerText
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering (2.1m Towering Shroud-Knight & 5 Visor Eyes)
+        const canvas = document.getElementById('bossCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate(time) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2 + 30;
+
+            const dither = bPhasing ? 0.20 : 1.00;
+            ctx.globalAlpha = dither;
+
+            // Draw Towering 2.1m Boss Body
+            ctx.fillStyle = '#1e293b';
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 3;
+
+            // Rusted Plate Armor & Shroud
+            ctx.beginPath();
+            ctx.moveTo(cx - 40, cy - 130); // Left shoulder
+            ctx.lineTo(cx + 40, cy - 130); // Right shoulder
+            ctx.lineTo(cx + 25, cy + 90);  // Hips
+            ctx.lineTo(cx - 25, cy + 90);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Legs
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(cx - 22, cy + 90, 16, 80);
+            ctx.fillRect(cx + 6, cy + 90, 16, 80);
+
+            // Greatsword
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(cx + 45, cy - 110, 12, 190);
+
+            // Helmet
+            ctx.fillStyle = '#090d16';
+            ctx.beginPath();
+            ctx.arc(cx, cy - 155, 24, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // 5 Glowing Twitching Visor Eyes
+            const eyeColor = '#a855f7';
+            ctx.fillStyle = eyeColor;
+            ctx.shadowColor = eyeColor;
+            ctx.shadowBlur = 10;
+
+            const jitterX = (Math.random() - 0.5) * 2;
+            const jitterY = (Math.random() - 0.5) * 2;
+
+            ctx.beginPath(); ctx.arc(cx - 10 + jitterX, cy - 160 + jitterY, 2.5, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(cx - 4 + jitterX, cy - 154 + jitterY, 2.5, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(cx + 2 + jitterX, cy - 162 + jitterY, 2.5, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(cx + 8 + jitterX, cy - 156 + jitterY, 2.5, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(cx - 1 + jitterX, cy - 150 + jitterY, 2.5, 0, Math.PI * 2); ctx.fill();
+
+            ctx.shadowBlur = 0; // Reset
+            ctx.globalAlpha = 1.0;
+
+            // Draw Peripheral Hallucination Phantom (Only when camera angle is peripheral)
+            if (Math.abs(cameraAngle) >= 45 && paranoia >= 0.25) {
+                const phantomX = (cameraAngle > 0) ? 60 : canvas.width - 60;
+                ctx.fillStyle = 'rgba(239, 68, 68, 0.45)';
+                ctx.beginPath();
+                ctx.arc(phantomX, cy - 100, 35, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#f87171';
+                ctx.font = '11px sans-serif';
+                ctx.fillText("👻 [PERIPHERAL PHANTOM]", phantomX - 60, cy - 145);
+            }
+
+            // Dark Oily Vignette Overlay
+            if (paranoia > 0.05) {
+                const grad = ctx.createRadialGradient(cx, cy, 100, cx, cy, 320);
+                grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+                grad.addColorStop(1, `rgba(0, 0, 0, ${paranoia * 0.85})`);
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateBossState();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
