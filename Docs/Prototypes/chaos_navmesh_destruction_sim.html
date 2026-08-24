@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Chaos Spatial Audio & Navmesh Destruction Simulator</title>
+    <!-- Traceability: CHAOS-SPEC-077 | Builds 2716-2735 -->
+    <style>
+        :root {
+            --bg-primary: #0b0c10;
+            --bg-secondary: #14171f;
+            --panel-bg: #1c222d;
+            --border-color: #2e3846;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-stone: #94a3b8;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .material-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .material-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+
+        .material-btn:hover {
+            border-color: var(--accent-amber);
+            color: var(--text-main);
+        }
+
+        .material-btn.active {
+            background: var(--panel-bg);
+            border-color: var(--accent-amber);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+        }
+
+        .material-title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .material-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #18202c 0%, #0d121a 70%, #06090e 100%);
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-amber);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .btn-strike {
+            background: #92400e;
+            border-color: #f59e0b;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-strike:hover {
+            background: #b45309;
+        }
+
+        .dialogue-box {
+            background: #11151c;
+            border: 1px solid #2e3846;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #f1f5f9;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>CHAOS SPATIAL AUDIO & DYNAMIC NAVMESH DESTRUCTION SIMULATOR</h1>
+                <p>Real-Time Geometry Fracture, Navmesh Obstacle Cutting & Impulse Acoustic Resonance (CHAOS-SPEC-077)</p>
+            </div>
+            <div class="badge">BUILD 2735</div>
+        </header>
+
+        <div class="material-bar">
+            <div class="material-btn active" id="matGraniteBtn">
+                <div class="material-title" style="color: var(--accent-stone);">🏛️ GRANITE STONE</div>
+                <div class="material-desc">Hardness 0.85 | 450 Hz Bass Resonance</div>
+            </div>
+            <div class="material-btn" id="matTimberBtn">
+                <div class="material-title" style="color: #d97706;">🪵 TIMBER SUPPORT</div>
+                <div class="material-desc">Hardness 0.40 | 1200 Hz Splinter Groan</div>
+            </div>
+            <div class="material-btn" id="matRunicBtn">
+                <div class="material-title" style="color: #38bdf8;">✨ RUNIC BASALT</div>
+                <div class="material-desc">Hardness 1.00 | 639 Hz Solfeggio Chime</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="670" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Strike Kinetic Energy (Joules):</span>
+                        <span class="control-val" id="joulesDisplay">5000 J</span>
+                    </div>
+                    <input type="range" id="joulesSlider" min="500" max="10000" step="100" value="5000">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Debris Mass (kg):</span>
+                        <span class="control-val" id="massDisplay">150 kg</span>
+                    </div>
+                    <input type="range" id="massSlider" min="0" max="300" step="5" value="150">
+                </div>
+
+                <button class="btn btn-strike" id="fracturePillarBtn">💥 DELIVER KINETIC IMPACT TO PILLAR</button>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Garrett]: "The foundation is groaning... watch your footing!"
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="clearRubbleBtn" style="flex: 1; color: var(--accent-cyan);">🧹 PULVERIZE RUBBLE</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Navmesh Status</div>
+                <div class="telemetry-val" id="navStatusVal" style="color: var(--accent-red);">Blocked Rubble</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Blocking Radius</div>
+                <div class="telemetry-val" id="radiusVal">525 uu</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Acoustic Frequency</div>
+                <div class="telemetry-val" id="freqVal">350 Hz</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense Rumble</div>
+                <div class="telemetry-val" id="rumbleVal">0.72 (30 Hz)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playCollapseThud(freq) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.4);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.55);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.6);
+        }
+
+        function playPulverizeBlast() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(528, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        // State Machine
+        let currentMaterial = 'Granite'; // 'Granite', 'Timber', 'Runic'
+        let impactJoules = 5000;
+        let debrisMass = 150;
+        let bPillarFractured = true;
+
+        // Trio Positions & Pillar
+        let kaelen = { x: 180, y: 210 };
+        let pillar = { x: 335, y: 210 };
+        let garrett = { x: 180, y: 150 };
+        let serafina = { x: 180, y: 270 };
+        let destination = { x: 520, y: 210 };
+
+        const matGraniteBtn = document.getElementById('matGraniteBtn');
+        const matTimberBtn = document.getElementById('matTimberBtn');
+        const matRunicBtn = document.getElementById('matRunicBtn');
+        const joulesSlider = document.getElementById('joulesSlider');
+        const joulesDisplay = document.getElementById('joulesDisplay');
+        const massSlider = document.getElementById('massSlider');
+        const massDisplay = document.getElementById('massDisplay');
+        const fracturePillarBtn = document.getElementById('fracturePillarBtn');
+        const clearRubbleBtn = document.getElementById('clearRubbleBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+
+        function setMaterial(mat, btn) {
+            currentMaterial = mat;
+            [matGraniteBtn, matTimberBtn, matRunicBtn].forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            impactJoules = parseFloat(joulesSlider.value);
+            debrisMass = parseFloat(massSlider.value);
+
+            joulesDisplay.innerText = impactJoules + " J";
+            massDisplay.innerText = debrisMass + " kg";
+
+            const radius = Math.round(150 + debrisMass * 2.5);
+            document.getElementById('radiusVal').innerText = radius + " uu";
+
+            let baseFreq = (currentMaterial === 'Timber') ? 1200 : (currentMaterial === 'Runic' ? 639 : 450);
+            let freq = Math.max(120, Math.round(baseFreq - (impactJoules / 50)));
+            document.getElementById('freqVal').innerText = freq + " Hz";
+
+            let navStatus = "Clear Path";
+            let statusColor = "var(--accent-green)";
+            if (bPillarFractured && debrisMass >= 100) {
+                navStatus = "Blocked Rubble (Detour Required)";
+                statusColor = "var(--accent-red)";
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "The archway collapsed! The main corridor is completely blocked!"`;
+            } else if (bPillarFractured && debrisMass > 20) {
+                navStatus = "Vaultable Low Rubble";
+                statusColor = "var(--accent-amber)";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Low rubble ahead—vault over, don't slow down!"`;
+            } else {
+                navStatus = "Clear Unobstructed Path";
+                statusColor = "var(--accent-green)";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Clean strike! The path is open again!"`;
+            }
+
+            document.getElementById('navStatusVal').innerHTML = `<span style="color: ${statusColor}">${navStatus}</span>`;
+
+            const rumble = bPillarFractured ? (0.40 + (debrisMass / 300) * 0.50).toFixed(2) : "0.00";
+            document.getElementById('rumbleVal').innerText = `${rumble} (30 Hz)`;
+        }
+
+        matGraniteBtn.onclick = () => setMaterial('Granite', matGraniteBtn);
+        matTimberBtn.onclick = () => setMaterial('Timber', matTimberBtn);
+        matRunicBtn.onclick = () => setMaterial('Runic', matRunicBtn);
+
+        joulesSlider.oninput = updateSimulation;
+        massSlider.oninput = updateSimulation;
+
+        fracturePillarBtn.onclick = () => {
+            bPillarFractured = true;
+            let baseFreq = (currentMaterial === 'Timber') ? 1200 : (currentMaterial === 'Runic' ? 639 : 450);
+            let freq = Math.max(120, Math.round(baseFreq - (impactJoules / 50)));
+            playCollapseThud(freq);
+            updateSimulation();
+        };
+
+        clearRubbleBtn.onclick = () => {
+            bPillarFractured = false;
+            debrisMass = 0;
+            massSlider.value = 0;
+            playPulverizeBlast();
+            updateSimulation();
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "CHAOS_NAVMESH_DESTRUCTION_STATE",
+                material_type: currentMaterial,
+                strike_kinetic_energy_joules: impactJoules,
+                debris_mass_kg: debrisMass,
+                navmesh_blocking_radius_uu: Math.round(150 + debrisMass * 2.5),
+                acoustic_frequency_hz: document.getElementById('freqVal').innerText
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Navmesh Grid Lines
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.15)';
+            ctx.lineWidth = 1;
+            for (let x = 40; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 40; y < canvas.height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // Draw Navmesh Dynamic Obstacle Zone
+            if (bPillarFractured && debrisMass > 0) {
+                const blockingRad = Math.min(100, 20 + debrisMass * 0.4);
+                ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(pillar.x, pillar.y, blockingRad, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = '#ef4444';
+                ctx.font = 'bold 11px monospace';
+                ctx.fillText("NAVMESH CUT [IMPASSABLE]", pillar.x - 70, pillar.y + blockingRad + 18);
+
+                // Draw Detour Path
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([6, 6]);
+                ctx.beginPath();
+                ctx.moveTo(kaelen.x, kaelen.y);
+                ctx.lineTo(pillar.x, pillar.y - blockingRad - 30);
+                ctx.lineTo(destination.x, destination.y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            } else {
+                // Direct Clear Path
+                ctx.strokeStyle = '#22c55e';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(kaelen.x, kaelen.y);
+                ctx.lineTo(destination.x, destination.y);
+                ctx.stroke();
+            }
+
+            // Draw Destination Flag
+            ctx.fillStyle = '#eab308';
+            ctx.beginPath();
+            ctx.arc(destination.x, destination.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px monospace';
+            ctx.fillText("Objective Node", destination.x - 40, destination.y + 24);
+
+            // Draw Pillar / Fractured Rubble
+            if (bPillarFractured) {
+                ctx.fillStyle = '#64748b';
+                for (let i = 0; i < 6; i++) {
+                    const ox = (i % 3 - 1) * 16;
+                    const oy = (Math.floor(i / 3) - 0.5) * 16;
+                    ctx.fillRect(pillar.x + ox - 8, pillar.y + oy - 8, 14, 14);
+                }
+            } else {
+                ctx.fillStyle = '#94a3b8';
+                ctx.fillRect(pillar.x - 14, pillar.y - 30, 28, 60);
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.strokeRect(pillar.x - 14, pillar.y - 30, 28, 60);
+                ctx.fillStyle = '#fff';
+                ctx.font = '11px monospace';
+                ctx.fillText("Intact Pillar", pillar.x - 35, pillar.y - 38);
+            }
+
+            // Draw Party
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(kaelen.x, kaelen.y, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Kaelen", kaelen.x - 20, kaelen.y - 16);
+
+            ctx.fillStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.arc(garrett.x, garrett.y, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett", garrett.x - 20, garrett.y - 14);
+
+            ctx.fillStyle = '#a855f7';
+            ctx.beginPath();
+            ctx.arc(serafina.x, serafina.y, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina", serafina.x - 20, serafina.y + 22);
+
+            requestAnimationFrame(animate);
+        }
+
+        updateSimulation();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

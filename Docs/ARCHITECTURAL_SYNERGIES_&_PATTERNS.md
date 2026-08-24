@@ -40,10 +40,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-018`** | **Procedural Vein Darkening, Strike Kinetic Slag & Bio-Acoustic BPM Invariant** | `SOMATIC-SPEC-074` / Soul / Combat / Audio / UI / Haptics | Procedural skin pallor, subcutaneous black vein darkening, sclera red-out ($0.0 \leftrightarrow 1.0$), cumulative strike kinetic slag accumulation ($\sum E_k$), and $60 \leftrightarrow 170\text{ BPM}$ bio-acoustic heart rate haptics. |
 | **`SYN-019`** | **Tripartite Solfeggio Harmonic Attunement, Dynamic EQS Flank Angles & Somatic Silence Contract Invariant** | `COMPANION-SPEC-075` / Companions / AI / Audio / Haptics | 4-Mode cognitive loop (Combat, Contemplative, Trauma, Campfire), EQS dynamic flank angles ($45^\circ \leftrightarrow 135^\circ$), Solfeggio triads ($396\text{ Hz} / 528\text{ Hz} / 639\text{ Hz}$), and $3.0\times$ synchronized finisher. |
 | **`SYN-020`** | **Blizzard Thermodynamics, Companion Warming Radius & Hearth Sanctuary Expansion Invariant** | `SCENARIO-SPEC-076` / Scenarios / Combat / Audio / UI / Haptics | Sub-zero blizzard temperature decay ($-5^\circ\text{C} \leftrightarrow -35^\circ\text{C}$), somatic frostbite speed slow ($1.00\times \to 0.40\times$), companion warming proximity ($350\text{uu}$), and ancient Hearth Brazier sanctuary expansion ($500\text{uu} \leftrightarrow 2500\text{uu}$). |
+| **`SYN-021`** | **Chaos Geometry Fracture Navmesh Cutting, Acoustic Impulse Groan & Low-Frequency Collapse Rumble Invariant** | `CHAOS-SPEC-077` / World / Chaos / Audio / Haptics | Dynamic Recast navmesh obstacle cutting ($150\text{uu} \leftrightarrow 800\text{uu}$), material impulse acoustic resonance ($120\text{ Hz} \leftrightarrow 4500\text{ Hz}$), rubble sound occlusion ($20000\text{ Hz} \to 500\text{ Hz}$), and $30\text{ Hz}$ collapse rumble haptics. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-021`: Chaos Geometry Fracture Navmesh Cutting, Acoustic Impulse Groan & Low-Frequency Collapse Rumble Invariant
+
+* **Target Subsystems:** `UAshenChaosNavmeshSubsystem`, `UAshenChaosDebrisObstructionEvaluator`, `UAshenChaosSpatialAudioEvaluator`, `UAshenDynamicNavmeshRegeneratorComponent`, `UAshenChaosNavmeshHapticBridge`
+* **Related Specifications:** [`CHAOS-SPEC-077`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CHAOS-SPEC-077%20%28CHAOS%20SPATIAL%20AUDIO%20%26%20DYNAMIC%20NAVMESH%20DESTRUCTION%20FRACTURE%20MATRIX%29.md)
+
+#### 📐 Mathematical Invariants:
+$$R_{\text{blocking}}(M_{\text{debris}}) = \text{clamp}(150\text{uu} + 2.5 \cdot M_{\text{debris}}, 150\text{uu}, 800\text{uu})$$
+$$f_{\text{resonance}}(E_k, \text{Material}) = \text{clamp}\left(f_{\text{base}}(\text{Material}) - \frac{E_k}{50}, 120\text{ Hz}, 4500\text{ Hz}\right)$$
+$$\text{LPF}_{\text{occlusion}}(M_{\text{debris}}) = \text{Lerp}\left(20000\text{ Hz}, 500\text{ Hz}, \text{clamp}\left(\frac{M_{\text{debris}}}{250}, 0.0, 1.0\right)\right)$$
+$$\text{CollapseRumble}(\text{Severity}, D) = \text{SeverityScale} \cdot \text{clamp}\left(1.0 - \frac{D}{1500\text{uu}}, 0.0, 1.0\right) \quad [30\text{ Hz Motor}]$$
+
+#### 💡 Architectural Insight & Impact:
+* **Physics-Driven Tactical Geometry:** Destruction is never purely cosmetic—collapsing a granite pillar instantly carves an impassable obstacle on the Recast navmesh, forcing enemy AI squads into choke-point detours while muffling combat audio through debris occlusion.
+* **Low-Frequency Collapse Shockwave:** Subterranean groans ($120\text{ Hz} \leftrightarrow 450\text{ Hz}$) and $30\text{ Hz}$ DualSense rumble communicate structural compromise directly to the player before visual debris settles.
+
+---
 
 ---
 

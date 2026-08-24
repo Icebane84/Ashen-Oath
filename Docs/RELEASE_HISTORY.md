@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2735: Master Batch #136 — Chaos Spatial Audio & Dynamic Navmesh Destruction (CHAOS-SPEC-077)
+**Domain:** World / Combat / AI / Audio / UI / Narrative / Core / Orchestration / QA  
+**Status:** 2,735 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2716 | `AshenChaosNavmeshTypes.h` | `AshenChaosNavmeshTypes` — Enums (3), Structs (1), Multicast Delegates (4) | World |
+| 2717 | `AshenChaosNavmeshSubsystem.h/.cpp` | `UAshenChaosNavmeshSubsystem` — Subsystem managing debris clusters & navmesh cutting | World |
+| 2718 | `AshenChaosDebrisObstructionEvaluator.h/.cpp` | `UAshenChaosDebrisObstructionEvaluator` — Evaluates blocking radius (150uu-800uu) & height | World |
+| 2719 | `AshenChaosSpatialAudioEvaluator.h/.cpp` | `UAshenChaosSpatialAudioEvaluator` — Computes impact frequencies (120Hz-4500Hz) & occlusion | World |
+| 2720 | `AshenDynamicNavmeshRegeneratorComponent.h/.cpp` | `UAshenDynamicNavmeshRegeneratorComponent` — Triggers dynamic tile rebuilds on Recast Navmesh | World |
+| 2721 | `AshenSunderDebrisClearingGASAbility.h/.cpp` | `UAshenSunderDebrisClearingGASAbility` — Kinetic sweep pulverizing rubble & restoring navmesh | Combat |
+| 2722 | `AshenGarrettRubbleVaultGASAbility.h/.cpp` | `UAshenGarrettRubbleVaultGASAbility` — Garrett's traversal vault over low rubble (<120uu) | Combat |
+| 2723 | `AshenSerafinaDebrisDisintegrationGASAbility.h/.cpp` | `UAshenSerafinaDebrisDisintegrationGASAbility` — Radiant spell dissolving stone blockades into ash | Combat |
+| 2724 | `AshenStructuralCollapseStumbleGASAbility.h/.cpp` | `UAshenStructuralCollapseStumbleGASAbility` — Somatic stumble debuff applied during cave-in collapse | Combat |
+| 2725 | `AshenDebrisWallSlamGASAbility.h/.cpp` | `UAshenDebrisWallSlamGASAbility` — Slams enemies into dynamic rubble for +50% crushing damage | Combat |
+| 2726 | `UBTTask_AshenDynamicDetourRoute.h/.cpp` | `UBTTask_AshenDynamicDetourRoute` — Behavior Tree task recalculating routes around navmesh cuts | AI |
+| 2727 | `AshenUserWidget_ChaosNavmeshHUD.h/.cpp` | `UAshenUserWidget_ChaosNavmeshHUD` — UMG widget displaying fracture severity & navmesh status | UI |
+| 2728 | `AshenChaosSpatialAudioSubsystem.h/.cpp` | `UAshenChaosSpatialAudioSubsystem` — MetaSounds structural crackles, thuds & audio occlusion | Audio |
+| 2729 | `AshenChaosDebrisPostProcessAdapter.h/.cpp` | `UAshenChaosDebrisPostProcessAdapter` — Post-process camera shake (0.0-2.0) & dust density | World |
+| 2730 | `AAshenDestructiblePillarActor.h/.cpp` | `AAshenDestructiblePillarActor` — Destructible Chaos geometry pillar actor dropping rubble | World |
+| 2731 | `AshenChaosNavmeshSaveGameAdapter.h/.cpp` | `UAshenChaosNavmeshSaveGameAdapter` — Serializes fractured pillar states & cleared debris stats | Core |
+| 2732 | `AshenChaosNavmeshDialogueBridge.h/.cpp` | `UAshenChaosNavmeshDialogueBridge` — Injects companion warning barks when corridors collapse | Narrative |
+| 2733 | `AshenChaosNavmeshHapticBridge.h/.cpp` | `UAshenChaosNavmeshHapticBridge` — Maps 30Hz collapse rumbles & rubble resistance to DualSense | Scenarios |
+| 2734 | `AshenChaosNavmeshMasterBridge.h/.cpp` | `UAshenChaosNavmeshMasterBridge` — Master bridge orchestrating Chaos physics & navmesh cutting | Orchestration |
+| 2735 | `AshenMasterBatch136AutomationTest.cpp` | `FAshenMasterBatch136AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2715: Master Batch #135 — Scenario 6: The Sanctified Hearth Resolution (SCENARIO-SPEC-076)
 **Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,715 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
