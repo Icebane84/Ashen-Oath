@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2715: Master Batch #135 — Scenario 6: The Sanctified Hearth Resolution (SCENARIO-SPEC-076)
+**Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,715 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2696 | `AshenScenario6Types.h` | `AshenScenario6Types` — Enums (3), Structs (1), Multicast Delegates (4) | Scenarios |
+| 2697 | `AshenScenario6MissionSubsystem.h/.cpp` | `UAshenScenario6MissionSubsystem` — Subsystem managing quest flow & hearth ignition | Scenarios |
+| 2698 | `AshenBlizzardThermodynamicsEvaluator.h/.cpp` | `UAshenBlizzardThermodynamicsEvaluator` — Evaluates frostbite rate & speed penalties | Scenarios |
+| 2699 | `AshenCompanionWarmingAuraComponent.h/.cpp` | `UAshenCompanionWarmingAuraComponent` — Thermal warmth zone (250uu-350uu) | Scenarios |
+| 2700 | `AshenHearthBrazierIgnitionEvaluator.h/.cpp` | `UAshenHearthBrazierIgnitionEvaluator` — Computes sanctuary radius expansion (500uu-2500uu) | Scenarios |
+| 2701 | `AshenWhiteFlameHearthIgnitionGASAbility.h/.cpp` | `UAshenWhiteFlameHearthIgnitionGASAbility` — Channels White Flame into ancient hearth brazier | Combat |
+| 2702 | `AshenGarrettTorchThrustGASAbility.h/.cpp` | `UAshenGarrettTorchThrustGASAbility` — Garrett's torch swing staggering frost enemies (+30 Heat) | Combat |
+| 2703 | `AshenSerafinaThermalAuraBurstGASAbility.h/.cpp` | `UAshenSerafinaThermalAuraBurstGASAbility` — Serafina's pulse purging 0.40 frostbite for allies | Combat |
+| 2704 | `AshenFrostbiteShiverDebuffGASAbility.h/.cpp` | `UAshenFrostbiteShiverDebuffGASAbility` — Somatic debuff reducing movement speed by up to 60% | Combat |
+| 2705 | `AshenHearthDefenseShockwaveGASAbility.h/.cpp` | `UAshenHearthDefenseShockwaveGASAbility` — Radial thermal shockwave (2000uu) repelling frost beasts | Combat |
+| 2706 | `UBTService_AshenCompanionHuddleWatch.h/.cpp` | `UBTService_AshenCompanionHuddleWatch` — AI service instructing companions to close in warming huddle | AI |
+| 2707 | `AshenUserWidget_Scenario6FrostbiteHUD.h/.cpp` | `UAshenUserWidget_Scenario6FrostbiteHUD` — UMG widget displaying frostbite gauge & temperature | UI |
+| 2708 | `AshenScenario6AudioSubsystem.h/.cpp` | `UAshenScenario6AudioSubsystem` — MetaSounds howling blizzard wind & roaring hearth fire | Audio |
+| 2709 | `AshenFrostbitePostProcessAdapter.h/.cpp` | `UAshenFrostbitePostProcessAdapter` — Drives screen-edge ice frost vignette & cold color tint | Scenarios |
+| 2710 | `AAshenSanctifiedHearthBrazierActor.h/.cpp` | `AAshenSanctifiedHearthBrazierActor` — Spatial stone Hearth Brazier actor in Northern Marches | World |
+| 2711 | `AshenScenario6SaveGameAdapter.h/.cpp` | `UAshenScenario6SaveGameAdapter` — Serializes Scenario 6 completion state & frostbite stats | Core |
+| 2712 | `AshenScenario6DialogueBridge.h/.cpp` | `UAshenScenario6DialogueBridge` — Contextual shivering dialogue & hearth restoration barks | Narrative |
+| 2713 | `AshenScenario6HapticBridge.h/.cpp` | `UAshenScenario6HapticBridge` — Maps sub-zero shivers to Left Grip & hearth warmth to Right Grip | Scenarios |
+| 2714 | `AshenScenario6MasterBridge.h/.cpp` | `UAshenScenario6MasterBridge` — Master bridge orchestrating thermodynamics & quest flow | Orchestration |
+| 2715 | `AshenMasterBatch135AutomationTest.cpp` | `FAshenMasterBatch135AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2695: Master Batch #134 — The Tripartite Companion Cognitive Loop & Somatic Attunement Engine (COMPANION-SPEC-075)
 **Domain:** Companions / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,695 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

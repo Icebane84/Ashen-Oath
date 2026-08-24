@@ -39,10 +39,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-017`** | **4-Run Formation Spacing, Twin-Blade X-Lock Deflect & Run D Dissociation Invariant** | `DEMO-SPEC-073` / Scenarios / AI / Combat / Haptics | Causal propagation governing 4-run formation spacing ($300\text{uu} \leftrightarrow 1200\text{uu}$), StateTree support hesitation ($0\text{ms} \leftrightarrow 600\text{ms}$), Garrett's twin-blade X-lock deflect, and Run D dissociation diagnosis. |
 | **`SYN-018`** | **Procedural Vein Darkening, Strike Kinetic Slag & Bio-Acoustic BPM Invariant** | `SOMATIC-SPEC-074` / Soul / Combat / Audio / UI / Haptics | Procedural skin pallor, subcutaneous black vein darkening, sclera red-out ($0.0 \leftrightarrow 1.0$), cumulative strike kinetic slag accumulation ($\sum E_k$), and $60 \leftrightarrow 170\text{ BPM}$ bio-acoustic heart rate haptics. |
 | **`SYN-019`** | **Tripartite Solfeggio Harmonic Attunement, Dynamic EQS Flank Angles & Somatic Silence Contract Invariant** | `COMPANION-SPEC-075` / Companions / AI / Audio / Haptics | 4-Mode cognitive loop (Combat, Contemplative, Trauma, Campfire), EQS dynamic flank angles ($45^\circ \leftrightarrow 135^\circ$), Solfeggio triads ($396\text{ Hz} / 528\text{ Hz} / 639\text{ Hz}$), and $3.0\times$ synchronized finisher. |
+| **`SYN-020`** | **Blizzard Thermodynamics, Companion Warming Radius & Hearth Sanctuary Expansion Invariant** | `SCENARIO-SPEC-076` / Scenarios / Combat / Audio / UI / Haptics | Sub-zero blizzard temperature decay ($-5^\circ\text{C} \leftrightarrow -35^\circ\text{C}$), somatic frostbite speed slow ($1.00\times \to 0.40\times$), companion warming proximity ($350\text{uu}$), and ancient Hearth Brazier sanctuary expansion ($500\text{uu} \leftrightarrow 2500\text{uu}$). |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-020`: Blizzard Thermodynamics, Companion Warming Radius & Hearth Sanctuary Expansion Invariant
+
+* **Target Subsystems:** `UAshenScenario6MissionSubsystem`, `UAshenBlizzardThermodynamicsEvaluator`, `UAshenCompanionWarmingAuraComponent`, `UAshenHearthBrazierIgnitionEvaluator`, `UAshenScenario6HapticBridge`
+* **Related Specifications:** [`SCENARIO-SPEC-076`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SCENARIO-SPEC-076%20%28SCENARIO%206%20%E2%80%94%20THE%20SANCTIFIED%20HEARTH%20RESOLUTION%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\Delta\text{Frostbite}(T_{\text{ambient}}, \text{Warmth}) = \begin{cases} -0.05/\text{s}, & \text{if inside Companion Aura (Dist} \le 350\text{uu}) \\ +\frac{|T_{\text{ambient}}|}{600}/\text{s}, & \text{otherwise} \end{cases}$$
+$$\text{SpeedMultiplier}(\text{Frostbite}) = 1.0 - 0.60 \cdot \text{clamp}(\text{Frostbite}, 0.0, 1.0) \quad [1.00\times \longleftrightarrow 0.40\times]$$
+$$R_{\text{sanctuary}}(\text{Ignition}) = 500\text{uu} + 2000\text{uu} \cdot \text{clamp}(\text{Ignition}, 0.0, 1.0) \quad [500\text{uu} \longleftrightarrow 2500\text{uu}]$$
+$$\text{ShiverMotor}(\text{Frostbite}, \text{Warmth}) = \begin{cases} 0.0, & \text{if in Warmth} \\ 0.80 \cdot \text{Frostbite}, & \text{otherwise (Left Grip)} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Environmental Somatic Coercion:** Harsh sub-zero weather forces physical formation discipline without scripted invisible walls: leaving companion warmth ($350\text{uu}$) rapidly penalizes agility and triggers tactile DualSense freezing tremors.
+* **Dynamic Sanctuary Geometry:** Reigniting ancient braziers physically expands the safe navigation sphere on the navmesh from a tight $500\text{uu}$ radius to an expansive $2500\text{uu}$ perimeter, repelling frost wights and burning off accumulated Integration Debt.
+
+---
 
 ---
 

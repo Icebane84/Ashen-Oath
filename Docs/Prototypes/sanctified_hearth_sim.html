@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Scenario 6: The Sanctified Hearth Resolution Simulator</title>
+    <!-- Traceability: SCENARIO-SPEC-076 | Builds 2696-2715 -->
+    <style>
+        :root {
+            --bg-primary: #080d14;
+            --bg-secondary: #0f1724;
+            --panel-bg: #152238;
+            --border-color: #1e3a5f;
+            --accent-cyan: #38bdf8;
+            --accent-ice: #93c5fd;
+            --accent-fire: #f97316;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --text-main: #f0f6fc;
+            --text-muted: #8ba2c4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-ice);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .weather-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .weather-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+
+        .weather-btn:hover {
+            border-color: var(--accent-ice);
+            color: var(--text-main);
+        }
+
+        .weather-btn.active {
+            background: var(--panel-bg);
+            border-color: var(--accent-ice);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(147, 197, 253, 0.25);
+        }
+
+        .weather-title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .weather-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #0f1e33 0%, #081220 70%, #03070e 100%);
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-ice);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-ice);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-ice);
+        }
+
+        .btn-hearth {
+            background: #9a3412;
+            border-color: #f97316;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-hearth:hover {
+            background: #c2410c;
+        }
+
+        .dialogue-box {
+            background: #0d1522;
+            border: 1px solid #1e3a5f;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #f0f6fc;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-ice);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SCENARIO 6: THE SANCTIFIED HEARTH RESOLUTION (NORTHERN MARCHES)</h1>
+                <p>Blizzard Thermodynamics, Companion Warming Proximity & Ancient Hearth Sanctuary Ignition (SCENARIO-SPEC-076)</p>
+            </div>
+            <div class="badge">BUILD 2715</div>
+        </header>
+
+        <div class="weather-bar">
+            <div class="weather-btn" id="weatherCalmBtn">
+                <div class="weather-title" style="color: var(--accent-cyan);">❄️ CALM CHILL</div>
+                <div class="weather-desc">-5°C Ambient Chill</div>
+            </div>
+            <div class="weather-btn active" id="weatherSnowBtn">
+                <div class="weather-title" style="color: var(--accent-ice);">🌨️ DRIVING SNOW</div>
+                <div class="weather-desc">-15°C Frostbite Drift</div>
+            </div>
+            <div class="weather-btn" id="weatherBlizzardBtn">
+                <div class="weather-title" style="color: #60a5fa;">🌪️ SEVERE BLIZZARD</div>
+                <div class="weather-desc">-25°C Rapid Freezing</div>
+            </div>
+            <div class="weather-btn" id="weatherWhiteoutBtn">
+                <div class="weather-title" style="color: #a78bfa;">⚡ WHITEOUT SURGE</div>
+                <div class="weather-desc">-35°C Sub-Zero Crisis</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="670" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Frostbite Severity Gauge:</span>
+                        <span class="control-val" id="frostbiteDisplay">0.20</span>
+                    </div>
+                    <input type="range" id="frostbiteSlider" min="0" max="1" step="0.01" value="0.20">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Hearth Brazier Ignition Progress:</span>
+                        <span class="control-val" id="hearthDisplay">0.00</span>
+                    </div>
+                    <input type="range" id="hearthSlider" min="0" max="1" step="0.01" value="0.00">
+                </div>
+
+                <button class="btn btn-hearth" id="channelHearthBtn">🔥 CHANNEL WHITE FLAME INTO HEARTH (+25%)</button>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Garrett]: "Keep moving. The cold is relentless in these Northern Marches."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="huddleBtn" style="flex: 1;">🤝 HUDDLE COMPANIONS</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Ambient Temperature</div>
+                <div class="telemetry-val" id="tempVal">-15°C</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Movement Multiplier</div>
+                <div class="telemetry-val" id="speedMultVal">0.88x</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Sanctuary Radius</div>
+                <div class="telemetry-val" id="sanctuaryRadiusVal">500 uu</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense Shiver Motor</div>
+                <div class="telemetry-val" id="shiverMotorVal">0.16 (Left Grip)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playBlizzardWind(freq) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.65);
+        }
+
+        function playFireIgnitionCrack() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(450, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.55);
+        }
+
+        // State Machine
+        let ambientTemp = -15;
+        let frostbite = 0.20;
+        let hearthIgnition = 0.00;
+        let bHuddling = false;
+
+        // Trio Positions & Brazier
+        let kaelen = { x: 260, y: 210 };
+        let garrett = { x: 200, y: 170 };
+        let serafina = { x: 200, y: 250 };
+        let brazier = { x: 440, y: 210 };
+
+        const weatherCalmBtn = document.getElementById('weatherCalmBtn');
+        const weatherSnowBtn = document.getElementById('weatherSnowBtn');
+        const weatherBlizzardBtn = document.getElementById('weatherBlizzardBtn');
+        const weatherWhiteoutBtn = document.getElementById('weatherWhiteoutBtn');
+        const frostbiteSlider = document.getElementById('frostbiteSlider');
+        const frostbiteDisplay = document.getElementById('frostbiteDisplay');
+        const hearthSlider = document.getElementById('hearthSlider');
+        const hearthDisplay = document.getElementById('hearthDisplay');
+        const channelHearthBtn = document.getElementById('channelHearthBtn');
+        const huddleBtn = document.getElementById('huddleBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+
+        function setWeather(temp, btn) {
+            ambientTemp = temp;
+            [weatherCalmBtn, weatherSnowBtn, weatherBlizzardBtn, weatherWhiteoutBtn].forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tempVal').innerText = temp + "°C";
+            playBlizzardWind(80 + Math.abs(temp) * 6);
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            frostbite = parseFloat(frostbiteSlider.value);
+            hearthIgnition = parseFloat(hearthSlider.value);
+
+            frostbiteDisplay.innerText = frostbite.toFixed(2);
+            hearthDisplay.innerText = hearthIgnition.toFixed(2);
+
+            const speedMult = (1.0 - frostbite * 0.60).toFixed(2) + "x";
+            document.getElementById('speedMultVal').innerText = speedMult;
+
+            const sanctuaryRadius = Math.round(500 + hearthIgnition * 2000) + " uu";
+            document.getElementById('sanctuaryRadiusVal').innerText = sanctuaryRadius;
+
+            const shiver = (frostbite * 0.80).toFixed(2);
+            document.getElementById('shiverMotorVal').innerText = `${shiver} (Left Grip)`;
+
+            if (hearthIgnition >= 1.0) {
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "The ancient flame breathes again! The cold cannot touch us here."`;
+            } else if (frostbite > 0.75) {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Kaelen! Stay close to the torch! Your fingers are turning black!"`;
+            } else if (frostbite > 0.50) {
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "The storm bites deep. Channel the White Flame into the brazier before we freeze!"`;
+            } else {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Keep moving. The cold is relentless in these Northern Marches."`;
+            }
+        }
+
+        weatherCalmBtn.onclick = () => setWeather(-5, weatherCalmBtn);
+        weatherSnowBtn.onclick = () => setWeather(-15, weatherSnowBtn);
+        weatherBlizzardBtn.onclick = () => setWeather(-25, weatherBlizzardBtn);
+        weatherWhiteoutBtn.onclick = () => setWeather(-35, weatherWhiteoutBtn);
+
+        frostbiteSlider.oninput = updateSimulation;
+        hearthSlider.oninput = updateSimulation;
+
+        channelHearthBtn.onclick = () => {
+            hearthSlider.value = Math.min(1.0, parseFloat(hearthSlider.value) + 0.25);
+            frostbiteSlider.value = Math.max(0.0, parseFloat(frostbiteSlider.value) - 0.15);
+            playFireIgnitionCrack();
+            updateSimulation();
+        };
+
+        huddleBtn.onclick = () => {
+            bHuddling = !bHuddling;
+            if (bHuddling) {
+                garrett.x = kaelen.x - 30; garrett.y = kaelen.y - 30;
+                serafina.x = kaelen.x - 30; serafina.y = kaelen.y + 30;
+                frostbiteSlider.value = Math.max(0.0, parseFloat(frostbiteSlider.value) - 0.20);
+                huddleBtn.innerText = "🚶 DISPERSE FORMATION";
+            } else {
+                garrett.x = kaelen.x - 60; garrett.y = kaelen.y - 40;
+                serafina.x = kaelen.x - 60; serafina.y = kaelen.y + 40;
+                huddleBtn.innerText = "🤝 HUDDLE COMPANIONS";
+            }
+            updateSimulation();
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SANCTIFIED_HEARTH_RESOLUTION_STATE",
+                ambient_temperature_celsius: ambientTemp,
+                frostbite_gauge: frostbite,
+                hearth_ignition_progress: hearthIgnition,
+                sanctuary_radius_uu: Math.round(500 + hearthIgnition * 2000),
+                movement_speed_multiplier: (1.0 - frostbite * 0.60)
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Blizzard Snow Particles
+        let particles = [];
+        for (let i = 0; i < 90; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: -2 - Math.random() * 4,
+                vy: 1 + Math.random() * 3,
+                size: 1.5 + Math.random() * 2.5
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Blizzard Snow Flakes
+            ctx.fillStyle = 'rgba(240, 246, 252, 0.7)';
+            particles.forEach(p => {
+                p.x += p.vx * (Math.abs(ambientTemp) / 10);
+                p.y += p.vy;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.y > canvas.height) p.y = 0;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw Hearth Brazier Sanctuary Warmth Aura
+            const sanctuaryRad = 35 + (hearthIgnition * 140);
+            const grad = ctx.createRadialGradient(brazier.x, brazier.y, 10, brazier.x, brazier.y, sanctuaryRad);
+            grad.addColorStop(0, 'rgba(249, 115, 22, 0.6)');
+            grad.addColorStop(0.6, 'rgba(249, 115, 22, 0.2)');
+            grad.addColorStop(1, 'rgba(249, 115, 22, 0.0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(brazier.x, brazier.y, sanctuaryRad, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Hearth Brazier Stone Actor
+            ctx.fillStyle = (hearthIgnition >= 1.0) ? '#f97316' : (hearthIgnition > 0 ? '#ea580c' : '#475569');
+            ctx.beginPath();
+            ctx.arc(brazier.x, brazier.y, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#fdba74';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = '#f0f6fc';
+            ctx.font = '11px monospace';
+            ctx.fillText(`Ancient Hearth (${Math.round(hearthIgnition * 100)}%)`, brazier.x - 65, brazier.y + 32);
+
+            // Companion Warmth Radiuses
+            ctx.strokeStyle = 'rgba(249, 115, 22, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(garrett.x, garrett.y, 45, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(serafina.x, serafina.y, 50, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Draw Kaelen
+            ctx.fillStyle = (frostbite > 0.5) ? '#93c5fd' : '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(kaelen.x, kaelen.y, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#e6edf3';
+            ctx.fillText("Kaelen", kaelen.x - 20, kaelen.y - 18);
+
+            // Draw Garrett (Torch)
+            ctx.fillStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.arc(garrett.x, garrett.y, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Garrett (Torch)", garrett.x - 40, garrett.y - 16);
+
+            // Draw Serafina (White Flame Aura)
+            ctx.fillStyle = '#a855f7';
+            ctx.beginPath();
+            ctx.arc(serafina.x, serafina.y, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("Serafina (Aura)", serafina.x - 40, serafina.y + 24);
+
+            requestAnimationFrame(animate);
+        }
+
+        updateSimulation();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
