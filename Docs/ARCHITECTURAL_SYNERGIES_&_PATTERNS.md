@@ -46,10 +46,31 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-024`** | **Void Gravity Manipulation, High-Altitude Wind Shear Drift & Telekinetic Light Bridge Invariant** | `SCENARIO-SPEC-080` / Scenarios / Combat / Audio / UI / Haptics | Void gravity jump arc scaling ($1.00\times \to 3.00\times$), downward kinetic slam force ($2.50\times$), lateral wind shear drift ($15\text{ m/s} \leftrightarrow 45\text{ m/s}$), Garrett anchor pitons, and $528\text{ Hz}$ telekinetic light bridge manifestation. |
 | **`SYN-025`** | **Tripartite Apotheosis Resonance, Closed-Loop Consequence Resolution & Grand Zenith Choral Triad Invariant** | `SCENARIO-SPEC-081` / Scenarios / Combat / Audio / UI / Haptics | Tripartite apotheosis resonance buildup ($0.0 \leftrightarrow 1.0$), synchronized combo multipliers ($1.00\times \to 4.00\times$), 4-branch consequence resolution matrix, Solfeggio choral triad ($396\text{ Hz} + 528\text{ Hz} + 639\text{ Hz}$), and 60 BPM DualSense trigger pulses. |
 | **`SYN-026`** | **Multi-Author Marginalia Inscription, Campfire Forensic Reconstruction & Trauma Soot Provenance Ledger Invariant** | `JOURNAL-SPEC-082` / Narrative / Scenarios / Combat / Audio / UI / Haptics | Multi-author marginalia trust gating (Kaelen $0\%$, Garrett $\ge 40\%$, Serafina $\ge 70\%$), cumulative soot provenance ($\sum \text{Soot}_{\mu\text{m}}$), campfire sanity restoration ($0.05/\text{s} \to 25\%$), and DualSense page-turn snap ($0.70$) & 400Hz quill vibration. |
+| **`SYN-027`** | **Parasitic Nightsteel Weight Scaling, Pommel Garnet Gaze Tracking & Gloomwood Chemical Stabilization Invariant** | `BLADE-SPEC-083` / Combat / Narrative / Audio / UI / Haptics | Living nightsteel mass scaling ($45.0\text{ kg} \leftrightarrow 220.0\text{ kg}$), swing drag floor ($1.00\times \to 0.45\times$), garnet pommel gaze & bile weeping ($>0.70$), and Garrett Gloomwood needle chemical cooling ($-12\text{ semitones}$, $-80\text{ kg}$). |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-027`: Parasitic Nightsteel Weight Scaling, Pommel Garnet Gaze Tracking & Gloomwood Chemical Stabilization Invariant
+
+* **Target Subsystems:** `UAshenOathbringerParasiteSubsystem`, `UAshenParasiticBladeMassEvaluator`, `UAshenPommelGazeTrackingEvaluator`, `UAshenGloomwoodStabilizationDirectorComponent`, `UAshenParasiticBladeHapticBridge`
+* **Related Specifications:** [`BLADE-SPEC-083`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/BLADE-SPEC-083%20%28THE%20OATHBRINGER%20PARASITIC%20BLADE%20%26%20ELDRIN%20WHISPER%20SUBSYSTEM%29.md)
+
+#### 📐 Mathematical Invariants:
+$$M_{\text{blade}}(\text{Debt}, b\text{Frozen}) = \begin{cases} \max(45.0, (45.0 + 175.0 \cdot \text{Debt}) - 80.0), & \text{if } b\text{Frozen} \\ 45.0 + 175.0 \cdot \text{Debt}, & \text{otherwise} \end{cases} \quad [\text{kg}]$$
+$$\text{SwingPlayRate}(M) = 1.0 - 0.55 \cdot \left(\frac{M - 45.0}{175.0}\right) \quad [1.00\times \longleftrightarrow 0.45\times]$$
+$$\text{KineticMultiplier}(M) = 1.0 + 1.50 \cdot \left(\frac{M - 45.0}{175.0}\right) \quad [1.00\times \longleftrightarrow 2.50\times]$$
+$$\text{AudioPitchOffset}(b\text{Frozen}) = \begin{cases} -12.0\text{ semitones}, & \text{if } b\text{Frozen} \\ 0.0\text{ semitones}, & \text{otherwise} \end{cases}$$
+$$\text{TriggerResistance}(M) = 0.20 + 0.75 \cdot \left(\frac{M - 45.0}{175.0}\right) \quad [0.20 \longleftrightarrow 0.95]$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Living Blade Weight Matrix:** Weapons in *Ashen Oath* are somatic burdens rather than static inventory items. When Kaelen taps into forbidden void power, the sword physically expands, forcing heavier player movement, massive kinetic impact damage, and severe DualSense trigger resistance.
+* **Alchemical Interventions as Gameplay Relief:** Garrett's alchemical Gloomwood needle bridges combat pacing with somatic biology, instantly chilling Kaelen's bloodstream (auditory $-12\text{ semitone}$ drop) and relieving $80\text{kg}$ of parasitic weight.
+
+---
 
 ---
 

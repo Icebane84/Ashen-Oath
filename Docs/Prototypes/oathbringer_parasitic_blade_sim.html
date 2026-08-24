@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Oathbringer Parasitic Blade & Eldrin Whispers Simulator</title>
+    <!-- Traceability: BLADE-SPEC-083 | Builds 2836-2855 -->
+    <style>
+        :root {
+            --bg-primary: #06070a;
+            --bg-secondary: #0e1118;
+            --panel-bg: #151924;
+            --border-color: #262e42;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-red);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-red);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #030407;
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-red);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-red);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-red);
+        }
+
+        .btn-needle {
+            background: #065f46;
+            border-color: #10b981;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-needle:hover {
+            background: #047857;
+        }
+
+        .whisper-box {
+            background: #05070d;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fca5a5;
+            line-height: 1.4;
+            min-height: 56px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-red);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>OATHBRINGER PARASITIC BLADE & ELDRIN WHISPERS SIMULATOR</h1>
+                <p>Living Nightsteel Mass Scaling, Garnet Pommel Eye Tracking & Gloomwood Chemical Stabilization (BLADE-SPEC-083)</p>
+            </div>
+            <div class="badge">BUILD 2855</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="bladeCanvas" width="690" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Parasitic Corruption / Integration Debt:</span>
+                        <span class="control-val" id="corruptionDisplay">15%</span>
+                    </div>
+                    <input type="range" id="corruptionSlider" min="0" max="100" step="1" value="15">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Pommel Gaze Target:</span>
+                        <span class="control-val" id="targetDisplay" style="color: var(--accent-gold);">Garrett (Paranoid Suspicion)</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button class="btn" id="targetKaelenBtn">Kaelen (Guilt)</button>
+                        <button class="btn" id="targetThreatBtn">Enemy Threat</button>
+                        <button class="btn" id="targetGarrettBtn" style="border-color: var(--accent-gold);">Garrett (Pity)</button>
+                        <button class="btn" id="targetSerafinaBtn">Serafina (Drain)</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-needle" id="injectNeedleBtn">💉 INJECT GLOOMWOOD SAP NEEDLE (-12 Semitones)</button>
+
+                <div class="whisper-box" id="whisperBox">
+                    [Eldrin]: "I was the Order's brightest star... and this blade was my glorious cage. Listen to the hum, Kaelen."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="heavyCleaveBtn" style="flex: 1; color: var(--accent-red);">⚔️ PARASITIC CLEAVE (+75%)</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Blade Mass</div>
+                <div class="telemetry-val" id="massVal">71.2 kg</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Swing Play-Rate Drag</div>
+                <div class="telemetry-val" id="dragVal">0.92x</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Audio Pitch Offset</div>
+                <div class="telemetry-val" id="pitchVal" style="color: var(--accent-cyan);">0.0 ST</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense Trigger Res</div>
+                <div class="telemetry-val" id="hapticVal">0.31 (Firm)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Nightsteel Discordant Hum & -12 Semitone Chemical Cooling)
+        let audioCtx = null;
+        let humOsc = null;
+        let humGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                humOsc = audioCtx.createOscillator();
+                humGain = audioCtx.createGain();
+
+                humOsc.type = 'sawtooth';
+                humOsc.frequency.setValueAtTime(110, audioCtx.currentTime); // Low A hum
+                humGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+
+                humOsc.connect(humGain);
+                humGain.connect(audioCtx.destination);
+                humOsc.start();
+            }
+        }
+
+        function playGloomwoodChillingAudio() {
+            initAudio();
+            if (!audioCtx) return;
+
+            // Pitch drop by 12 semitones (110Hz -> 55Hz)
+            humOsc.frequency.exponentialRampToValueAtTime(55, audioCtx.currentTime + 0.4);
+            setTimeout(() => {
+                if (humOsc) humOsc.frequency.setValueAtTime(110, audioCtx.currentTime);
+            }, 8000);
+        }
+
+        // State Machine
+        let corruption = 0.15;
+        let bFrozen = false;
+        let freezeTimer = 0;
+        let currentTarget = "Garrett (Paranoid Suspicion)";
+
+        const corruptionSlider = document.getElementById('corruptionSlider');
+        const corruptionDisplay = document.getElementById('corruptionDisplay');
+        const targetDisplay = document.getElementById('targetDisplay');
+        const injectNeedleBtn = document.getElementById('injectNeedleBtn');
+        const heavyCleaveBtn = document.getElementById('heavyCleaveBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const whisperBox = document.getElementById('whisperBox');
+
+        function updateBladeState() {
+            corruption = parseFloat(corruptionSlider.value) / 100;
+            corruptionDisplay.innerText = Math.round(corruption * 100) + "%";
+
+            let mass = 45.0 + (175.0 * corruption);
+            if (bFrozen) mass = Math.max(45.0, mass - 80.0);
+
+            const playRate = (1.0 - (0.55 * (mass - 45.0) / 175.0)).toFixed(2) + "x";
+            const triggerRes = (0.20 + (0.75 * (mass - 45.0) / 175.0)).toFixed(2);
+
+            document.getElementById('massVal').innerText = mass.toFixed(1) + " kg";
+            document.getElementById('dragVal').innerText = playRate;
+            document.getElementById('hapticVal').innerText = triggerRes + " (Heavy)";
+            document.getElementById('pitchVal').innerText = bFrozen ? "-12.0 ST (Cold)" : "0.0 ST";
+
+            if (humGain && audioCtx) {
+                humGain.gain.setValueAtTime(bFrozen ? 0.01 : (0.02 + 0.15 * corruption), audioCtx.currentTime);
+            }
+
+            // Whispers
+            if (bFrozen) {
+                whisperBox.innerHTML = `<strong>[Gloomwood Sap]:</strong> *Chemical frost numbs Kaelen's forearm. The nightsteel parasite is frozen into silence.*`;
+            } else if (corruption >= 0.70) {
+                if (currentTarget.includes("Garrett")) {
+                    whisperBox.innerHTML = `<strong>[Nyx]:</strong> "He is calculating your expiration, Kaelen. A sentinel only watches what he intends to put down."`;
+                } else if (currentTarget.includes("Serafina")) {
+                    whisperBox.innerHTML = `<strong>[Eldrin]:</strong> "Every touch of her golden flame drinks your poison. You are killing her, boy."`;
+                } else {
+                    whisperBox.innerHTML = `<strong>[Nyx]:</strong> "Let go of the White Flame. Embrace the nightsteel—it is feather-light in the dark."`;
+                }
+            } else if (corruption >= 0.30) {
+                whisperBox.innerHTML = `<strong>[Eldrin]:</strong> "I was the Order's brightest star... and this blade was my glorious cage. Listen to the hum, Kaelen."`;
+            } else {
+                whisperBox.innerHTML = `<strong>[Oathbringer]:</strong> *A distant, cold hum vibrates through the nightsteel hilt.*`;
+            }
+        }
+
+        corruptionSlider.oninput = updateBladeState;
+
+        document.getElementById('targetKaelenBtn').onclick = () => { currentTarget = "Kaelen (Introspective Guilt)"; targetDisplay.innerText = currentTarget; updateBladeState(); };
+        document.getElementById('targetThreatBtn').onclick = () => { currentTarget = "Enemy Threat"; targetDisplay.innerText = currentTarget; updateBladeState(); };
+        document.getElementById('targetGarrettBtn').onclick = () => { currentTarget = "Garrett (Paranoid Suspicion)"; targetDisplay.innerText = currentTarget; updateBladeState(); };
+        document.getElementById('targetSerafinaBtn').onclick = () => { currentTarget = "Serafina (Transference Predation)"; targetDisplay.innerText = currentTarget; updateBladeState(); };
+
+        injectNeedleBtn.onclick = () => {
+            initAudio();
+            playGloomwoodChillingAudio();
+            bFrozen = true;
+            freezeTimer = 8;
+            updateBladeState();
+            injectNeedleBtn.innerText = "⏳ GLOOMWOOD FROZEN (8s)";
+            injectNeedleBtn.disabled = true;
+
+            const interval = setInterval(() => {
+                freezeTimer--;
+                if (freezeTimer <= 0) {
+                    clearInterval(interval);
+                    bFrozen = false;
+                    injectNeedleBtn.innerText = "💉 INJECT GLOOMWOOD SAP NEEDLE (-12 Semitones)";
+                    injectNeedleBtn.disabled = false;
+                    updateBladeState();
+                } else {
+                    injectNeedleBtn.innerText = `⏳ GLOOMWOOD FROZEN (${freezeTimer}s)`;
+                }
+            }, 1000);
+        };
+
+        heavyCleaveBtn.onclick = () => {
+            initAudio();
+            if (!bFrozen) {
+                corruptionSlider.value = Math.min(100, parseInt(corruptionSlider.value) + 15);
+                updateBladeState();
+            }
+            alert("⚔️ PARASITIC CLEAVE EXECUTED!\n\n• Damage: +75% Kinetic Overcharge\n• Integration Debt: +15%\n• Nightsteel Mass Increased\n• Eldrin Whispers Intensified");
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "OATHBRINGER_PARASITIC_BLADE_TELEMETRY",
+                corruption_percentage: Math.round(corruption * 100),
+                blade_mass_kg: document.getElementById('massVal').innerText,
+                swing_play_rate: document.getElementById('dragVal').innerText,
+                gloomwood_frozen: bFrozen,
+                pommel_target: currentTarget,
+                active_whisper: whisperBox.innerText
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering (Oathbringer & Garnet Pommel Eyes)
+        const canvas = document.getElementById('bladeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            // Draw Greatsword Blade
+            ctx.fillStyle = '#1e293b';
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 3;
+
+            // Blade profile
+            ctx.beginPath();
+            ctx.moveTo(cx - 28, cy + 120);
+            ctx.lineTo(cx - 22, cy - 140);
+            ctx.lineTo(cx, cy - 175); // Tip
+            ctx.lineTo(cx + 22, cy - 140);
+            ctx.lineTo(cx + 28, cy + 120);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Dark Nightsteel Veins
+            if (corruption > 0.10) {
+                ctx.strokeStyle = `rgba(239, 68, 68, ${corruption * 0.8})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(cx - 10, cy + 100);
+                ctx.lineTo(cx, cy);
+                ctx.lineTo(cx + 12, cy - 80);
+                ctx.stroke();
+            }
+
+            // Crossguard
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(cx - 65, cy + 120, 130, 16);
+            ctx.strokeRect(cx - 65, cy + 120, 130, 16);
+
+            // Grip
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(cx - 10, cy + 136, 20, 50);
+
+            // Wolf Pommel Head
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(cx, cy + 195, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Dual Garnet Gemstone Eyes
+            const eyeGlow = bFrozen ? 0.15 : (0.2 + 0.8 * corruption);
+            const eyeColor = bFrozen ? '#38bdf8' : `rgba(239, 68, 68, ${eyeGlow})`;
+
+            ctx.fillStyle = eyeColor;
+            ctx.shadowColor = eyeColor;
+            ctx.shadowBlur = 12 * eyeGlow;
+
+            ctx.beginPath(); ctx.arc(cx - 7, cy + 192, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(cx + 7, cy + 192, 4, 0, Math.PI * 2); ctx.fill();
+
+            ctx.shadowBlur = 0; // Reset
+
+            // Weeping Nyx Bile
+            if (corruption >= 0.70 && !bFrozen) {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(cx - 2, cy + 213, 4, 15);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateBladeState();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

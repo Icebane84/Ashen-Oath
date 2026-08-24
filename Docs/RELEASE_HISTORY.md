@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2855: Master Batch #142 — The Oathbringer Parasitic Blade & Eldrin Whispers (BLADE-SPEC-083)
+**Domain:** Combat / Narrative / Audio / UI / World / Core / Orchestration / AI / QA  
+**Status:** 2,855 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2836 | `AshenParasiticBladeTypes.h` | `AshenParasiticBladeTypes` — Enums (3), Structs (1), Multicast Delegates (4) | Combat |
+| 2837 | `AshenOathbringerParasiteSubsystem.h/.cpp` | `UAshenOathbringerParasiteSubsystem` — Subsystem managing parasitic bond & whispers | Combat |
+| 2838 | `AshenParasiticBladeMassEvaluator.h/.cpp` | `UAshenParasiticBladeMassEvaluator` — Evaluates dynamic mass (45-220kg) & play rate | Combat |
+| 2839 | `AshenPommelGazeTrackingEvaluator.h/.cpp` | `UAshenPommelGazeTrackingEvaluator` — Evaluates garnet pommel eye rotation & weeping bile | Combat |
+| 2840 | `AshenGloomwoodStabilizationDirectorComponent.h/.cpp` | `UAshenGloomwoodStabilizationDirectorComponent` — Coordinates needle injection & pitch shift | Combat |
+| 2841 | `AshenParasiticCleaveOverchargeGASAbility.h/.cpp` | `UAshenParasiticCleaveOverchargeGASAbility` — Heavy cleave (+75% dmg, +0.15 debt) | Combat |
+| 2842 | `AshenGloomwoodNeedleStabilizationGASAbility.h/.cpp` | `UAshenGloomwoodNeedleStabilizationGASAbility` — Freezes corruption for 8s (-12 semitones) | Combat |
+| 2843 | `AshenEldrinWhisperDisruptionGASAbility.h/.cpp` | `UAshenEldrinWhisperDisruptionGASAbility` — Eldrin's soul scream stuns 800uu radius | Combat |
+| 2844 | `AshenNightsteelResonancePulseGASAbility.h/.cpp` | `UAshenNightsteelResonancePulseGASAbility` — Radial 360-degree nightsteel shockwave | Combat |
+| 2845 | `AshenParasiticBloodDrainDebuffGASAbility.h/.cpp` | `UAshenParasiticBloodDrainDebuffGASAbility` — 15 Dmg/s health drain over 70% corruption | Combat |
+| 2846 | `UBTService_AshenGarrettStabilizerTactics.h/.cpp` | `UBTService_AshenGarrettStabilizerTactics` — AI service for Garrett needle flanking | AI |
+| 2847 | `AshenUserWidget_OathbringerParasiteHUD.h/.cpp` | `UAshenUserWidget_OathbringerParasiteHUD` — UMG dynamic mass gauge & eye glow | UI |
+| 2848 | `AshenOathbringerAudioSubsystem.h/.cpp` | `UAshenOathbringerAudioSubsystem` — MetaSounds nightsteel hum & -12 ST pitch drop | Audio |
+| 2849 | `AshenParasiticBladePostProcessAdapter.h/.cpp` | `UAshenParasiticBladePostProcessAdapter` — Post-process vein vignette & frost chill | Combat |
+| 2850 | `AAshenOathbringerBladeWorldActor.h/.cpp` | `AAshenOathbringerBladeWorldActor` — Spatial greatsword actor with socketed garnet eyes | World |
+| 2851 | `AshenParasiticBladeSaveGameAdapter.h/.cpp` | `UAshenParasiticBladeSaveGameAdapter` — Serializes blade corruption & needle inventory | Core |
+| 2852 | `AshenEldrinDialogueBridge.h/.cpp` | `UAshenEldrinDialogueBridge` — Contextual Eldrin and Nyx controller speaker whispers | Narrative |
+| 2853 | `AshenParasiticBladeHapticBridge.h/.cpp` | `UAshenParasiticBladeHapticBridge` — Maps DualSense trigger mass drag (0.20-0.95) & pulse | Combat |
+| 2854 | `AshenParasiticBladeMasterBridge.h/.cpp` | `UAshenParasiticBladeMasterBridge` — Master bridge orchestrating blade physics & rest | Orchestration |
+| 2855 | `AshenMasterBatch142AutomationTest.cpp` | `FAshenMasterBatch142AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2835: Master Batch #141 — The Grand Campaign Forensic Campfire Journal (JOURNAL-SPEC-082)
 **Domain:** Narrative / Scenarios / Combat / AI / Audio / UI / World / Core / Orchestration / QA  
 **Status:** 2,835 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

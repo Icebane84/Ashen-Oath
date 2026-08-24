@@ -1,6 +1,6 @@
 # Ashen Oath — Architecture Map & Vertical Slices
-**Status:** Clean Production Architecture | **2,835 Builds Clean** (0 Errors, 0 Warnings)
-**Unreal Engine Version:** 5.8 | **Master Milestone:** 2835 (Master Batches #1–#141)
+**Status:** Clean Production Architecture | **2,855 Builds Clean** (0 Errors, 0 Warnings)
+**Unreal Engine Version:** 5.8 | **Master Milestone:** 2855 (Master Batches #1–#142)
 
 ---
 
@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Master Batch #142 (Builds 2836–2855)**: The Oathbringer Parasitic Blade & Eldrin Whispers (BLADE-SPEC-083) (100% Pure Gameplay Density)
 - **Master Batch #141 (Builds 2816–2835)**: The Grand Campaign Forensic Campfire Journal (JOURNAL-SPEC-082) (100% Pure Gameplay Density)
 - **Master Batch #140 (Builds 2796–2815)**: Scenario 10: The Sovereign Convergence (SCENARIO-SPEC-081) (100% Pure Gameplay Density — 10-Scenario Matrix 100% Complete)
 - **Master Batch #139 (Builds 2776–2795)**: Scenario 9: The Whispering Citadel (SCENARIO-SPEC-080) (100% Pure Gameplay Density)
