@@ -1,0 +1,38 @@
+// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Abilities/GameplayAbility.h"
+#include "Audio/AshenQuartzAudioTypes.h"
+#include "AshenGarrettCaltropAudioGASAbility.generated.h"
+
+/**
+ * UAshenGarrettCaltropAudioGASAbility
+ * 
+ * Garrett deploys Burning Steel Caltrops, temporarily engaging an audio High-Pass Filter cutting Kaelen's bass sickness.
+ */
+UCLASS()
+class ASHENOATH_API UAshenGarrettCaltropAudioGASAbility : public UGameplayAbility
+{
+	GENERATED_BODY()
+
+public:
+	UAshenGarrettCaltropAudioGASAbility();
+
+	virtual void ActivateAbility(
+		const FGameplayAbilitySpecHandle Handle,
+		const FGameplayAbilityActorInfo* ActorInfo,
+		const FGameplayAbilityActivationInfo ActivationInfo,
+		const FGameplayEventData* TriggerEventData) override;
+
+	virtual void EndAbility(
+		const FGameplayAbilitySpecHandle Handle,
+		const FGameplayAbilityActorInfo* ActorInfo,
+		const FGameplayAbilityActivationInfo ActivationInfo,
+		bool bReplicateEndAbility,
+		bool bWasCancelled) override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ashen|Combat|Audio")
+	float CaltropFilterDurationSeconds = 4.0f;
+};
