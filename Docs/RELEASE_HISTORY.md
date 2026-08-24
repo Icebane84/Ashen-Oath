@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2795: Master Batch #139 — Scenario 9: The Whispering Citadel (SCENARIO-SPEC-080)
+**Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,795 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2776 | `AshenScenario9Types.h` | `AshenScenario9Types` — Enums (3), Structs (1), Multicast Delegates (4) | Scenarios |
+| 2777 | `AshenScenario9MissionSubsystem.h/.cpp` | `UAshenScenario9MissionSubsystem` — Subsystem managing archipelago gravity & wind | Scenarios |
+| 2778 | `AshenVoidGravityPhysicsEvaluator.h/.cpp` | `UAshenVoidGravityPhysicsEvaluator` — Evaluates low-g jump (1.0x-3.0x) & downward slam (2.5x) | Scenarios |
+| 2779 | `AshenWindShearDriftEvaluator.h/.cpp` | `UAshenWindShearDriftEvaluator` — Computes lateral wind drift (15-45 m/s) & anchor stability | Scenarios |
+| 2780 | `AshenTelekineticBridgeDirectorComponent.h/.cpp` | `UAshenTelekineticBridgeDirectorComponent` — Component managing 10s light bridge decay & chimes | Scenarios |
+| 2781 | `AshenSerafinaTelekineticBridgeGASAbility.h/.cpp` | `UAshenSerafinaTelekineticBridgeGASAbility` — Serafina manifests 1500uu resonant light bridge | Combat |
+| 2782 | `AshenGarrettVoidAnchorGASAbility.h/.cpp` | `UAshenGarrettVoidAnchorGASAbility` — Garrett fires bedrock anchor piton neutralizing drift | Combat |
+| 2783 | `AshenGravitonCleaveGASAbility.h/.cpp` | `UAshenGravitonCleaveGASAbility` — Kaelen downward slam crushing automatons with 2.5x force | Combat |
+| 2784 | `AshenWindShearDestabilizeDebuffGASAbility.h/.cpp` | `UAshenWindShearDestabilizeDebuffGASAbility` — Environmental debuff imposing 75% aim destabilization | Combat |
+| 2785 | `AshenZeroGOrbitalLungeGASAbility.h/.cpp` | `UAshenZeroGOrbitalLungeGASAbility` — Melee lunge traversing island chasms with 2.5x reach | Combat |
+| 2786 | `UBTService_AshenVoidFlightTactics.h/.cpp` | `UBTService_AshenVoidFlightTactics` — AI service for floating automatons in low-g currents | AI |
+| 2787 | `AshenUserWidget_Scenario9CitadelHUD.h/.cpp` | `UAshenUserWidget_Scenario9CitadelHUD` — UMG widget displaying gravity scale & wind anemometer | UI |
+| 2788 | `AshenScenario9AudioSubsystem.h/.cpp` | `UAshenScenario9AudioSubsystem` — MetaSounds gale howls (180Hz-950Hz) & 528Hz bridge chimes | Audio |
+| 2789 | `AshenVoidAtmospherePostProcessAdapter.h/.cpp` | `UAshenVoidAtmospherePostProcessAdapter` — Post-process celestial void bloom & wind streaks | Scenarios |
+| 2790 | `AAshenFloatingArchipelagoIslandActor.h/.cpp` | `AAshenFloatingArchipelagoIslandActor` — Spatial hovering island actor at 8500uu altitude | World |
+| 2791 | `AshenScenario9SaveGameAdapter.h/.cpp` | `UAshenScenario9SaveGameAdapter` — Serializes Scenario 9 completion state & highest altitude | Core |
+| 2792 | `AshenScenario9DialogueBridge.h/.cpp` | `UAshenScenario9DialogueBridge` — Contextual companion barks on vertigo & telekinetic bridges | Narrative |
+| 2793 | `AshenScenario9HapticBridge.h/.cpp` | `UAshenScenario9HapticBridge` — Maps zero-g featherweight triggers, wind rumbles & 528Hz chimes | Scenarios |
+| 2794 | `AshenScenario9MasterBridge.h/.cpp` | `UAshenScenario9MasterBridge` — Master bridge orchestrating gravity, wind physics & bridges | Orchestration |
+| 2795 | `AshenMasterBatch139AutomationTest.cpp` | `FAshenMasterBatch139AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2775: Master Batch #138 — Scenario 8: The Searing Abyss (SCENARIO-SPEC-079)
 **Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,775 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

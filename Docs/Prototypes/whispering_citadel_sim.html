@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Scenario 9: The Whispering Citadel Simulator</title>
+    <!-- Traceability: SCENARIO-SPEC-080 | Builds 2776-2795 -->
+    <style>
+        :root {
+            --bg-primary: #05060c;
+            --bg-secondary: #0c0f1d;
+            --panel-bg: #12182e;
+            --border-color: #232f54;
+            --accent-cyan: #38bdf8;
+            --accent-purple: #c084fc;
+            --accent-amber: #fbbf24;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        .grav-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .grav-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+
+        .grav-btn:hover {
+            border-color: var(--accent-purple);
+            color: var(--text-main);
+        }
+
+        .grav-btn.active {
+            background: var(--panel-bg);
+            border-color: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(192, 132, 252, 0.35);
+        }
+
+        .grav-title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .grav-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #03040a;
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-purple);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-purple);
+        }
+
+        .btn-bridge {
+            background: #7e22ce;
+            border-color: #c084fc;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(192, 132, 252, 0.4);
+        }
+
+        .btn-bridge:hover {
+            background: #9333ea;
+        }
+
+        .dialogue-box {
+            background: #090c16;
+            border: 1px solid #232f54;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #f8fafc;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-purple);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SCENARIO 9: THE WHISPERING CITADEL SIMULATOR</h1>
+                <p>Floating Archipelagos, Void Gravity Manipulation & Telekinetic Bridging (SCENARIO-SPEC-080)</p>
+            </div>
+            <div class="badge">BUILD 2795</div>
+        </header>
+
+        <div class="grav-bar">
+            <div class="grav-btn" id="tierStdBtn">
+                <div class="grav-title" style="color: var(--accent-green);">🌍 STANDARD (1.00g)</div>
+                <div class="grav-desc">1.0x Jump Arc | Normal Swing</div>
+            </div>
+            <div class="grav-btn active" id="tierLowBtn">
+                <div class="grav-title" style="color: var(--accent-purple);">🌌 LOW VOID (0.35g)</div>
+                <div class="grav-desc">2.1x Jump Arc | Extended Hang</div>
+            </div>
+            <div class="grav-btn" id="tierZeroBtn">
+                <div class="grav-title" style="color: #38bdf8;">✨ ZERO-G DRIFT (0.10g)</div>
+                <div class="grav-desc">3.0x Jump Arc | 2.5x Slam Force</div>
+            </div>
+            <div class="grav-btn" id="tierHyperBtn">
+                <div class="grav-title" style="color: var(--accent-red);">💥 HYPER WELL (1.50g)</div>
+                <div class="grav-desc">0.67x Jump Arc | Heavy Drag</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="670" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Wind Shear Gale Speed (m/s):</span>
+                        <span class="control-val" id="windDisplay">15 m/s</span>
+                    </div>
+                    <input type="range" id="windSlider" min="5" max="50" step="1" value="15">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Archipelago Altitude:</span>
+                        <span class="control-val" id="altDisplay">8,500 uu</span>
+                    </div>
+                    <input type="range" id="altSlider" min="5000" max="15000" step="500" value="8500">
+                </div>
+
+                <button class="btn btn-bridge" id="manifestBridgeBtn">✨ MANIFEST TELEKINETIC LIGHT BRIDGE (528Hz)</button>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Serafina]: "The void gravity feels weightless, but the fall is infinite. Stay focused."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="voidAnchorBtn" style="flex: 1; color: var(--accent-cyan);">⚓ VOID ANCHOR PITON</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Jump Arc Multiplier</div>
+                <div class="telemetry-val" id="jumpMultVal">2.1x</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Wind Drift Velocity</div>
+                <div class="telemetry-val" id="windDriftVal">450 uu/s</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Bridge Stability</div>
+                <div class="telemetry-val" id="bridgeStabVal" style="color: var(--accent-purple);">100%</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">DualSense Trigger Tension</div>
+                <div class="telemetry-val" id="triggerTensionVal">0.16</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playBridgeChime() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(528, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1056, audioCtx.currentTime + 1.2);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.4);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.5);
+        }
+
+        function playGaleHowl() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(380, audioCtx.currentTime + 0.8);
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.9);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.95);
+        }
+
+        // State Machine
+        let gravityScale = 0.35;
+        let windSpeed = 15;
+        let altitude = 8500;
+        let bAnchored = false;
+        let bridgeStability = 1.0;
+        let bBridgeActive = true;
+
+        const tierStdBtn = document.getElementById('tierStdBtn');
+        const tierLowBtn = document.getElementById('tierLowBtn');
+        const tierZeroBtn = document.getElementById('tierZeroBtn');
+        const tierHyperBtn = document.getElementById('tierHyperBtn');
+        const windSlider = document.getElementById('windSlider');
+        const windDisplay = document.getElementById('windDisplay');
+        const altSlider = document.getElementById('altSlider');
+        const altDisplay = document.getElementById('altDisplay');
+        const manifestBridgeBtn = document.getElementById('manifestBridgeBtn');
+        const voidAnchorBtn = document.getElementById('voidAnchorBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+
+        function setGravityTier(g, btn) {
+            gravityScale = g;
+            [tierStdBtn, tierLowBtn, tierZeroBtn, tierHyperBtn].forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            windSpeed = parseFloat(windSlider.value);
+            altitude = parseFloat(altSlider.value);
+
+            windDisplay.innerText = windSpeed + " m/s";
+            altDisplay.innerText = altitude.toLocaleString() + " uu";
+
+            let jumpMult = 1.0;
+            if (gravityScale <= 1.0) {
+                jumpMult = 1.0 + ((1.0 - gravityScale) / 0.90) * 2.0;
+            } else {
+                jumpMult = Math.max(0.5, 1.0 / gravityScale);
+            }
+            document.getElementById('jumpMultVal').innerText = jumpMult.toFixed(1) + "x";
+
+            const driftVel = bAnchored ? 0 : Math.round(windSpeed * 100 * 0.30);
+            document.getElementById('windDriftVal').innerText = driftVel + " uu/s";
+
+            document.getElementById('bridgeStabVal').innerText = Math.round(bridgeStability * 100) + "%";
+
+            const triggerTension = Math.max(0.05, Math.min(0.90, (gravityScale - 0.10) / 1.40 * 0.90)).toFixed(2);
+            document.getElementById('triggerTensionVal').innerText = triggerTension;
+
+            if (bAnchored) {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Anchor piton deployed! We're locked to the bedrock—let the gale blow!"`;
+            } else if (windSpeed >= 35) {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Incoming violent gale shear! Brace the anchors, don't get swept into the void!"`;
+            } else if (windSpeed >= 25) {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Wind is picking up from the north... time your leaps between gusts!"`;
+            } else if (!bBridgeActive) {
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "The light lattice collapsed! We need a new bridge to cross!"`;
+            } else {
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "The void gravity feels weightless, but the fall is infinite. Stay focused."`;
+            }
+        }
+
+        tierStdBtn.onclick = () => setGravityTier(1.0, tierStdBtn);
+        tierLowBtn.onclick = () => setGravityTier(0.35, tierLowBtn);
+        tierZeroBtn.onclick = () => setGravityTier(0.10, tierZeroBtn);
+        tierHyperBtn.onclick = () => setGravityTier(1.50, tierHyperBtn);
+
+        windSlider.oninput = () => { updateSimulation(); if (windSpeed > 30) playGaleHowl(); };
+        altSlider.oninput = updateSimulation;
+
+        manifestBridgeBtn.onclick = () => {
+            bridgeStability = 1.0;
+            bBridgeActive = true;
+            playBridgeChime();
+            updateSimulation();
+        };
+
+        voidAnchorBtn.onclick = () => {
+            bAnchored = !bAnchored;
+            voidAnchorBtn.style.color = bAnchored ? "var(--accent-green)" : "var(--accent-cyan)";
+            updateSimulation();
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SCENARIO_9_WHISPERING_CITADEL_STATE",
+                gravity_scale: gravityScale,
+                wind_speed_mps: windSpeed,
+                archipelago_altitude_uu: altitude,
+                is_anchored: bAnchored,
+                bridge_stability_percentage: Math.round(bridgeStability * 100)
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let leftIsland = { x: 120, y: 220, w: 160, h: 100 };
+        let rightIsland = { x: 430, y: 190, w: 180, h: 120 };
+        let partyPos = { x: 180, y: 210 };
+        let jumpPhase = 0;
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Floating Islands
+            ctx.fillStyle = '#1e293b';
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+
+            // Left Island
+            ctx.beginPath();
+            ctx.roundRect(leftIsland.x, leftIsland.y, leftIsland.w, leftIsland.h, [8, 8, 30, 30]);
+            ctx.fill();
+            ctx.stroke();
+
+            // Right Island
+            ctx.beginPath();
+            ctx.roundRect(rightIsland.x, rightIsland.y, rightIsland.w, rightIsland.h, [8, 8, 40, 40]);
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw Telekinetic Light Bridge
+            if (bBridgeActive && bridgeStability > 0) {
+                ctx.strokeStyle = `rgba(192, 132, 252, ${bridgeStability * 0.85})`;
+                ctx.lineWidth = 6;
+                ctx.shadowColor = '#c084fc';
+                ctx.shadowBlur = 14;
+                ctx.beginPath();
+                ctx.moveTo(leftIsland.x + leftIsland.w, leftIsland.y + 10);
+                ctx.lineTo(rightIsland.x, rightIsland.y + 10);
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                // Bridge grid lines
+                ctx.strokeStyle = `rgba(255, 255, 255, ${bridgeStability * 0.6})`;
+                ctx.lineWidth = 1;
+                for (let x = leftIsland.x + leftIsland.w + 15; x < rightIsland.x; x += 25) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, leftIsland.y + 5);
+                    ctx.lineTo(x, leftIsland.y + 15);
+                    ctx.stroke();
+                }
+            }
+
+            // Wind particle streaks
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+            ctx.lineWidth = 1;
+            const streakCount = Math.round(windSpeed / 5);
+            for (let i = 0; i < streakCount; i++) {
+                const sy = 50 + (i * 35) + (Math.sin(Date.now() * 0.003 + i) * 10);
+                const sx = (Date.now() * 0.3 * (windSpeed / 15) + (i * 120)) % canvas.width;
+                ctx.beginPath();
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(sx + 35, sy);
+                ctx.stroke();
+            }
+
+            // Draw Party
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(partyPos.x, partyPos.y, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px monospace';
+            ctx.fillText("Kaelen", partyPos.x - 18, partyPos.y - 16);
+
+            ctx.fillStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.arc(partyPos.x - 25, partyPos.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#c084fc';
+            ctx.beginPath();
+            ctx.arc(partyPos.x - 48, partyPos.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            requestAnimationFrame(animate);
+        }
+
+        updateSimulation();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

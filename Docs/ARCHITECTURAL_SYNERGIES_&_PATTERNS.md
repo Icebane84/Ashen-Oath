@@ -43,10 +43,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-021`** | **Chaos Geometry Fracture Navmesh Cutting, Acoustic Impulse Groan & Low-Frequency Collapse Rumble Invariant** | `CHAOS-SPEC-077` / World / Chaos / Audio / Haptics | Dynamic Recast navmesh obstacle cutting ($150\text{uu} \leftrightarrow 800\text{uu}$), material impulse acoustic resonance ($120\text{ Hz} \leftrightarrow 4500\text{ Hz}$), rubble sound occlusion ($20000\text{ Hz} \to 500\text{ Hz}$), and $30\text{ Hz}$ collapse rumble haptics. |
 | **`SYN-022`** | **Volcanic Caldera Thermodynamics, Magma Surge Hazard Cycles & Molten Blade Tempering Invariant** | `SCENARIO-SPEC-078` / Scenarios / Combat / Audio / UI / Haptics | Ambient caldera temperature decay ($+45^\circ\text{C} \leftrightarrow +95^\circ\text{C}$), Heat Exhaustion stamina scaling ($1.00\times \to 2.00\times$), 15-second magma surge hazard cycles ($150\text{ Dmg/s}$), molten weapon tempering ($800^\circ\text{C}$, $+40\%$ fire), and cryo mist cooling sanctuaries ($-0.05/\text{s}$). |
 | **`SYN-023`** | **Subterranean Darkness Blindness, Torch Fuel Endurance & Acoustic Echolocation Sonar Invariant** | `SCENARIO-SPEC-079` / Scenarios / Combat / Audio / UI / Haptics | Subterranean darkness blindness, torch fuel decay ($100\text{uu} \leftrightarrow 800\text{uu}$), darkness attack miss penalty ($60\%$), acoustic echolocation pulse propagation ($350\text{uu} \leftrightarrow 1800\text{uu}$), White Flame radiant flares, and $40\text{ Hz}$ lurker heartbeat haptics. |
+| **`SYN-024`** | **Void Gravity Manipulation, High-Altitude Wind Shear Drift & Telekinetic Light Bridge Invariant** | `SCENARIO-SPEC-080` / Scenarios / Combat / Audio / UI / Haptics | Void gravity jump arc scaling ($1.00\times \to 3.00\times$), downward kinetic slam force ($2.50\times$), lateral wind shear drift ($15\text{ m/s} \leftrightarrow 45\text{ m/s}$), Garrett anchor pitons, and $528\text{ Hz}$ telekinetic light bridge manifestation. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-024`: Void Gravity Manipulation, High-Altitude Wind Shear Drift & Telekinetic Light Bridge Invariant
+
+* **Target Subsystems:** `UAshenScenario9MissionSubsystem`, `UAshenVoidGravityPhysicsEvaluator`, `UAshenWindShearDriftEvaluator`, `UAshenTelekineticBridgeDirectorComponent`, `UAshenScenario9HapticBridge`
+* **Related Specifications:** [`SCENARIO-SPEC-080`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SCENARIO-SPEC-080%20%28SCENARIO%209%20%E2%80%94%20THE%20WHISPERING%20CITADEL%20%28FLOATING%20ARCHIPELAGOS%29%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{JumpDistanceMultiplier}(g) = \begin{cases} 1.0 + \left(\frac{1.0 - g}{0.90}\right) \cdot 2.0, & \text{if } g \le 1.0\text{g} \quad [1.00\times \longleftrightarrow 3.00\times] \\ \max\left(0.5, \frac{1.0}{g}\right), & \text{otherwise} \end{cases}$$
+$$\text{DownwardKineticMultiplier}(g) = \begin{cases} 1.0 + \left(\frac{1.0 - g}{0.90}\right) \cdot 1.5, & \text{if } g < 1.0\text{g} \quad [1.00\times \longleftrightarrow 2.50\times] \\ 1.0, & \text{otherwise} \end{cases}$$
+$$\vec{v}_{\text{drift}}(v_{\text{wind}}, \vec{D}_{\text{wind}}, \text{bAnchored}) = \begin{cases} \vec{0}, & \text{if } \text{bAnchored} \\ \vec{D}_{\text{wind}} \cdot (v_{\text{wind}} \cdot 100\text{uu/s} \cdot 0.30), & \text{otherwise} \end{cases}$$
+$$\text{DualSenseTriggerTension}(g) = \text{clamp}\left(\frac{g - 0.10}{1.40} \cdot 0.90, 0.05, 0.90\right) \quad [\text{Featherweight Trigger}]$$
+
+#### 💡 Architectural Insight & Impact:
+* **Verticality and Low-G Traversal:** The floating citadel leverages low gravity to transform massive chasm gaps into viable traversal leaps while scaling downward kinetic momentum so players can crush airborne automatons with immense impact energy.
+* **Wind Shear and Tethering Defense:** Gale shear gusts convert mid-air flight into a high-stakes balance check, making Garrett's bedrock anchor pitons essential for stabilizing the party on floating island perimeters.
+
+---
 
 ---
 
