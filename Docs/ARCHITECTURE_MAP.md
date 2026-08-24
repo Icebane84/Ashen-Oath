@@ -1,6 +1,6 @@
 # Ashen Oath — Architecture Map & Vertical Slices
-**Status:** Clean Production Architecture | **2,735 Builds Clean** (0 Errors, 0 Warnings)
-**Unreal Engine Version:** 5.8 | **Master Milestone:** 2735 (Master Batches #1–#136)
+**Status:** Clean Production Architecture | **2,755 Builds Clean** (0 Errors, 0 Warnings)
+**Unreal Engine Version:** 5.8 | **Master Milestone:** 2755 (Master Batches #1–#137)
 
 ---
 
@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Master Batch #137 (Builds 2736–2755)**: Scenario 7: The Ashen Crucible (SCENARIO-SPEC-078) (100% Pure Gameplay Density)
 - **Master Batch #136 (Builds 2716–2735)**: Chaos Spatial Audio & Dynamic Navmesh Destruction (CHAOS-SPEC-077) (100% Pure Gameplay Density)
 - **Master Batch #135 (Builds 2696–2715)**: Scenario 6: The Sanctified Hearth Resolution (SCENARIO-SPEC-076) (100% Pure Gameplay Density)
 - **Master Batch #134 (Builds 2676–2695)**: The Tripartite Companion Cognitive Loop & Somatic Attunement Engine (COMPANION-SPEC-075) (100% Pure Gameplay Density)

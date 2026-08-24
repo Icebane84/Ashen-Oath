@@ -41,10 +41,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-019`** | **Tripartite Solfeggio Harmonic Attunement, Dynamic EQS Flank Angles & Somatic Silence Contract Invariant** | `COMPANION-SPEC-075` / Companions / AI / Audio / Haptics | 4-Mode cognitive loop (Combat, Contemplative, Trauma, Campfire), EQS dynamic flank angles ($45^\circ \leftrightarrow 135^\circ$), Solfeggio triads ($396\text{ Hz} / 528\text{ Hz} / 639\text{ Hz}$), and $3.0\times$ synchronized finisher. |
 | **`SYN-020`** | **Blizzard Thermodynamics, Companion Warming Radius & Hearth Sanctuary Expansion Invariant** | `SCENARIO-SPEC-076` / Scenarios / Combat / Audio / UI / Haptics | Sub-zero blizzard temperature decay ($-5^\circ\text{C} \leftrightarrow -35^\circ\text{C}$), somatic frostbite speed slow ($1.00\times \to 0.40\times$), companion warming proximity ($350\text{uu}$), and ancient Hearth Brazier sanctuary expansion ($500\text{uu} \leftrightarrow 2500\text{uu}$). |
 | **`SYN-021`** | **Chaos Geometry Fracture Navmesh Cutting, Acoustic Impulse Groan & Low-Frequency Collapse Rumble Invariant** | `CHAOS-SPEC-077` / World / Chaos / Audio / Haptics | Dynamic Recast navmesh obstacle cutting ($150\text{uu} \leftrightarrow 800\text{uu}$), material impulse acoustic resonance ($120\text{ Hz} \leftrightarrow 4500\text{ Hz}$), rubble sound occlusion ($20000\text{ Hz} \to 500\text{ Hz}$), and $30\text{ Hz}$ collapse rumble haptics. |
+| **`SYN-022`** | **Volcanic Caldera Thermodynamics, Magma Surge Hazard Cycles & Molten Blade Tempering Invariant** | `SCENARIO-SPEC-078` / Scenarios / Combat / Audio / UI / Haptics | Ambient caldera temperature decay ($+45^\circ\text{C} \leftrightarrow +95^\circ\text{C}$), Heat Exhaustion stamina scaling ($1.00\times \to 2.00\times$), 15-second magma surge hazard cycles ($150\text{ Dmg/s}$), molten weapon tempering ($800^\circ\text{C}$, $+40\%$ fire), and cryo mist cooling sanctuaries ($-0.05/\text{s}$). |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-022`: Volcanic Caldera Thermodynamics, Magma Surge Hazard Cycles & Molten Blade Tempering Invariant
+
+* **Target Subsystems:** `UAshenScenario7MissionSubsystem`, `UAshenCalderaThermodynamicsEvaluator`, `UAshenMoltenTemperingEvaluator`, `UAshenMagmaSurgeHazardDirectorComponent`, `UAshenScenario7HapticBridge`
+* **Related Specifications:** [`SCENARIO-SPEC-078`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SCENARIO-SPEC-078%20%28SCENARIO%207%20%E2%80%94%20THE%20ASHEN%20CRUCIBLE%20%28VOLCANIC%20CALDERA%29%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\Delta\text{HeatExhaustion}(T_{\text{ambient}}, \text{Mist}) = \begin{cases} -0.05/\text{s}, & \text{if inside Cryo Mist Oasis (Dist} \le 300\text{uu}) \\ +\frac{T_{\text{ambient}} - 35^\circ\text{C}}{400}/\text{s}, & \text{otherwise} \end{cases}$$
+$$\text{StaminaDrainMultiplier}(\text{Heat}) = 1.0 + 1.0 \cdot \text{clamp}(\text{Heat}, 0.0, 1.0) \quad [1.00\times \longleftrightarrow 2.00\times]$$
+$$\text{FireBonus}(T_{\text{blade}}) = \text{clamp}\left(\frac{T_{\text{blade}} - 100^\circ\text{C}}{700^\circ\text{C}}, 0.0, 1.0\right) \cdot 0.40 \quad [0\% \longleftrightarrow +40\%]$$
+$$\text{ThermalPulse90Hz}(\text{Heat}, T_{\text{blade}}) = 0.70 \cdot \text{Heat} + 0.30 \cdot \text{clamp}\left(\frac{T_{\text{blade}} - 100}{700}, 0.0, 1.0\right) \quad [90\text{ Hz Motor}]$$
+
+#### 💡 Architectural Insight & Impact:
+* **Dynamic Environmental Thermal Pressure:** The volcanic caldera converts physical space into an active resource burn—lingering in the open rapidly doubles stamina costs and inflicts thermal damage, elevating Garrett's alchemical cryo mist from utility to a life-or-death tactical retreat sanctuary.
+* **Risk-Reward Molten Weapon Tempering:** Players must actively navigate hazard zones and plunge greatswords into lethal magma fissures to supercharge weapon strikes with $+40\%$ fire damage before blade stability decays.
+
+---
 
 ---
 

@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2755: Master Batch #137 — Scenario 7: The Ashen Crucible (SCENARIO-SPEC-078)
+**Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,755 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2736 | `AshenScenario7Types.h` | `AshenScenario7Types` — Enums (3), Structs (1), Multicast Delegates (4) | Scenarios |
+| 2737 | `AshenScenario7MissionSubsystem.h/.cpp` | `UAshenScenario7MissionSubsystem` — Subsystem managing quest flow & blade tempering | Scenarios |
+| 2738 | `AshenCalderaThermodynamicsEvaluator.h/.cpp` | `UAshenCalderaThermodynamicsEvaluator` — Evaluates heat exhaustion rate & stamina drain (1.0x-2.0x) | Scenarios |
+| 2739 | `AshenMoltenTemperingEvaluator.h/.cpp` | `UAshenMoltenTemperingEvaluator` — Computes blade heat (20°C-800°C) & fire damage bonus (+40%) | Scenarios |
+| 2740 | `AshenMagmaSurgeHazardDirectorComponent.h/.cpp` | `UAshenMagmaSurgeHazardDirectorComponent` — Coordinates 15-second magma eruption cycles | Scenarios |
+| 2741 | `AshenMoltenWeaponTemperingGASAbility.h/.cpp` | `UAshenMoltenWeaponTemperingGASAbility` — Kaelen tempers blade in magma vent (+40% fire dmg) | Combat |
+| 2742 | `AshenGarrettCryoMistTrapGASAbility.h/.cpp` | `UAshenGarrettCryoMistTrapGASAbility` — Garrett drops cryo mist trap (300uu) reversing heat | Combat |
+| 2743 | `AshenSerafinaObsidianBarrierGASAbility.h/.cpp` | `UAshenSerafinaObsidianBarrierGASAbility` — Serafina conjures obsidian wall deflecting lava | Combat |
+| 2744 | `AshenHeatExhaustionDebuffGASAbility.h/.cpp` | `UAshenHeatExhaustionDebuffGASAbility` — Somatic debuff increasing stamina drain up to 2.0x | Combat |
+| 2745 | `AshenMagmaSurgeEruptionGASAbility.h/.cpp` | `UAshenMagmaSurgeEruptionGASAbility` — Environmental hazard dealing 150 Heat Dmg/s | Combat |
+| 2746 | `UBTService_AshenMagmaHazardAvoidance.h/.cpp` | `UBTService_AshenMagmaHazardAvoidance` — AI service directing companions away from magma fissures | AI |
+| 2747 | `AshenUserWidget_Scenario7CrucibleHUD.h/.cpp` | `UAshenUserWidget_Scenario7CrucibleHUD` — UMG widget displaying Heat Exhaustion gauge & blade temp | UI |
+| 2748 | `AshenScenario7AudioSubsystem.h/.cpp` | `UAshenScenario7AudioSubsystem` — MetaSounds bubbling magma, roaring geysers & steam hiss | Audio |
+| 2749 | `AshenHeatDistortionPostProcessAdapter.h/.cpp` | `UAshenHeatDistortionPostProcessAdapter` — Post-process optical heat shimmer & combustion glow | Scenarios |
+| 2750 | `AAshenMagmaVentCrucibleActor.h/.cpp` | `AAshenMagmaVentCrucibleActor` — Spatial volcanic caldera crucible actor for blade tempering | World |
+| 2751 | `AshenScenario7SaveGameAdapter.h/.cpp` | `UAshenScenario7SaveGameAdapter` — Serializes Scenario 7 completion state & highest temp survived | Core |
+| 2752 | `AshenScenario7DialogueBridge.h/.cpp` | `UAshenScenario7DialogueBridge` — Contextual companion banter on extreme heat & cryo mist | Narrative |
+| 2753 | `AshenScenario7HapticBridge.h/.cpp` | `UAshenScenario7HapticBridge` — Maps 90Hz thermal pulse, molten trigger resistance & magma rumble | Scenarios |
+| 2754 | `AshenScenario7MasterBridge.h/.cpp` | `UAshenScenario7MasterBridge` — Master bridge orchestrating caldera thermodynamics & quest flow | Orchestration |
+| 2755 | `AshenMasterBatch137AutomationTest.cpp` | `FAshenMasterBatch137AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2735: Master Batch #136 — Chaos Spatial Audio & Dynamic Navmesh Destruction (CHAOS-SPEC-077)
 **Domain:** World / Combat / AI / Audio / UI / Narrative / Core / Orchestration / QA  
 **Status:** 2,735 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
