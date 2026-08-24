@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2675: Master Batch #133 — Procedural Trauma Somatics & Weapon Soot Provenance Matrix (SOMATIC-SPEC-074)
+**Domain:** Soul / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
+**Status:** 2,675 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2656 | `AshenTraumaSomaticsTypes.h` | `AshenTraumaSomaticsTypes` — Enums (2), Structs (1), Multicast Delegates (4) | Soul |
+| 2657 | `AshenTraumaSomaticsSubsystem.h/.cpp` | `UAshenTraumaSomaticsSubsystem` — Subsystem managing procedural vein corruption & soot | Soul |
+| 2658 | `AshenProceduralVeinCorruptionEvaluator.h/.cpp` | `UAshenProceduralVeinCorruptionEvaluator` — Evaluator computing skin pallor & sclera red-out | Soul |
+| 2659 | `AshenWeaponSootAccumulationComponent.h/.cpp` | `UAshenWeaponSootAccumulationComponent` — Tracks strike kinetic energy (Σ Ek) & micro-nicks | Combat |
+| 2660 | `AshenBioAcousticHeartbeatEvaluator.h/.cpp` | `UAshenBioAcousticHeartbeatEvaluator` — Interpolates heart rate (60 to 170 BPM) | Soul |
+| 2661 | `AshenSootBurnWeaponCleaveGASAbility.h/.cpp` | `UAshenSootBurnWeaponCleaveGASAbility` — Converts accumulated soot to thermal damage (+40 Heat) | Combat |
+| 2662 | `AshenTraumaVeinSurgeGASAbility.h/.cpp` | `UAshenTraumaVeinSurgeGASAbility` — Converts dark vein corruption into kinetic lunge (+50%) | Combat |
+| 2663 | `AshenBladeWipeCampfireGASAbility.h/.cpp` | `UAshenBladeWipeCampfireGASAbility` — Rest-state ability restoring steel polish (+0.10 Resolve) | Combat |
+| 2664 | `AshenSomaticTremorGripGASAbility.h/.cpp` | `UAshenSomaticTremorGripGASAbility` — Somatic weapon tremor reducing parry window by 25% | Combat |
+| 2665 | `AshenVeinCauterizationGASAbility.h/.cpp` | `UAshenVeinCauterizationGASAbility` — Emergency cauterization burning off 0.25 vein corruption | Combat |
+| 2666 | `UBTService_AshenCompanionTraumaWatch.h/.cpp` | `UBTService_AshenCompanionTraumaWatch` — AI service detecting Kaelen's visible vein stages | AI |
+| 2667 | `AshenUserWidget_TraumaSomaticsHUD.h/.cpp` | `UAshenUserWidget_TraumaSomaticsHUD` — UMG widget displaying vein map & heart BPM gauge | UI |
+| 2668 | `AshenBioAcousticAudioSubsystem.h/.cpp` | `UAshenBioAcousticAudioSubsystem` — MetaSounds 60-170 BPM heart thumps & audio LPF | Audio |
+| 2669 | `AshenTraumaMaterialPostProcessAdapter.h/.cpp` | `UAshenTraumaMaterialPostProcessAdapter` — Drives material scalars & chromatic aberration | Soul |
+| 2670 | `AAshenSomaticCalibrationAnchorActor.h/.cpp` | `AAshenSomaticCalibrationAnchorActor` — Spatial anchor setting ambient soot deposition rates | World |
+| 2671 | `AshenTraumaSomaticsSaveGameAdapter.h/.cpp` | `UAshenTraumaSomaticsSaveGameAdapter` — Serializes cumulative soot, veins, and micro-nicks | Core |
+| 2672 | `AshenTraumaSomaticsDialogueBridge.h/.cpp` | `UAshenTraumaSomaticsDialogueBridge` — Injects companion observation barks at debt thresholds | Narrative |
+| 2673 | `AshenTraumaSomaticsHapticBridge.h/.cpp` | `UAshenTraumaSomaticsHapticBridge` — Synchronizes DualSense motor ticks to real-time BPM | Scenarios |
+| 2674 | `AshenTraumaSomaticsMasterBridge.h/.cpp` | `UAshenTraumaSomaticsMasterBridge` — Master bridge orchestrating trauma somatics pipeline | Orchestration |
+| 2675 | `AshenMasterBatch133AutomationTest.cpp` | `FAshenMasterBatch133AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2655: Master Batch #132 — The Bleeding Waystation 7-Minute Vertical Slice (DEMO-SPEC-073)
 **Domain:** Scenarios / Combat / AI / Audio / UI / World / Narrative / Core / Orchestration / QA  
 **Status:** 2,655 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

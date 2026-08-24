@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Procedural Trauma Somatics & Weapon Soot Simulator</title>
+    <!-- Traceability: SOMATIC-SPEC-074 | Builds 2656-2675 -->
+    <style>
+        :root {
+            --bg-primary: #0a0b0e;
+            --bg-secondary: #12151b;
+            --panel-bg: #181d26;
+            --border-color: #2b3545;
+            --accent-cyan: #38bdf8;
+            --accent-red: #f85149;
+            --accent-amber: #e3b341;
+            --accent-purple: #a855f7;
+            --accent-green: #3fb950;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-red);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-red);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: radial-gradient(circle at center, #1c151f 0%, #0d0a12 70%, #060408 100%);
+            display: block;
+            width: 100%;
+            height: 420px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-red);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-red);
+        }
+
+        .btn-strike {
+            background: #991b1b;
+            border-color: #f87171;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
+        }
+
+        .btn-strike:hover {
+            background: #dc2626;
+        }
+
+        .dialogue-box {
+            background: #151a22;
+            border: 1px solid #2b3545;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e6edf3;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-red);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>PROCEDURAL TRAUMA SOMATICS & WEAPON SOOT SIMULATOR</h1>
+                <p>Real-Time Vein Darkening, Sclera Red-Out, Cumulative Strike Slag & Bio-Acoustic BPM (SOMATIC-SPEC-074)</p>
+            </div>
+            <div class="badge">BUILD 2675</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="simCanvas" width="670" height="420"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Integration Debt:</span>
+                        <span class="control-val" id="debtDisplay">0.20</span>
+                    </div>
+                    <input type="range" id="debtSlider" min="0" max="1" step="0.01" value="0.20">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Shadow Burnout:</span>
+                        <span class="control-val" id="burnoutDisplay">0.10</span>
+                    </div>
+                    <input type="range" id="burnoutSlider" min="0" max="1" step="0.01" value="0.10">
+                </div>
+
+                <button class="btn btn-strike" id="strikeBtn">⚔️ EXECUTE HEAVY KINETIC STRIKE (3500 JOULES)</button>
+
+                <div class="dialogue-box" id="dialogueBox">
+                    [Garrett]: "You look steady, Kaelen. Keep your focus."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="cleanBladeBtn" style="flex: 1;">🪵 CLEAN BLADE AT CAMP</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Somatic Stage</div>
+                <div class="telemetry-val" id="stageVal">Stage 0 (Pristine)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Heart Rate</div>
+                <div class="telemetry-val" id="bpmVal">73 BPM</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Blade Soot Profile</div>
+                <div class="telemetry-val" id="sootProfileVal">Polished Steel</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Edge Micro-Nicks</div>
+                <div class="telemetry-val" id="nicksVal">0 Nicks</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer
+        let audioCtx = null;
+        let nextHeartTime = 0;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playHeartThump(bpm) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            const baseFreq = (bpm > 130) ? 95 : 65;
+            osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.12);
+
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.14);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        function playStrikeClang() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(580, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.35);
+
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.38);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        }
+
+        // State Telemetry
+        let debt = 0.20;
+        let burnout = 0.10;
+        let bladeSoot = 0.0;
+        let microNicks = 0;
+        let cumulativeJoules = 0;
+
+        const debtSlider = document.getElementById('debtSlider');
+        const burnoutSlider = document.getElementById('burnoutSlider');
+        const debtDisplay = document.getElementById('debtDisplay');
+        const burnoutDisplay = document.getElementById('burnoutDisplay');
+        const strikeBtn = document.getElementById('strikeBtn');
+        const cleanBladeBtn = document.getElementById('cleanBladeBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const dialogueBox = document.getElementById('dialogueBox');
+
+        function updateState() {
+            debt = parseFloat(debtSlider.value);
+            burnout = parseFloat(burnoutSlider.value);
+            debtDisplay.innerText = debt.toFixed(2);
+            burnoutDisplay.innerText = burnout.toFixed(2);
+
+            const veinCorruption = Math.min(1.0, debt * 1.15 + burnout * 0.35);
+            const heartBPM = Math.min(170, Math.round(60 + veinCorruption * 60 + (debt > 0.5 ? 40 : 0)));
+
+            let stageStr = "Stage 0 (Pristine)";
+            let stageClass = "color: var(--accent-green)";
+            if (veinCorruption >= 0.75) {
+                stageStr = "Stage 3 (Shattered Vessel)";
+                stageClass = "color: var(--accent-red)";
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "Black blood at his temple—Garrett, he's slipping into the Oakhaven void!"`;
+            } else if (veinCorruption >= 0.50) {
+                stageStr = "Stage 2 (Vascular Crisis)";
+                stageClass = "color: var(--accent-purple)";
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "Your hands are shaking, Kaelen! Step back before your grip gives out!"`;
+            } else if (veinCorruption >= 0.25) {
+                stageStr = "Stage 1 (Subcutaneous Taint)";
+                stageClass = "color: var(--accent-amber)";
+                dialogueBox.innerHTML = `<strong>[Serafina]:</strong> "Kaelen... the veins along your neck are darkening. Breathe."`;
+            } else {
+                dialogueBox.innerHTML = `<strong>[Garrett]:</strong> "You look steady, Kaelen. Keep your focus."`;
+            }
+
+            let sootProfile = "Clean Polished Steel";
+            if (bladeSoot >= 0.80) sootProfile = "Superheated Slag";
+            else if (bladeSoot >= 0.50) sootProfile = "Charred Black Steel";
+            else if (bladeSoot >= 0.15) sootProfile = "Smoked Edge";
+
+            document.getElementById('stageVal').innerHTML = `<span style="${stageClass}">${stageStr}</span>`;
+            document.getElementById('bpmVal').innerText = `${heartBPM} BPM`;
+            document.getElementById('sootProfileVal').innerText = sootProfile;
+            document.getElementById('nicksVal').innerText = `${microNicks} Nicks`;
+        }
+
+        debtSlider.oninput = updateState;
+        burnoutSlider.oninput = updateState;
+
+        strikeBtn.onclick = () => {
+            cumulativeJoules += 3500;
+            bladeSoot = Math.min(1.0, bladeSoot + (3500 / 5000) * 0.05);
+            microNicks += 1;
+            playStrikeClang();
+            updateState();
+        };
+
+        cleanBladeBtn.onclick = () => {
+            bladeSoot = 0.0;
+            updateState();
+            dialogueBox.innerHTML = `<strong>[Campfire Rest]:</strong> Kaelen wipes the ash and slag from the steel. Polish restored (+0.10 Resolve).`;
+        };
+
+        copySeltBtn.onclick = () => {
+            const veinCorruption = Math.min(1.0, debt * 1.15 + burnout * 0.35);
+            const heartBPM = Math.min(170, Math.round(60 + veinCorruption * 60 + (debt > 0.5 ? 40 : 0)));
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "TRAUMA_SOMATICS_PROVENANCE",
+                integration_debt: debt,
+                shadow_burnout: burnout,
+                vein_corruption_scalar: veinCorruption,
+                heart_rate_bpm: heartBPM,
+                blade_soot_scalar: bladeSoot,
+                micro_nick_count: microNicks,
+                cumulative_strike_joules: cumulativeJoules
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        let lastTime = performance.now();
+
+        function animate(now) {
+            const dt = (now - lastTime) / 1000;
+            lastTime = now;
+
+            const veinCorruption = Math.min(1.0, debt * 1.15 + burnout * 0.35);
+            const heartBPM = Math.min(170, Math.round(60 + veinCorruption * 60 + (debt > 0.5 ? 40 : 0)));
+
+            // Periodic Heartbeat Audio
+            if (audioCtx && audioCtx.currentTime >= nextHeartTime) {
+                playHeartThump(heartBPM);
+                nextHeartTime = audioCtx.currentTime + (60.0 / heartBPM);
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Draw Kaelen's Somatic Face & Vein Profile
+            const faceX = 180;
+            const faceY = 210;
+
+            // Skin Tone (Blends to Pallor)
+            const rSkin = Math.round(230 - veinCorruption * 70);
+            const gSkin = Math.round(200 - veinCorruption * 90);
+            const bSkin = Math.round(190 - veinCorruption * 80);
+            ctx.fillStyle = `rgb(${rSkin}, ${gSkin}, ${bSkin})`;
+            ctx.beginPath();
+            ctx.ellipse(faceX, faceY, 70, 95, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Subcutaneous Black Veins
+            if (veinCorruption > 0.1) {
+                ctx.strokeStyle = `rgba(30, 5, 45, ${Math.min(1.0, veinCorruption * 1.2)})`;
+                ctx.lineWidth = 2.5 * veinCorruption;
+                ctx.beginPath();
+                // Temple vein
+                ctx.moveTo(faceX - 35, faceY - 50);
+                ctx.quadraticCurveTo(faceX - 50, faceY - 20, faceX - 30, faceY);
+                // Neck vein
+                ctx.moveTo(faceX - 25, faceY + 40);
+                ctx.quadraticCurveTo(faceX - 45, faceY + 65, faceX - 15, faceY + 90);
+                // Cheek vein
+                ctx.moveTo(faceX + 20, faceY - 10);
+                ctx.quadraticCurveTo(faceX + 45, faceY + 20, faceX + 25, faceY + 55);
+                ctx.stroke();
+            }
+
+            // Sclera Red-Out Eye
+            const eyeX = faceX - 22;
+            const eyeY = faceY - 15;
+            const scleraRed = Math.max(0, (debt - 0.30) / 0.70);
+            ctx.fillStyle = `rgb(255, ${Math.round(255 - scleraRed * 180)}, ${Math.round(255 - scleraRed * 190)})`;
+            ctx.beginPath();
+            ctx.arc(eyeX, eyeY, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(eyeX, eyeY, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#e6edf3';
+            ctx.font = '12px monospace';
+            ctx.fillText("KAELEN: SOMATIC PROFILE", faceX - 75, faceY + 130);
+            ctx.fillText(`Vein Corruption: ${(veinCorruption * 100).toFixed(0)}%`, faceX - 65, faceY + 148);
+
+            // 2. Draw Oathbringer Greatsword Soot & Micro-Nicks
+            const swordX = 450;
+            const swordY = 70;
+            const bladeW = 40;
+            const bladeH = 260;
+
+            // Base Steel Blade
+            const steelBrightness = Math.round(200 - bladeSoot * 140);
+            ctx.fillStyle = `rgb(${steelBrightness}, ${steelBrightness}, ${steelBrightness + 10})`;
+            ctx.fillRect(swordX - bladeW / 2, swordY, bladeW, bladeH);
+
+            // Soot & Slag Layer
+            if (bladeSoot > 0.05) {
+                const slagGrad = ctx.createLinearGradient(swordX, swordY, swordX, swordY + bladeH);
+                slagGrad.addColorStop(0, `rgba(20, 20, 20, ${bladeSoot * 0.95})`);
+                if (bladeSoot >= 0.80) {
+                    slagGrad.addColorStop(0.5, 'rgba(239, 68, 68, 0.7)'); // Thermal glow
+                }
+                slagGrad.addColorStop(1, `rgba(40, 30, 20, ${bladeSoot * 0.85})`);
+                ctx.fillStyle = slagGrad;
+                ctx.fillRect(swordX - bladeW / 2, swordY, bladeW, bladeH);
+            }
+
+            // Sword Edges & Nicks
+            ctx.strokeStyle = (bladeSoot >= 0.80) ? '#f87171' : '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(swordX - bladeW / 2, swordY, bladeW, bladeH);
+
+            // Draw Micro-Nicks on Edge
+            ctx.fillStyle = '#0a0b0e';
+            for (let i = 0; i < Math.min(12, microNicks); i++) {
+                const nickY = swordY + 30 + i * 18;
+                ctx.beginPath();
+                ctx.moveTo(swordX + bladeW / 2, nickY);
+                ctx.lineTo(swordX + bladeW / 2 - 5, nickY + 3);
+                ctx.lineTo(swordX + bladeW / 2, nickY + 6);
+                ctx.fill();
+            }
+
+            // Crossguard & Hilt
+            ctx.fillStyle = '#b45309';
+            ctx.fillRect(swordX - 45, swordY + bladeH, 90, 16);
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(swordX - 8, swordY + bladeH + 16, 16, 50);
+
+            ctx.fillStyle = '#e6edf3';
+            ctx.font = '12px monospace';
+            ctx.fillText("OATHBRINGER GREATSWORD", swordX - 75, swordY + bladeH + 90);
+            ctx.fillText(`Soot Slag: ${(bladeSoot * 100).toFixed(0)}% | ${microNicks} Nicks`, swordX - 80, swordY + bladeH + 108);
+
+            requestAnimationFrame(animate);
+        }
+
+        updateState();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

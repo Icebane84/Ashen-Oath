@@ -37,10 +37,32 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-015`** | **Unchained Kinetic Power-Through, Mud Drag & Palpitation Pulse Invariant** | `SCENARIO-SPEC-071` / Combat / Scenarios / Haptics / Audio | Unchained mode scaling $+50\%$ damage ($1.50\times$) and mud power-through ($0.85\times$ vs $0.50\times$), with $130 \leftrightarrow 170\text{ BPM}$ haptic palpitations and 400cm boundary defense. |
 | **`SYN-016`** | **Angular Clock-Face Riposte, Dynamic Rubble LPF & Back-Face Shearing Invariant** | `KINETIC-SPEC-072` / Combat / Audio / Niagara / Chaos | Strike vector inversion mapping 4-zone counter montages ($0^\circ-360^\circ$), continuous rubble LPF ($400\text{ Hz} \leftrightarrow 20,000\text{ Hz}$), and back-face particle exit shearing. |
 | **`SYN-017`** | **4-Run Formation Spacing, Twin-Blade X-Lock Deflect & Run D Dissociation Invariant** | `DEMO-SPEC-073` / Scenarios / AI / Combat / Haptics | Causal propagation governing 4-run formation spacing ($300\text{uu} \leftrightarrow 1200\text{uu}$), StateTree support hesitation ($0\text{ms} \leftrightarrow 600\text{ms}$), Garrett's twin-blade X-lock deflect, and Run D dissociation diagnosis. |
+| **`SYN-018`** | **Procedural Vein Darkening, Strike Kinetic Slag & Bio-Acoustic BPM Invariant** | `SOMATIC-SPEC-074` / Soul / Combat / Audio / UI / Haptics | Procedural skin pallor, subcutaneous black vein darkening, sclera red-out ($0.0 \leftrightarrow 1.0$), cumulative strike kinetic slag accumulation ($\sum E_k$), and $60 \leftrightarrow 170\text{ BPM}$ bio-acoustic heart rate haptics. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-018`: Procedural Vein Darkening, Strike Kinetic Slag & Bio-Acoustic BPM Invariant
+
+* **Target Subsystems:** `UAshenTraumaSomaticsSubsystem`, `UAshenProceduralVeinCorruptionEvaluator`, `UAshenWeaponSootAccumulationComponent`, `UAshenBioAcousticHeartbeatEvaluator`, `UAshenSootBurnWeaponCleaveGASAbility`
+* **Related Specifications:** [`SOMATIC-SPEC-074`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SOMATIC-SPEC-074%20%28PROCEDURAL%20TRAUMA%20SOMATICS%20%26%20WEAPON%20SOOT%20PROVENANCE%20MATRIX%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{VeinCorruption} = \text{clamp}(1.15 \cdot \text{Debt} + 0.35 \cdot \text{Burnout}, 0.0, 1.0)$$
+$$\text{SkinPallor} = \text{clamp}(0.85 \cdot \text{Debt}, 0.0, 1.0)$$
+$$\text{ScleraRedness} = \text{clamp}\left(\frac{\text{Debt} - 0.30}{0.70}, 0.0, 1.0\right)$$
+$$\Delta\text{Soot} = \left(\frac{E_k}{5000\text{ J}}\right) \cdot 0.05$$
+$$\text{BPM} = \text{clamp}(110.0 + 60.0 \cdot \text{VeinCorruption}, 60.0, 170.0)$$
+$$\text{LPF}(\text{BPM}) = \text{Lerp}\left(20000\text{ Hz}, 600\text{ Hz}, \text{clamp}\left(\frac{\text{BPM} - 60}{110}, 0, 1\right)\right)$$
+
+#### 💡 Architectural Insight & Impact:
+* **Physicalized Psychological Provenance:** Internal integration debt is never hidden behind an arbitrary numerical gauge—it is physically expressed across Kaelen's neck veins, eye sclera, blade soot slag, breathing tempo, and DualSense tactile palpitation pulses.
+* **Soot as Tactical Resource:** Soot accumulation on the Oathbringer Greatsword is both visual patina and a combat battery: reaching $\ge 0.80$ allows superheated slag thermal burst cleaves ($+40\text{ Heat Damage}$), creating a trade-off between keeping the blade polished for Resolve vs wielding charred thermal slag.
+
+---
 
 ---
 
