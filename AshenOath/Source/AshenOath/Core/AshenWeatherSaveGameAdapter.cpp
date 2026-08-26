@@ -1,15 +1,39 @@
-// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
+// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
+
 #include "Core/AshenWeatherSaveGameAdapter.h"
 
 UAshenWeatherSaveGameAdapter::UAshenWeatherSaveGameAdapter()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	bHasSavedData = false;
+	SavedWeatherState = EWeatherHazardState::ClearTemperate;
+	SavedSeverity = EAtmosphericSeverity::MildDrift;
+	SavedTemperature = 18.0f;
 }
-void UAshenWeatherSaveGameAdapter::BeginPlay() { Super::BeginPlay(); }
 
-bool UAshenWeatherSaveGameAdapter::SaveWeatherState(EWeatherState ActiveWeather, int32 DiscoveredWardsCount)
+void UAshenWeatherSaveGameAdapter::PackageWeatherState(
+	EWeatherHazardState WeatherState,
+	EAtmosphericSeverity Severity,
+	float Temperature)
 {
-	UE_LOG(LogTemp, Log, TEXT("UAshenWeatherSaveGameAdapter: Saved Weather State (Weather: %d, Wards: %d) to SaveGame."),
-		static_cast<int32>(ActiveWeather), DiscoveredWardsCount);
+	SavedWeatherState = WeatherState;
+	SavedSeverity = Severity;
+	SavedTemperature = Temperature;
+	bHasSavedData = true;
+}
+
+bool UAshenWeatherSaveGameAdapter::RestoreWeatherState(
+	EWeatherHazardState& OutWeatherState,
+	EAtmosphericSeverity& OutSeverity,
+	float& OutTemperature)
+{
+	if (!bHasSavedData)
+	{
+		return false;
+	}
+
+	OutWeatherState = SavedWeatherState;
+	OutSeverity = SavedSeverity;
+	OutTemperature = SavedTemperature;
 	return true;
 }

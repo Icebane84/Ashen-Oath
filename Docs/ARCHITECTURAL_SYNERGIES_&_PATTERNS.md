@@ -52,10 +52,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-030`** | **Chaos Rubble Mass Impulse Dynamics, Falling Masonry Hazard Radii & Cleave Demolition Invariant** | `CHAOS-SPEC-086` / World / Chaos / Combat / AI / Haptics | Rubble chunk mass scaling ($25.0\text{kg} \leftrightarrow 450.0\text{kg}$), navmesh traversal costs ($1.0\times \to 4.5\times$), $1.2\text{s}$ falling hazard telegraphs ($150\text{uu} \leftrightarrow 450\text{uu}$), and $+60\%$ thermal demolition efficiency. |
 | **`SYN-031`** | **Campfire Alchemical Recipe Boiling, Morale Satiation Scaling & Soul-Ember Infusion Invariant** | `COOKING-SPEC-087` / World / Combat / AI / Audio / UI / Haptics | Cauldron boiling curves ($60^\circ\text{C}-110^\circ\text{C}$), $+50\%$ stirring rhythm progress, 10-minute party buffs ($+25\%$ poise, $-30\%$ burnout, $+20\%$ damage), and Garrett ember-salt preservation ($3.0\times$). |
 | **`SYN-032`** | **Tactical Map Cartography Fog Unveiling, Sanctuary Beacon Attunement & Travel Hazard Ambush Invariant** | `MAP-SPEC-088` / World / Combat / AI / Audio / UI / Haptics | Fog of war reveal radius ($500\text{uu} \leftrightarrow 3500\text{uu}$), $3.0\text{s}$ beacon teleportation ($15\text{ stamina/km}$), travel ambush risk ($0-75\%$), and $-15\%$ surprise posture penalty. |
+| **`SYN-033`** | **Dynamic Weather State Cycling, Biome Thermal Degradation & Electro-Acidic Hazard Invariant** | `WEATHER-SPEC-089` / World / Combat / AI / Audio / UI / Haptics | Blizzard sub-zero slow ($-30\%$), acid rain armor corrosion ($-2.5\%/\text{s}$), $1.5\text{s}$ lightning telegraphs ($850-1250\text{ Dmg}$), and $100\%$ hearth shelter immunity. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-033`: Dynamic Weather State Cycling, Biome Thermal Degradation & Electro-Acidic Hazard Invariant
+
+* **Target Subsystems:** `UAshenDynamicWeatherSubsystem`, `UAshenWeatherDegradationEvaluator`, `UAshenLightningSurgeEvaluator`, `UAshenWeatherShelterDirectorComponent`, `UAshenWeatherHapticBridge`
+* **Related Specifications:** [`WEATHER-SPEC-089`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/WEATHER-SPEC-089%20%28THE%20DYNAMIC%20WEATHER%20&%20ENVIRONMENTAL%20BIOME%20HAZARD%20SYSTEM%29.md)
+
+#### 📐 Mathematical Invariants:
+$$V_{\text{move}}(\text{State}) = \begin{cases} 0.70\times, & \text{if BlizzardWhiteout} \\ 1.00\times, & \text{otherwise} \end{cases}$$
+$$\text{CorrosionRate}(\text{State}, b\text{Insulated}) = \begin{cases} 2.5 \cdot (b\text{Insulated} ? 0.40 : 1.00) \ [\%/\text{s}], & \text{if AcidRainCorrosion} \\ 0.0, & \text{otherwise} \end{cases}$$
+$$\text{Damage}_{\text{lightning}}(\text{Severity}) = \begin{cases} 550.0\text{ Dmg}, & \text{if MildDrift} \\ 850.0\text{ Dmg}, & \text{if ModerateGale} \\ 1250.0\text{ Dmg}, & \text{if SevereCataclysm} \end{cases}$$
+$$\text{Mitigation}_{\text{shelter}}(\text{Type}) = \begin{cases} 1.00\times \ (100\%), & \text{if HearthSanctuary} \\ 0.75\times \ (75\%), & \text{if CavernOverhang} \\ 0.00\times \ (0\%), & \text{if ExposedWilds} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Environmental Hostility & Tactical Agency:** Atmospheric weather is a live combatant that players must proactively counter through preparation (Garrett's insulated tallow paste), active positioning (seeking cavern overhangs during acid rain or lightning surges), and White Flame sanctuary shelter.
+* **Sensory Immersion Synergy:** The DualSense haptic profile delivers subtle droplet tickles at $120\text{Hz}$ alongside heavy motor drag resistance ($0.25 \leftrightarrow 0.90$) when battling howling blizzard wind shears.
+
+---
 
 ---
 

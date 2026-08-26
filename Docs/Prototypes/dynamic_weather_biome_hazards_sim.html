@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Dynamic Weather & Biome Hazard Simulator</title>
+    <!-- Traceability: WEATHER-SPEC-089 | Builds 2956-2975 -->
+    <style>
+        :root {
+            --bg-primary: #070a0e;
+            --bg-secondary: #0f1722;
+            --panel-bg: #172334;
+            --border-color: #2b3e58;
+            --accent-cyan: #38bdf8;
+            --accent-blue: #60a5fa;
+            --accent-green: #22c55e;
+            --accent-gold: #fbbf24;
+            --accent-orange: #f97316;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #090e15;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #090e15;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-lightning {
+            background: #1e3a8a;
+            border-color: #38bdf8;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-lightning:hover {
+            background: #1d4ed8;
+        }
+
+        .bark-box {
+            background: #0d1726;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #bae6fd;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>DYNAMIC WEATHER & ENVIRONMENTAL BIOME HAZARD SIMULATOR</h1>
+                <p>Blizzard Whiteouts, Ash Storms, Acid Rain Corrosion & Lightning Surges (WEATHER-SPEC-089)</p>
+            </div>
+            <div class="badge">BUILD 2975</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="weatherCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Select Active Weather Hazard:</span>
+                        <span class="control-val" id="weatherDisplay">Clear Temperate</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button class="btn" id="wClear">☀️ Clear</button>
+                        <button class="btn" id="wBlizzard" style="color: var(--accent-blue);">❄️ Blizzard (-35°C)</button>
+                        <button class="btn" id="wAsh" style="color: var(--accent-orange);">🌋 Ash Storm</button>
+                        <button class="btn" id="wAcid" style="color: var(--accent-green);">🧪 Acid Rain</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-lightning" id="wLightning">⚡ TRIGGER LIGHTNING SURGE (1.5s Telegraph)</button>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Environmental Shelter Protection:</span>
+                        <span class="control-val" id="shelterDisplay" style="color: var(--accent-red);">Exposed Wilds (0%)</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button class="btn" id="sExposed">🌲 Exposed</button>
+                        <button class="btn" id="sCavern">⛰️ Cavern (75%)</button>
+                        <button class="btn" id="sHearth" style="grid-column: span 2; color: var(--accent-gold);">🔥 Hearth Sanctuary (100% Total Immunity)</button>
+                    </div>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Kaelen]: "Winds are calm for now. Make good time."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="insulationBtn" style="flex: 1; color: var(--accent-gold);">🛡️ Garrett Insulation: OFF</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Ambient Temp</div>
+                <div class="telemetry-val" id="tempVal">18°C</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Visibility Distance</div>
+                <div class="telemetry-val" id="visVal">5000 uu</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Wind Shear Speed</div>
+                <div class="telemetry-val" id="windVal">5 m/s</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Acid Corrosion Rate</div>
+                <div class="telemetry-val" id="corrosionVal">0.0 %/s</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Howling Wind & Thunderclaps)
+        let audioCtx = null;
+        let windNoise = null;
+        let windGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Synthesize wind noise
+                const bufferSize = audioCtx.sampleRate * 2;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * 0.2;
+                }
+
+                windNoise = audioCtx.createBufferSource();
+                windNoise.buffer = buffer;
+                windNoise.loop = true;
+
+                windGain = audioCtx.createGain();
+                windGain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+
+                windNoise.connect(windGain);
+                windGain.connect(audioCtx.destination);
+                windNoise.start();
+            }
+        }
+
+        // State Machine
+        let weatherState = "Clear";
+        let shelter = "Exposed";
+        let temperature = 18;
+        let visibility = 5000;
+        let windSpeed = 5;
+        let corrosionRate = 0.0;
+        let bInsulated = false;
+        let bLightningStrike = false;
+
+        const weatherDisplay = document.getElementById('weatherDisplay');
+        const shelterDisplay = document.getElementById('shelterDisplay');
+        const barkBox = document.getElementById('barkBox');
+
+        // Particle System (Snow, Ash, Acid Rain)
+        let particles = [];
+        for (let i = 0; i < 120; i++) {
+            particles.push({
+                x: Math.random() * 670,
+                y: Math.random() * 440,
+                vx: -2 + Math.random() * 4,
+                vy: 2 + Math.random() * 6,
+                size: 2 + Math.random() * 3
+            });
+        }
+
+        function updateUI() {
+            weatherDisplay.innerText = weatherState;
+            document.getElementById('tempVal').innerText = temperature + "°C";
+            document.getElementById('visVal').innerText = visibility + " uu";
+            document.getElementById('windVal').innerText = windSpeed + " m/s";
+            
+            const effCorrosion = bInsulated ? (corrosionRate * 0.4) : corrosionRate;
+            document.getElementById('corrosionVal').innerText = effCorrosion.toFixed(1) + " %/s";
+
+            if (windGain && audioCtx) {
+                windGain.gain.setValueAtTime(Math.min(0.2, windSpeed / 100), audioCtx.currentTime);
+            }
+        }
+
+        document.getElementById('wClear').onclick = () => {
+            weatherState = "Clear";
+            temperature = 18; visibility = 5000; windSpeed = 5; corrosionRate = 0.0;
+            barkBox.innerHTML = `<strong>[Kaelen]:</strong> "Winds are calm for now. Make good time."`;
+            updateUI();
+        };
+
+        document.getElementById('wBlizzard').onclick = () => {
+            initAudio();
+            weatherState = "Blizzard Whiteout";
+            temperature = -35; visibility = 400; windSpeed = 32; corrosionRate = 0.0;
+            barkBox.innerHTML = `<strong>[Kaelen]:</strong> "Frost is locking my joints. Keep moving or freeze!"`;
+            updateUI();
+        };
+
+        document.getElementById('wAsh').onclick = () => {
+            initAudio();
+            weatherState = "Volcanic Ash Storm";
+            temperature = 52; visibility = 800; windSpeed = 18; corrosionRate = 0.0;
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Cover your mouth—this ash will choke your lungs before the beasts find you."`;
+            updateUI();
+        };
+
+        document.getElementById('wAcid').onclick = () => {
+            initAudio();
+            weatherState = "Acid Rain Corrosion";
+            temperature = 14; visibility = 1500; windSpeed = 12; corrosionRate = 2.5;
+            barkBox.innerHTML = `<strong>[Serafina]:</strong> "The rain is burning through our cloaks! Find cover!"`;
+            updateUI();
+        };
+
+        document.getElementById('wLightning').onclick = () => {
+            initAudio();
+            weatherState = "Lightning Surge";
+            temperature = 16; visibility = 2000; windSpeed = 24; corrosionRate = 0.0;
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Ground's ionizing! When the air tastes like copper, DODGE!"`;
+            bLightningStrike = true;
+            updateUI();
+
+            setTimeout(() => {
+                bLightningStrike = false;
+            }, 1500);
+        };
+
+        document.getElementById('sExposed').onclick = () => {
+            shelter = "Exposed";
+            shelterDisplay.innerText = "Exposed Wilds (0%)";
+            shelterDisplay.style.color = "var(--accent-red)";
+        };
+
+        document.getElementById('sCavern').onclick = () => {
+            shelter = "Cavern";
+            shelterDisplay.innerText = "Cavern Overhang (75%)";
+            shelterDisplay.style.color = "var(--accent-cyan)";
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Stay under the stone. It'll keep the worst of the rain off our plates."`;
+        };
+
+        document.getElementById('sHearth').onclick = () => {
+            shelter = "Hearth";
+            shelterDisplay.innerText = "Hearth Sanctuary (100%)";
+            shelterDisplay.style.color = "var(--accent-gold)";
+            barkBox.innerHTML = `<strong>[Serafina]:</strong> "The hearth flame keeps the storm outside. We are safe here."`;
+        };
+
+        document.getElementById('insulationBtn').onclick = () => {
+            bInsulated = !bInsulated;
+            document.getElementById('insulationBtn').innerText = bInsulated ? "🛡️ Garrett Insulation: ON (-60%)" : "🛡️ Garrett Insulation: OFF";
+            updateUI();
+        };
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "DYNAMIC_WEATHER_BIOME_HAZARD_TELEMETRY",
+                weather_state: weatherState,
+                temperature_celsius: temperature,
+                visibility_distance_uu: visibility,
+                wind_shear_mps: windSpeed,
+                corrosion_rate_per_sec: corrosionRate,
+                shelter_type: shelter,
+                alchemical_insulation_active: bInsulated
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering (Atmospheric VFX & Hazard Overlay)
+        const canvas = document.getElementById('weatherCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Mountain Terrain Silhouette
+            ctx.fillStyle = '#111827';
+            ctx.beginPath();
+            ctx.moveTo(0, 440);
+            ctx.lineTo(0, 320);
+            ctx.lineTo(200, 240);
+            ctx.lineTo(380, 340);
+            ctx.lineTo(520, 210);
+            ctx.lineTo(670, 310);
+            ctx.lineTo(670, 440);
+            ctx.fill();
+
+            // Weather Particles
+            if (weatherState !== "Clear") {
+                particles.forEach(p => {
+                    p.x += (weatherState === "Blizzard Whiteout" ? -windSpeed * 0.3 : p.vx);
+                    p.y += (weatherState === "Acid Rain Corrosion" ? 8 : p.vy);
+
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.x > canvas.width) p.x = 0;
+                    if (p.y > canvas.height) p.y = 0;
+
+                    if (weatherState === "Blizzard Whiteout") {
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    } else if (weatherState === "Volcanic Ash Storm") {
+                        ctx.fillStyle = 'rgba(234, 88, 12, 0.6)';
+                    } else if (weatherState === "Acid Rain Corrosion") {
+                        ctx.fillStyle = 'rgba(34, 197, 94, 0.7)';
+                    } else {
+                        ctx.fillStyle = 'rgba(56, 189, 248, 0.6)';
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+
+            // Lightning Strike Flash & Telegraph
+            if (bLightningStrike) {
+                ctx.strokeStyle = '#38bdf8';
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.3)';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(335, 300, 100, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText("⚡ LIGHTNING IMPACT ZONE (1.5s)", 230, 305);
+            }
+
+            // Atmospheric Vignette Overlay
+            if (weatherState === "Blizzard Whiteout") {
+                const grad = ctx.createRadialGradient(335, 220, 100, 335, 220, 350);
+                grad.addColorStop(0, 'rgba(255, 255, 255, 0.0)');
+                grad.addColorStop(1, 'rgba(255, 255, 255, 0.6)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateUI();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

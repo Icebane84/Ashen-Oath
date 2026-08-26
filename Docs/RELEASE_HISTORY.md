@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2975: Master Batch #148 — The Dynamic Weather & Environmental Biome Hazard System (WEATHER-SPEC-089)
+**Domain:** World / Combat / AI / Audio / UI / Core / Orchestration / Narrative / QA  
+**Status:** 2,975 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2956 | `AshenDynamicWeatherTypes.h` | `AshenDynamicWeatherTypes` — Enums (3), Structs (2), Multicast Delegates (4) | World |
+| 2957 | `AshenDynamicWeatherSubsystem.h/.cpp` | `UAshenDynamicWeatherSubsystem` — Subsystem managing weather cycles & climate | World |
+| 2958 | `AshenWeatherDegradationEvaluator.h/.cpp` | `UAshenWeatherDegradationEvaluator` — Computes temperature, acid & stamina decay | World |
+| 2959 | `AshenLightningSurgeEvaluator.h/.cpp` | `UAshenLightningSurgeEvaluator` — Calculates 1.5s warning & 850 Dmg strikes | World |
+| 2960 | `AshenWeatherShelterDirectorComponent.h/.cpp` | `UAshenWeatherShelterDirectorComponent` — Coordinates cavern/hearth shelter | World |
+| 2961 | `AshenBlizzardFrostbiteGASAbility.h/.cpp` | `UAshenBlizzardFrostbiteGASAbility` — Applies frostbite -30% slow & stamina drain | Combat |
+| 2962 | `AshenAcidRainCorrosionGASAbility.h/.cpp` | `UAshenAcidRainCorrosionGASAbility` — Erodes armor (-2.5%/s) & amplifies damage | Combat |
+| 2963 | `AshenLightningBoltImpactGASAbility.h/.cpp` | `UAshenLightningBoltImpactGASAbility` — Delivers violent 850 Dmg shock & knockdown | Combat |
+| 2964 | `AshenGarrettAlchemicalInsulationGASAbility.h/.cpp` | `UAshenGarrettAlchemicalInsulationGASAbility` — Garrett ability mitigating decay by 60% | Combat |
+| 2965 | `AshenSerafinaRadiantSanctuaryDomeGASAbility.h/.cpp` | `UAshenSerafinaRadiantSanctuaryDomeGASAbility` — Serafina 450uu dome with 100% immunity | Combat |
+| 2966 | `UBTService_AshenAIWeatherAwareness.h/.cpp` | `UBTService_AshenAIWeatherAwareness` — AI service seeking shelter during storms | AI |
+| 2967 | `AshenUserWidget_WeatherHazardHUD.h/.cpp` | `UAshenUserWidget_WeatherHazardHUD` — UMG widget displaying telemetry & thermometer | UI |
+| 2968 | `AshenWeatherAudioSubsystem.h/.cpp` | `UAshenWeatherAudioSubsystem` — MetaSounds howling wind & thunderclap explosions | Audio |
+| 2969 | `AshenWeatherAtmosphericPostProcessAdapter.h/.cpp` | `UAshenWeatherAtmosphericPostProcessAdapter` — Post-process frost freeze & ash fog | Combat |
+| 2970 | `AAshenWeatherShelterVolumeWorldActor.h/.cpp` | `AAshenWeatherShelterVolumeWorldActor` — Spatial cavern/hearth shelter trigger actor | World |
+| 2971 | `AshenWeatherSaveGameAdapter.h/.cpp` | `UAshenWeatherSaveGameAdapter` — Serializes active weather state & temperature | Core |
+| 2972 | `AshenWeatherNarrativeBridge.h/.cpp` | `UAshenWeatherNarrativeBridge` — Contextual companion survival commentary | Narrative |
+| 2973 | `AshenWeatherHapticBridge.h/.cpp` | `UAshenWeatherHapticBridge` — DualSense rain tickles (120Hz) & wind drag haptics | Combat |
+| 2974 | `AshenWeatherMasterBridge.h/.cpp` | `UAshenWeatherMasterBridge` — Master bridge connecting weather subsystem & GAS | Orchestration |
+| 2975 | `AshenMasterBatch148AutomationTest.cpp` | `FAshenMasterBatch148AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2955: Master Batch #147 — The Tactical Map Overhaul & Fast Travel Sanctuary Waypoint Subsystem (MAP-SPEC-088)
 **Domain:** World / Combat / AI / Audio / UI / Core / Orchestration / Narrative / QA  
 **Status:** 2,955 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

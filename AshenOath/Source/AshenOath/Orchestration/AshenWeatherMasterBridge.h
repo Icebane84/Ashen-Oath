@@ -1,28 +1,29 @@
-// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
+// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
+
 #pragma once
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "World/AshenWeatherAtmosphereTypes.h"
+#include "World/AshenDynamicWeatherTypes.h"
 #include "AshenWeatherMasterBridge.generated.h"
 
 /**
  * UAshenWeatherMasterBridge
- * Master domain bridge broadcasting weather state changes, miasma hazard pulses, and sanctuary ward entries across subsystems.
+ * 
+ * Master orchestrator connecting the dynamic weather subsystem, GAS atmospheric abilities, UMG weather widgets, and audio synthesizers.
  */
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+UCLASS(ClassGroup=(Ashen), meta=(BlueprintSpawnableComponent))
 class ASHENOATH_API UAshenWeatherMasterBridge : public UActorComponent
 {
 	GENERATED_BODY()
+
 public:
 	UAshenWeatherMasterBridge();
-	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen Oath | Orchestration")
-	bool bWeatherBridgeActive = false;
+	/** Broadcasts live atmospheric weather change */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|Orchestration|Weather")
+	void BroadcastWeatherState(EWeatherHazardState NewState, float Temperature);
 
-	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Orchestration")
-	void BroadcastWeatherChanged(EWeatherState NewWeather, float Toxicity);
-
-	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Orchestration")
-	void BroadcastSanctuaryWardEntered(FName WardID);
+	UPROPERTY(BlueprintAssignable, Category = "Ashen|Orchestration|Weather")
+	FOnWeatherStateChanged OnWeatherBroadcaster;
 };
