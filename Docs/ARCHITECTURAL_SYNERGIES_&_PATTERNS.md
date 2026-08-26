@@ -49,10 +49,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-027`** | **Parasitic Nightsteel Weight Scaling, Pommel Garnet Gaze Tracking & Gloomwood Chemical Stabilization Invariant** | `BLADE-SPEC-083` / Combat / Narrative / Audio / UI / Haptics | Living nightsteel mass scaling ($45.0\text{ kg} \leftrightarrow 220.0\text{ kg}$), swing drag floor ($1.00\times \to 0.45\times$), garnet pommel gaze & bile weeping ($>0.70$), and Garrett Gloomwood needle chemical cooling ($-12\text{ semitones}$, $-80\text{ kg}$). |
 | **`SYN-028`** | **Quartz Dynamic 6-Stem Transition Matrix, Symbiotic Resonance Bar Alignment & Afro-Pop Pack Convergence Invariant** | `QUARTZ-SPEC-084` / Audio / Combat / Narrative / UI / Haptics | 6-Stem dynamic gains ($0.0 \leftrightarrow 1.0$), complete silence of Stem 02 during Flow State, Garrett alchemical filters ($450\text{ Hz}$ LPF, $-24\text{ dB}$ tackle ducking, $-12\text{ ST}$ chill), and $+100\%$ stamina recovery. |
 | **`SYN-029`** | **Shroud-Knight Phase-Shift Dithering, Creeping Paranoia Peripheral Gaze Invalidation & Trinity Strike Finisher Invariant** | `CREATURE-SPEC-085` / Combat / AI / Audio / UI / Haptics | Phase-shifting dithering opacity mask ($1.00 \to 0.15$), peripheral phantom visibility gating ($\ge 45^\circ$), companion eye-contact grounding ($-0.15/\text{s}$), and 3-step Trinity Strike ($3.5\times$). |
+| **`SYN-030`** | **Chaos Rubble Mass Impulse Dynamics, Falling Masonry Hazard Radii & Cleave Demolition Invariant** | `CHAOS-SPEC-086` / World / Chaos / Combat / AI / Haptics | Rubble chunk mass scaling ($25.0\text{kg} \leftrightarrow 450.0\text{kg}$), navmesh traversal costs ($1.0\times \to 4.5\times$), $1.2\text{s}$ falling hazard telegraphs ($150\text{uu} \leftrightarrow 450\text{uu}$), and $+60\%$ thermal demolition efficiency. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-030`: Chaos Rubble Mass Impulse Dynamics, Falling Masonry Hazard Radii & Cleave Demolition Invariant
+
+* **Target Subsystems:** `UAshenDynamicRubblePhysicsSubsystem`, `UAshenFallingMasonryHazardEvaluator`, `UAshenRubbleMassImpulseEvaluator`, `UAshenRubbleClearingDirectorComponent`, `UAshenRubblePhysicsHapticBridge`
+* **Related Specifications:** [`CHAOS-SPEC-086`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CHAOS-SPEC-086%20%28THE%20ENVIRONMENTAL%20DESTRUCTION%20&%20DYNAMIC%20RUBBLE%20PHYSICS%20PIPELINE%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{Damage}_{\text{crush}}(M, H) = \text{clamp}((M \cdot 1.50) + (H \cdot 25.0), 250.0, 1200.0) \quad [\text{Dmg}]$$
+$$R_{\text{telegraph}}(M) = 150.0 + \left(\frac{M - 25.0}{575.0}\right) \cdot 300.0 \quad [150.0\text{uu} \longleftrightarrow 450.0\text{uu}]$$
+$$\text{NavCost}(M, \text{Tier}) = \begin{cases} 4.50\times, & \text{if } M \ge 200.0\text{kg} \lor \text{Tier} \in \{\text{HeavyBoulder}, \text{MonolithicArch}\} \\ \text{clamp}(1.50 + \frac{M}{150.0} \cdot 1.50, 1.50, 3.00), & \text{if } \text{Tier} = \text{MediumMasonry} \\ 1.00\times, & \text{otherwise} \end{cases}$$
+$$\text{DemolitionEfficiency}(b\text{Thermal}) = \begin{cases} 1.60\times, & \text{if } b\text{Thermal} \\ 1.00\times, & \text{otherwise} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Tactical Level Morphology:** Battlefield destruction is not merely aesthetic—a collapsing arch permanently alters AI pathfinding cost tensors, forming choke points that can be exploited, fortified, or breached via trio demolition abilities.
+* **Thermal-Physical Decomposition:** Combining elemental thermal shock (Serafina) with kinetic cleave impact (Kaelen) produces non-linear demolition bonuses ($+60\%$), rewarding coordinated trio sandbox interactions.
+
+---
 
 ---
 

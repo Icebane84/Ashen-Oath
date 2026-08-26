@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Environmental Destruction & Dynamic Rubble Physics Simulator</title>
+    <!-- Traceability: CHAOS-SPEC-086 | Builds 2896-2915 -->
+    <style>
+        :root {
+            --bg-primary: #080706;
+            --bg-secondary: #14110e;
+            --panel-bg: #201a14;
+            --border-color: #382c20;
+            --accent-amber: #f59e0b;
+            --accent-orange: #ea580c;
+            --accent-red: #ef4444;
+            --accent-cyan: #38bdf8;
+            --accent-green: #22c55e;
+            --text-main: #f8fafc;
+            --text-muted: #a8a29e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #0d0a08;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-amber);
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .btn-collapse {
+            background: #7c2d12;
+            border-color: #ea580c;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 12px rgba(234, 88, 12, 0.4);
+        }
+
+        .btn-collapse:hover {
+            background: #9a3412;
+        }
+
+        .bark-box {
+            background: #110e0a;
+            border: 1px solid #292016;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fef08a;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>ENVIRONMENTAL DESTRUCTION & DYNAMIC RUBBLE PHYSICS SIMULATOR</h1>
+                <p>Chaos Masonry Fractures, Falling Telegraph Hazards & Alchemical Demolition (CHAOS-SPEC-086)</p>
+            </div>
+            <div class="badge">BUILD 2915</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="rubbleCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Overhead Structural Strain:</span>
+                        <span class="control-val" id="strainDisplay">0% (Stable)</span>
+                    </div>
+                    <input type="range" id="strainSlider" min="0" max="100" step="1" value="0">
+                </div>
+
+                <button class="btn btn-collapse" id="triggerCollapseBtn">💥 TRIGGER CATASTROPHIC COLLAPSE (1.2s Telegraph)</button>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Trio Rubble Demolition Actions:</span>
+                        <span class="control-val" id="toolDisplay" style="color: var(--accent-cyan);">None</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button class="btn" id="cleaveBtn">⚔️ Kaelen Cleave</button>
+                        <button class="btn" id="bombBtn">💣 Garrett Breach</button>
+                        <button class="btn" id="thermalBtn" style="grid-column: span 2; color: var(--accent-orange);">🔥 Serafina Thermal Shock (-60%)</button>
+                    </div>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Kaelen]: "Watch the overhead spans."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="resetBtn" style="flex: 1; color: var(--accent-amber);">🔄 RESET ARCH</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Structure State</div>
+                <div class="telemetry-val" id="stateVal" style="color: var(--accent-green);">Stable Intact</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Rubble Cluster Mass</div>
+                <div class="telemetry-val" id="massVal">0 kg</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Navmesh Traversal Cost</div>
+                <div class="telemetry-val" id="navVal">1.0x (Clear)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Hazard Radius</div>
+                <div class="telemetry-val" id="hazardVal">0 uu</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Low-Frequency Stress Groans & Stone Collapse Rumble)
+        let audioCtx = null;
+        let groanOsc = null;
+        let groanGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                groanOsc = audioCtx.createOscillator();
+                groanGain = audioCtx.createGain();
+
+                groanOsc.type = 'sawtooth';
+                groanOsc.frequency.setValueAtTime(60, audioCtx.currentTime); // Low frequency stone stress
+                groanGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+
+                groanOsc.connect(groanGain);
+                groanGain.connect(audioCtx.destination);
+                groanOsc.start();
+            }
+        }
+
+        // State Machine
+        let strain = 0.0;
+        let rubbleMass = 0;
+        let bCollapsed = false;
+        let bTelegraphing = false;
+        let bThermalActive = false;
+        let collapseTimer = 0;
+
+        const strainSlider = document.getElementById('strainSlider');
+        const strainDisplay = document.getElementById('strainDisplay');
+        const toolDisplay = document.getElementById('toolDisplay');
+        const triggerCollapseBtn = document.getElementById('triggerCollapseBtn');
+        const cleaveBtn = document.getElementById('cleaveBtn');
+        const bombBtn = document.getElementById('bombBtn');
+        const thermalBtn = document.getElementById('thermalBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const barkBox = document.getElementById('barkBox');
+
+        // Physics Debris Chunks
+        let debrisChunks = [];
+
+        function updateState() {
+            strain = parseFloat(strainSlider.value) / 100;
+            strainDisplay.innerText = Math.round(strain * 100) + "%";
+
+            if (bCollapsed) {
+                document.getElementById('stateVal').innerText = "Settled Debris Pile";
+                document.getElementById('stateVal').style.color = "var(--accent-red)";
+                document.getElementById('massVal').innerText = Math.round(rubbleMass) + " kg";
+                document.getElementById('navVal').innerText = (rubbleMass > 200) ? "4.5x (BLOCKED)" : (1.0 + (rubbleMass / 150) * 1.5).toFixed(1) + "x";
+                document.getElementById('navVal').style.color = (rubbleMass > 200) ? "var(--accent-red)" : "var(--accent-amber)";
+                document.getElementById('hazardVal').innerText = "0 uu (Settled)";
+            } else if (bTelegraphing) {
+                document.getElementById('stateVal').innerText = "TELEGRAPH WARNING (1.2s)";
+                document.getElementById('stateVal').style.color = "var(--accent-orange)";
+                document.getElementById('hazardVal').innerText = "350 uu";
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Ceiling's giving way! MOVE!"`;
+            } else if (strain >= 0.50) {
+                document.getElementById('stateVal').innerText = "Stress Groaning";
+                document.getElementById('stateVal').style.color = "var(--accent-amber)";
+                document.getElementById('hazardVal').innerText = "0 uu";
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "The archway is groaning... it won't hold much longer."`;
+            } else {
+                document.getElementById('stateVal').innerText = "Stable Intact";
+                document.getElementById('stateVal').style.color = "var(--accent-green)";
+                document.getElementById('hazardVal').innerText = "0 uu";
+                barkBox.innerHTML = `<strong>[Kaelen]:</strong> "Watch the overhead spans."`;
+            }
+
+            if (groanGain && audioCtx) {
+                groanGain.gain.setValueAtTime(strain * 0.08, audioCtx.currentTime);
+            }
+        }
+
+        strainSlider.oninput = updateState;
+
+        triggerCollapseBtn.onclick = () => {
+            initAudio();
+            bTelegraphing = true;
+            strainSlider.value = 100;
+            updateState();
+
+            setTimeout(() => {
+                bTelegraphing = false;
+                bCollapsed = true;
+                rubbleMass = 450; // 450kg rubble pile
+
+                // Spawn debris particles
+                debrisChunks = [];
+                for (let i = 0; i < 35; i++) {
+                    debrisChunks.push({
+                        x: 220 + Math.random() * 230,
+                        y: 320 + Math.random() * 60,
+                        size: 8 + Math.random() * 18,
+                        rotation: Math.random() * Math.PI
+                    });
+                }
+
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Corridor's blocked. We'll need heavy force to breach it."`;
+                updateState();
+            }, 1200);
+        };
+
+        cleaveBtn.onclick = () => {
+            if (!bCollapsed || rubbleMass <= 0) return;
+            initAudio();
+            const mult = bThermalActive ? 1.60 : 1.00;
+            rubbleMass = Math.max(0, rubbleMass - (180 * mult));
+            toolDisplay.innerText = "Kaelen Cleave (-" + Math.round(180 * mult) + "kg)";
+            barkBox.innerHTML = `<strong>[Kaelen]:</strong> "Stand clear! The nightsteel will shatter these stones!"`;
+            updateState();
+        };
+
+        bombBtn.onclick = () => {
+            if (!bCollapsed || rubbleMass <= 0) return;
+            initAudio();
+            const mult = bThermalActive ? 1.60 : 1.00;
+            rubbleMass = Math.max(0, rubbleMass - (280 * mult));
+            toolDisplay.innerText = "Garrett Breach (-" + Math.round(280 * mult) + "kg)";
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Breaching charge set. Cover your ears!"`;
+            updateState();
+        };
+
+        thermalBtn.onclick = () => {
+            initAudio();
+            bThermalActive = !bThermalActive;
+            thermalBtn.innerText = bThermalActive ? "🔥 THERMAL SHOCK ACTIVE (+60% Demo)" : "🔥 Serafina Thermal Shock (-60%)";
+            barkBox.innerHTML = `<strong>[Serafina]:</strong> "The White Flame turns this granite to brittle chalk."`;
+        };
+
+        resetBtn.onclick = () => {
+            bCollapsed = false;
+            bTelegraphing = false;
+            rubbleMass = 0;
+            strainSlider.value = 0;
+            debrisChunks = [];
+            bThermalActive = false;
+            thermalBtn.innerText = "🔥 Serafina Thermal Shock (-60%)";
+            toolDisplay.innerText = "None";
+            updateState();
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "DYNAMIC_RUBBLE_PHYSICS_TELEMETRY",
+                structural_strain_pct: Math.round(strain * 100) + "%",
+                collapse_state: document.getElementById('stateVal').innerText,
+                rubble_cluster_mass_kg: Math.round(rubbleMass),
+                navmesh_traversal_cost: document.getElementById('navVal').innerText,
+                thermal_shock_active: bThermalActive,
+                choke_point_blocked: rubbleMass >= 200
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering
+        const canvas = document.getElementById('rubbleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = canvas.width / 2;
+
+            // Draw Ground Corridor
+            ctx.fillStyle = '#1c1917';
+            ctx.fillRect(0, 380, canvas.width, 60);
+
+            // Draw Overhead Gothic Stone Arch
+            if (!bCollapsed) {
+                ctx.fillStyle = '#292524';
+                ctx.strokeStyle = strain > 0.5 ? '#ea580c' : '#57534e';
+                ctx.lineWidth = 4;
+
+                ctx.beginPath();
+                ctx.moveTo(cx - 160, 380);
+                ctx.lineTo(cx - 160, 140);
+                ctx.quadraticCurveTo(cx, 60, cx + 160, 140);
+                ctx.lineTo(cx + 160, 380);
+                ctx.stroke();
+
+                // Draw Stress Cracks if strained
+                if (strain > 0.3) {
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(cx - 20, 95);
+                    ctx.lineTo(cx + 15, 125);
+                    ctx.lineTo(cx - 5, 145);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw Falling Telegraph Radius
+            if (bTelegraphing) {
+                ctx.strokeStyle = '#ea580c';
+                ctx.fillStyle = 'rgba(234, 88, 12, 0.25)';
+                ctx.lineWidth = 3;
+
+                ctx.beginPath();
+                ctx.ellipse(cx, 380, 175, 45, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#f97316';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText("⚠️ COLLAPSE IMPACT ZONE (1.2s)", cx - 110, 385);
+            }
+
+            // Draw Settled Rubble Chunks
+            if (bCollapsed && rubbleMass > 0) {
+                ctx.fillStyle = bThermalActive ? '#ea580c' : '#44403c';
+                ctx.strokeStyle = '#78716c';
+                ctx.lineWidth = 2;
+
+                debrisChunks.forEach(chunk => {
+                    ctx.save();
+                    ctx.translate(chunk.x, chunk.y);
+                    ctx.rotate(chunk.rotation);
+                    ctx.fillRect(-chunk.size/2, -chunk.size/2, chunk.size, chunk.size);
+                    ctx.strokeRect(-chunk.size/2, -chunk.size/2, chunk.size, chunk.size);
+                    ctx.restore();
+                });
+
+                // Choke Point Label
+                ctx.fillStyle = (rubbleMass >= 200) ? '#ef4444' : '#fbbf24';
+                ctx.font = 'bold 12px monospace';
+                ctx.fillText(`RUBBLE CLUSTER: ${Math.round(rubbleMass)}kg (${(rubbleMass >= 200) ? 'BLOCKED' : 'PASSABLE'})`, cx - 120, 290);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateState();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

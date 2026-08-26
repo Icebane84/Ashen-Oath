@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2915: Master Batch #145 — The Environmental Destruction & Dynamic Rubble Physics Pipeline (CHAOS-SPEC-086)
+**Domain:** World / Chaos / Combat / AI / Audio / UI / Core / Orchestration / Narrative / QA  
+**Status:** 2,915 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2896 | `AshenDynamicRubbleTypes.h` | `AshenDynamicRubbleTypes` — Enums (3), Structs (2), Multicast Delegates (4) | World |
+| 2897 | `AshenDynamicRubblePhysicsSubsystem.h/.cpp` | `UAshenDynamicRubblePhysicsSubsystem` — Subsystem managing rubble & structural strain | World |
+| 2898 | `AshenFallingMasonryHazardEvaluator.h/.cpp` | `UAshenFallingMasonryHazardEvaluator` — Computes 150-450uu telegraph & crushing damage | World |
+| 2899 | `AshenRubbleMassImpulseEvaluator.h/.cpp` | `UAshenRubbleMassImpulseEvaluator` — Calculates kinetic impulse & navmesh costs | World |
+| 2900 | `AshenRubbleClearingDirectorComponent.h/.cpp` | `UAshenRubbleClearingDirectorComponent` — Coordinates demolition & thermal shock | World |
+| 2901 | `AshenHeavyCleaveDemolitionGASAbility.h/.cpp` | `UAshenHeavyCleaveDemolitionGASAbility` — Kaelen heavy cleave shattering stone boulders | Combat |
+| 2902 | `AshenGarrettBreachingChargeGASAbility.h/.cpp` | `UAshenGarrettBreachingChargeGASAbility` — Garrett breaching charge blasting corridors | Combat |
+| 2903 | `AshenSerafinaThermalShatterGASAbility.h/.cpp` | `UAshenSerafinaThermalShatterGASAbility` — Serafina White Flame thermal shock (-60%) | Combat |
+| 2904 | `AshenFallingMasonryImpactGASAbility.h/.cpp` | `UAshenFallingMasonryImpactGASAbility` — Environmental hazard crushing & knockdown | Combat |
+| 2905 | `AshenRubbleScrambleTraversalGASAbility.h/.cpp` | `UAshenRubbleScrambleTraversalGASAbility` — Agile traversal scramble over rubble piles | Combat |
+| 2906 | `UBTService_AshenMasonryHazardAIAvoidance.h/.cpp` | `UBTService_AshenMasonryHazardAIAvoidance` — AI service for evading hazard telegraphs | AI |
+| 2907 | `AshenUserWidget_RubbleHazardHUD.h/.cpp` | `UAshenUserWidget_RubbleHazardHUD` — UMG structural strain & hazard warning HUD | UI |
+| 2908 | `AshenRubbleAcousticSubsystem.h/.cpp` | `UAshenRubbleAcousticSubsystem` — MetaSounds 40-120Hz stone stress groans & cracks | Audio |
+| 2909 | `AshenMasonryCollapsePostProcessAdapter.h/.cpp` | `UAshenMasonryCollapsePostProcessAdapter` — Post-process camera shake & dust fogging | Combat |
+| 2910 | `AAshenDestructibleMasonryWorldActor.h/.cpp` | `AAshenDestructibleMasonryWorldActor` — Spatial Chaos destructible stone arch actor | World |
+| 2911 | `AshenRubblePhysicsSaveGameAdapter.h/.cpp` | `UAshenRubblePhysicsSaveGameAdapter` — Serializes collapsed states & cleared passages | Core |
+| 2912 | `AshenRubbleNarrativeBridge.h/.cpp` | `UAshenRubbleNarrativeBridge` — Contextual companion collapse barks & advice | Narrative |
+| 2913 | `AshenRubblePhysicsHapticBridge.h/.cpp` | `UAshenRubblePhysicsHapticBridge` — DualSense 35Hz collapse rumble & trigger resistance | Combat |
+| 2914 | `AshenRubblePhysicsMasterBridge.h/.cpp` | `UAshenRubblePhysicsMasterBridge` — Master bridge connecting Chaos physics & GAS | Orchestration |
+| 2915 | `AshenMasterBatch145AutomationTest.cpp` | `FAshenMasterBatch145AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2895: Master Batch #144 — The Shroud-Knight Boss Encounter & Creeping Paranoia System (CREATURE-SPEC-085)
 **Domain:** Combat / AI / Audio / UI / World / Core / Orchestration / Narrative / QA  
 **Status:** 2,895 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
