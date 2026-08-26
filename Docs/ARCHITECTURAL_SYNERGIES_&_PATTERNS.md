@@ -50,10 +50,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-028`** | **Quartz Dynamic 6-Stem Transition Matrix, Symbiotic Resonance Bar Alignment & Afro-Pop Pack Convergence Invariant** | `QUARTZ-SPEC-084` / Audio / Combat / Narrative / UI / Haptics | 6-Stem dynamic gains ($0.0 \leftrightarrow 1.0$), complete silence of Stem 02 during Flow State, Garrett alchemical filters ($450\text{ Hz}$ LPF, $-24\text{ dB}$ tackle ducking, $-12\text{ ST}$ chill), and $+100\%$ stamina recovery. |
 | **`SYN-029`** | **Shroud-Knight Phase-Shift Dithering, Creeping Paranoia Peripheral Gaze Invalidation & Trinity Strike Finisher Invariant** | `CREATURE-SPEC-085` / Combat / AI / Audio / UI / Haptics | Phase-shifting dithering opacity mask ($1.00 \to 0.15$), peripheral phantom visibility gating ($\ge 45^\circ$), companion eye-contact grounding ($-0.15/\text{s}$), and 3-step Trinity Strike ($3.5\times$). |
 | **`SYN-030`** | **Chaos Rubble Mass Impulse Dynamics, Falling Masonry Hazard Radii & Cleave Demolition Invariant** | `CHAOS-SPEC-086` / World / Chaos / Combat / AI / Haptics | Rubble chunk mass scaling ($25.0\text{kg} \leftrightarrow 450.0\text{kg}$), navmesh traversal costs ($1.0\times \to 4.5\times$), $1.2\text{s}$ falling hazard telegraphs ($150\text{uu} \leftrightarrow 450\text{uu}$), and $+60\%$ thermal demolition efficiency. |
+| **`SYN-031`** | **Campfire Alchemical Recipe Boiling, Morale Satiation Scaling & Soul-Ember Infusion Invariant** | `COOKING-SPEC-087` / World / Combat / AI / Audio / UI / Haptics | Cauldron boiling curves ($60^\circ\text{C}-110^\circ\text{C}$), $+50\%$ stirring rhythm progress, 10-minute party buffs ($+25\%$ poise, $-30\%$ burnout, $+20\%$ damage), and Garrett ember-salt preservation ($3.0\times$). |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-031`: Campfire Alchemical Recipe Boiling, Morale Satiation Scaling & Soul-Ember Infusion Invariant
+
+* **Target Subsystems:** `UAshenCampfireCookingSubsystem`, `UAshenMoraleBuffEvaluator`, `UAshenRationSpoilageEvaluator`, `UAshenAlchemicalRationingDirectorComponent`, `UAshenCampfireCookingHapticBridge`
+* **Related Specifications:** [`COOKING-SPEC-087`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/COOKING-SPEC-087%20%28THE%20SOUL-EMBER%20CAMPFIRE%20COOKING%20&%20ALCHEMICAL%20RATIONING%20SYSTEM%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{ProgressStep}(\text{Acc}) = 0.25 \cdot (1.0 + (\text{Acc} \cdot 0.50)) \quad [0.25 \longleftrightarrow 0.375 / \text{stir}]$$
+$$\text{Freshness}(D, Q) = \text{clamp}\left(100.0 - \frac{D / 100.0}{\text{ShelfLifeMult}(Q)}, 0.0, 100.0\right) \quad [\%]$$
+$$\text{ShelfLifeMult}(Q) = \begin{cases} 3.0, & \text{if } Q = \text{PreservedSalted} \\ 1.5, & \text{if } Q = \text{PristineEmber} \\ 1.0, & \text{otherwise} \end{cases}$$
+$$\text{Buff}_{\text{Morale}}(\text{Recipe}) = \begin{cases} \text{Poise} + 25\%, \text{Stamina} + 150, & \text{if } \text{Recipe} = \text{SentinelsIronBroth} \\ \text{Burnout} - 30\%, & \text{if } \text{Recipe} = \text{WhiteFlameHerbalTisane} \\ \text{KineticDmg} + 20\%, \text{DebtFreeze} = 10\text{m}, & \text{if } \text{Recipe} = \text{GloomwoodVenisonStew} \\ \text{AllStats} + 25\%, \text{SanityMax} = 100\%, & \text{if } \text{Recipe} = \text{GrandZenithSoulGoulash} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Campfire Sanctuary Loop:** Rest stops are transformed from passive save points into active preparation rituals. Concocting specific stews directly alters combat difficulty by pre-conditioning posture thresholds, burnout absorption, and damage scaling.
+* **Economic Preservation Dynamics:** Long excursions through the Gloomwood test player rationing; converting raw game into salted rations extends viability by $300\%$, mitigating attrition without artificial penalty timers.
+
+---
 
 ---
 

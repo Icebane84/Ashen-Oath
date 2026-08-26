@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Soul-Ember Campfire Cooking & Alchemical Rationing Simulator</title>
+    <!-- Traceability: COOKING-SPEC-087 | Builds 2916-2935 -->
+    <style>
+        :root {
+            --bg-primary: #0a0705;
+            --bg-secondary: #160e0a;
+            --panel-bg: #241610;
+            --border-color: #3d2419;
+            --accent-orange: #f97316;
+            --accent-gold: #fbbf24;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-cyan: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #a8a29e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-orange);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-orange);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #0f0a07;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-orange);
+            font-family: monospace;
+        }
+
+        select {
+            background: var(--panel-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-orange);
+        }
+
+        .btn-cook {
+            background: #9a3412;
+            border-color: #ea580c;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 12px rgba(234, 88, 12, 0.4);
+        }
+
+        .btn-cook:hover {
+            background: #c2410c;
+        }
+
+        .bark-box {
+            background: #190e08;
+            border: 1px solid #331c11;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fed7aa;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-orange);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SOUL-EMBER CAMPFIRE COOKING & ALCHEMICAL RATIONING SIMULATOR</h1>
+                <p>Garrett's Field Alchemy, Morale Buff Scaling, Pot Boiling Dynamics & Campfire Stew Recipes (COOKING-SPEC-087)</p>
+            </div>
+            <div class="badge">BUILD 2935</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="cookingCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Select Campfire Stew Recipe:</span>
+                    </div>
+                    <select id="recipeSelect">
+                        <option value="Sentinel">Sentinel's Iron Broth (+25% Poise, +150 Stamina)</option>
+                        <option value="Tisane">White Flame Herbal Tisane (-30% Burnout Rate)</option>
+                        <option value="Venison">Gloomwood Venison Stew (+20% Kinetic Dmg, Debt Freeze)</option>
+                        <option value="GrandZenith">Grand Zenith Soul Goulash (+25% All Stats, Max Sanity)</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn btn-cook" id="startCookingBtn">🍲 START BOILING</button>
+                    <button class="btn" id="stirPotBtn">🥄 STIR POT (Rhythm)</button>
+                </div>
+
+                <button class="btn" id="consumePortionBtn" style="color: var(--accent-green);">🥣 CONSUME MEAL PORTION</button>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Garrett Alchemical Ration Preservation:</span>
+                        <span class="control-val" id="saltDisplay">Standard Shelf-Life</span>
+                    </div>
+                    <button class="btn" id="saltBtn" style="color: var(--accent-gold);">🧂 APPLY EMBER SALTS (3.0x Shelf-Life)</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "Keep the embers stoked. Slow heat makes the marrow render."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="audioToggleBtn" style="flex: 1; color: var(--accent-cyan);">🔊 AUDITION EMBERS</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Pot Temperature</div>
+                <div class="telemetry-val" id="tempVal">20°C (Cold)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Pot State</div>
+                <div class="telemetry-val" id="stateVal" style="color: var(--accent-green);">Empty Cold</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Portions Remaining</div>
+                <div class="telemetry-val" id="portionsVal">0 / 3</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Active Morale Buff</div>
+                <div class="telemetry-val" id="buffVal" style="color: var(--accent-gold);">None</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Simmering Bubble Boil & Ember Crackles)
+        let audioCtx = null;
+        let crackleNoise = null;
+        let crackleGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Synthesize fire crackle noise
+                const bufferSize = audioCtx.sampleRate * 2;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * (Math.random() > 0.98 ? 1.0 : 0.05);
+                }
+
+                crackleNoise = audioCtx.createBufferSource();
+                crackleNoise.buffer = buffer;
+                crackleNoise.loop = true;
+
+                crackleGain = audioCtx.createGain();
+                crackleGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+
+                crackleNoise.connect(crackleGain);
+                crackleGain.connect(audioCtx.destination);
+                crackleNoise.start();
+            }
+        }
+
+        // State Machine
+        let temperature = 20.0;
+        let progress = 0.0;
+        let potState = "EmptyCold";
+        let portions = 0;
+        let activeRecipe = "Sentinel";
+        let bSalted = false;
+        let activeBuff = "None";
+
+        const recipeSelect = document.getElementById('recipeSelect');
+        const startCookingBtn = document.getElementById('startCookingBtn');
+        const stirPotBtn = document.getElementById('stirPotBtn');
+        const consumePortionBtn = document.getElementById('consumePortionBtn');
+        const saltBtn = document.getElementById('saltBtn');
+        const saltDisplay = document.getElementById('saltDisplay');
+        const copySeltBtn = document.getElementById('copySeltBtn');
+        const barkBox = document.getElementById('barkBox');
+
+        function updatePotUI() {
+            document.getElementById('tempVal').innerText = Math.round(temperature) + "°C";
+            document.getElementById('stateVal').innerText = potState;
+            document.getElementById('portionsVal').innerText = portions + " / 3";
+            document.getElementById('buffVal').innerText = activeBuff;
+
+            if (potState === "MealReadyServed") {
+                document.getElementById('stateVal').style.color = "var(--accent-gold)";
+            } else if (potState === "ActiveStirring" || potState === "SimmeringBoil") {
+                document.getElementById('stateVal').style.color = "var(--accent-orange)";
+            } else {
+                document.getElementById('stateVal').style.color = "var(--text-muted)";
+            }
+        }
+
+        startCookingBtn.onclick = () => {
+            initAudio();
+            activeRecipe = recipeSelect.value;
+            temperature = 75.0;
+            progress = 0.10;
+            potState = "SimmeringBoil";
+            portions = 0;
+
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Pot's on the boil. Keep stirring so the herbs don't scorch the iron."`;
+            updatePotUI();
+        };
+
+        stirPotBtn.onclick = () => {
+            if (potState !== "SimmeringBoil" && potState !== "ActiveStirring") return;
+            initAudio();
+            potState = "ActiveStirring";
+            progress += 0.30;
+            temperature = Math.min(105, temperature + 6);
+
+            if (progress >= 1.0) {
+                potState = "MealReadyServed";
+                portions = 3;
+                if (activeRecipe === "Sentinel") {
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Iron broth is ready. Thick enough to coat your ribs against cold steel."`;
+                } else if (activeRecipe === "Tisane") {
+                    barkBox.innerHTML = `<strong>[Serafina]:</strong> "The tisane has steeped. Let the warmth quiet the noise in your chest."`;
+                } else if (activeRecipe === "Venison") {
+                    barkBox.innerHTML = `<strong>[Kaelen]:</strong> "Venison's cooked. Eat while the fat is hot—tomorrow the road gets steep."`;
+                } else if (activeRecipe === "GrandZenith") {
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Now that... that smells like the grand zenith feasts before the sunder."`;
+                }
+            }
+            updatePotUI();
+        };
+
+        consumePortionBtn.onclick = () => {
+            if (portions <= 0 || potState !== "MealReadyServed") return;
+            initAudio();
+            portions--;
+
+            if (activeRecipe === "Sentinel") {
+                activeBuff = "+25% Poise, +150 Stamina";
+            } else if (activeRecipe === "Tisane") {
+                activeBuff = "-30% Burnout Accumulation";
+            } else if (activeRecipe === "Venison") {
+                activeBuff = "+20% Kinetic Dmg, Debt Freeze";
+            } else if (activeRecipe === "GrandZenith") {
+                activeBuff = "+25% All Stats, Max Sanity";
+            }
+
+            if (portions <= 0) {
+                potState = "EmptyCold";
+                temperature = 30.0;
+            }
+            updatePotUI();
+        };
+
+        saltBtn.onclick = () => {
+            initAudio();
+            bSalted = !bSalted;
+            saltDisplay.innerText = bSalted ? "Preserved (3.0x Shelf-Life)" : "Standard Shelf-Life";
+            saltBtn.innerText = bSalted ? "🧂 SALTED RATIONS ACTIVE" : "🧂 APPLY EMBER SALTS (3.0x Shelf-Life)";
+        };
+
+        document.getElementById('audioToggleBtn').onclick = () => {
+            initAudio();
+            alert("🔊 Soul-Ember Fire & Cauldron Audio Engaged!\nEnjoy the ambient crackling and boiling sounds.");
+        };
+
+        copySeltBtn.onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "CAMPFIRE_COOKING_RATIONING_TELEMETRY",
+                active_recipe: activeRecipe,
+                pot_temperature_celsius: Math.round(temperature),
+                pot_state: potState,
+                portions_remaining: portions,
+                ember_salt_preserved: bSalted,
+                active_morale_buff: activeBuff
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering (Campfire, Cauldron & Steam Particles)
+        const canvas = document.getElementById('cookingCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let steamParticles = [];
+
+        function animate(time) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2 + 50;
+
+            // Draw Campfire Embers & Flames
+            const flameHeight = (temperature > 50) ? 55 + Math.sin(time * 0.01) * 15 : 20;
+            ctx.fillStyle = '#ea580c';
+            ctx.beginPath();
+            ctx.arc(cx, cy + 85, 30, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.moveTo(cx - 25, cy + 85);
+            ctx.quadraticCurveTo(cx, cy + 85 - flameHeight, cx + 25, cy + 85);
+            ctx.fill();
+
+            // Draw Cauldron Tripod Legs
+            ctx.strokeStyle = '#44403c';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - 80);
+            ctx.lineTo(cx - 85, cy + 95);
+            ctx.moveTo(cx, cy - 80);
+            ctx.lineTo(cx + 85, cy + 95);
+            ctx.stroke();
+
+            // Draw Cast-Iron Cauldron Pot
+            ctx.fillStyle = '#1c1917';
+            ctx.strokeStyle = '#292524';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(cx, cy + 15, 60, 0, Math.PI);
+            ctx.fill();
+            ctx.stroke();
+
+            // Cauldron Rim & Stew Liquid
+            ctx.fillStyle = (potState === "MealReadyServed") ? '#d97706' : (temperature > 50 ? '#9a3412' : '#292524');
+            ctx.beginPath();
+            ctx.ellipse(cx, cy + 15, 60, 16, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Steam Particle Emitter
+            if (temperature > 60) {
+                if (Math.random() > 0.3) {
+                    steamParticles.push({
+                        x: cx + (Math.random() - 0.5) * 60,
+                        y: cy + 10,
+                        opacity: 0.6,
+                        size: 6 + Math.random() * 8,
+                        vy: 1.2 + Math.random() * 1.5
+                    });
+                }
+            }
+
+            for (let i = steamParticles.length - 1; i >= 0; i--) {
+                const p = steamParticles[i];
+                p.y -= p.vy;
+                p.opacity -= 0.012;
+                p.size += 0.2;
+
+                ctx.fillStyle = `rgba(254, 215, 170, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (p.opacity <= 0) {
+                    steamParticles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updatePotUI();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

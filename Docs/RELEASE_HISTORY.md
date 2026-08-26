@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2935: Master Batch #146 — The Soul-Ember Campfire Cooking & Alchemical Rationing System (COOKING-SPEC-087)
+**Domain:** World / Combat / AI / Audio / UI / Core / Orchestration / Narrative / QA  
+**Status:** 2,935 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2916 | `AshenCampfireCookingTypes.h` | `AshenCampfireCookingTypes` — Enums (3), Structs (2), Multicast Delegates (4) | World |
+| 2917 | `AshenCampfireCookingSubsystem.h/.cpp` | `UAshenCampfireCookingSubsystem` — Subsystem managing cauldron cooking & portions | World |
+| 2918 | `AshenMoraleBuffEvaluator.h/.cpp` | `UAshenMoraleBuffEvaluator` — Computes recipe morale buffs (+25% poise, -30% burnout) | World |
+| 2919 | `AshenRationSpoilageEvaluator.h/.cpp` | `UAshenRationSpoilageEvaluator` — Calculates ration freshness & 3.0x salt multiplier | World |
+| 2920 | `AshenAlchemicalRationingDirectorComponent.h/.cpp` | `UAshenAlchemicalRationingDirectorComponent` — Coordinates ingredient mixing & timing | World |
+| 2921 | `AshenConsumeCampfireMealGASAbility.h/.cpp` | `UAshenConsumeCampfireMealGASAbility` — Consumes meal and applies 10-minute buff | Combat |
+| 2922 | `AshenGarrettEmberSaltPreserveGASAbility.h/.cpp` | `UAshenGarrettEmberSaltPreserveGASAbility` — Garrett ability tripling ration shelf-life | Combat |
+| 2923 | `AshenSerafinaTisaneBrewGASAbility.h/.cpp` | `UAshenSerafinaTisaneBrewGASAbility` — Serafina herbal tisane reducing burnout rate | Combat |
+| 2924 | `AshenKaelenVenisonCarveGASAbility.h/.cpp` | `UAshenKaelenVenisonCarveGASAbility` — Kaelen ability harvesting game with +20% yield | Combat |
+| 2925 | `AshenTripartiteFeastBuffGASAbility.h/.cpp` | `UAshenTripartiteFeastBuffGASAbility` — Trio synergy feast granting +25% all stats | Combat |
+| 2926 | `UBTService_AshenCompanionCampfireSocialAI.h/.cpp` | `UBTService_AshenCompanionCampfireSocialAI` — AI service for companion campfire eating | AI |
+| 2927 | `AshenUserWidget_CampfireCookingHUD.h/.cpp` | `UAshenUserWidget_CampfireCookingHUD` — UMG pot boiling & recipe card interface | UI |
+| 2928 | `AshenCampfireAudioSubsystem.h/.cpp` | `UAshenCampfireAudioSubsystem` — MetaSounds stew boiling & ember crackle audio | Audio |
+| 2929 | `AshenCookingPotSimmerPostProcessAdapter.h/.cpp` | `UAshenCookingPotSimmerPostProcessAdapter` — Post-process heat haze & steam vignette | World |
+| 2930 | `AAshenCampfireCookingPotWorldActor.h/.cpp` | `AAshenCampfireCookingPotWorldActor` — Spatial world actor with tripod cauldron pot | World |
+| 2931 | `AshenCampfireCookingSaveGameAdapter.h/.cpp` | `UAshenCampfireCookingSaveGameAdapter` — Serializes unlocked recipes & active meal buffs | Core |
+| 2932 | `AshenCampfireCookingDialogueBridge.h/.cpp` | `UAshenCampfireCookingDialogueBridge` — Companion campfire culinary banter barks | Narrative |
+| 2933 | `AshenCampfireCookingHapticBridge.h/.cpp` | `UAshenCampfireCookingHapticBridge` — DualSense 25Hz ember crackle & stirring resistance | Combat |
+| 2934 | `AshenCampfireCookingMasterBridge.h/.cpp` | `UAshenCampfireCookingMasterBridge` — Master bridge connecting cooking subsystem & GAS | Orchestration |
+| 2935 | `AshenMasterBatch146AutomationTest.cpp` | `FAshenMasterBatch146AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2915: Master Batch #145 — The Environmental Destruction & Dynamic Rubble Physics Pipeline (CHAOS-SPEC-086)
 **Domain:** World / Chaos / Combat / AI / Audio / UI / Core / Orchestration / Narrative / QA  
 **Status:** 2,915 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
