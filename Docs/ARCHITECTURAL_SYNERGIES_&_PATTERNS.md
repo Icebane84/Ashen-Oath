@@ -51,10 +51,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-029`** | **Shroud-Knight Phase-Shift Dithering, Creeping Paranoia Peripheral Gaze Invalidation & Trinity Strike Finisher Invariant** | `CREATURE-SPEC-085` / Combat / AI / Audio / UI / Haptics | Phase-shifting dithering opacity mask ($1.00 \to 0.15$), peripheral phantom visibility gating ($\ge 45^\circ$), companion eye-contact grounding ($-0.15/\text{s}$), and 3-step Trinity Strike ($3.5\times$). |
 | **`SYN-030`** | **Chaos Rubble Mass Impulse Dynamics, Falling Masonry Hazard Radii & Cleave Demolition Invariant** | `CHAOS-SPEC-086` / World / Chaos / Combat / AI / Haptics | Rubble chunk mass scaling ($25.0\text{kg} \leftrightarrow 450.0\text{kg}$), navmesh traversal costs ($1.0\times \to 4.5\times$), $1.2\text{s}$ falling hazard telegraphs ($150\text{uu} \leftrightarrow 450\text{uu}$), and $+60\%$ thermal demolition efficiency. |
 | **`SYN-031`** | **Campfire Alchemical Recipe Boiling, Morale Satiation Scaling & Soul-Ember Infusion Invariant** | `COOKING-SPEC-087` / World / Combat / AI / Audio / UI / Haptics | Cauldron boiling curves ($60^\circ\text{C}-110^\circ\text{C}$), $+50\%$ stirring rhythm progress, 10-minute party buffs ($+25\%$ poise, $-30\%$ burnout, $+20\%$ damage), and Garrett ember-salt preservation ($3.0\times$). |
+| **`SYN-032`** | **Tactical Map Cartography Fog Unveiling, Sanctuary Beacon Attunement & Travel Hazard Ambush Invariant** | `MAP-SPEC-088` / World / Combat / AI / Audio / UI / Haptics | Fog of war reveal radius ($500\text{uu} \leftrightarrow 3500\text{uu}$), $3.0\text{s}$ beacon teleportation ($15\text{ stamina/km}$), travel ambush risk ($0-75\%$), and $-15\%$ surprise posture penalty. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-032`: Tactical Map Cartography Fog Unveiling, Sanctuary Beacon Attunement & Travel Hazard Ambush Invariant
+
+* **Target Subsystems:** `UAshenTacticalMapWaypointSubsystem`, `UAshenFogOfWarCartographyEvaluator`, `UAshenTravelHazardAmbushEvaluator`, `UAshenSanctuaryFastTravelDirectorComponent`, `UAshenTacticalMapHapticBridge`
+* **Related Specifications:** [`MAP-SPEC-088`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/MAP-SPEC-088%20%28THE%20TACTICAL%20MAP%20OVERHAUL%20&%20FAST%20TRAVEL%20SANCTUARY%20WAYPOINT%20SUBSYSTEM%29.md)
+
+#### 📐 Mathematical Invariants:
+$$R_{\text{unveil}}(Z, b\text{Torch}, b\text{Lookout}) = \begin{cases} 3500.0, & \text{if } b\text{Lookout} \\ \text{clamp}\left(800.0 + (b\text{Torch} \cdot 400.0) + \text{clamp}(\frac{Z}{500.0} \cdot 200.0, 0.0, 600.0), 500.0, 2500.0\right), & \text{otherwise} \end{cases} \quad [\text{uu}]$$
+$$P_{\text{ambush}}(D, C, b\text{Salt}) = \text{clamp}\left(((D \cdot 3.0) + (C \cdot 40.0)) \cdot (b\text{Salt} ? 0.50 : 1.00), 0.0, 75.0\right) \quad [\%]$$
+$$\text{Cost}_{\text{stamina}}(D) = D \cdot 15.0 \quad [\text{Stamina}]$$
+$$\text{PostureMitigation}(b\text{Surprise}) = \begin{cases} 0.85\times, & \text{if } b\text{Surprise} \\ 1.00\times, & \text{otherwise} \end{cases}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Overland Travel Tension:** Fast travel is not free or detached from the world; moving across perilous, high-corruption biomes introduces calculated risk curves ($P_{\text{ambush}}$) that connect directly back to field rations (Garrett's salts reduce ambush risk by $50\%$) and stamina management.
+* **Topographic Cartography Parity:** Exploration visibility mirrors physical world verticality—players atop mountainous crags or watchtowers unveil massive fog chunks ($3500\text{uu}$), reinforcing environmental reconnaissance.
+
+---
 
 ---
 

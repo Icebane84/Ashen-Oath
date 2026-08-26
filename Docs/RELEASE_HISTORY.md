@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2955: Master Batch #147 — The Tactical Map Overhaul & Fast Travel Sanctuary Waypoint Subsystem (MAP-SPEC-088)
+**Domain:** World / Combat / AI / Audio / UI / Core / Orchestration / Narrative / QA  
+**Status:** 2,955 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2936 | `AshenTacticalMapTypes.h` | `AshenTacticalMapTypes` — Enums (3), Structs (2), Multicast Delegates (4) | World |
+| 2937 | `AshenTacticalMapWaypointSubsystem.h/.cpp` | `UAshenTacticalMapWaypointSubsystem` — Subsystem managing waypoints & fast travel | World |
+| 2938 | `AshenFogOfWarCartographyEvaluator.h/.cpp` | `UAshenFogOfWarCartographyEvaluator` — Computes 500-2500uu fog unveil & lookout views | World |
+| 2939 | `AshenTravelHazardAmbushEvaluator.h/.cpp` | `UAshenTravelHazardAmbushEvaluator` — Calculates ambush risk & surprise penalties | World |
+| 2940 | `AshenSanctuaryFastTravelDirectorComponent.h/.cpp` | `UAshenSanctuaryFastTravelDirectorComponent` — Directs 3.0s channel & stamina costs | World |
+| 2941 | `AshenFastTravelTeleportGASAbility.h/.cpp` | `UAshenFastTravelTeleportGASAbility` — Channels fast travel teleportation | Combat |
+| 2942 | `AshenIgniteSanctuaryBeaconGASAbility.h/.cpp` | `UAshenIgniteSanctuaryBeaconGASAbility` — Ignites & attunes ancient campfire beacons | Combat |
+| 2943 | `AshenGarrettCartographerSurveyGASAbility.h/.cpp` | `UAshenGarrettCartographerSurveyGASAbility` — Garrett ability surveying from high ground | Combat |
+| 2944 | `AshenTravelAmbushSurpriseGASAbility.h/.cpp` | `UAshenTravelAmbushSurpriseGASAbility` — Executes roadside ambush skirmishes | Combat |
+| 2945 | `AshenSanctuaryRecallGASAbility.h/.cpp` | `UAshenSanctuaryRecallGASAbility` — Emergency warp recall to last visited hearth | Combat |
+| 2946 | `UBTService_AshenRoadsideAmbushAITactics.h/.cpp` | `UBTService_AshenRoadsideAmbushAITactics` — AI service for coordinated ambush attacks | AI |
+| 2947 | `AshenUserWidget_TacticalMapHUD.h/.cpp` | `UAshenUserWidget_TacticalMapHUD` — UMG interactive cartographic parchment map | UI |
+| 2948 | `AshenTacticalMapAudioSubsystem.h/.cpp` | `UAshenTacticalMapAudioSubsystem` — MetaSounds 432Hz harmonic hums & teleport whooshes | Audio |
+| 2949 | `AshenMapParchmentPostProcessAdapter.h/.cpp` | `UAshenMapParchmentPostProcessAdapter` — Post-process sepia ink contour shader | Combat |
+| 2950 | `AAshenSanctuaryBeaconWorldActor.h/.cpp` | `AAshenSanctuaryBeaconWorldActor` — Spatial stone campfire brazier world actor | World |
+| 2951 | `AshenTacticalMapSaveGameAdapter.h/.cpp` | `UAshenTacticalMapSaveGameAdapter` — Serializes discovered beacons & fog masks | Core |
+| 2952 | `AshenTacticalMapNarrativeBridge.h/.cpp` | `UAshenTacticalMapNarrativeBridge` — Companion fast travel & discovery barks | Narrative |
+| 2953 | `AshenTacticalMapHapticBridge.h/.cpp` | `UAshenTacticalMapHapticBridge` — DualSense boundary drag resistance & pulse | Combat |
+| 2954 | `AshenTacticalMapMasterBridge.h/.cpp` | `UAshenTacticalMapMasterBridge` — Master bridge connecting map subsystem & GAS | Orchestration |
+| 2955 | `AshenMasterBatch147AutomationTest.cpp` | `FAshenMasterBatch147AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2935: Master Batch #146 — The Soul-Ember Campfire Cooking & Alchemical Rationing System (COOKING-SPEC-087)
 **Domain:** World / Combat / AI / Audio / UI / Core / Orchestration / Narrative / QA  
 **Status:** 2,935 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

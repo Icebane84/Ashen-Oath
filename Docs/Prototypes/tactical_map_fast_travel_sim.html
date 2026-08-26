@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Tactical Map Overhaul & Fast Travel Simulator</title>
+    <!-- Traceability: MAP-SPEC-088 | Builds 2936-2955 -->
+    <style>
+        :root {
+            --bg-primary: #07090d;
+            --bg-secondary: #0e131b;
+            --panel-bg: #151d2a;
+            --border-color: #243248;
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-orange: #f97316;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #090e15;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #090e15;
+            display: block;
+            width: 100%;
+            height: 440px;
+            cursor: crosshair;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-warp {
+            background: #0369a1;
+            border-color: #38bdf8;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-warp:hover {
+            background: #0284c7;
+        }
+
+        .bark-box {
+            background: #0c1522;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #bae6fd;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>TACTICAL CARTOGRAPHY & FAST TRAVEL SANCTUARY SIMULATOR</h1>
+                <p>Fog of War Exploration Grid, Campfire Beacon Attunement & Travel Hazard Ambush Risk (MAP-SPEC-088)</p>
+            </div>
+            <div class="badge">BUILD 2955</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="mapCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Selected Sanctuary Beacon:</span>
+                        <span class="control-val" id="selectedBeaconDisplay">Gloomwood Hearth</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button class="btn" id="selectB1">🌲 Gloomwood Hearth</button>
+                        <button class="btn" id="selectB2">❄️ Frostvein Altar</button>
+                        <button class="btn" id="selectB3">🌋 Ashen Caldera</button>
+                        <button class="btn" id="selectB4">🪽 Floating Citadel</button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn" id="attuneBtn" style="color: var(--accent-gold);">🔥 ATTUNE BEACON</button>
+                    <button class="btn btn-warp" id="fastTravelBtn">🌀 FAST TRAVEL (3.0s)</button>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Garrett Spyglass Vantage Survey:</span>
+                    </div>
+                    <button class="btn" id="surveyBtn" style="color: var(--accent-cyan);">🔭 CLEAR FOG (3500uu Lookout)</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "Check the map. The fog is thick ahead."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="toggleSaltBtn" style="flex: 1; color: var(--accent-orange);">🧂 Salt Provisions: OFF</button>
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Current Location</div>
+                <div class="telemetry-val" id="currentLocVal" style="color: var(--accent-gold);">Gloomwood</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Beacon State</div>
+                <div class="telemetry-val" id="stateVal" style="color: var(--accent-green);">Attuned</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Ambush Probability</div>
+                <div class="telemetry-val" id="ambushVal">0% (Safe)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Stamina Cost</div>
+                <div class="telemetry-val" id="costVal">0 Stamina</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (432Hz Harmonic Sanctuary Resonance & Teleport Woosh)
+        let audioCtx = null;
+        let humOsc = null;
+        let humGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                humOsc = audioCtx.createOscillator();
+                humGain = audioCtx.createGain();
+
+                humOsc.type = 'sine';
+                humOsc.frequency.setValueAtTime(432, audioCtx.currentTime); // 432Hz harmonic
+                humGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+
+                humOsc.connect(humGain);
+                humGain.connect(audioCtx.destination);
+                humOsc.start();
+            }
+        }
+
+        // Waypoints Dataset
+        const waypoints = [
+            { id: "B1", name: "Gloomwood Hearth", x: 140, y: 320, state: "Attuned", distKm: 0, corruption: 0.2 },
+            { id: "B2", name: "Frostvein Altar", x: 260, y: 140, state: "Discovered", distKm: 6.2, corruption: 0.4 },
+            { id: "B3", name: "Ashen Caldera", x: 480, y: 280, state: "Undiscovered", distKm: 11.5, corruption: 0.7 },
+            { id: "B4", name: "Floating Citadel", x: 550, y: 110, state: "Undiscovered", distKm: 16.0, corruption: 0.9 }
+        ];
+
+        let currentLocation = waypoints[0];
+        let selectedLocation = waypoints[0];
+        let bSalted = false;
+        let fogExploration = [{ x: 140, y: 320, r: 120 }];
+
+        const selectedBeaconDisplay = document.getElementById('selectedBeaconDisplay');
+        const barkBox = document.getElementById('barkBox');
+
+        function updateMapUI() {
+            selectedBeaconDisplay.innerText = selectedLocation.name;
+            document.getElementById('currentLocVal').innerText = currentLocation.name;
+            document.getElementById('stateVal').innerText = selectedLocation.state;
+            
+            if (selectedLocation.state === "Attuned") {
+                document.getElementById('stateVal').style.color = "var(--accent-green)";
+            } else if (selectedLocation.state === "Discovered") {
+                document.getElementById('stateVal').style.color = "var(--accent-gold)";
+            } else {
+                document.getElementById('stateVal').style.color = "var(--text-muted)";
+            }
+
+            const dist = Math.hypot(selectedLocation.x - currentLocation.x, selectedLocation.y - currentLocation.y) / 25;
+            let risk = (dist * 3.0) + (selectedLocation.corruption * 40.0);
+            if (bSalted) risk *= 0.5;
+            risk = Math.min(75, Math.max(0, Math.round(risk)));
+
+            document.getElementById('ambushVal').innerText = (dist === 0) ? "0% (Safe)" : risk + "% Risk";
+            document.getElementById('ambushVal').style.color = (risk > 40) ? "var(--accent-red)" : "var(--accent-cyan)";
+            document.getElementById('costVal').innerText = Math.round(dist * 15) + " Stamina";
+        }
+
+        document.getElementById('selectB1').onclick = () => { selectedLocation = waypoints[0]; updateMapUI(); };
+        document.getElementById('selectB2').onclick = () => { selectedLocation = waypoints[1]; updateMapUI(); };
+        document.getElementById('selectB3').onclick = () => { selectedLocation = waypoints[2]; updateMapUI(); };
+        document.getElementById('selectB4').onclick = () => { selectedLocation = waypoints[3]; updateMapUI(); };
+
+        document.getElementById('attuneBtn').onclick = () => {
+            initAudio();
+            selectedLocation.state = "Attuned";
+            fogExploration.push({ x: selectedLocation.x, y: selectedLocation.y, r: 100 });
+            barkBox.innerHTML = `<strong>[Serafina]:</strong> "The hearth flame is rekindled. We have an anchor in these ruins."`;
+            updateMapUI();
+        };
+
+        document.getElementById('fastTravelBtn').onclick = () => {
+            initAudio();
+            if (selectedLocation.state !== "Attuned") {
+                alert("⚠️ Cannot Fast Travel: Beacon is not yet attuned!");
+                return;
+            }
+            currentLocation = selectedLocation;
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Teleportation complete. Welcome to ${selectedLocation.name}."`;
+            updateMapUI();
+        };
+
+        document.getElementById('surveyBtn').onclick = () => {
+            initAudio();
+            fogExploration.push({ x: 350, y: 220, r: 250 });
+            waypoints.forEach(w => { if (w.state === "Undiscovered") w.state = "Discovered"; });
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Spyglass vantage cleared the valley fog. All waypoints marked."`;
+            updateMapUI();
+        };
+
+        document.getElementById('toggleSaltBtn').onclick = () => {
+            bSalted = !bSalted;
+            document.getElementById('toggleSaltBtn').innerText = bSalted ? "🧂 Salt Provisions: ON (-50% Risk)" : "🧂 Salt Provisions: OFF";
+            updateMapUI();
+        };
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "TACTICAL_MAP_FAST_TRAVEL_TELEMETRY",
+                current_sanctuary: currentLocation.name,
+                selected_destination: selectedLocation.name,
+                destination_beacon_state: selectedLocation.state,
+                ambush_probability: document.getElementById('ambushVal').innerText,
+                stamina_travel_cost: document.getElementById('costVal').innerText,
+                ember_salt_mitigation: bSalted
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Canvas Rendering (Parchment Map, Fog of War, Waypoint Pins)
+        const canvas = document.getElementById('mapCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Topographic Contour Lines
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            for (let r = 50; r < 500; r += 50) {
+                ctx.beginPath();
+                ctx.arc(335, 220, r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Draw Fast Travel Trajectory
+            if (currentLocation !== selectedLocation) {
+                ctx.strokeStyle = '#38bdf8';
+                ctx.setLineDash([6, 6]);
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(currentLocation.x, currentLocation.y);
+                ctx.lineTo(selectedLocation.x, selectedLocation.y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // Draw Fog of War Overlay
+            ctx.fillStyle = 'rgba(7, 9, 13, 0.75)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Punch holes in fog for explored areas
+            ctx.globalCompositeOperation = 'destination-out';
+            fogExploration.forEach(f => {
+                const grad = ctx.createRadialGradient(f.x, f.y, f.r * 0.4, f.x, f.y, f.r);
+                grad.addColorStop(0, 'rgba(0,0,0,1)');
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalCompositeOperation = 'source-over';
+
+            // Draw Waypoint Pins
+            waypoints.forEach(w => {
+                ctx.fillStyle = (w.state === "Attuned") ? '#38bdf8' : (w.state === "Discovered" ? '#fbbf24' : '#475569');
+                ctx.strokeStyle = (w === selectedLocation) ? '#ffffff' : '#0f172a';
+                ctx.lineWidth = 2;
+
+                ctx.beginPath();
+                ctx.arc(w.x, w.y, (w === selectedLocation ? 10 : 7), 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Draw Current Party Marker
+                if (w === currentLocation) {
+                    ctx.strokeStyle = '#22c55e';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.arc(w.x, w.y, 14, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                // Label
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = '11px monospace';
+                ctx.fillText(w.name, w.x - 30, w.y + 20);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        updateMapUI();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

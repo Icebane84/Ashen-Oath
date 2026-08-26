@@ -1,6 +1,6 @@
 # Ashen Oath — Architecture Map & Vertical Slices
-**Status:** Clean Production Architecture | **2,935 Builds Clean** (0 Errors, 0 Warnings)
-**Unreal Engine Version:** 5.8 | **Master Milestone:** 2935 (Master Batches #1–#146)
+**Status:** Clean Production Architecture | **2,955 Builds Clean** (0 Errors, 0 Warnings)
+**Unreal Engine Version:** 5.8 | **Master Milestone:** 2955 (Master Batches #1–#147)
 
 ---
 
@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Master Batch #147 (Builds 2936–2955)**: The Tactical Map Overhaul & Fast Travel Sanctuary Waypoint Subsystem (MAP-SPEC-088) (100% Pure Gameplay Density)
 - **Master Batch #146 (Builds 2916–2935)**: The Soul-Ember Campfire Cooking & Alchemical Rationing System (COOKING-SPEC-087) (100% Pure Gameplay Density)
 - **Master Batch #145 (Builds 2896–2915)**: The Environmental Destruction & Dynamic Rubble Physics Pipeline (CHAOS-SPEC-086) (100% Pure Gameplay Density)
 - **Master Batch #144 (Builds 2876–2895)**: The Shroud-Knight Boss Encounter & Creeping Paranoia System (CREATURE-SPEC-085) (100% Pure Gameplay Density)
