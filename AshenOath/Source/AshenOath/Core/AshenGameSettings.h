@@ -95,6 +95,10 @@ public:
 	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (ClampMin = "0.05"))
 	float BaseDodgeDuration;
 
+	/** Stamina cost consumed upon executing a dodge roll */
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (ClampMin = "0.0"))
+	float BaseDodgeStaminaCost;
+
 	/** Camera trauma amount added when wielder receives damage */
 	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (ClampMin = "0.0", ClampMax = "1.0"))
 	float DamageTraumaAmount;

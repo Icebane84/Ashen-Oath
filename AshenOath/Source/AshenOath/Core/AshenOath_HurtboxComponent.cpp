@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AshenOath_HurtboxComponent.h"
+#include "AshenOathCharacter.h"
 #include "AshenOath_HealthComponent.h"
 #include "AshenCharacterInterface.h"
 #include "AshenOath_PoiseComponent.h"
@@ -35,6 +36,19 @@ void UAshenOath_HurtboxComponent::BeginPlay()
 
 float UAshenOath_HurtboxComponent::ReceiveDamage(float DamageAmount, float PoiseAmount, AActor* DamageSource)
 {
+	// 0. Invulnerability Frames (i-Frames) during active Dodge Roll
+	if (AActor* OwnerActor = GetOwner())
+	{
+		if (AAshenOathCharacter* AshenChar = Cast<AAshenOathCharacter>(OwnerActor))
+		{
+			if (AshenChar->IsDodging())
+			{
+				// Total damage & poise immunity during invincibility roll frames
+				return 0.0f;
+			}
+		}
+	}
+
 	// 1. Parry Window check with Integration Debt (Runtime Noise) degradation
 	if (bIsParryWindow)
 	{

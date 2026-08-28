@@ -29,6 +29,7 @@ UAshenGameSettings::UAshenGameSettings()
 
 	BaseDodgeForce = 1500.0f;
 	BaseDodgeDuration = 0.4f;
+	BaseDodgeStaminaCost = 20.0f;
 	DamageTraumaAmount = 0.4f;
 	BaseNormalFOV = 75.0f;
 	BaseSprintFOV = 85.0f;

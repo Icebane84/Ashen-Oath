@@ -124,6 +124,12 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Ashen Oath|Character|States")
 	bool bIsSprinting;
 
+	UFUNCTION(BlueprintPure, Category = "Ashen Oath|Character|States")
+	bool IsDodging() const { return bIsDodging; }
+
+	UFUNCTION(BlueprintPure, Category = "Ashen Oath|Character|States")
+	bool IsSprinting() const { return bIsSprinting; }
+
 public:
 
 	/** Constructor */

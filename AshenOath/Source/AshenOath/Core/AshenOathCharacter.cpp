@@ -251,50 +251,97 @@ void AAshenOathCharacter::DoDodge()
 		InputBuffer->ConsumeBufferedAction(TEXT("Dodge"));
 	}
 
-	if (!bIsDodging)
+	if (bIsDodging)
 	{
-		bIsDodging = true;
-		
-		// Broadcast delegate matching dodge_started signal
-		if (OnDodgeStarted.IsBound())
-		{
-			OnDodgeStarted.Broadcast();
-		}
+		return;
+	}
 
-		// Calculate direction
-		FVector DodgeDirection = GetLastMovementInputVector().GetSafeNormal();
+	// Query settings for dodge forces and stamina costs
+	float DodgeForce = 1500.0f;
+	float DodgeDuration = 0.4f;
+	float DodgeStaminaCost = 20.0f;
+	if (const UAshenGameSettings* Settings = GetDefault<UAshenGameSettings>())
+	{
+		DodgeForce = Settings->BaseDodgeForce;
+		DodgeDuration = Settings->BaseDodgeDuration;
+		DodgeStaminaCost = Settings->BaseDodgeStaminaCost;
+	}
+
+	// 1. Stamina Gating & Consumption
+	if (UAshenOath_StaminaComponent* StaminaComp = FindComponentByClass<UAshenOath_StaminaComponent>())
+	{
+		if (StaminaComp->GetCurrentStamina() < DodgeStaminaCost)
+		{
+			// Insufficient stamina for dodge roll
+			return;
+		}
+		StaminaComp->ConsumeStamina(DodgeStaminaCost);
+	}
+
+	bIsDodging = true;
+	
+	// Broadcast delegate matching dodge_started signal
+	if (OnDodgeStarted.IsBound())
+	{
+		OnDodgeStarted.Broadcast();
+	}
+
+	// 2. Direction Calculation with Lock-On Orbital Strafe Support
+	FVector DodgeDirection = FVector::ZeroVector;
+	FVector InputVector = GetLastMovementInputVector().GetSafeNormal2D();
+
+	UAshenOath_LockOnComponent* LockOnComp = FindComponentByClass<UAshenOath_LockOnComponent>();
+	if (LockOnComp && LockOnComp->IsLockedOn() && LockOnComp->GetLockedTarget())
+	{
+		AActor* LockedTarget = LockOnComp->GetLockedTarget();
+		FVector ToTarget = (LockedTarget->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
+		FVector TangentRight = FVector(-ToTarget.Y, ToTarget.X, 0.0f); // 90 degrees clockwise
+
+		if (InputVector.IsNearlyZero())
+		{
+			// Default to backward hop away from locked target
+			DodgeDirection = -ToTarget;
+		}
+		else
+		{
+			// Orbital Strafe: Project player input onto Target Radial (Forward/Back) and Tangent (Left/Right Orbit) axes
+			float RadialDot = FVector::DotProduct(InputVector, ToTarget);
+			float LateralDot = FVector::DotProduct(InputVector, TangentRight);
+
+			// Synthesize orbital flank dodge vector
+			DodgeDirection = (ToTarget * RadialDot + TangentRight * LateralDot).GetSafeNormal2D();
+		}
+	}
+	else
+	{
+		// Free-aim directional dodge
+		DodgeDirection = InputVector;
 		if (DodgeDirection.IsNearlyZero())
 		{
-			DodgeDirection = -GetActorForwardVector(); // fallback to backward dodge
+			DodgeDirection = -GetActorForwardVector().GetSafeNormal2D(); // fallback to backward dodge
 		}
+	}
 
-		// Snap rotation to face direction
+	// Snap rotation to face direction
+	if (!DodgeDirection.IsNearlyZero())
+	{
 		FRotator NewRotation = FRotationMatrix::MakeFromX(DodgeDirection).Rotator();
 		NewRotation.Pitch = 0.0f;
 		NewRotation.Roll = 0.0f;
 		SetActorRotation(NewRotation);
-
-		// Query settings for dodge forces
-		float DodgeForce = 1500.0f;
-		float DodgeDuration = 0.4f;
-		if (const UAshenGameSettings* Settings = GetDefault<UAshenGameSettings>())
-		{
-			DodgeForce = Settings->BaseDodgeForce;
-			DodgeDuration = Settings->BaseDodgeDuration;
-		}
-
-		// Launch Character
-		LaunchCharacter(DodgeDirection * DodgeForce, true, true);
-
-		// Set timer to end dodge after duration
-		GetWorldTimerManager().SetTimer(
-			DodgeTimerHandle,
-			this,
-			&AAshenOathCharacter::EndDodge,
-			DodgeDuration,
-			false
-		);
 	}
+
+	// Launch Character
+	LaunchCharacter(DodgeDirection * DodgeForce, true, true);
+
+	// Set timer to end dodge after duration
+	GetWorldTimerManager().SetTimer(
+		DodgeTimerHandle,
+		this,
+		&AAshenOathCharacter::EndDodge,
+		DodgeDuration,
+		false
+	);
 }
 
 void AAshenOathCharacter::EndDodge()
