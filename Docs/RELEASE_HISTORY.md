@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 2995: Master Batch #149 — The Oathbringer Blade, Sanity Collapse & Quartz Conductor Flow Loop (CONVERGENCE-SPEC-090)
+**Domain:** Combat / Audio / AI / UI / Core / Orchestration / Narrative / World / QA  
+**Status:** 2,995 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2976 | `AshenBladeSanityConductorTypes.h` | `AshenBladeSanityConductorTypes` — Enums (3), Structs (1), Multicast Delegates (4) | Combat |
+| 2977 | `AshenBladeSanityConductorConvergenceSubsystem.h/.cpp` | `UAshenBladeSanityConductorConvergenceSubsystem` — Master convergence subsystem | Combat |
+| 2978 | `AshenBladeSanityFeedbackEvaluator.h/.cpp` | `UAshenBladeSanityFeedbackEvaluator` — Calculates +45% dmg, -35% parry window | Combat |
+| 2979 | `AshenQuartzDissonanceMixEvaluator.h/.cpp` | `UAshenQuartzDissonanceMixEvaluator` — Computes Stem 02 gain & -18dB ducking | Combat |
+| 2980 | `AshenFlowStateCatharsisDirectorComponent.h/.cpp` | `UAshenFlowStateCatharsisDirectorComponent` — Directs 8s Flow State +40 sanity purge | Combat |
+| 2981 | `AshenParasiticBladeSiphonGASAbility.h/.cpp` | `UAshenParasiticBladeSiphonGASAbility` — Siphons blood (-30% hunger) on cleaves | Combat |
+| 2982 | `AshenSanityCollapseDissonanceGASAbility.h/.cpp` | `UAshenSanityCollapseDissonanceGASAbility` — Debuff state at <25 sanity (1.5x stamina) | Combat |
+| 2983 | `AshenSymbioticFlowCatharsisGASAbility.h/.cpp` | `UAshenSymbioticFlowCatharsisGASAbility` — Channels 8s flow purge & whisper silence | Combat |
+| 2984 | `AshenGarrettSanityAnchorSaltsGASAbility.h/.cpp` | `UAshenGarrettSanityAnchorSaltsGASAbility` — Garrett ability freezing decay for 12s | Combat |
+| 2985 | `AshenSerafinaPurifyingResonanceGASAbility.h/.cpp` | `UAshenSerafinaPurifyingResonanceGASAbility` — Serafina White Flame +30 sanity restore | Combat |
+| 2986 | `UBTService_AshenCompanionSanitySupportAI.h/.cpp` | `UBTService_AshenCompanionSanitySupportAI` — AI service for companion sanity triage | AI |
+| 2987 | `AshenUserWidget_BladeSanityConductorHUD.h/.cpp` | `UAshenUserWidget_BladeSanityConductorHUD` — UMG HUD displaying 6-stem visualizer | UI |
+| 2988 | `AshenConvergenceAudioSubsystem.h/.cpp` | `UAshenConvergenceAudioSubsystem` — MetaSounds Eldrin whispers & flow chords | Audio |
+| 2989 | `AshenSanityDissonancePostProcessAdapter.h/.cpp` | `UAshenSanityDissonancePostProcessAdapter` — Post-process chromatic aberration | Combat |
+| 2990 | `AAshenSanityCrucibleResonanceWorldActor.h/.cpp` | `AAshenSanityCrucibleResonanceWorldActor` — Spatial crucible sanity purge altar | World |
+| 2991 | `AshenBladeSanitySaveGameAdapter.h/.cpp` | `UAshenBladeSanitySaveGameAdapter` — Serializes blade hunger, sanity & stem mix | Core |
+| 2992 | `AshenBladeSanityNarrativeBridge.h/.cpp` | `UAshenBladeSanityNarrativeBridge` — Contextual companion sanity & flow barks | Narrative |
+| 2993 | `AshenBladeSanityHapticBridge.h/.cpp` | `UAshenBladeSanityHapticBridge` — DualSense 45Hz blade rumble & flow purr | Combat |
+| 2994 | `AshenBladeSanityMasterBridge.h/.cpp` | `UAshenBladeSanityMasterBridge` — Master bridge connecting blade, sanity & audio | Orchestration |
+| 2995 | `AshenMasterBatch149AutomationTest.cpp` | `FAshenMasterBatch149AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2975: Master Batch #148 — The Dynamic Weather & Environmental Biome Hazard System (WEATHER-SPEC-089)
 **Domain:** World / Combat / AI / Audio / UI / Core / Orchestration / Narrative / QA  
 **Status:** 2,975 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

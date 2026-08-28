@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Oathbringer Blade, Sanity Collapse & Quartz Flow Simulator</title>
+    <!-- Traceability: CONVERGENCE-SPEC-090 | Builds 2976-2995 -->
+    <style>
+        :root {
+            --bg-primary: #06080c;
+            --bg-secondary: #0d121a;
+            --panel-bg: #141c28;
+            --border-color: #26364d;
+            --accent-cyan: #38bdf8;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --accent-gold: #fbbf24;
+            --accent-green: #22c55e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #080c14;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #080c14;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-purple);
+        }
+
+        .btn-flow {
+            background: #047857;
+            border-color: #34d399;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 14px rgba(52, 211, 153, 0.4);
+        }
+
+        .btn-flow:hover {
+            background: #059669;
+        }
+
+        .bark-box {
+            background: #0c1524;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #e9d5ff;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-purple);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>OATHBRINGER BLADE, SANITY COLLAPSE & QUARTZ CONDUCTOR FLOW LOOP</h1>
+                <p>Parasitic Hunger ↔ Dissonant Stem 02 Whispers ↔ 8-Second Symbiotic Catharsis (CONVERGENCE-SPEC-090)</p>
+            </div>
+            <div class="badge">BUILD 2995</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="convergenceCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Oathbringer Blade Hunger:</span>
+                        <span class="control-val" id="hungerDisplay">0% (Sated)</span>
+                    </div>
+                    <input type="range" id="hungerSlider" min="0" max="100" value="0" style="width: 100%; accent-color: var(--accent-red);">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn" id="strikeBtn" style="color: var(--accent-red);">🩸 Blood Strike (+15% Hunger)</button>
+                    <button class="btn" id="siphonBtn" style="color: var(--accent-cyan);">🗡️ Siphon Cleave (-30% Hunger)</button>
+                </div>
+
+                <button class="btn btn-flow" id="flowBtn">🌊 TRIGGER 8-SEC FLOW CATHARSIS (+40 SANITY)</button>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn" id="saltsBtn" style="color: var(--accent-gold);">🧂 Garrett Smelling Salts</button>
+                    <button class="btn" id="purifyBtn" style="color: var(--accent-green);">🔥 Serafina White Flame</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Kaelen]: "My thoughts are clear. The sword is disciplined."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-green);">📋 COPY SELT CONVERGENCE EVENT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Sanity Level</div>
+                <div class="telemetry-val" id="sanityVal" style="color: var(--accent-green);">100.0</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Stem 02 Whispers</div>
+                <div class="telemetry-val" id="whisperVal">0.0 (Muted)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Melodic Ducking</div>
+                <div class="telemetry-val" id="duckingVal">0.0 dB</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Blade Damage Bonus</div>
+                <div class="telemetry-val" id="dmgBonusVal">+0.0%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Stem 02 Whispers & Flow Chords)
+        let audioCtx = null;
+        let whisperNoise = null;
+        let whisperGain = null;
+        let flowOsc = null;
+        let flowGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+                // Stem 02 Whispers Synthesizer
+                const bufferSize = audioCtx.sampleRate * 2;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * 0.15;
+                }
+                whisperNoise = audioCtx.createBufferSource();
+                whisperNoise.buffer = buffer;
+                whisperNoise.loop = true;
+
+                whisperGain = audioCtx.createGain();
+                whisperGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
+
+                whisperNoise.connect(whisperGain);
+                whisperGain.connect(audioCtx.destination);
+                whisperNoise.start();
+
+                // Flow State Radiant Chords
+                flowOsc = audioCtx.createOscillator();
+                flowOsc.type = 'triangle';
+                flowOsc.frequency.setValueAtTime(528, audioCtx.currentTime); // 528Hz Solfeggio Miracle tone
+                flowGain = audioCtx.createGain();
+                flowGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
+
+                flowOsc.connect(flowGain);
+                flowGain.connect(audioCtx.destination);
+                flowOsc.start();
+            }
+        }
+
+        // Convergence State
+        let hunger01 = 0.0;
+        let sanity = 100.0;
+        let bFlowActive = false;
+        let flowTimer = 0.0;
+
+        const hungerSlider = document.getElementById('hungerSlider');
+        const hungerDisplay = document.getElementById('hungerDisplay');
+        const barkBox = document.getElementById('barkBox');
+
+        function updateConvergenceUI() {
+            hungerDisplay.innerText = Math.round(hunger01 * 100) + "%";
+            document.getElementById('sanityVal').innerText = sanity.toFixed(1);
+
+            const whisperGainVal = bFlowActive ? 0.0 : Math.max(0.0, (100.0 - sanity) / 100.0);
+            const duckingDb = -18.0 * whisperGainVal;
+            const dmgBonus = (hunger01 * 45.0).toFixed(1);
+
+            document.getElementById('whisperVal').innerText = whisperGainVal.toFixed(2);
+            document.getElementById('duckingVal').innerText = duckingDb.toFixed(1) + " dB";
+            document.getElementById('dmgBonusVal').innerText = "+" + dmgBonus + "%";
+
+            // Audio Synthesis Volume Updates
+            if (audioCtx && whisperGain && flowGain) {
+                whisperGain.gain.setValueAtTime(whisperGainVal * 0.15, audioCtx.currentTime);
+                flowGain.gain.setValueAtTime(bFlowActive ? 0.10 : 0.0, audioCtx.currentTime);
+            }
+
+            // Dialogue Barks
+            if (bFlowActive) {
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "The White Flame sings through you—the shadows are banished!"`;
+            } else if (sanity < 25) {
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "KAELEN! Look at me! Don't listen to the blade's voice!"`;
+            } else if (sanity < 50) {
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "The whispers are clouding your mind. Find the rhythm."`;
+            } else if (hunger01 > 0.6) {
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Blade's getting hungry. Don't let it drink too deep."`;
+            } else {
+                barkBox.innerHTML = `<strong>[Kaelen]:</strong> "My thoughts are clear. The sword is disciplined."`;
+            }
+        }
+
+        hungerSlider.oninput = () => {
+            hunger01 = hungerSlider.value / 100.0;
+            updateConvergenceUI();
+        };
+
+        document.getElementById('strikeBtn').onclick = () => {
+            initAudio();
+            hunger01 = Math.min(1.0, hunger01 + 0.15);
+            hungerSlider.value = hunger01 * 100;
+            updateConvergenceUI();
+        };
+
+        document.getElementById('siphonBtn').onclick = () => {
+            initAudio();
+            hunger01 = Math.max(0.0, hunger01 - 0.30);
+            hungerSlider.value = hunger01 * 100;
+            updateConvergenceUI();
+        };
+
+        document.getElementById('flowBtn').onclick = () => {
+            initAudio();
+            bFlowActive = true;
+            flowTimer = 8.0;
+            sanity = Math.min(100.0, sanity + 40.0);
+            updateConvergenceUI();
+        };
+
+        document.getElementById('saltsBtn').onclick = () => {
+            initAudio();
+            sanity = Math.min(100.0, sanity + 15.0);
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Sniff this ember-salt. Keep your eyes open."`;
+            updateConvergenceUI();
+        };
+
+        document.getElementById('purifyBtn').onclick = () => {
+            initAudio();
+            sanity = Math.min(100.0, sanity + 30.0);
+            barkBox.innerHTML = `<strong>[Serafina]:</strong> "White Flame purify this ground."`;
+            updateConvergenceUI();
+        };
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "BLADE_SANITY_QUARTZ_CONVERGENCE_TELEMETRY",
+                blade_hunger_01: hunger01,
+                current_sanity: sanity,
+                stem02_whisper_gain: (1.0 - (sanity / 100.0)).toFixed(2),
+                melodic_ducking_db: (-18.0 * (1.0 - (sanity / 100.0))).toFixed(1),
+                flow_state_active: bFlowActive
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Loop & Canvas Visualizer
+        const canvas = document.getElementById('convergenceCanvas');
+        const ctx = canvas.getContext('2d');
+        let lastTime = performance.now();
+
+        function animate(now) {
+            const dt = (now - lastTime) / 1000.0;
+            lastTime = now;
+
+            // Tick Sanity & Flow Timer
+            if (bFlowActive) {
+                flowTimer -= dt;
+                sanity = Math.min(100.0, sanity + dt * 5.0);
+                if (flowTimer <= 0.0) {
+                    bFlowActive = false;
+                }
+            } else {
+                sanity = Math.max(0.0, sanity - dt * (hunger01 * 2.5));
+            }
+
+            updateConvergenceUI();
+
+            // Render Spectrum Visualizer
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Central Blade & Sanity Orb
+            const centerX = 335;
+            const centerY = 220;
+
+            // Background Pulsing Ring
+            ctx.strokeStyle = bFlowActive ? '#34d399' : (sanity < 25 ? '#ef4444' : '#c084fc');
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 80 + Math.sin(now * 0.005) * 8, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Quartz 6-Stem Bars
+            const stemNames = ["01 Mel", "02 Whisp", "03 Rhyth", "04 Bass", "05 Harm", "06 Flame"];
+            const stemGains = [
+                1.0 - (bFlowActive ? 0.0 : (1.0 - sanity / 100.0) * 0.7),
+                bFlowActive ? 0.0 : (1.0 - sanity / 100.0),
+                0.8,
+                0.75,
+                0.6,
+                bFlowActive ? 1.0 : 0.2
+            ];
+
+            const barWidth = 35;
+            const gap = 18;
+            const startX = centerX - ((6 * barWidth + 5 * gap) / 2);
+
+            stemNames.forEach((name, i) => {
+                const x = startX + i * (barWidth + gap);
+                const h = stemGains[i] * 120;
+                const y = 380 - h;
+
+                ctx.fillStyle = (i === 1) ? (bFlowActive ? '#475569' : '#ef4444') : (i === 5 ? '#fbbf24' : '#38bdf8');
+                ctx.fillRect(x, y, barWidth, h);
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '10px monospace';
+                ctx.fillText(name, x, 395);
+            });
+
+            // Center Label
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 13px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(bFlowActive ? "✨ SYMBIOTIC FLOW ACTIVE ✨" : `SANITY: ${sanity.toFixed(0)}%`, centerX, centerY + 5);
+
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

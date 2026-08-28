@@ -53,10 +53,31 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-031`** | **Campfire Alchemical Recipe Boiling, Morale Satiation Scaling & Soul-Ember Infusion Invariant** | `COOKING-SPEC-087` / World / Combat / AI / Audio / UI / Haptics | Cauldron boiling curves ($60^\circ\text{C}-110^\circ\text{C}$), $+50\%$ stirring rhythm progress, 10-minute party buffs ($+25\%$ poise, $-30\%$ burnout, $+20\%$ damage), and Garrett ember-salt preservation ($3.0\times$). |
 | **`SYN-032`** | **Tactical Map Cartography Fog Unveiling, Sanctuary Beacon Attunement & Travel Hazard Ambush Invariant** | `MAP-SPEC-088` / World / Combat / AI / Audio / UI / Haptics | Fog of war reveal radius ($500\text{uu} \leftrightarrow 3500\text{uu}$), $3.0\text{s}$ beacon teleportation ($15\text{ stamina/km}$), travel ambush risk ($0-75\%$), and $-15\%$ surprise posture penalty. |
 | **`SYN-033`** | **Dynamic Weather State Cycling, Biome Thermal Degradation & Electro-Acidic Hazard Invariant** | `WEATHER-SPEC-089` / World / Combat / AI / Audio / UI / Haptics | Blizzard sub-zero slow ($-30\%$), acid rain armor corrosion ($-2.5\%/\text{s}$), $1.5\text{s}$ lightning telegraphs ($850-1250\text{ Dmg}$), and $100\%$ hearth shelter immunity. |
+| **`SYN-034`** | **Parasitic Blade Hunger Decay, Sanity Dissonance Audio Gating & Flow State Catharsis Invariant** | `CONVERGENCE-SPEC-090` / Combat / Audio / AI / UI / Haptics | Blade strike bonus ($+45\%$), parry window reduction ($-35\%$), Stem 02 whisper gain ($0.0 \leftrightarrow 1.0$), $-18\text{dB}$ melodic ducking, and $8\text{s}$ Flow State $+40$ sanity catharsis purge. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-034`: Parasitic Blade Hunger Decay, Sanity Dissonance Audio Gating & Flow State Catharsis Invariant
+
+* **Target Subsystems:** `UAshenBladeSanityConductorConvergenceSubsystem`, `UAshenBladeSanityFeedbackEvaluator`, `UAshenQuartzDissonanceMixEvaluator`, `UAshenFlowStateCatharsisDirectorComponent`, `UAshenBladeSanityHapticBridge`
+* **Related Specifications:** [`CONVERGENCE-SPEC-090`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CONVERGENCE-SPEC-090%20%28THE%20OATHBRINGER%20BLADE,%20SANITY%20COLLAPSE%20&%20QUARTZ%20CONDUCTOR%20FLOW%20LOOP%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{DamageBonus}(\text{Hunger}) = +45.0\% \cdot \text{Hunger}_{01}$$
+$$\text{ParryReduction}(\text{Sanity}) = \frac{100.0 - \text{Sanity}}{100.0} \cdot 0.35 \quad [-35\% \text{ Narrower Window}]$$
+$$G_{\text{Stem02}}(\text{Sanity}, b\text{Flow}) = \begin{cases} 0.0, & \text{if } b\text{Flow} \\ \text{clamp}\left(1.0 - \frac{\text{Sanity}}{100.0}, 0.0, 1.0\right), & \text{otherwise} \end{cases}$$
+$$\text{Ducking}_{\text{Melody}}(\text{Sanity}, b\text{Flow}) = -18.0 \cdot G_{\text{Stem02}} \quad [\text{dB}]$$
+$$\Delta\text{Sanity}_{\text{Catharsis}} = +40.0 \quad (\text{Instant Purge on Flow Activation})$$
+
+#### 💡 Architectural Insight & Impact:
+* **Psychological & Auditory Combat Resonance:** The wielder's mental state is no longer an abstract gauge; it directly warps the diegetic soundscape (Quartz 6-stem dynamic mixer), visual perception (chromatic aberration post-process), and tactical mechanical execution (parry timing windows & dodge stamina costs).
+* **Flow State Catharsis:** Achieving Symbiotic Flow State provides immediate mechanical and acoustic relief, silencing chaotic demonic whispers, restoring $+40$ sanity, and doubling stamina recovery rate ($2.0\times$).
+
+---
 
 ---
 
