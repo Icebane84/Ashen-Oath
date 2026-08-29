@@ -1,10 +1,10 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "World/AshenSanctuarySurvivalTypes.h"
+#include "World/AshenSanctuarySurvivalBalanceDataAsset.h"
 #include "AshenShelterThermodynamicsEvaluator.generated.h"
 
 /**
@@ -31,4 +31,7 @@ public:
 	/** Evaluates sanity decay suppression [0.0 in hearth, 1.0 in wilderness] */
 	UFUNCTION(BlueprintPure, Category = "Ashen|Survival|Evaluator")
 	float EvaluateSanityDecayScale(EThermalShelterTier Tier) const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|Survival|Balancing")
+	UAshenSanctuarySurvivalBalanceDataAsset* BalanceDataAsset;
 };

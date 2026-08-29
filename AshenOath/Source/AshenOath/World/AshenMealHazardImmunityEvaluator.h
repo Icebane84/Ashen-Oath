@@ -1,16 +1,17 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "World/AshenSanctuarySurvivalTypes.h"
+#include "World/AshenSanctuarySurvivalBalanceDataAsset.h"
 #include "AshenMealHazardImmunityEvaluator.generated.h"
 
 /**
  * UAshenMealHazardImmunityEvaluator
  * 
- * Computes environmental hazard mitigation (100% immunity against Blizzards from Glacial Stew, Acid Rain from Vitriol Broth, Ash Storms from Cinder Cake).
+ * Computes environmental hazard mitigation (100% immunity against Blizzards from Glacial Stew,
+ * Acid Rain from Vitriol Broth, Ash Storms from Cinder Cake) with DataAsset support.
  */
 UCLASS(ClassGroup=(Ashen), meta=(BlueprintSpawnableComponent))
 class ASHENOATH_API UAshenMealHazardImmunityEvaluator : public UActorComponent
@@ -27,4 +28,7 @@ public:
 	/** Evaluates net damage reduction percentage [0.0 to 1.0] */
 	UFUNCTION(BlueprintPure, Category = "Ashen|Survival|Evaluator")
 	float EvaluateHazardDamageReduction(ECookedMealBuffType ActiveMeal, bool bInBlizzard, bool bInAcidRain, bool bInAshStorm) const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|Survival|Balancing")
+	UAshenSanctuarySurvivalBalanceDataAsset* BalanceDataAsset;
 };

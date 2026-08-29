@@ -5,44 +5,55 @@
 UAshenShelterThermodynamicsEvaluator::UAshenShelterThermodynamicsEvaluator()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	BalanceDataAsset = nullptr;
 }
 
-float UAshenShelterThermodynamicsEvaluator::EvaluateHypothermiaHPLoss(
-	EThermalShelterTier Tier,
-	bool bInBlizzard) const
+float UAshenShelterThermodynamicsEvaluator::EvaluateHypothermiaHPLoss(EThermalShelterTier Tier, bool bInBlizzard) const
 {
-	if (!bInBlizzard || Tier == EThermalShelterTier::SanctuaryHearthRadius || Tier == EThermalShelterTier::NaturalCavern)
+	if (!bInBlizzard)
 	{
 		return 0.0f;
 	}
-	return -2.50f; // -2.5 HP per second in exposed blizzard
+
+	// Shelter blocks hypothermia damage
+	if (Tier == EThermalShelterTier::NaturalCavern || Tier == EThermalShelterTier::SanctuaryHearthRadius)
+	{
+		return 0.0f;
+	}
+
+	if (BalanceDataAsset)
+	{
+		return BalanceDataAsset->GetClampedShelterBalancing().WildernessHypothermiaHPLoss; // -2.50 HP/s
+	}
+
+	return -2.50f;
 }
 
-float UAshenShelterThermodynamicsEvaluator::EvaluateCookingSpeedMultiplier(
-	EThermalShelterTier Tier) const
+float UAshenShelterThermodynamicsEvaluator::EvaluateCookingSpeedMultiplier(EThermalShelterTier Tier) const
 {
-	switch (Tier)
+	if (Tier == EThermalShelterTier::NaturalCavern || Tier == EThermalShelterTier::SanctuaryHearthRadius)
 	{
-	case EThermalShelterTier::SanctuaryHearthRadius:
-	case EThermalShelterTier::NaturalCavern:
-		return 2.00f; // 2.0x (50% faster cooking rate in windbreak shelter)
-	case EThermalShelterTier::OpenWilderness:
-	default:
-		return 1.00f;
+		if (BalanceDataAsset)
+		{
+			return BalanceDataAsset->GetClampedShelterBalancing().CavernCookingSpeedMultiplier; // 2.0x
+		}
+		return 2.0f;
 	}
+
+	return 1.0f;
 }
 
-float UAshenShelterThermodynamicsEvaluator::EvaluateSanityDecayScale(
-	EThermalShelterTier Tier) const
+float UAshenShelterThermodynamicsEvaluator::EvaluateSanityDecayScale(EThermalShelterTier Tier) const
 {
-	switch (Tier)
+	if (Tier == EThermalShelterTier::SanctuaryHearthRadius)
 	{
-	case EThermalShelterTier::SanctuaryHearthRadius:
-		return 0.0f; // Complete sanity preservation in Hearthstone haven
-	case EThermalShelterTier::NaturalCavern:
-		return 0.50f;
-	case EThermalShelterTier::OpenWilderness:
-	default:
-		return 1.00f;
+		return 0.0f; // Complete sanity preservation in sanctuary
 	}
+
+	if (Tier == EThermalShelterTier::NaturalCavern)
+	{
+		return 0.25f; // 75% sanity suppression in cavern
+	}
+
+	return 1.0f; // 100% standard decay in open wilderness
 }

@@ -5,6 +5,7 @@
 UAshenMealHazardImmunityEvaluator::UAshenMealHazardImmunityEvaluator()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	BalanceDataAsset = nullptr;
 }
 
 bool UAshenMealHazardImmunityEvaluator::IsImmuneToHazard(
@@ -17,14 +18,17 @@ bool UAshenMealHazardImmunityEvaluator::IsImmuneToHazard(
 	{
 		return true;
 	}
+
 	if (bInAcidRain && ActiveMeal == ECookedMealBuffType::VitriolPurgeBroth)
 	{
 		return true;
 	}
+
 	if (bInAshStorm && ActiveMeal == ECookedMealBuffType::CinderAshCake)
 	{
 		return true;
 	}
+
 	return false;
 }
 
@@ -34,9 +38,15 @@ float UAshenMealHazardImmunityEvaluator::EvaluateHazardDamageReduction(
 	bool bInAcidRain,
 	bool bInAshStorm) const
 {
-	if (IsImmuneToHazard(ActiveMeal, bInBlizzard, bInAcidRain, bInAshStorm))
+	const bool bImmune = IsImmuneToHazard(ActiveMeal, bInBlizzard, bInAcidRain, bInAshStorm);
+	if (bImmune)
 	{
-		return 1.00f; // 100% Damage Reduction
+		if (BalanceDataAsset)
+		{
+			return BalanceDataAsset->GetClampedMealBalancing().MatchedHazardDamageReduction;
+		}
+		return 1.0f; // 100% reduction
 	}
+
 	return 0.0f;
 }

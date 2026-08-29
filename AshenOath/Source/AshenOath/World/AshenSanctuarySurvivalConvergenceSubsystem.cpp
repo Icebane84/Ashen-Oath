@@ -1,6 +1,9 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
 
 #include "World/AshenSanctuarySurvivalConvergenceSubsystem.h"
+#include "Companions/AshenCompanionFatigueSubsystem.h"
+#include "Engine/World.h"
+#include "Engine/GameInstance.h"
 
 UAshenSanctuarySurvivalConvergenceSubsystem::UAshenSanctuarySurvivalConvergenceSubsystem()
 {
@@ -12,6 +15,8 @@ UAshenSanctuarySurvivalConvergenceSubsystem::UAshenSanctuarySurvivalConvergenceS
 	CurrentThermodynamics.BodyTemperatureCelsius = 37.0f;
 	CurrentThermodynamics.WeatherDecayMultiplier = 1.0f;
 	CurrentThermodynamics.CookingRateMultiplier = 1.0f;
+
+	BalanceDataAsset = nullptr;
 }
 
 void UAshenSanctuarySurvivalConvergenceSubsystem::ApplyMealBuff(
@@ -20,65 +25,33 @@ void UAshenSanctuarySurvivalConvergenceSubsystem::ApplyMealBuff(
 {
 	ActiveMealData.ActiveMeal = MealType;
 	ActiveMealData.RemainingDurationSeconds = DurationSeconds;
-	ActiveMealData.HazardImmunityPercent = 1.00f; // 100% Immunity
+	ActiveMealData.HazardImmunityPercent = 1.0f;
 
-	OnMealBuffApplied.Broadcast(MealType, DurationSeconds);
-}
-
-void UAshenSanctuarySurvivalConvergenceSubsystem::SetShelterTier(
-	EThermalShelterTier NewTier)
-{
-	if (CurrentThermodynamics.ShelterTier != NewTier)
+	if (OnMealBuffApplied.IsBound())
 	{
-		CurrentThermodynamics.ShelterTier = NewTier;
-		UpdateThermodynamicState();
-		OnShelterTierChanged.Broadcast(NewTier, CurrentThermodynamics);
+		OnMealBuffApplied.Broadcast(MealType, DurationSeconds);
 	}
+
+	UE_LOG(LogTemp, Log, TEXT("UAshenSanctuarySurvivalConvergenceSubsystem: Meal Buff %d applied for %.1fs (100%% Hazard Immunity)."),
+		(int32)MealType, DurationSeconds);
 }
 
-void UAshenSanctuarySurvivalConvergenceSubsystem::IgniteBeacon(
-	FName BeaconId,
-	const FString& RegionName,
-	const FText& InscribedLore)
+void UAshenSanctuarySurvivalConvergenceSubsystem::SetShelterTier(EThermalShelterTier NewTier)
 {
-	FSanctuaryBeaconRecord Record;
-	Record.BeaconId = BeaconId;
-	Record.RegionName = RegionName;
-	Record.bIsIgnited = true;
-	Record.HavenRadiusUU = 1200.0f;
-	Record.InscribedJournalEntry = InscribedLore;
+	CurrentThermodynamics.ShelterTier = NewTier;
 
-	DiscoveredBeacons.Add(BeaconId, Record);
-
-	SetShelterTier(EThermalShelterTier::SanctuaryHearthRadius);
-
-	OnSanctuaryBeaconIgnited.Broadcast(BeaconId, Record);
-	OnForensicJournalEntryAutoLogged.Broadcast(ESurvivalJournalCategory::BeaconLoreSketch, InscribedLore);
-}
-
-bool UAshenSanctuarySurvivalConvergenceSubsystem::IsBeaconIgnited(
-	FName BeaconId) const
-{
-	if (const FSanctuaryBeaconRecord* Record = DiscoveredBeacons.Find(BeaconId))
+	switch (NewTier)
 	{
-		return Record->bIsIgnited;
-	}
-	return false;
-}
-
-void UAshenSanctuarySurvivalConvergenceSubsystem::UpdateThermodynamicState()
-{
-	switch (CurrentThermodynamics.ShelterTier)
-	{
-	case EThermalShelterTier::SanctuaryHearthRadius:
-		CurrentThermodynamics.BodyTemperatureCelsius = 37.0f;
-		CurrentThermodynamics.WeatherDecayMultiplier = 0.0f;
+	case EThermalShelterTier::NaturalCavern:
+		CurrentThermodynamics.WeatherDecayMultiplier = 0.25f;
 		CurrentThermodynamics.CookingRateMultiplier = 2.0f;
+		CurrentThermodynamics.BodyTemperatureCelsius = 37.0f;
 		break;
 
-	case EThermalShelterTier::NaturalCavern:
-		CurrentThermodynamics.WeatherDecayMultiplier = 0.25f; // 75% block
-		CurrentThermodynamics.CookingRateMultiplier = 2.0f;   // 50% faster cooking
+	case EThermalShelterTier::SanctuaryHearthRadius:
+		CurrentThermodynamics.WeatherDecayMultiplier = 0.0f;
+		CurrentThermodynamics.CookingRateMultiplier = 2.0f;
+		CurrentThermodynamics.BodyTemperatureCelsius = 37.0f;
 		break;
 
 	case EThermalShelterTier::OpenWilderness:
@@ -87,4 +60,70 @@ void UAshenSanctuarySurvivalConvergenceSubsystem::UpdateThermodynamicState()
 		CurrentThermodynamics.CookingRateMultiplier = 1.0f;
 		break;
 	}
+
+	if (OnShelterTierChanged.IsBound())
+	{
+		OnShelterTierChanged.Broadcast(NewTier, CurrentThermodynamics);
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("UAshenSanctuarySurvivalConvergenceSubsystem: Shelter Tier updated to %d (Decay Mult: %.2f, Cooking Mult: %.2f)."),
+		(int32)NewTier, CurrentThermodynamics.WeatherDecayMultiplier, CurrentThermodynamics.CookingRateMultiplier);
+}
+
+void UAshenSanctuarySurvivalConvergenceSubsystem::IgniteBeacon(
+	FName BeaconId,
+	const FString& RegionName,
+	const FText& InscribedLore)
+{
+	float HavenRadius = 1200.0f;
+	if (BalanceDataAsset)
+	{
+		HavenRadius = BalanceDataAsset->GetClampedBeaconBalancing().BeaconHavenRadiusUU;
+	}
+
+	FSanctuaryBeaconRecord Record;
+	Record.BeaconId = BeaconId;
+	Record.RegionName = RegionName;
+	Record.bIsIgnited = true;
+	Record.HavenRadiusUU = HavenRadius;
+	Record.InscribedJournalEntry = InscribedLore;
+
+	DiscoveredBeacons.Add(BeaconId, Record);
+
+	// Automatically transition to Sanctuary Tier
+	SetShelterTier(EThermalShelterTier::SanctuaryHearthRadius);
+
+	// 1. Purge Companion Fatigue on GameInstance
+	if (UWorld* World = GetWorld())
+	{
+		if (UGameInstance* GI = World->GetGameInstance())
+		{
+			if (UAshenCompanionFatigueSubsystem* FatigueSubsystem = GI->GetSubsystem<UAshenCompanionFatigueSubsystem>())
+			{
+				FatigueSubsystem->ResetAllFatigue();
+			}
+		}
+	}
+
+	if (OnSanctuaryBeaconIgnited.IsBound())
+	{
+		OnSanctuaryBeaconIgnited.Broadcast(BeaconId, Record);
+	}
+
+	if (OnForensicJournalEntryAutoLogged.IsBound())
+	{
+		OnForensicJournalEntryAutoLogged.Broadcast(ESurvivalJournalCategory::BeaconLoreSketch, InscribedLore);
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("UAshenSanctuarySurvivalConvergenceSubsystem: *** SANCTUARY BEACON [%s] IGNITED *** in %s (Haven Radius: %.1fuu, Fatigue Purged)!"),
+		*BeaconId.ToString(), *RegionName, HavenRadius);
+}
+
+bool UAshenSanctuarySurvivalConvergenceSubsystem::IsBeaconIgnited(FName BeaconId) const
+{
+	if (const FSanctuaryBeaconRecord* Record = DiscoveredBeacons.Find(BeaconId))
+	{
+		return Record->bIsIgnited;
+	}
+	return false;
 }

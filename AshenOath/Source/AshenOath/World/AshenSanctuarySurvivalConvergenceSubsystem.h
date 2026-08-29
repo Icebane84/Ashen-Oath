@@ -1,16 +1,17 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "World/AshenSanctuarySurvivalTypes.h"
+#include "World/AshenSanctuarySurvivalBalanceDataAsset.h"
 #include "AshenSanctuarySurvivalConvergenceSubsystem.generated.h"
 
 /**
  * UAshenSanctuarySurvivalConvergenceSubsystem
  * 
- * Central world subsystem orchestrating campfire meal hazard immunities, thermodynamic shelter calculations, and sanctuary beacon journal inscriptions.
+ * Central world subsystem orchestrating campfire meal hazard immunities,
+ * thermodynamic shelter calculations, and sanctuary beacon journal inscriptions (SANCTUARY-SURVIVAL-SPEC-096).
  */
 UCLASS()
 class ASHENOATH_API UAshenSanctuarySurvivalConvergenceSubsystem : public UWorldSubsystem
@@ -56,6 +57,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ashen|Survival")
 	FOnForensicJournalEntryAutoLogged OnForensicJournalEntryAutoLogged;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|Survival|Balancing")
+	UAshenSanctuarySurvivalBalanceDataAsset* BalanceDataAsset;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Survival")
 	FMealHazardImmunityData ActiveMealData;
@@ -65,7 +69,4 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Survival")
 	TMap<FName, FSanctuaryBeaconRecord> DiscoveredBeacons;
-
-private:
-	void UpdateThermodynamicState();
 };
