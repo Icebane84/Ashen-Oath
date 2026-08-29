@@ -43,6 +43,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|Stamina")
 	void SetMaxStamina(float NewMaxStamina);
 
+	UFUNCTION(BlueprintPure, Category = "AshenOath|Stamina")
+	float GetRegenRate() const { return RegenRate; }
+
+	UFUNCTION(BlueprintCallable, Category = "AshenOath|Stamina")
+	void SetRegenRate(float NewRate) { RegenRate = NewRate; }
+
 public:
 	UPROPERTY(BlueprintAssignable, Category = "AshenOath|Stamina|Events")
 	FOnStaminaChangedSignature OnStaminaChanged;

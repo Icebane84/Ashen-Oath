@@ -17,16 +17,16 @@
                                                │
        ┌───────────────────┬───────────────────┼───────────────────┐
        ▼                   ▼                   ▼                   ▼
-[ PRIORITY 1: DUALITY ] [ PRIORITY 2: OATHS ] [ PRIORITY 3: TRIO ] [ PRIORITY 4: TRIAGE ]
-   [100% COMPLETE]         [100% COMPLETE]      [100% COMPLETE]     [READY TO TRIAGE]
+[ PRIORITY 1: DUALITY ] [ PRIORITY 2: OATHS ] [ PRIORITY 3: TRIO ] [ PRIORITY 4: DEVIL'S ]
+   [100% COMPLETE]         [100% COMPLETE]      [100% COMPLETE]     [100% COMPLETE]
 ```
 
 | Priority Layer | Target Domain | Key Components & Subsystems | Verification Suite | Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **Priority 1: Duality Pipeline** | `Soul/`, `World/`, `Combat/` | `UAshenSovereignDualityTransformationAbility`, `UAshenDualityStateVectorCompiler`, `UAshenDualityShaderShiftComponent`, `UAshenDualityEngineShaderModulator`, `UAshenDualityMaterialInstanceAdapterComponent`, `UAshenDualityPostProcessVolumeAdapter`, `AAshenDualityTransformationLocusActor` | `FAshenMasterEndToEndIntegrationAutomationTest` (Asserts live `CompiledDualityStateScalar`, `CurrentDualityBlendRatio`, material parameters) | **COMPLETED & VERIFIED** (Commit `1b510b2`) |
 | **Priority 2: Living Oaths & Oath Burn** | `Combat/`, `Soul/`, `Core/` | `UAshenOath_OathRegistryComponent`, `UAshenLivingOathRegistrySubsystem`, `UAshenLivingOathGASAbility`, `UAshenOathBurnStaminaDrainGASAbility` | `FAshenLivingOathIntegrationTest` (Asserts swearing oaths, burden accumulation, burn state activation, fulfillment/breach) | **COMPLETED & VERIFIED** (Commit `1544729`) |
-| **Priority 3: Sanctuary & Companion Trio** | `Companions/`, `World/`, `UI/` | `UAshenCompanionFatigueSubsystem`, `UAshenTrioPartySpawnerComponent`, `UAshenSanctuarySurvivalConvergenceSubsystem`, `UAshenCampfireRestSubsystem` | `FAshenCompanionTrioFatigueIntegrationTest` (Asserts fatigue decay, tactical assists, campfire rest reset) | **COMPLETED & VERIFIED** (Commit `eacf843`) |
-| **Priority 4: Scaffolding Triage & Purge** | `Tooling/`, `Orchestration/` | Triage the 129 `SynthesisOrchestrator` classes and 0%-wired legacy pillars; keep core spine lean and 100% causal | `run_all_checks.py` & UBT 5.8 Clean Suite | **IN QUEUE (Next)** |
+| **Priority 3: Sanctuary & Companion Trio** | `Companions/`, `World/`, `UI/` | `UAshenCompanionFatigueSubsystem`, `UAshenTrioPartySpawnerComponent`, `UAshenSanctuarySurvivalConvergenceSubsystem`, `UAshenCampfireRestSubsystem` | `FAshenCompanionTrioFatigueIntegrationTest` (Asserts fatigue decay, tactical assists via Twin-Blade X-Lock & Alchemical Flasks, campfire rest reset) | **COMPLETED & VERIFIED** (Commit `eacf843`, `1dd64e5`) |
+| **Priority 4: Devil's Bargain & Scope Triage** | `Combat/`, `Companions/`, `Core/` | `UAshenDevilsBargainTransformationSubsystem`, `UAshenDevilsBargainTrustAtrophyDirector`, `AAshenCombatCharacter` | `FAshenDevilsBargainIntegrationTest` (Asserts critical HP dilation window, +200% attack speed surge, -25% companion trust penalty) | **COMPLETED & VERIFIED** (Commit `7edd69a`) |
 
 ---
 
@@ -54,8 +54,14 @@
    - [`UAshenOathBurnStaminaDrainGASAbility`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Combat/AshenOathBurnStaminaDrainGASAbility.cpp): Drains $-15.0\text{ Stamina}$ and drives glowing crack shaders when burden exceeds threshold.
 4. **Automation Suite:** Verified via [`FAshenLivingOathIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenLivingOathIntegrationTest.cpp).
 
-### ✅ Priority 3: Sanctuary & Companion Trio Fatigue Loop (100% Complete — Commit `eacf843`)
+### ✅ Priority 3: Sanctuary & Companion Trio Fatigue Loop (100% Complete — Commit `eacf843`, `1dd64e5`)
 1. **Authoritative Fatigue Subsystem:** `UAshenCompanionFatigueSubsystem` managing Tripartite Fatigue (Garrett Control via Twin-Blade X-Lock & Alchemical Flasks, Serafina Poise via Healing Prayers, Kaelen Transference).
 2. **Sanctuary / Campfire Rest Integration:** Added `ResetAllFatigue()` to purge companion fatigue upon resting at campfire havens or consuming hot meals.
 3. **Vulnerability State Enforcement:** Enforces vulnerability threshold ($\ge 0.70\text{ Fatigue}$) increasing assist cooldowns and lowering defense.
 4. **Automation Suite:** Verified via [`FAshenCompanionTrioFatigueIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenCompanionTrioFatigueIntegrationTest.cpp).
+
+### ✅ Priority 4: Devil's Bargain Crisis & Trust Atrophy Integration (100% Complete — Commit `7edd69a`)
+1. **Authoritative Crisis Subsystem:** `UAshenDevilsBargainTransformationSubsystem` managing Unchained Berserk state and attack speed multipliers.
+2. **Trust Atrophy Director:** Connects to `UAshenDevilsBargainTrustAtrophyDirector` to penalize party trust ($-25.0\%$) and apply combo delay penalties upon accepting demonic bargain.
+3. **Combat Character Integration:** Triggers on HP $\le 25\%$ via `HandleHealthChanged()`, applies slow-motion ($0.1\times$), and broadcasts `OnDevilsBargainCrisisEntered`.
+4. **Automation Suite:** Verified via [`FAshenDevilsBargainIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenDevilsBargainIntegrationTest.cpp).
