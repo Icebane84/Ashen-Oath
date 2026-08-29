@@ -1,15 +1,15 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
 
-#include "Combat/AshenIgniteSanctuaryBeaconGASAbility.h"
+#include "Combat/AshenHearthstoneSanctuaryRegenGASAbility.h"
 
-UAshenIgniteSanctuaryBeaconGASAbility::UAshenIgniteSanctuaryBeaconGASAbility()
+UAshenHearthstoneSanctuaryRegenGASAbility::UAshenHearthstoneSanctuaryRegenGASAbility()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
-	HavenRadiusUU = 1200.0f;
+	HPRegenPerSecond = 5.0f;
 }
 
-void UAshenIgniteSanctuaryBeaconGASAbility::ActivateAbility(
+void UAshenHearthstoneSanctuaryRegenGASAbility::ActivateAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,
@@ -18,7 +18,7 @@ void UAshenIgniteSanctuaryBeaconGASAbility::ActivateAbility(
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UAshenIgniteSanctuaryBeaconGASAbility::EndAbility(
+void UAshenHearthstoneSanctuaryRegenGASAbility::EndAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,

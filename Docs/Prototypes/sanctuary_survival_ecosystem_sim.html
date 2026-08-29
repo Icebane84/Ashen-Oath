@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Sanctuary & Survival Ecosystem Simulator</title>
+    <!-- Traceability: SANCTUARY-SURVIVAL-SPEC-096 | Builds 3096-3115 -->
+    <style>
+        :root {
+            --bg-primary: #060911;
+            --bg-secondary: #0d1527;
+            --panel-bg: #152238;
+            --border-color: #2b3d5c;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #04070e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #04070e;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .meal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .btn-meal {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn-meal:hover {
+            border-color: var(--accent-amber);
+        }
+
+        .btn-meal.active {
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-stew { background: #0c4a6e; border-color: #38bdf8; color: #bae6fd; }
+        .btn-broth { background: #14532d; border-color: #22c55e; color: #86efac; }
+        .btn-cake { background: #78350f; border-color: #f59e0b; color: #fde68a; }
+        .btn-ration { background: #451a03; border-color: #d97706; color: #fed7aa; }
+
+        .shelter-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin: 4px 0;
+        }
+
+        .btn-shelter {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 7px 4px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn-shelter.active {
+            border-color: var(--accent-amber);
+            background: #1e293b;
+        }
+
+        .btn-action {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fef08a;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>SANCTUARY & SURVIVAL CONVERGENCE ECOSYSTEM SIMULATOR</h1>
+                <p>Campfire Cooking Hazard Immunities ↔ 3-Tier Shelter Thermodynamics ↔ Forensic Journal (SPEC-096)</p>
+            </div>
+            <div class="badge">BUILD 3115</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="survivalCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Campfire Cooked Meal Ingestion:</div>
+                <div class="meal-grid">
+                    <button class="btn-meal btn-stew active" id="btnStew">🍲 GLACIAL STEW<br><span style="font-size: 9px;">(Blizzard Immunity)</span></button>
+                    <button class="btn-meal btn-broth" id="btnBroth">🧪 VITRIOL BROTH<br><span style="font-size: 9px;">(Acid Rain Immunity)</span></button>
+                    <button class="btn-meal btn-cake" id="btnCake">🥮 CINDER CAKE<br><span style="font-size: 9px;">(Ash Storm Resist)</span></button>
+                    <button class="btn-meal btn-ration" id="btnRation">🍖 SMOKED RATION<br><span style="font-size: 9px;">(Stamina Shield)</span></button>
+                </div>
+
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">Environmental Shelter Tier:</div>
+                <div class="shelter-grid">
+                    <button class="btn-shelter active" id="btnWilderness">🌲 WILDERNESS<br><span style="font-size: 8px;">(100% Decay)</span></button>
+                    <button class="btn-shelter" id="btnCavern">⛰️ CAVERN<br><span style="font-size: 8px;">(75% Windbreak)</span></button>
+                    <button class="btn-shelter" id="btnHearth">🔥 HEARTH HAVEN<br><span style="font-size: 8px;">(100% Shield)</span></button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                    <button class="btn-action" id="btnIgniteBeacon" style="background: #78350f; border-color: #f59e0b; font-weight: bold;">✨ IGNITE SANCTUARY BEACON (CHANNEL WHITE FLAME)</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "That troll fat stew should keep your blood boiling through the whiteout."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT SURVIVAL TELEMETRY</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Body Temperature</div>
+                <div class="telemetry-val" id="tempVal" style="color: var(--accent-cyan);">37.0°C (NORMAL)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Active Meal Immunity</div>
+                <div class="telemetry-val" id="mealVal" style="color: var(--accent-cyan);">GLACIAL STEW</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Shelter / Cooking Rate</div>
+                <div class="telemetry-val" id="shelterVal">WILDERNESS (1.0x)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Journal Discovered</div>
+                <div class="telemetry-val" id="journalVal" style="color: var(--accent-emerald);">1 BEACON LOGGED</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Blizzard Wind, Cavern Echo, Hearth Harmonies)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTone(freq, type, duration, gainVal = 0.25) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Survival State
+        let bodyTempC = 37.0;
+        let activeMeal = 'GlacialStew';
+        let shelterTier = 'Wilderness';
+        let bBeaconIgnited = false;
+        let journalCount = 1;
+
+        const barkBox = document.getElementById('barkBox');
+
+        function setMeal(meal) {
+            activeMeal = meal;
+            document.querySelectorAll('.btn-meal').forEach(btn => btn.classList.remove('active'));
+
+            switch (meal) {
+                case 'GlacialStew':
+                    document.getElementById('btnStew').classList.add('active');
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "That troll fat stew should keep your blood boiling through the whiteout."`;
+                    playTone(440, 'sine', 0.4, 0.25);
+                    break;
+                case 'VitriolBroth':
+                    document.getElementById('btnBroth').classList.add('active');
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Vitriol broth coats the throat. The acid rain won't burn your skin now."`;
+                    playTone(320, 'triangle', 0.4, 0.25);
+                    break;
+                case 'CinderCake':
+                    document.getElementById('btnCake').classList.add('active');
+                    barkBox.innerHTML = `<strong>[Serafina]:</strong> "Ember grains steel the lungs against the volcanic choking fog."`;
+                    playTone(280, 'sawtooth', 0.4, 0.25);
+                    break;
+                case 'Ration':
+                    document.getElementById('btnRation').classList.add('active');
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Good cured game. Keeps stamina fatigue from capping your breath."`;
+                    playTone(520, 'sine', 0.3, 0.2);
+                    break;
+            }
+            updateTelemetry();
+        }
+
+        function setShelter(tier) {
+            shelterTier = tier;
+            document.querySelectorAll('.btn-shelter').forEach(btn => btn.classList.remove('active'));
+
+            switch (tier) {
+                case 'Wilderness':
+                    document.getElementById('btnWilderness').classList.add('active');
+                    bodyTempC = (activeMeal === 'GlacialStew') ? 37.0 : 33.5;
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Keep an eye on the frost on your gauntlets, Kaelen."`;
+                    playTone(120, 'sawtooth', 0.6, 0.3); // Howling storm
+                    break;
+                case 'Cavern':
+                    document.getElementById('btnCavern').classList.add('active');
+                    bodyTempC = 36.5;
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Good thinking stepping inside this cavern. Set up the campfire; boiling will take half the time."`;
+                    playTone(220, 'triangle', 0.5, 0.25);
+                    break;
+                case 'Hearth':
+                    document.getElementById('btnHearth').classList.add('active');
+                    bodyTempC = 37.0;
+                    barkBox.innerHTML = `<strong>[Serafina]:</strong> "The hearth burns once more. May the White Flame keep the shadows at bay."`;
+                    playTone(587, 'sine', 0.8, 0.35); // Warm sanctuary chime
+                    break;
+            }
+            updateTelemetry();
+        }
+
+        document.getElementById('btnStew').onclick = () => setMeal('GlacialStew');
+        document.getElementById('btnBroth').onclick = () => setMeal('VitriolBroth');
+        document.getElementById('btnCake').onclick = () => setMeal('CinderCake');
+        document.getElementById('btnRation').onclick = () => setMeal('Ration');
+
+        document.getElementById('btnWilderness').onclick = () => setShelter('Wilderness');
+        document.getElementById('btnCavern').onclick = () => setShelter('Cavern');
+        document.getElementById('btnHearth').onclick = () => setShelter('Hearth');
+
+        document.getElementById('btnIgniteBeacon').onclick = () => {
+            bBeaconIgnited = true;
+            journalCount++;
+            setShelter('Hearth');
+            playTone(880, 'sine', 1.0, 0.4);
+            barkBox.innerHTML = `<strong>[Forensic Journal Auto-Logged]:</strong> "Sanctuary Beacon Gloomwood-01 ignited! 1200uu warm haven established."`;
+            updateTelemetry();
+        };
+
+        function updateTelemetry() {
+            document.getElementById('tempVal').innerText = `${bodyTempC.toFixed(1)}°C (${bodyTempC >= 36.5 ? 'NORMAL' : 'HYPOTHERMIA'})`;
+            document.getElementById('tempVal').style.color = (bodyTempC >= 36.5) ? 'var(--accent-cyan)' : 'var(--accent-red)';
+            document.getElementById('mealVal').innerText = activeMeal.toUpperCase();
+
+            let speedStr = (shelterTier === 'Wilderness') ? '1.0x' : '2.0x';
+            document.getElementById('shelterVal').innerText = `${shelterTier.toUpperCase()} (${speedStr})`;
+            document.getElementById('journalVal').innerText = `${journalCount} BEACONS LOGGED`;
+        }
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SANCTUARY_SURVIVAL_TELEMETRY",
+                body_temp_c: bodyTempC,
+                active_meal: activeMeal,
+                shelter_tier: shelterTier,
+                beacon_ignited: bBeaconIgnited,
+                journal_count: journalCount
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Haven & Environment Visualizer
+        const canvas = document.getElementById('survivalCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 335;
+            const centerY = 220;
+
+            // Draw Haven Radius Circle if in Hearth Haven
+            if (shelterTier === 'Hearth') {
+                const grad = ctx.createRadialGradient(centerX, centerY, 50, centerX, centerY, 190);
+                grad.addColorStop(0, 'rgba(245, 158, 11, 0.35)');
+                grad.addColorStop(1, 'transparent');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 190, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 190, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#f59e0b';
+                ctx.font = 'bold 11px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText("✨ 1200uu SANCTUARY HEAVEN RADIUS (100% IMMUNITY)", centerX, centerY + 215);
+            } else if (shelterTier === 'Cavern') {
+                // Cavern Archway Silhouette
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - 20, 140, Math.PI * 0.9, Math.PI * 2.1);
+                ctx.stroke();
+
+                ctx.fillStyle = '#38bdf8';
+                ctx.font = 'bold 11px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText("⛰️ CAVERN WINDBREAK (75% WEATHER REDUCTION)", centerX, centerY + 215);
+            } else {
+                // Exposed Wilderness Storm Particles
+                ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
+                for (let i = 0; i < 30; i++) {
+                    const x = (Date.now() * 0.3 + i * 40) % canvas.width;
+                    const y = (Date.now() * 0.2 + i * 25) % canvas.height;
+                    ctx.fillRect(x, y, 3, 3);
+                }
+            }
+
+            // Draw Campfire / Beacon Center Locus
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 28, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Campfire Fire Animation
+            const flameScale = 0.8 + Math.sin(Date.now() * 0.01) * 0.2;
+            ctx.fillStyle = (shelterTier === 'Hearth') ? '#f59e0b' : '#ef4444';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 6, 16 * flameScale, 0, Math.PI * 2);
+            ctx.fill();
+
+            requestAnimationFrame(animate);
+        }
+
+        updateTelemetry();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

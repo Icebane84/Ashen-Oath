@@ -5,20 +5,20 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "World/AshenSanctuarySurvivalTypes.h"
-#include "AshenIgniteSanctuaryBeaconGASAbility.generated.h"
+#include "AshenHearthstoneSanctuaryRegenGASAbility.generated.h"
 
 /**
- * UAshenIgniteSanctuaryBeaconGASAbility
+ * UAshenHearthstoneSanctuaryRegenGASAbility
  * 
- * Beacon Ignition: Channels White Flame into an ancient ruined Hearthstone, creating a 1200uu haven sphere and auto-logging forensic journal entries.
+ * Sanctuary Haven Aura: Restores +5.0 HP per second, normalizes body temperature to 37.0C, and completely halts sanity degradation.
  */
 UCLASS()
-class ASHENOATH_API UAshenIgniteSanctuaryBeaconGASAbility : public UGameplayAbility
+class ASHENOATH_API UAshenHearthstoneSanctuaryRegenGASAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 
 public:
-	UAshenIgniteSanctuaryBeaconGASAbility();
+	UAshenHearthstoneSanctuaryRegenGASAbility();
 
 	virtual void ActivateAbility(
 		const FGameplayAbilitySpecHandle Handle,
@@ -34,5 +34,5 @@ public:
 		bool bWasCancelled) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ashen|Survival")
-	float HavenRadiusUU = 1200.0f;
+	float HPRegenPerSecond = 5.0f;
 };

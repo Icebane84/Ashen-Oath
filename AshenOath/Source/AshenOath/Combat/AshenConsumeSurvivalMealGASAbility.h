@@ -5,20 +5,20 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "World/AshenSanctuarySurvivalTypes.h"
-#include "AshenIgniteSanctuaryBeaconGASAbility.generated.h"
+#include "AshenConsumeSurvivalMealGASAbility.generated.h"
 
 /**
- * UAshenIgniteSanctuaryBeaconGASAbility
+ * UAshenConsumeSurvivalMealGASAbility
  * 
- * Beacon Ignition: Channels White Flame into an ancient ruined Hearthstone, creating a 1200uu haven sphere and auto-logging forensic journal entries.
+ * Meal Ingestion Execution: Consumes campfire cooked stew/broth/cake, granting 900s of 100% biological immunity against corresponding environmental hazard.
  */
 UCLASS()
-class ASHENOATH_API UAshenIgniteSanctuaryBeaconGASAbility : public UGameplayAbility
+class ASHENOATH_API UAshenConsumeSurvivalMealGASAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 
 public:
-	UAshenIgniteSanctuaryBeaconGASAbility();
+	UAshenConsumeSurvivalMealGASAbility();
 
 	virtual void ActivateAbility(
 		const FGameplayAbilitySpecHandle Handle,
@@ -34,5 +34,8 @@ public:
 		bool bWasCancelled) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ashen|Survival")
-	float HavenRadiusUU = 1200.0f;
+	ECookedMealBuffType MealTypeToConsume = ECookedMealBuffType::GlacialHeartStew;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ashen|Survival")
+	float BuffDurationSeconds = 900.0f;
 };

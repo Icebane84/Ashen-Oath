@@ -59,10 +59,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-037`** | **Chaos Rubble NavMesh Chokepoints, Weather Perception Clamping & Conductive Lightning Arcing Invariant** | `DESTRUCTION-WEATHER-AI-SPEC-093` / World / Combat / AI / Audio / UI / Haptics | Dynamic Lock-On clamping ($1500\text{uu} \to 500\text{uu}$), AI vision cone narrowing ($90^\circ \to 45^\circ$), $350\text{uu}$ chain-lightning arcs ($350\text{ Shock Dmg}$, $1.2\text{s}$ stagger), and $\pm 65^\circ$ AI pincer flanking around rubble chokepoints. |
 | **`SYN-038`** | **Oathbringer 4-Guard Martial Kinematics, Rhythm Flow Recovery Canceling & Runic Seam Inscription Invariant** | `STANCE-SPEC-094` / Combat / UI / AI / Audio / Haptics | 4 historical guards (Vom Tag $+40\%$ poise, Pflug $-30\%$ stamina, Ochs $+0.12\text{s}$ parry, Mordhau $100\%$ armor pen), $0.15\text{s}$ Flow Glint cancels ($0\text{ stamina}$ cost, $+25\%$ momentum), and fuller seam runic transitions. |
 | **`SYN-039`** | **Oathbringer Soot Battery, Garrett Alchemical Blade Coatings & Thermal Shock Reaction Invariant** | `ALCHEMICAL-SLAG-SPEC-095` / Combat / UI / AI / Audio / Haptics | Soot accumulation ($0.0 \to 1.0$), Superheated Slag ($\ge 0.80$, $+35\text{ Heat}$), $450\text{ Heat AoE}$ Conflagration Deflagration, and $+100\%$ Thermal Shock poise shatter. |
+| **`SYN-040`** | **Campfire Cooking Meal Hazard Immunities, Thermal Shelter Thermodynamic Gating & Sanctuary Beacon Journal Inscription Invariant** | `SANCTUARY-SURVIVAL-SPEC-096` / World / Combat / UI / AI / Audio / Haptics | Meal hazard immunities ($100\%$), 3-tier shelter thermodynamics ($-2.5\text{ HP/s}$ hypothermia vs $2.0\times$ cavern cooking), $1200\text{uu}$ beacon haven, and auto-logging Forensic Journal entries. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-040`: Campfire Cooking Meal Hazard Immunities, Thermal Shelter Thermodynamic Gating & Sanctuary Beacon Journal Inscription Invariant
+
+* **Target Subsystems:** `UAshenSanctuarySurvivalConvergenceSubsystem`, `UAshenMealHazardImmunityEvaluator`, `UAshenShelterThermodynamicsEvaluator`, `UAshenSanctuaryBeaconJournalRegistrarComponent`, `UAshenSanctuarySurvivalHapticBridge`
+* **Related Specifications:** [`SANCTUARY-SURVIVAL-SPEC-096`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SANCTUARY-SURVIVAL-SPEC-096%20%28THE%20SANCTUARY%20&%20SURVIVAL%20CONVERGENCE%20ECOSYSTEM%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{HazardImmunity}(\text{Meal}, \text{Hazard}) = \begin{cases} 100\%, & \text{GlacialHeartStew} \land \text{Blizzard} \\ 100\%, & \text{VitriolPurgeBroth} \land \text{AcidRain} \\ 100\%, & \text{CinderAshCake} \land \text{AshStorm} \\ 0\%, & \text{Otherwise} \end{cases}$$
+$$\text{HypothermiaLoss}(\text{Tier}, \text{Blizzard}) = \begin{cases} -2.50\text{ HP/s}, & \text{OpenWilderness} \land \text{Blizzard} \\ 0.0\text{ HP/s}, & \text{NaturalCavern} \lor \text{SanctuaryHearth} \end{cases}$$
+$$\text{CookingSpeed}(\text{Tier}) = \begin{cases} 2.00\times \text{ (50\% Faster Boiling)}, & \text{NaturalCavern} \lor \text{SanctuaryHearth} \\ 1.00\times, & \text{OpenWilderness} \end{cases}$$
+$$\text{SanctuaryHaven} = \{ R = 1200.0\text{uu}, T_{\text{body}} \to 37.0^\circ\text{C}, \text{SanityDecay} = 0.0/\text{s}, \text{HPRegen} = +5.0/\text{s} \}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Biological Survival Gating:** Environmental weather hazards cease to be simple damage-over-time tick volumes. By preparing matching campfire recipes from harvested fauna, the player actively overcomes lethal blizzard, acid, and ash biomes.
+* **Diegetic Lore Discovery:** Beacon ignition bridges physical survival shelter with the narrative Forensic Journal, ensuring every activated waypoint enriches the world's historical tapestry and companion perspectives.
+
+---
 
 ---
 

@@ -1,6 +1,6 @@
 # Ashen Oath — Architecture Map & Vertical Slices
-**Status:** Clean Production Architecture | **3,095 Builds Clean** (0 Errors, 0 Warnings)
-**Unreal Engine Version:** 5.8 | **Master Milestone:** 3095 (Master Batches #1–#154)
+**Status:** Clean Production Architecture | **3,115 Builds Clean** (0 Errors, 0 Warnings)
+**Unreal Engine Version:** 5.8 | **Master Milestone:** 3115 (Master Batches #1–#155)
 
 ---
 
@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Master Batch #155 (Builds 3096–3115)**: The Sanctuary & Survival Ecosystem (SANCTUARY-SURVIVAL-SPEC-096) (100% Pure Gameplay Density)
 - **Master Batch #154 (Builds 3076–3095)**: The Alchemical Weapon Coating & Thermal Slag Reaction Loop (ALCHEMICAL-SLAG-SPEC-095) (100% Pure Gameplay Density)
 - **Master Batch #153 (Builds 3056–3075)**: The Oathbringer Historical Greatsword Stance Flow & Runic Mastery Loop (STANCE-SPEC-094) (100% Pure Gameplay Density)
 - **Master Batch #152 (Builds 3036–3055)**: Environmental Destruction, Weather Hazards & AI Combat Tactics Loop (DESTRUCTION-WEATHER-AI-SPEC-093) (100% Pure Gameplay Density)

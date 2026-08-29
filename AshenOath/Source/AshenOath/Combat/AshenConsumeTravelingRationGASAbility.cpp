@@ -1,15 +1,15 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
 
-#include "Combat/AshenIgniteSanctuaryBeaconGASAbility.h"
+#include "Combat/AshenConsumeTravelingRationGASAbility.h"
 
-UAshenIgniteSanctuaryBeaconGASAbility::UAshenIgniteSanctuaryBeaconGASAbility()
+UAshenConsumeTravelingRationGASAbility::UAshenConsumeTravelingRationGASAbility()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
-	HavenRadiusUU = 1200.0f;
+	DurationSeconds = 1800.0f;
 }
 
-void UAshenIgniteSanctuaryBeaconGASAbility::ActivateAbility(
+void UAshenConsumeTravelingRationGASAbility::ActivateAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,
@@ -18,7 +18,7 @@ void UAshenIgniteSanctuaryBeaconGASAbility::ActivateAbility(
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UAshenIgniteSanctuaryBeaconGASAbility::EndAbility(
+void UAshenConsumeTravelingRationGASAbility::EndAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,

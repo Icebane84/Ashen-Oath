@@ -1,15 +1,16 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
 
-#include "Combat/AshenIgniteSanctuaryBeaconGASAbility.h"
+#include "Combat/AshenConsumeSurvivalMealGASAbility.h"
 
-UAshenIgniteSanctuaryBeaconGASAbility::UAshenIgniteSanctuaryBeaconGASAbility()
+UAshenConsumeSurvivalMealGASAbility::UAshenConsumeSurvivalMealGASAbility()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
-	HavenRadiusUU = 1200.0f;
+	MealTypeToConsume = ECookedMealBuffType::GlacialHeartStew;
+	BuffDurationSeconds = 900.0f;
 }
 
-void UAshenIgniteSanctuaryBeaconGASAbility::ActivateAbility(
+void UAshenConsumeSurvivalMealGASAbility::ActivateAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,
@@ -18,7 +19,7 @@ void UAshenIgniteSanctuaryBeaconGASAbility::ActivateAbility(
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UAshenIgniteSanctuaryBeaconGASAbility::EndAbility(
+void UAshenConsumeSurvivalMealGASAbility::EndAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,

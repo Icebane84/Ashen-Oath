@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 3115: Master Batch #155 — The Sanctuary & Survival Ecosystem (SANCTUARY-SURVIVAL-SPEC-096)
+**Domain:** World / Combat / UI / AI / Audio / Core / Orchestration / Narrative / QA  
+**Status:** 3,115 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 3096 | `AshenSanctuarySurvivalTypes.h` | `AshenSanctuarySurvivalTypes` — Enums (3), Structs (3), Multicast Delegates (4) | World |
+| 3097 | `AshenSanctuarySurvivalConvergenceSubsystem.h/.cpp` | `UAshenSanctuarySurvivalConvergenceSubsystem` — Master survival subsystem | World |
+| 3098 | `AshenMealHazardImmunityEvaluator.h/.cpp` | `UAshenMealHazardImmunityEvaluator` — Evaluates 100% meal hazard immunities | World |
+| 3099 | `AshenShelterThermodynamicsEvaluator.h/.cpp` | `UAshenShelterThermodynamicsEvaluator` — Computes hypothermia loss & 2x cooking | World |
+| 3100 | `AshenSanctuaryBeaconJournalRegistrarComponent.h/.cpp` | `UAshenSanctuaryBeaconJournalRegistrarComponent` — Auto-logs beacon journal lore | World |
+| 3101 | `AshenConsumeSurvivalMealGASAbility.h/.cpp` | `UAshenConsumeSurvivalMealGASAbility` — Meal ingestion ability (900s 100% immunity) | Combat |
+| 3102 | `AshenIgniteSanctuaryBeaconGASAbility.h/.cpp` | `UAshenIgniteSanctuaryBeaconGASAbility` — White Flame beacon ignition ability (1200uu) | Combat |
+| 3103 | `AshenCavernRestorationBuffGASAbility.h/.cpp` | `UAshenCavernRestorationBuffGASAbility` — Cavern windbreak 2x cooking buff ability | Combat |
+| 3104 | `AshenConsumeTravelingRationGASAbility.h/.cpp` | `UAshenConsumeTravelingRationGASAbility` — Traveling ration stamina shield ability | Combat |
+| 3105 | `AshenHearthstoneSanctuaryRegenGASAbility.h/.cpp` | `UAshenHearthstoneSanctuaryRegenGASAbility` — +5 HP/s & 0 sanity decay haven ability | Combat |
+| 3106 | `UBTService_AshenAICompanionSanctuaryTactics.h/.cpp` | `UBTService_AshenAICompanionSanctuaryTactics` — AI companion sanctuary rest service | AI |
+| 3107 | `AshenUserWidget_SanctuarySurvivalHUD.h/.cpp` | `UAshenUserWidget_SanctuarySurvivalHUD` — UMG HUD for body temp gauge & meal buff | UI |
+| 3108 | `AshenSanctuarySurvivalAudioSubsystem.h/.cpp` | `UAshenSanctuarySurvivalAudioSubsystem` — MetaSounds cavern wind & hearth fire | Audio |
+| 3109 | `AshenThermalPostProcessVignetteAdapter.h/.cpp` | `UAshenThermalPostProcessVignetteAdapter` — Frost vignette & warm hearth glow adapter | Combat |
+| 3110 | `AAshenSanctuaryBeaconHearthWorldActor.h/.cpp` | `AAshenSanctuaryBeaconHearthWorldActor` — Ancient sanctuary beacon world actor | World |
+| 3111 | `AshenSanctuarySurvivalSaveGameAdapter.h/.cpp` | `UAshenSanctuarySurvivalSaveGameAdapter` — Serializes active meal & discovered beacons | Core |
+| 3112 | `AshenSanctuarySurvivalNarrativeBridge.h/.cpp` | `UAshenSanctuarySurvivalNarrativeBridge` — Contextual companion shelter barks | Narrative |
+| 3113 | `AshenSanctuarySurvivalHapticBridge.h/.cpp` | `UAshenSanctuarySurvivalHapticBridge` — DualSense 0.85 cold shiver & warm pulse | Combat |
+| 3114 | `AshenSanctuarySurvivalMasterBridge.h/.cpp` | `UAshenSanctuarySurvivalMasterBridge` — Master bridge connecting survival & HUD | Orchestration |
+| 3115 | `AshenMasterBatch155AutomationTest.cpp` | `FAshenMasterBatch155AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 3095: Master Batch #154 — The Alchemical Weapon Coating & Thermal Slag Reaction Loop (ALCHEMICAL-SLAG-SPEC-095)
 **Domain:** Combat / UI / AI / Audio / Core / Orchestration / Narrative / World / QA  
 **Status:** 3,095 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

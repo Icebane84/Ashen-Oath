@@ -1,15 +1,15 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
 
-#include "Combat/AshenIgniteSanctuaryBeaconGASAbility.h"
+#include "Combat/AshenCavernRestorationBuffGASAbility.h"
 
-UAshenIgniteSanctuaryBeaconGASAbility::UAshenIgniteSanctuaryBeaconGASAbility()
+UAshenCavernRestorationBuffGASAbility::UAshenCavernRestorationBuffGASAbility()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
-	HavenRadiusUU = 1200.0f;
+	CookingRateBonusMultiplier = 2.00f;
 }
 
-void UAshenIgniteSanctuaryBeaconGASAbility::ActivateAbility(
+void UAshenCavernRestorationBuffGASAbility::ActivateAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,
@@ -18,7 +18,7 @@ void UAshenIgniteSanctuaryBeaconGASAbility::ActivateAbility(
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UAshenIgniteSanctuaryBeaconGASAbility::EndAbility(
+void UAshenCavernRestorationBuffGASAbility::EndAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,

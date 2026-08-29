@@ -5,20 +5,20 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "World/AshenSanctuarySurvivalTypes.h"
-#include "AshenIgniteSanctuaryBeaconGASAbility.generated.h"
+#include "AshenCavernRestorationBuffGASAbility.generated.h"
 
 /**
- * UAshenIgniteSanctuaryBeaconGASAbility
+ * UAshenCavernRestorationBuffGASAbility
  * 
- * Beacon Ignition: Channels White Flame into an ancient ruined Hearthstone, creating a 1200uu haven sphere and auto-logging forensic journal entries.
+ * Cavern Windbreak Buff: Applies 75% precipitation protection, halts blizzard freezing damage, and accelerates cooking speed by 2.0x.
  */
 UCLASS()
-class ASHENOATH_API UAshenIgniteSanctuaryBeaconGASAbility : public UGameplayAbility
+class ASHENOATH_API UAshenCavernRestorationBuffGASAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 
 public:
-	UAshenIgniteSanctuaryBeaconGASAbility();
+	UAshenCavernRestorationBuffGASAbility();
 
 	virtual void ActivateAbility(
 		const FGameplayAbilitySpecHandle Handle,
@@ -34,5 +34,5 @@ public:
 		bool bWasCancelled) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ashen|Survival")
-	float HavenRadiusUU = 1200.0f;
+	float CookingRateBonusMultiplier = 2.00f;
 };

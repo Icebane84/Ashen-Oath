@@ -5,20 +5,20 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "World/AshenSanctuarySurvivalTypes.h"
-#include "AshenIgniteSanctuaryBeaconGASAbility.generated.h"
+#include "AshenConsumeTravelingRationGASAbility.generated.h"
 
 /**
- * UAshenIgniteSanctuaryBeaconGASAbility
+ * UAshenConsumeTravelingRationGASAbility
  * 
- * Beacon Ignition: Channels White Flame into an ancient ruined Hearthstone, creating a 1200uu haven sphere and auto-logging forensic journal entries.
+ * Traveling Ration Ingestion: Prevents overland travel fatigue from clamping maximum stamina for 1800s.
  */
 UCLASS()
-class ASHENOATH_API UAshenIgniteSanctuaryBeaconGASAbility : public UGameplayAbility
+class ASHENOATH_API UAshenConsumeTravelingRationGASAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 
 public:
-	UAshenIgniteSanctuaryBeaconGASAbility();
+	UAshenConsumeTravelingRationGASAbility();
 
 	virtual void ActivateAbility(
 		const FGameplayAbilitySpecHandle Handle,
@@ -34,5 +34,5 @@ public:
 		bool bWasCancelled) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ashen|Survival")
-	float HavenRadiusUU = 1200.0f;
+	float DurationSeconds = 1800.0f;
 };
