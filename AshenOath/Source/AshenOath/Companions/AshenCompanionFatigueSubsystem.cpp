@@ -38,6 +38,14 @@ void UAshenCompanionFatigueSubsystem::RecoverFatigue(float DeltaSeconds)
 	KaelenFatigue = FMath::Max(0.0f, KaelenFatigue - RecoveryRate);
 }
 
+void UAshenCompanionFatigueSubsystem::ResetAllFatigue()
+{
+	GarrettFatigue = 0.0f;
+	SerafinaFatigue = 0.0f;
+	KaelenFatigue = 0.0f;
+	UE_LOG(LogTemp, Log, TEXT("UAshenCompanionFatigueSubsystem: Cleared all companion fatigue at Campfire / Sanctuary rest."));
+}
+
 bool UAshenCompanionFatigueSubsystem::IsCompanionVulnerable(FName CompanionID) const
 {
 	if (CompanionID == FName(TEXT("Garrett"))) return GarrettFatigue >= 0.70f;

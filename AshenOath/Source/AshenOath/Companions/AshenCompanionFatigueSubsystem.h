@@ -32,5 +32,8 @@ public:
 	void RecoverFatigue(float DeltaSeconds);
 
 	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Companions")
+	void ResetAllFatigue();
+
+	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Companions")
 	bool IsCompanionVulnerable(FName CompanionID) const;
 };
