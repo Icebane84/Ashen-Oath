@@ -34,6 +34,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Companions")
 	void ResetAllFatigue();
 
+	/** Relieves Serafina's burnout fatigue (e.g. 50% during White Flame Resolution) */
+	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Companions")
+	void RelieveSerafinaBurnout(float ReliefRatio = 0.50f)
+	{
+		SerafinaFatigue = FMath::Clamp(SerafinaFatigue * (1.0f - ReliefRatio), 0.0f, 1.0f);
+	}
+
+	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Companions")
+	void SetSerafinaFatigue(float NewFatigue)
+	{
+		SerafinaFatigue = FMath::Clamp(NewFatigue, 0.0f, 1.0f);
+	}
+
 	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Companions")
 	bool IsCompanionVulnerable(FName CompanionID) const;
 };

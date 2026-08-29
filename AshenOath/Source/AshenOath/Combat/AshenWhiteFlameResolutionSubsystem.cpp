@@ -1,5 +1,10 @@
 // Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
+
 #include "Combat/AshenWhiteFlameResolutionSubsystem.h"
+#include "Memory/AshenIntegrationDebtAccumulatorSubsystem.h"
+#include "Companions/AshenCompanionFatigueSubsystem.h"
+#include "Engine/World.h"
+#include "Engine/GameInstance.h"
 
 void UAshenWhiteFlameResolutionSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -10,7 +15,11 @@ void UAshenWhiteFlameResolutionSubsystem::Initialize(FSubsystemCollectionBase& C
 	CurrentResolutionPayload.State = EWhiteFlameState::Inactive;
 	UE_LOG(LogTemp, Log, TEXT("UAshenWhiteFlameResolutionSubsystem: White Flame Resolution Subsystem Initialized."));
 }
-void UAshenWhiteFlameResolutionSubsystem::Deinitialize() { Super::Deinitialize(); }
+
+void UAshenWhiteFlameResolutionSubsystem::Deinitialize()
+{
+	Super::Deinitialize();
+}
 
 bool UAshenWhiteFlameResolutionSubsystem::EvaluateResolutionReadiness(float KaelenResolve, float SerafinaBurnout)
 {
@@ -38,7 +47,49 @@ bool UAshenWhiteFlameResolutionSubsystem::ActivateWhiteFlameResolution(float Cur
 	CurrentResolutionPayload.EradicatedDebtAmount = CurrentIntegrationDebt;
 	OutClearedDebt = CurrentIntegrationDebt; // 100% eradication
 
-	UE_LOG(LogTemp, Error, TEXT("UAshenWhiteFlameResolutionSubsystem: *** THE WHITE FLAME RESOLUTION IS ACTIVE *** (Eradicated %.1f Integration Debt)!"),
+	if (OnWhiteFlameResolutionActivated.IsBound())
+	{
+		OnWhiteFlameResolutionActivated.Broadcast(OutClearedDebt, CurrentResolutionPayload.DurationRemainingSeconds);
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("UAshenWhiteFlameResolutionSubsystem: *** THE WHITE FLAME RESOLUTION IS ACTIVE *** (Eradicated %.2f Integration Debt)!"),
 		OutClearedDebt);
+	return true;
+}
+
+bool UAshenWhiteFlameResolutionSubsystem::ActivateWhiteFlameWithWorldContext(UWorld* WorldContext, float& OutClearedDebt)
+{
+	OutClearedDebt = 0.0f;
+	if (!WorldContext)
+	{
+		return false;
+	}
+
+	float CurrentDebt = 0.0f;
+	if (UAshenIntegrationDebtAccumulatorSubsystem* DebtSubsystem = WorldContext->GetSubsystem<UAshenIntegrationDebtAccumulatorSubsystem>())
+	{
+		CurrentDebt = DebtSubsystem->GetIntegrationDebt();
+	}
+
+	if (!ActivateWhiteFlameResolution(CurrentDebt, OutClearedDebt))
+	{
+		return false;
+	}
+
+	// 1. Eradicate Integration Debt
+	if (UAshenIntegrationDebtAccumulatorSubsystem* DebtSubsystem = WorldContext->GetSubsystem<UAshenIntegrationDebtAccumulatorSubsystem>())
+	{
+		DebtSubsystem->ClearAllDebt();
+	}
+
+	// 2. Relieve Serafina's Burnout by 50%
+	if (UGameInstance* GI = WorldContext->GetGameInstance())
+	{
+		if (UAshenCompanionFatigueSubsystem* FatigueSubsystem = GI->GetSubsystem<UAshenCompanionFatigueSubsystem>())
+		{
+			FatigueSubsystem->RelieveSerafinaBurnout(0.50f);
+		}
+	}
+
 	return true;
 }
