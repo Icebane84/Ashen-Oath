@@ -9,8 +9,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMemoryWeavingLocusActivatedSigna
 
 /**
  * AAshenMemoryPalaceWeavingLocusActor
- *
- * Interactive physical locus in level space where players execute Grace vs Accountability lens selection (UMB-INT-001 Memory Slice).
+ * Interactive physical locus in level space where players execute Grace vs Accountability lens selection (UMB-INT-001 Memory Slice),
+ * unsealing nodes in the Memory Palace graph and restoring +20.0 Sanity.
  */
 UCLASS()
 class ASHENOATH_API AAshenMemoryPalaceWeavingLocusActor : public AActor
@@ -20,8 +20,9 @@ class ASHENOATH_API AAshenMemoryPalaceWeavingLocusActor : public AActor
 public:
 	AAshenMemoryPalaceWeavingLocusActor();
 
+	/** Executes a memory weaving pass, resolving the locus and unsealing the node */
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|WeavingLocus")
-	void ExecuteMemoryWeavingPass(bool bSelectGraceLens);
+	void ExecuteMemoryWeavingPass(bool bSelectGraceLens, AActor* Interactor = nullptr);
 
 	UPROPERTY(BlueprintAssignable, Category = "AshenOath|WeavingLocus|Events")
 	FOnMemoryWeavingLocusActivatedSignature OnWeavingLocusActivated;

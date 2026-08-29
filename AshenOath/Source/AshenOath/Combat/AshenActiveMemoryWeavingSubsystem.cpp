@@ -1,56 +1,70 @@
 // Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
+
 #include "Combat/AshenActiveMemoryWeavingSubsystem.h"
+#include "Combat/AshenOath_SanityComponent.h"
 
 void UAshenActiveMemoryWeavingSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 	CurrentLoomPayload.ActiveThreadCount = 4;
-	CurrentLoomPayload.TensionScalar = 0.0f;
-	CurrentLoomPayload.PoiseAbsorptionRatio = 0.75f;
+	CurrentLoomPayload.TensionScalar = 0.20f;
 	CurrentLoomPayload.TensionState = EFilamentTensionState::Slack;
 	UE_LOG(LogTemp, Log, TEXT("UAshenActiveMemoryWeavingSubsystem: Active Memory Weaving Subsystem Initialized."));
 }
-void UAshenActiveMemoryWeavingSubsystem::Deinitialize() { Super::Deinitialize(); }
 
-void UAshenActiveMemoryWeavingSubsystem::CalculateWeavingDensity(float IntegrationDebt, float TrustScalar, int32& OutThreadCount, float& OutTension)
+void UAshenActiveMemoryWeavingSubsystem::Deinitialize()
 {
-	const float D = FMath::Clamp(IntegrationDebt, 0.0f, 100.0f);
-	const float Tr = FMath::Clamp(TrustScalar, 0.0f, 1.0f);
+	Super::Deinitialize();
+}
 
-	// Thread count scales with Debt (1 to 8 threads)
-	OutThreadCount = FMath::Clamp(FMath::RoundToInt32(1.0f + (D / 100.0f) * 7.0f), 1, 8);
-	
-	// Tension is high when Debt is high but Trust is low
-	OutTension = FMath::Clamp((D / 100.0f) * (1.2f - Tr), 0.0f, 1.0f);
+void UAshenActiveMemoryWeavingSubsystem::CalculateWeavingDensity(
+	float IntegrationDebt,
+	float TrustScalar,
+	int32& OutThreadCount,
+	float& OutTension)
+{
+	// Threads scale with mutual trust: 4..20 threads
+	OutThreadCount = FMath::Clamp(FMath::RoundToInt(4.0f + TrustScalar * 16.0f), 2, 24);
+
+	// Tension scales with unintegrated trauma/debt: 0.20..1.00
+	OutTension = FMath::Clamp(0.20f + IntegrationDebt * 0.80f, 0.0f, 1.0f);
 
 	CurrentLoomPayload.ActiveThreadCount = OutThreadCount;
 	CurrentLoomPayload.TensionScalar = OutTension;
+	CurrentLoomPayload.TensionState = (OutTension > 0.80f) ? EFilamentTensionState::Snapping : (OutTension > 0.40f ? EFilamentTensionState::Tense : EFilamentTensionState::Slack);
 
-	if (OutTension >= 0.85f)
+	if (OnWeavingDensityUpdated.IsBound())
 	{
-		CurrentLoomPayload.TensionState = EFilamentTensionState::Snapping;
+		OnWeavingDensityUpdated.Broadcast(OutThreadCount, OutTension);
 	}
-	else if (OutTension >= 0.40f)
-	{
-		CurrentLoomPayload.TensionState = EFilamentTensionState::Tense;
-	}
-	else
-	{
-		CurrentLoomPayload.TensionState = EFilamentTensionState::Slack;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("UAshenActiveMemoryWeavingSubsystem: Threads: %d | Tension: %.2f | State: %d"),
-		OutThreadCount, OutTension, static_cast<int32>(CurrentLoomPayload.TensionState));
 }
 
-bool UAshenActiveMemoryWeavingSubsystem::RegisterThreadSnapEvent()
+bool UAshenActiveMemoryWeavingSubsystem::RegisterThreadSnapEvent(AActor* KaelenActor)
 {
-	if (CurrentLoomPayload.ActiveThreadCount > 0)
+	if (CurrentLoomPayload.TensionScalar < 0.80f)
 	{
-		CurrentLoomPayload.ActiveThreadCount--;
-		UE_LOG(LogTemp, Warning, TEXT("UAshenActiveMemoryWeavingSubsystem: THREAD SNAPPED! (Remaining Threads: %d)"),
-			CurrentLoomPayload.ActiveThreadCount);
-		return true;
+		return false; // Tension not high enough to snap
 	}
-	return false;
+
+	const float SanityBacklash = 15.0f;
+	if (KaelenActor)
+	{
+		if (UAshenOath_SanityComponent* SanityComp = KaelenActor->FindComponentByClass<UAshenOath_SanityComponent>())
+		{
+			SanityComp->SufferMentalDamage(SanityBacklash);
+		}
+	}
+
+	CurrentLoomPayload.ActiveThreadCount = FMath::Max(2, CurrentLoomPayload.ActiveThreadCount - 2);
+	CurrentLoomPayload.TensionState = EFilamentTensionState::Slack;
+
+	if (OnThreadSnapped.IsBound())
+	{
+		OnThreadSnapped.Broadcast(SanityBacklash);
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("UAshenActiveMemoryWeavingSubsystem: *** MEMORY WEAVE THREAD SNAPPED *** (Inflicted %.1f Sanity Backlash)!"),
+		SanityBacklash);
+
+	return true;
 }
