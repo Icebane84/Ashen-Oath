@@ -75,6 +75,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ashen|Combat|Slag")
 	void ProcessMeleeHitSootAndCoating(AActor* HitTarget, bool bIsHeavyCleave);
 
+	/** Switch active martial guard stance across the 4 canonical guards */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|Combat|Stance")
+	void SwitchToMartialStance(EOathbringerMartialStance NewStance);
+
+	UFUNCTION(BlueprintPure, Category = "Ashen|Combat|Stance")
+	EOathbringerMartialStance GetCurrentMartialStance() const { return CurrentMartialStance; }
+
+	UFUNCTION(BlueprintPure, Category = "Ashen|Combat|Stance")
+	const FOathbringerStanceKinematics& GetCurrentStanceKinematics() const { return CurrentStanceKinematics; }
+
 	UFUNCTION()
 	void HandleRunicSeamColorUpdated(FLinearColor NewColor, float EmissiveIntensity);
 
@@ -247,6 +257,13 @@ protected:
 	/** Duality Post Process Volume Adapter (World Domain post-process shifter) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	class UAshenDualityPostProcessVolumeAdapter* DualityPostProcessAdapter;
+
+	/** Active martial stance state and live kinematics */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Combat|Stance")
+	EOathbringerMartialStance CurrentMartialStance = EOathbringerMartialStance::VomTag_HighWrath;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Combat|Stance")
+	FOathbringerStanceKinematics CurrentStanceKinematics;
 
 private:
 	/** Guards against firing the crisis delegate more than once per life. Reset in HandleCharacterDeath(). */

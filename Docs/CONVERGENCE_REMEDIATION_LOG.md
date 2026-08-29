@@ -1,8 +1,8 @@
 # Ashen Oath — Causal Convergence & Mechanics Wiring Remediation Log
 
 **Governing Directives:**
-* Sentinel Audit: [`Ashen_Oath_Theater_Pattern_Audit.md`](file:///C:/Users/Chris/Where%20Light%20Fades/Ashen%20Oath/Design%20and%20Technical/Ashen_Oath_Theater_Pattern_Audit.md)
-* Remediation Guide: [`Ashen_Oath_Wiring_Remediation_Guide.md`](file:///C:/Users/Chris/Where%20Light%20Fades/Ashen%20Oath/Design%20and%20Technical/Ashen_Oath_Wiring_Remediation_Guide.md)
+* Sentinel Audit: [`Ashen_Oath_Theater_Pattern_Audit.md`](file:///C:/Where%20Light%20Fades/Ashen%20Oath/Design%20and%20Technical/Ashen_Oath_Theater_Pattern_Audit.md)
+* Remediation Guide: [`Ashen_Oath_Wiring_Remediation_Guide.md`](file:///C:/Where%20Light%20Fades/Ashen%20Oath/Design%20and%20Technical/Ashen_Oath_Wiring_Remediation_Guide.md)
 * **6-Step Causal Wiring Law & Anti-Theater Rule** embedded directly into `SKILL.md`
 * Zero Entropy & Value-Asserting Test Mandate (AES $\ge 8$)
 
@@ -15,53 +15,29 @@
 │                            CONVERGENCE & REMEDIATION PROGRESS MATRIX                        │
 └─────────────────────────────────────────────────────────────────────────────────────────────┘
                                                │
-       ┌───────────────────┬───────────────────┼───────────────────┐
-       ▼                   ▼                   ▼                   ▼
-[ PRIORITY 1: DUALITY ] [ PRIORITY 2: OATHS ] [ PRIORITY 3: TRIO ] [ PRIORITY 4: DEVIL'S ]
-   [100% COMPLETE]         [100% COMPLETE]      [100% COMPLETE]     [100% COMPLETE]
+       ┌───────────────────┬───────────────────┼───────────────────┬───────────────────┐
+       ▼                   ▼                   ▼                   ▼                   ▼
+[ PRIORITY 1: DUALITY ] [ PRIORITY 2: OATHS ] [ PRIORITY 3: TRIO ] [ PRIORITY 4: BARGAIN ] [ COMBAT SYNERGY ]
+   ✅ 100% COMPLETE        ✅ 100% COMPLETE     ✅ 100% COMPLETE      ✅ 100% COMPLETE     ✅ 100% COMPLETE
+   (Commit 1b510b2)        (Commit 1544729)     (Commit 1dd64e5)      (Commit 7edd69a)     (Commit daf6e7d)
 ```
 
-| Priority Layer | Target Domain | Key Components & Subsystems | Verification Suite | Status |
+| System Layer | Integration Point | Functional Output | Verification Suite | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **Priority 1: Duality Pipeline** | `Soul/`, `World/`, `Combat/` | `UAshenSovereignDualityTransformationAbility`, `UAshenDualityStateVectorCompiler`, `UAshenDualityShaderShiftComponent`, `UAshenDualityEngineShaderModulator`, `UAshenDualityMaterialInstanceAdapterComponent`, `UAshenDualityPostProcessVolumeAdapter`, `AAshenDualityTransformationLocusActor` | `FAshenMasterEndToEndIntegrationAutomationTest` (Asserts live `CompiledDualityStateScalar`, `CurrentDualityBlendRatio`, material parameters) | **COMPLETED & VERIFIED** (Commit `1b510b2`) |
-| **Priority 2: Living Oaths & Oath Burn** | `Combat/`, `Soul/`, `Core/` | `UAshenOath_OathRegistryComponent`, `UAshenLivingOathRegistrySubsystem`, `UAshenLivingOathGASAbility`, `UAshenOathBurnStaminaDrainGASAbility` | `FAshenLivingOathIntegrationTest` (Asserts swearing oaths, burden accumulation, burn state activation, fulfillment/breach) | **COMPLETED & VERIFIED** (Commit `1544729`) |
-| **Priority 3: Sanctuary & Companion Trio** | `Companions/`, `World/`, `UI/` | `UAshenCompanionFatigueSubsystem`, `UAshenTrioPartySpawnerComponent`, `UAshenSanctuarySurvivalConvergenceSubsystem`, `UAshenCampfireRestSubsystem` | `FAshenCompanionTrioFatigueIntegrationTest` (Asserts fatigue decay, tactical assists via Twin-Blade X-Lock & Alchemical Flasks, campfire rest reset) | **COMPLETED & VERIFIED** (Commit `eacf843`, `1dd64e5`) |
-| **Priority 4: Devil's Bargain & Scope Triage** | `Combat/`, `Companions/`, `Core/` | `UAshenDevilsBargainTransformationSubsystem`, `UAshenDevilsBargainTrustAtrophyDirector`, `AAshenCombatCharacter` | `FAshenDevilsBargainIntegrationTest` (Asserts critical HP dilation window, +200% attack speed surge, -25% companion trust penalty) | **COMPLETED & VERIFIED** (Commit `7edd69a`) |
+| **Duality Phase 2 Pulse** | HP threshold (50%) on Boss ASC / Player | Interpolates `UAshenDualityShaderShiftComponent` blend scalar to `1.0f` and grants transition immunity | `FAshenCoreCombatSynergyIntegrationTest` & `FAshenMasterEndToEndIntegrationAutomationTest` | **VERIFIED (0 Errors)** |
+| **Sacred Sanctuary Field** | Dynamic spawn via `UAshenSerafinaSacredBarrierGASAbility` | `AAshenSanctuaryField` overlap applies `+250%` stamina acceleration ($3.5\times$) and AoE damage nullification; adds $+0.20$ Serafina fatigue | `FAshenCoreCombatSynergyIntegrationTest` | **VERIFIED (0 Errors)** |
+| **Garrett Flank Assist** | Assist input tag (`E`) | Motion-warps to target rear transform; deals $1.8\times$ stagger multiplier against `State.Combat.Recovery`; adds $+0.25$ Garrett fatigue | `FAshenCoreCombatSynergyIntegrationTest` | **VERIFIED (0 Errors)** |
+| **Oathbringer Riposte** | Contextual trigger during `State.Combat.Staggered` | Synchronizes transforms to front socket ($120\text{uu}$), triggers trauma shake, deals $450\text{ damage}$, and resets posture | `FAshenCoreCombatSynergyIntegrationTest` | **VERIFIED (0 Errors)** |
+| **Living Oaths & Burn** | `UAshenOath_OathRegistryComponent` & `UAshenLivingOathRegistrySubsystem` | Tracks swearing, burden scaling, Oath Burn stamina drain debuff ($-15.0\text{ stamina/s}$), fulfillment & breach | `FAshenLivingOathIntegrationTest` | **VERIFIED (0 Errors)** |
+| **Devil's Bargain Crisis** | HP $\le 25\%$ crisis window on `AAshenCombatCharacter` | $0.1\times$ slow motion, $+200\%$ attack speed surge ($3.0\times$), $-25\%$ companion trust atrophy penalty | `FAshenDevilsBargainIntegrationTest` | **VERIFIED (0 Errors)** |
 
 ---
 
-## 🔬 Milestone Detail Log
+## 🔬 Master Value-Asserting Automation Test Suites
 
-### ✅ Priority 1: Duality Transformation Pipeline (100% Complete — Commit `1b510b2`)
-1. **Authoritative Source of Truth:** `UAshenDualityStateVectorCompiler` instantiated on `AAshenCombatCharacter` and compiled via `CompileDualityStateVector(TargetCorruption)`.
-2. **5-Way World Adapter Fan-Out:**
-   - `UAshenDualityShaderShiftComponent::SetDualityBlendRatio()`
-   - `UAshenDualityEngineShaderModulator::UpdateDualityShaderParameters()`
-   - `UAshenDualityMaterialInstanceAdapterComponent::UpdateMaterialInstanceParameters()`
-   - `UAshenDualityPostProcessVolumeAdapter::AdjustPostProcessForRealmShift()`
-   - `AAshenDualityTransformationLocusActor::TriggerDualityTransformationAuraPulse()`
-3. **Dynamic Material Modulation:** Pushes `CorruptionAmount`, `ArmorSootR`, `SeamGrimeG`, `TabardRaggednessB`, `EyeBladeEmissiveA`, and `DualityBlendRatio` across skeletal mesh materials in real-time.
-4. **Automation Suite:** Verified via [`FAshenMasterEndToEndIntegrationAutomationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenMasterEndToEndIntegrationAutomationTest.cpp).
-
-### ✅ Priority 2: Living Oaths & Oath Burn Pipeline (100% Complete — Commit `1544729`)
-1. **Authoritative Source of Truth:** `UAshenOath_OathRegistryComponent` on `AAshenCombatCharacter` and `UAshenLivingOathRegistrySubsystem` in `World`.
-2. **Material & Mesh Hooking:** Listens to `OnOathSworn`, `OnOathFulfilled`, `OnOathBroken` to drive dynamic material parameters:
-   - `OathBurdenAmount` ($0.0 \to 1.0$)
-   - `OathBurnActive` ($1.0$ if burden $\ge 1.0$ or on breach)
-   - `OathResonanceGlow` ($1.0$ on fulfillment, $0.0$ on breach)
-3. **GAS Execution Payloads:**
-   - [`UAshenLivingOathGASAbility`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Combat/AshenLivingOathGASAbility.cpp): Unleashes radial resonance damage scaled by Kaelen's current `ActiveOathBurden`.
-   - [`UAshenOathBurnStaminaDrainGASAbility`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Combat/AshenOathBurnStaminaDrainGASAbility.cpp): Drains $-15.0\text{ Stamina}$ and drives glowing crack shaders when burden exceeds threshold.
-4. **Automation Suite:** Verified via [`FAshenLivingOathIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenLivingOathIntegrationTest.cpp).
-
-### ✅ Priority 3: Sanctuary & Companion Trio Fatigue Loop (100% Complete — Commit `eacf843`, `1dd64e5`)
-1. **Authoritative Fatigue Subsystem:** `UAshenCompanionFatigueSubsystem` managing Tripartite Fatigue (Garrett Control via Twin-Blade X-Lock & Alchemical Flasks, Serafina Poise via Healing Prayers, Kaelen Transference).
-2. **Sanctuary / Campfire Rest Integration:** Added `ResetAllFatigue()` to purge companion fatigue upon resting at campfire havens or consuming hot meals.
-3. **Vulnerability State Enforcement:** Enforces vulnerability threshold ($\ge 0.70\text{ Fatigue}$) increasing assist cooldowns and lowering defense.
-4. **Automation Suite:** Verified via [`FAshenCompanionTrioFatigueIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenCompanionTrioFatigueIntegrationTest.cpp).
-
-### ✅ Priority 4: Devil's Bargain Crisis & Trust Atrophy Integration (100% Complete — Commit `7edd69a`)
-1. **Authoritative Crisis Subsystem:** `UAshenDevilsBargainTransformationSubsystem` managing Unchained Berserk state and attack speed multipliers.
-2. **Trust Atrophy Director:** Connects to `UAshenDevilsBargainTrustAtrophyDirector` to penalize party trust ($-25.0\%$) and apply combo delay penalties upon accepting demonic bargain.
-3. **Combat Character Integration:** Triggers on HP $\le 25\%$ via `HandleHealthChanged()`, applies slow-motion ($0.1\times$), and broadcasts `OnDevilsBargainCrisisEntered`.
-4. **Automation Suite:** Verified via [`FAshenDevilsBargainIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenDevilsBargainIntegrationTest.cpp).
+1. [`FAshenCoreCombatSynergyIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenCoreCombatSynergyIntegrationTest.cpp) — Asserts all 4 Core Combat Synergy systems: Duality Phase 2 interpolation, Sanctuary Field $+250\%$ stamina acceleration, Garrett Flank motion-warp & $1.8\times$ stagger, and Oathbringer Riposte paired execution & posture reset.
+2. [`FAshenMasterEndToEndIntegrationAutomationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenMasterEndToEndIntegrationAutomationTest.cpp) — Asserts Duality Transformation Ability, Soul State Vector compilation, World Shader Shift blend scalar, and Martial Stance flow.
+3. [`FAshenLivingOathIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenLivingOathIntegrationTest.cpp) — Asserts Swearing Oaths ($0.10 \to 1.00$ burden), automatic Oath Burn debuff activation, stamina drain, and fulfillment/breach tracking.
+4. [`FAshenCompanionTrioFatigueIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenCompanionTrioFatigueIntegrationTest.cpp) — Asserts Garrett Twin-Blade X-Lock and Serafina Prayer fatigue accumulation, vulnerability threshold ($\ge 0.70$), dynamic decay, and Campfire rest purge to `0.0`.
+5. [`FAshenDevilsBargainIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenDevilsBargainIntegrationTest.cpp) — Asserts critical HP crisis dilation, $+200\%$ attack speed surge, and $-25\%$ companion trust penalty.
+6. [`FAshenCombatHitSootAlchemicalIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenCombatHitSootAlchemicalIntegrationTest.cpp) — Asserts melee hit soot accumulation ($0.04/0.08$), Superheated Slag transition, alchemical coatings, and Thermal Shock poise shatter.

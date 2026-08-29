@@ -255,8 +255,22 @@ void AAshenCombatCharacter::HandleRunicSeamColorUpdated(FLinearColor NewColor, f
 	}
 }
 
+void AAshenCombatCharacter::SwitchToMartialStance(EOathbringerMartialStance NewStance)
+{
+	if (UWorld* World = GetWorld())
+	{
+		if (UAshenOathbringerStanceFlowConvergenceSubsystem* StanceSubsystem = World->GetSubsystem<UAshenOathbringerStanceFlowConvergenceSubsystem>())
+		{
+			StanceSubsystem->SwitchStance(NewStance);
+		}
+	}
+}
+
 void AAshenCombatCharacter::HandleStanceChanged(EOathbringerMartialStance NewStance, const FOathbringerStanceKinematics& Kinematics)
 {
+	CurrentMartialStance = NewStance;
+	CurrentStanceKinematics = Kinematics;
+
 	HandleRunicSeamColorUpdated(Kinematics.RunicSeamColor, 1.25f);
 	UE_LOG(LogTemp, Log, TEXT("AAshenCombatCharacter: Switched stance to %d (Runic Seam R: %.2f, G: %.2f, B: %.2f)"),
 		static_cast<int32>(NewStance), Kinematics.RunicSeamColor.R, Kinematics.RunicSeamColor.G, Kinematics.RunicSeamColor.B);
