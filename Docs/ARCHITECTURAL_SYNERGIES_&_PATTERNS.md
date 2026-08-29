@@ -56,10 +56,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-034`** | **Parasitic Blade Hunger Decay, Sanity Dissonance Audio Gating & Flow State Catharsis Invariant** | `CONVERGENCE-SPEC-090` / Combat / Audio / AI / UI / Haptics | Blade strike bonus ($+45\%$), parry window reduction ($-35\%$), Stem 02 whisper gain ($0.0 \leftrightarrow 1.0$), $-18\text{dB}$ melodic ducking, and $8\text{s}$ Flow State $+40$ sanity catharsis purge. |
 | **`SYN-035`** | **Equipment Weight Class Dodge Scaling, Cardiac Pulse Exhaustion & Poise-Break Hitstop Invariant** | `KINEMATICS-SPEC-091` / Combat / Audio / AI / UI / Haptics | Weight class roll duration ($0.32\text{s}-0.70\text{s}$), i-frames ($0.28\text{s}-0.05\text{s}$), cardiac exhaustion swing slowdown ($+25\%$), $0.20\text{s}$ poise break hitstop ($0.02\times$), and perfect deflection surge ($+50$ stamina, $+35$ Flame, $+25\%$ riposte). |
 | **`SYN-036`** | **Cognitive Dissonance Delta Solver, Dynamic Contradiction Quest Branching & Companion Alignment Invariant** | `CSE-SPEC-092` / Narrative / Combat / AI / UI / Haptics | Dissonance index calculation ($D \in [0.0, 1.0]$), $+30\%$ harmony synergy bonus, $+20\%$ fracture tandem stamina penalty, 3 contract archetypes, and companion alignment ultimatums. |
+| **`SYN-037`** | **Chaos Rubble NavMesh Chokepoints, Weather Perception Clamping & Conductive Lightning Arcing Invariant** | `DESTRUCTION-WEATHER-AI-SPEC-093` / World / Combat / AI / Audio / UI / Haptics | Dynamic Lock-On clamping ($1500\text{uu} \to 500\text{uu}$), AI vision cone narrowing ($90^\circ \to 45^\circ$), $350\text{uu}$ chain-lightning arcs ($350\text{ Shock Dmg}$, $1.2\text{s}$ stagger), and $\pm 65^\circ$ AI pincer flanking around rubble chokepoints. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-037`: Chaos Rubble NavMesh Chokepoints, Weather Perception Clamping & Conductive Lightning Arcing Invariant
+
+* **Target Subsystems:** `UAshenDestructionWeatherAIConvergenceSubsystem`, `UAshenWeatherPerceptionClampEvaluator`, `UAshenConductiveLightningArcEvaluator`, `UAshenDestructionCoverDurabilityEvaluator`, `UAshenDestructionWeatherAIHapticBridge`
+* **Related Specifications:** [`DESTRUCTION-WEATHER-AI-SPEC-093`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/DESTRUCTION-WEATHER-AI-SPEC-093%20%28ENVIRONMENTAL%20DESTRUCTION,%20WEATHER%20HAZARDS%20&%20AI%20COMBAT%20TACTICS%20LOOP%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{LockOnRange}(\text{Weather}) = \begin{cases} 1500\text{uu}, & \text{ClearDaylight} \\ 1100\text{uu}, & \text{AcidRainMist} \\ 750\text{uu}, & \text{VolcanicAshStorm} \\ 500\text{uu}, & \text{BlizzardWhiteout} \end{cases}$$
+$$\text{AISightRadius}(\text{Weather}) = \begin{cases} 2000\text{uu} \text{ (FoV: } 90^\circ), & \text{ClearDaylight} \\ 1400\text{uu} \text{ (FoV: } 75^\circ), & \text{AcidRainMist} \\ 900\text{uu} \text{ (FoV: } 55^\circ), & \text{VolcanicAshStorm} \\ 600\text{uu} \text{ (FoV: } 45^\circ), & \text{BlizzardWhiteout} \end{cases}$$
+$$\text{ChainLightningArc} = \{ R \le 350.0\text{uu}, \text{Damage} = 350.0\text{ Shock}, \text{Stagger} = 1.20\text{s} \}$$
+$$\text{CoverShatterShrapnel} = \{ \text{Durability} = 500.0\text{ HP}, \text{ExplosionDamage} = 250.0, \text{BlastRadius} = 250.0\text{uu} \}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Tactical Atmospheric Gating:** Atmospheric density actively modifies combat geometry. In clear skies, long-range skirmishes dominate, whereas blinding blizzards force close-quarters encounters, enabling storm-stealth ambushes ($+50\%$ critical strike damage).
+* **Conductive Environmental Chaining:** Destruction debris and weather puddles act as live electrical conduits—lightning striking wet pools or metallic rubble chains shockwaves across clustered combatants.
+
+---
 
 ---
 

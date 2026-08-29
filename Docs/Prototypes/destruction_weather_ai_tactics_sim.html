@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Environmental Destruction, Weather Hazards & AI Tactics Simulator</title>
+    <!-- Traceability: DESTRUCTION-WEATHER-AI-SPEC-093 | Builds 3036-3055 -->
+    <style>
+        :root {
+            --bg-primary: #060911;
+            --bg-secondary: #0d1527;
+            --panel-bg: #152238;
+            --border-color: #2b3d5c;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #04070e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #04070e;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .btn-lightning {
+            background: #78350f;
+            border-color: #f59e0b;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .btn-cleave {
+            background: #1e3a8a;
+            border-color: #38bdf8;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fef08a;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>ENVIRONMENTAL DESTRUCTION, WEATHER & AI TACTICS SIMULATOR</h1>
+                <p>Chaos Rubble Chokepoints ↔ Weather Perception Clamping ↔ Conductive Lightning Arcs (SPEC-093)</p>
+            </div>
+            <div class="badge">BUILD 3055</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="tacticalCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Atmospheric Weather State:</span>
+                        <span class="control-val" id="weatherVal">Blizzard Whiteout</span>
+                    </div>
+                    <select id="weatherSelect" style="background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px; border-radius: 4px; font-size: 12px;">
+                        <option value="Blizzard">Blizzard Whiteout (500uu Lock-On, 45° FoV)</option>
+                        <option value="AshStorm">Volcanic Ash Storm (750uu Lock-On, 55° FoV)</option>
+                        <option value="AcidRain">Acid Rain (1100uu Lock-On, 75° FoV)</option>
+                        <option value="Clear">Clear Daylight (1500uu Lock-On, 90° FoV)</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn btn-cleave" id="cleavePillarBtn">💥 CLEAVE PILLAR (CHOKEPOINT)</button>
+                    <button class="btn btn-lightning" id="strikeLightningBtn">⚡ STRIKE LIGHTNING (850 DMG)</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "They're using the whiteout to flank us! Watch the flanks!"
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT TACTICAL TELEMETRY</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Lock-On Range</div>
+                <div class="telemetry-val" id="lockOnVal">500 uu</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">AI Vision Cone</div>
+                <div class="telemetry-val" id="fovVal">45° (600 uu)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Conductive Chain Shock</div>
+                <div class="telemetry-val" id="shockVal" style="color: var(--accent-cyan);">350 Dmg (1.2s)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">AI Tactical Maneuver</div>
+                <div class="telemetry-val" id="pincerVal" style="color: var(--accent-amber);">PINCER FLANK (±65°)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Thunder 45Hz sub-bass vs Sizzling Arc 2400Hz)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playThunder() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(45, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.2);
+        }
+
+        function playSizzle() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(2400, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.6);
+        }
+
+        // State Variables
+        let currentTier = "Blizzard";
+        let bPillarCleaved = false;
+        let bLightningStriking = false;
+        let lockOnRange = 500;
+        let aiFov = 45;
+        let aiSight = 600;
+
+        const weatherSelect = document.getElementById('weatherSelect');
+        const barkBox = document.getElementById('barkBox');
+
+        function updateWeather() {
+            currentTier = weatherSelect.value;
+            switch(currentTier) {
+                case 'Blizzard':
+                    lockOnRange = 500; aiFov = 45; aiSight = 600;
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "They're using the whiteout to flank us! Watch the flanks!"`;
+                    break;
+                case 'AshStorm':
+                    lockOnRange = 750; aiFov = 55; aiSight = 900;
+                    barkBox.innerHTML = `<strong>[Serafina]:</strong> "Ash is choking our sightlines. Close ranks!"`;
+                    break;
+                case 'AcidRain':
+                    lockOnRange = 1100; aiFov = 75; aiSight = 1400;
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Get clear of that wet iron! The next lightning bolt will fry everything in the pool!"`;
+                    break;
+                case 'Clear':
+                default:
+                    lockOnRange = 1500; aiFov = 90; aiSight = 2000;
+                    barkBox.innerHTML = `<strong>[Serafina]:</strong> "Hold the line. We use the terrain to break their charge."`;
+                    break;
+            }
+
+            document.getElementById('weatherVal').innerText = currentTier;
+            document.getElementById('lockOnVal').innerText = lockOnRange + " uu";
+            document.getElementById('fovVal').innerText = `${aiFov}° (${aiSight} uu)`;
+        }
+
+        weatherSelect.onchange = updateWeather;
+
+        document.getElementById('cleavePillarBtn').onclick = () => {
+            bPillarCleaved = !bPillarCleaved;
+            barkBox.innerHTML = bPillarCleaved 
+                ? `<strong>[Serafina]:</strong> "The archway is crumbling! Watch the falling stone!"`
+                : `<strong>[Garrett]:</strong> "Area cleared of debris."`;
+        };
+
+        document.getElementById('strikeLightningBtn').onclick = () => {
+            bLightningStriking = true;
+            playThunder();
+            setTimeout(() => { playSizzle(); }, 200);
+            setTimeout(() => { bLightningStriking = false; }, 800);
+        };
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "DESTRUCTION_WEATHER_AI_TELEMETRY",
+                visibility_tier: currentTier,
+                lock_on_range_uu: lockOnRange,
+                ai_vision_fov_degrees: aiFov,
+                ai_sight_radius_uu: aiSight,
+                chokepoint_active: bPillarCleaved,
+                conductive_arc_damage: 350.0
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Canvas Tactical Top-Down Visualizer
+        const canvas = document.getElementById('tacticalCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const pPlayer = { x: 335, y: 320 };
+            const pRubble = { x: 335, y: 220 };
+            const pAILeft = { x: bPillarCleaved ? 210 : 310, y: 140 };
+            const pAIRight = { x: bPillarCleaved ? 460 : 360, y: 140 };
+
+            // Draw Weather Fog Overlay
+            if (currentTier === "Blizzard") {
+                ctx.fillStyle = "rgba(200, 220, 255, 0.12)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            } else if (currentTier === "AshStorm") {
+                ctx.fillStyle = "rgba(220, 120, 60, 0.10)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            // Draw Player Lock-On Range Ring
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.arc(pPlayer.x, pPlayer.y, lockOnRange * 0.14, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw Cleaved Rubble Obstacle
+            if (bPillarCleaved) {
+                ctx.fillStyle = '#64748b';
+                ctx.fillRect(pRubble.x - 60, pRubble.y - 15, 120, 30);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText("CLEAVED RUBBLE CHOKEPOINT", pRubble.x, pRubble.y + 4);
+            }
+
+            // Draw Player
+            ctx.fillStyle = '#10b981';
+            ctx.beginPath(); ctx.arc(pPlayer.x, pPlayer.y, 14, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText("KAELEN", pPlayer.x, pPlayer.y + 24);
+
+            // Draw AI Skirmishers
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath(); ctx.arc(pAILeft.x, pAILeft.y, 12, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(pAIRight.x, pAIRight.y, 12, 0, Math.PI * 2); ctx.fill();
+            ctx.fillText("FLANK LEFT (-65°)", pAILeft.x, pAILeft.y - 16);
+            ctx.fillText("FLANK RIGHT (+65°)", pAIRight.x, pAIRight.y - 16);
+
+            // Draw Lightning Flash & Conductive Arcs
+            if (bLightningStriking) {
+                ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(335, 0);
+                ctx.lineTo(pRubble.x, pRubble.y);
+                ctx.stroke();
+
+                // Conductive Chain Arc to AI
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(pRubble.x, pRubble.y);
+                ctx.lineTo(pAILeft.x, pAILeft.y);
+                ctx.moveTo(pRubble.x, pRubble.y);
+                ctx.lineTo(pAIRight.x, pAIRight.y);
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateWeather();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
