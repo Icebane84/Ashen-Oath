@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 3175: Master Batch #158 — The Executioner's Severance & Dismemberment Physics Pipeline (SEVERANCE-DISMEMBERMENT-SPEC-099)
+**Domain:** Combat / UI / AI / Audio / Core / Orchestration / Narrative / World / QA  
+**Status:** 3,175 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 3156 | `AshenSeveranceTypes.h` | `AshenSeveranceTypes` — Enums (3), Structs (3), Multicast Delegates (4) | Combat |
+| 3157 | `AshenSeveranceDismembermentConvergenceSubsystem.h/.cpp` | `UAshenSeveranceDismembermentConvergenceSubsystem` — Master dismemberment subsystem | Combat |
+| 3158 | `AshenSeverancePlaneEvaluator.h/.cpp` | `UAshenSeverancePlaneEvaluator` — Computes 3D slice plane normals & impulses | Combat |
+| 3159 | `AshenAdrenalineSurgeEvaluator.h/.cpp` | `UAshenAdrenalineSurgeEvaluator` — Solves adrenaline gains & stamina refills | Combat |
+| 3160 | `AshenProceduralGoreDecalDirectorComponent.h/.cpp` | `UAshenProceduralGoreDecalDirectorComponent` — Directs directional blood splatter decals | Combat |
+| 3161 | `AshenExecuteSeveranceCleaveGASAbility.h/.cpp` | `UAshenExecuteSeveranceCleaveGASAbility` — Execution slice ability on poise breaks | Combat |
+| 3162 | `AshenAdrenalineSurgeBuffGASAbility.h/.cpp` | `UAshenAdrenalineSurgeBuffGASAbility` — Hyper-armor & stamina refill surge ability | Combat |
+| 3163 | `AshenSomaticBloodrageGASAbility.h/.cpp` | `UAshenSomaticBloodrageGASAbility` — +30% weapon damage bloodrage ability | Combat |
+| 3164 | `AshenDecapitationExecutionGASAbility.h/.cpp` | `UAshenDecapitationExecutionGASAbility` — Clean head decapitation finisher ability | Combat |
+| 3165 | `AshenLimbAmputationStrikeGASAbility.h/.cpp` | `UAshenLimbAmputationStrikeGASAbility` — Arm/leg amputation strike ability | Combat |
+| 3166 | `UBTService_AshenAIPanicOnSeveranceWitness.h/.cpp` | `UBTService_AshenAIPanicOnSeveranceWitness` — AI panic/retreat on execution witness | AI |
+| 3167 | `AshenUserWidget_ExecutionerAdrenalineHUD.h/.cpp` | `UAshenUserWidget_ExecutionerAdrenalineHUD` — UMG adrenaline gauge & prompt HUD | UI |
+| 3168 | `AshenSeveranceGoreAudioSubsystem.h/.cpp` | `UAshenSeveranceGoreAudioSubsystem` — MetaSounds 180Hz bone cleave & 3.2kHz gore audio | Audio |
+| 3169 | `AshenSeveranceBloodSplatterPostProcessAdapter.h/.cpp` | `UAshenSeveranceBloodSplatterPostProcessAdapter` — Dynamic lens blood splatter adapter | Combat |
+| 3170 | `AAshenSeveranceGibWorldActor.h/.cpp` | `AAshenSeveranceGibWorldActor` — Physical ragdoll severed gib actor | World |
+| 3171 | `AshenSeveranceSaveGameAdapter.h/.cpp` | `UAshenSeveranceSaveGameAdapter` — Serializes execution stats & adrenaline | Core |
+| 3172 | `AshenSeveranceNarrativeBridge.h/.cpp` | `UAshenSeveranceNarrativeBridge` — Companion dialogue barks on gruesome kills | Narrative |
+| 3173 | `AshenSeveranceHapticBridge.h/.cpp` | `UAshenSeveranceHapticBridge` — DualSense 0.95 heavy bone cleave haptics | Combat |
+| 3174 | `AshenSeveranceMasterBridge.h/.cpp` | `UAshenSeveranceMasterBridge` — Master bridge connecting combat, dismemberment & HUD | Orchestration |
+| 3175 | `AshenMasterBatch158AutomationTest.cpp` | `FAshenMasterBatch158AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 3155: Master Batch #157 — The Runic Forge Weapon Evolution & Sigil Inscription Matrix (RUNIC-FORGE-SPEC-098)
 **Domain:** Combat / UI / AI / Audio / Core / Orchestration / Narrative / World / QA  
 **Status:** 3,155 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

@@ -62,10 +62,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-040`** | **Campfire Cooking Meal Hazard Immunities, Thermal Shelter Thermodynamic Gating & Sanctuary Beacon Journal Inscription Invariant** | `SANCTUARY-SURVIVAL-SPEC-096` / World / Combat / UI / AI / Audio / Haptics | Meal hazard immunities ($100\%$), 3-tier shelter thermodynamics ($-2.5\text{ HP/s}$ hypothermia vs $2.0\times$ cavern cooking), $1200\text{uu}$ beacon haven, and auto-logging Forensic Journal entries. |
 | **`SYN-041`** | **Forensic Clue Deduction Pinning, Mindscape Memory Shard Synthesis & Trauma Catharsis Invariant** | `FORENSIC-MINDSCAPE-SPEC-097` / Narrative / World / Combat / UI / AI / Audio / Haptics | Clue reliability weights ($0.65-1.0$), deduction synthesis threshold ($S \ge 0.85$), $+50.0\text{ Sanity}$ catharsis purge, and $+25\%$ crit $/ +40\%$ poise anatomical mastery. |
 | **`SYN-042`** | **Oathbringer 5-Tier Ascension, 4-Guard Sigil Inscription & Flow Hybrid Finisher Invariant** | `RUNIC-FORGE-SPEC-098` / Combat / UI / AI / Audio / Haptics | 5-Tier ascension ($1.0\times \to 1.5\times$ base dmg, $100 \to 250\text{ Flow}$), 4 dedicated guard sockets, and $0.15\text{s}$ Flow Glint dual-sigil hybrid finisher ($1.40\times$). |
+| **`SYN-043`** | **Poise Break Execution Severance, Dynamic Slice Planes & Adrenaline Momentum Invariant** | `SEVERANCE-DISMEMBERMENT-SPEC-099` / Combat / UI / AI / Audio / Haptics | Poise break decapitations ($+35\text{ Adrenaline}$), total bisections ($+40$), stamina refills ($+25$), hyper-armor ($\ge 50\text{ Adrenaline}$), and $180\text{Hz}$ bone cleave audio. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-043`: Poise Break Execution Severance, Dynamic Slice Planes & Adrenaline Momentum Invariant
+
+* **Target Subsystems:** `UAshenSeveranceDismembermentConvergenceSubsystem`, `UAshenSeverancePlaneEvaluator`, `UAshenAdrenalineSurgeEvaluator`, `UAshenProceduralGoreDecalDirectorComponent`, `UAshenSeveranceHapticBridge`
+* **Related Specifications:** [`SEVERANCE-DISMEMBERMENT-SPEC-099`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SEVERANCE-DISMEMBERMENT-SPEC-099%20%28THE%20EXECUTIONER%27S%20SEVERANCE%20&%20DISMEMBERMENT%20PHYSICS%20PIPELINE%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{AdrenalineGain}(\text{Target}) = \begin{cases} 35.0, & \text{Head / Decapitation} \\ 40.0, & \text{Torso / Total Bisection} \\ 25.0, & \text{Arms / Legs (Amputation)} \\ 15.0, & \text{Minor Limbs} \end{cases}$$
+$$\text{StaminaRefill}(A) = \text{Clamp}(A \times 0.50, 15.0, 50.0)$$
+$$\text{HyperArmorActive}(A) = (A \ge 50.0)$$
+$$\text{DecalScaleY}(V_{\text{Splatter}}) = V_{\text{Splatter}} \times 120.0\text{uu}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Tactical Execution Rewards:** Rather than executions serving purely as visual flair, every severance directly replenishes Kaelen's stamina pool and charges his somatic adrenaline meter, rewarding aggressive poise-breaking combat flow against overwhelming mob encounters.
+* **Psychological Battlefield Impact:** Severing an elite enemy dynamically fractures enemy AI morale within an $800\text{uu}$ radius, forcing lesser minions into panic retreats.
+
+---
 
 ---
 

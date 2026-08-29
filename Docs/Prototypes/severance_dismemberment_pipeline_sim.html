@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Executioner's Severance & Dismemberment Pipeline Simulator</title>
+    <!-- Traceability: SEVERANCE-DISMEMBERMENT-SPEC-099 | Builds 3156-3175 -->
+    <style>
+        :root {
+            --bg-primary: #060911;
+            --bg-secondary: #0d1527;
+            --panel-bg: #152238;
+            --border-color: #2b3d5c;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-red);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-red);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #04070e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #04070e;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .target-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .btn-target {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn-target:hover {
+            border-color: var(--accent-red);
+        }
+
+        .btn-target.active {
+            border-color: #ef4444;
+            background: #450a0a;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
+        .btn-action {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action:hover {
+            background: var(--border-color);
+            border-color: var(--accent-red);
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fca5a5;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-red);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>EXECUTIONER'S SEVERANCE & DISMEMBERMENT PIPELINE SIMULATOR</h1>
+                <p>Poise Break Collapse ↔ Dynamic Bone Slicing ↔ Adrenaline Surge (SPEC-099)</p>
+            </div>
+            <div class="badge">BUILD 3175</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="severanceCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Anatomical Severance Target:</div>
+                <div class="target-grid">
+                    <button class="btn-target active" id="tgtHead" onclick="setTarget('Head')">💀 DECAPITATION<br><span style="font-size: 9px;">+35 Adrenaline / Apex Panic</span></button>
+                    <button class="btn-target" id="tgtTorso" onclick="setTarget('Torso')">⚔️ TOTAL BISECTION<br><span style="font-size: 9px;">+40 Adrenaline / Waist Cleave</span></button>
+                    <button class="btn-target" id="tgtArm" onclick="setTarget('Arm')">🗡️ WEAPON ARM<br><span style="font-size: 9px;">+25 Adrenaline / Disarm</span></button>
+                    <button class="btn-target" id="tgtLeg" onclick="setTarget('Leg')">🦵 CRIPPLE LEG<br><span style="font-size: 9px;">+25 Adrenaline / -60% Speed</span></button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                    <button class="btn-action" id="btnExecute" style="background: #991b1b; border-color: #ef4444; font-weight: bold;">🩸 EXECUTE POISE-BROKEN TARGET (SPACE / CLICK)</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "Clean neck cleave. That steel didn't hesitate for a heartbeat."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT SEVERANCE TELEMETRY</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Severance Target</div>
+                <div class="telemetry-val" id="targetVal" style="color: var(--accent-red);">DECAPITATION</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Adrenaline Pool</div>
+                <div class="telemetry-val" id="adrenalineVal" style="color: var(--accent-amber);">35.0 / 100</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Hyper-Armor</div>
+                <div class="telemetry-val" id="hyperArmorVal" style="color: var(--accent-emerald);">INACTIVE</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Stamina Recovery</div>
+                <div class="telemetry-val" id="staminaVal" style="color: var(--accent-cyan);">+17.5 STAMINA</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (180Hz Sub-Bass Thud, 3.2kHz Arterial Splatter)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playGoreSound(subBassFreq, splatterFreq, duration) {
+            initAudio();
+            if (!audioCtx) return;
+
+            // Sub-bass bone cleave thud (180Hz)
+            const osc1 = audioCtx.createOscillator();
+            const gain1 = audioCtx.createGain();
+            osc1.type = 'sawtooth';
+            osc1.frequency.setValueAtTime(subBassFreq, audioCtx.currentTime);
+            osc1.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + duration);
+
+            gain1.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc1.connect(gain1);
+            gain1.connect(audioCtx.destination);
+            osc1.start();
+            osc1.stop(audioCtx.currentTime + duration);
+
+            // Wet gore noise burst (3.2kHz)
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(splatterFreq, audioCtx.currentTime);
+
+            gain2.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration * 0.5);
+
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            osc2.start();
+            osc2.stop(audioCtx.currentTime + duration * 0.5);
+        }
+
+        // Severance State
+        let currentTarget = 'Head';
+        let currentAdrenaline = 35.0;
+        let bloodParticles = [];
+        let slicePlaneY = 160;
+
+        const barkBox = document.getElementById('barkBox');
+
+        function setTarget(target) {
+            initAudio();
+            currentTarget = target;
+            document.querySelectorAll('.btn-target').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tgt${target}`).classList.add('active');
+
+            if (target === 'Head') {
+                slicePlaneY = 160;
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Clean neck cleave. That steel didn't hesitate for a heartbeat."`;
+            } else if (target === 'Torso') {
+                slicePlaneY = 240;
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "May the Flame forgive the savagery of this sundering world."`;
+            } else if (target === 'Arm') {
+                slicePlaneY = 200;
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Weapon arm severed! He won't be holding a spear again."`;
+            } else {
+                slicePlaneY = 310;
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Leg shattered. Target crippled and slowed."`;
+            }
+            updateTelemetry();
+        }
+
+        function executeSeverance() {
+            initAudio();
+            playGoreSound(180, 3200, 0.45);
+
+            // Spawn dynamic blood splatter particles
+            for (let i = 0; i < 40; i++) {
+                bloodParticles.push({
+                    x: 335,
+                    y: slicePlaneY,
+                    vx: (Math.random() - 0.5) * 14 + (Math.random() > 0.5 ? 6 : -6),
+                    vy: (Math.random() - 0.5) * 12 - 4,
+                    size: Math.random() * 6 + 2,
+                    alpha: 1.0
+                });
+            }
+
+            const adrenalineGains = { Head: 35.0, Torso: 40.0, Arm: 25.0, Leg: 25.0 };
+            currentAdrenaline = Math.min(100.0, currentAdrenaline + adrenalineGains[currentTarget]);
+            updateTelemetry();
+        }
+
+        document.getElementById('btnExecute').onclick = executeSeverance;
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                executeSeverance();
+            }
+        });
+
+        function updateTelemetry() {
+            document.getElementById('targetVal').innerText = currentTarget.toUpperCase();
+            document.getElementById('adrenalineVal').innerText = `${currentAdrenaline.toFixed(1)} / 100`;
+            document.getElementById('hyperArmorVal').innerText = (currentAdrenaline >= 50.0) ? "ACTIVE (HYPER-ARMOR)" : "INACTIVE";
+            document.getElementById('hyperArmorVal').style.color = (currentAdrenaline >= 50.0) ? "#10b981" : "#94a3b8";
+            document.getElementById('staminaVal').innerText = `+${(currentAdrenaline * 0.5).toFixed(1)} STAMINA`;
+        }
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "SEVERANCE_DISMEMBERMENT_TELEMETRY",
+                bone_target: currentTarget,
+                adrenaline_pool: currentAdrenaline,
+                hyper_armor: currentAdrenaline >= 50.0
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Canvas Renderer
+        const canvas = document.getElementById('severanceCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 335;
+            const centerY = 220;
+
+            // Draw Target Enemy Silhouette (Corrupted Shroud Knight)
+            ctx.fillStyle = '#1e293b';
+            // Head
+            ctx.beginPath();
+            ctx.arc(centerX, 150, 24, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Torso
+            ctx.fillRect(centerX - 30, 180, 60, 90);
+
+            // Arms
+            ctx.fillRect(centerX - 55, 185, 20, 80);
+            ctx.fillRect(centerX + 35, 185, 20, 80);
+
+            // Legs
+            ctx.fillRect(centerX - 25, 275, 20, 90);
+            ctx.fillRect(centerX + 5, 275, 20, 90);
+
+            // Draw Executioner Slice Plane Indicator
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 6]);
+            ctx.beginPath();
+            ctx.moveTo(centerX - 140, slicePlaneY);
+            ctx.lineTo(centerX + 140, slicePlaneY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw Blood Particles
+            for (let i = bloodParticles.length - 1; i >= 0; i--) {
+                const p = bloodParticles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.35; // Gravity
+                p.alpha -= 0.02;
+
+                ctx.fillStyle = `rgba(239, 68, 68, ${p.alpha})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (p.alpha <= 0) {
+                    bloodParticles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateTelemetry();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

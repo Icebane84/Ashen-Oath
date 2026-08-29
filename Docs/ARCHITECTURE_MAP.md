@@ -1,6 +1,6 @@
 # Ashen Oath — Architecture Map & Vertical Slices
-**Status:** Clean Production Architecture | **3,155 Builds Clean** (0 Errors, 0 Warnings)
-**Unreal Engine Version:** 5.8 | **Master Milestone:** 3155 (Master Batches #1–#157)
+**Status:** Clean Production Architecture | **3,175 Builds Clean** (0 Errors, 0 Warnings)
+**Unreal Engine Version:** 5.8 | **Master Milestone:** 3175 (Master Batches #1–#158)
 
 ---
 
@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Master Batch #158 (Builds 3156–3175)**: The Executioner's Severance & Dismemberment Physics Pipeline (SEVERANCE-DISMEMBERMENT-SPEC-099) (100% Pure Gameplay Density)
 - **Master Batch #157 (Builds 3136–3155)**: The Runic Forge Weapon Evolution & Sigil Inscription Matrix (RUNIC-FORGE-SPEC-098) (100% Pure Gameplay Density)
 - **Master Batch #156 (Builds 3116–3135)**: The Forensic Journal & Memory Palace Reconstruction Loop (FORENSIC-MINDSCAPE-SPEC-097) (100% Pure Gameplay Density)
 - **Master Batch #155 (Builds 3096–3115)**: The Sanctuary & Survival Ecosystem (SANCTUARY-SURVIVAL-SPEC-096) (100% Pure Gameplay Density)

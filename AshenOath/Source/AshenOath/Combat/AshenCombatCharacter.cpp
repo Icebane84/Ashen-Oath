@@ -8,6 +8,9 @@
 #include "Combat/AshenAscendOathbringerTierGASAbility.h"
 #include "Combat/AshenColossusRuptureCleaveGASAbility.h"
 #include "Combat/AshenGravimetricPommelShatterGASAbility.h"
+#include "Combat/AshenExecuteSeveranceCleaveGASAbility.h"
+#include "Combat/AshenAdrenalineSurgeBuffGASAbility.h"
+#include "Combat/AshenDecapitationExecutionGASAbility.h"
 #include "AbilitySystemComponent.h"
 #include "CombatEnemy.h"
 #include "Components/CapsuleComponent.h"
@@ -196,6 +199,9 @@ void AAshenCombatCharacter::BeginPlay()
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenAscendOathbringerTierGASAbility::StaticClass(), 1, 3, this));
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenColossusRuptureCleaveGASAbility::StaticClass(), 1, 4, this));
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenGravimetricPommelShatterGASAbility::StaticClass(), 1, 5, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenExecuteSeveranceCleaveGASAbility::StaticClass(), 1, 6, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenAdrenalineSurgeBuffGASAbility::StaticClass(), 1, 7, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenDecapitationExecutionGASAbility::StaticClass(), 1, 8, this));
 	}
 }
 
