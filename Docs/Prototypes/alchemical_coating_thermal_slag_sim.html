@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Alchemical Coating & Thermal Slag Simulator</title>
+    <!-- Traceability: ALCHEMICAL-SLAG-SPEC-095 | Builds 3076-3095 -->
+    <style>
+        :root {
+            --bg-primary: #060911;
+            --bg-secondary: #0d1527;
+            --panel-bg: #152238;
+            --border-color: #2b3d5c;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #04070e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #04070e;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .coating-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .btn-coating {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn-coating:hover {
+            border-color: var(--accent-amber);
+        }
+
+        .btn-coating.active {
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-naphtha { background: #450a0a; border-color: #ef4444; color: #fca5a5; }
+        .btn-frost { background: #0c4a6e; border-color: #38bdf8; color: #bae6fd; }
+        .btn-acid { background: #14532d; border-color: #22c55e; color: #86efac; }
+        .btn-copper { background: #78350f; border-color: #f59e0b; color: #fde68a; }
+
+        .btn-action {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fef08a;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>OATHBRINGER ALCHEMICAL COATING & THERMAL SLAG SIMULATOR</h1>
+                <p>Garrett's Flask Coatings ↔ Soot Battery (0-100%) ↔ Thermal Shock Reactions (SPEC-095)</p>
+            </div>
+            <div class="badge">BUILD 3095</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="slagCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Garrett's Alchemical Flask Coatings:</div>
+                <div class="coating-grid">
+                    <button class="btn-coating btn-naphtha active" id="btnNaphtha">🔥 PYROPHORIC NAPHTHA<br><span style="font-size: 9px;">(+25 Fire Dmg)</span></button>
+                    <button class="btn-coating btn-frost" id="btnFrost">❄️ GLACIAL FROST RESIN<br><span style="font-size: 9px;">(-30% Speed)</span></button>
+                    <button class="btn-coating btn-acid" id="btnAcid">🧪 VITRIOL ACID<br><span style="font-size: 9px;">(-35% Armor)</span></button>
+                    <button class="btn-coating btn-copper" id="btnCopper">⚡ COPPER SALVE<br><span style="font-size: 9px;">(Lightning Pull)</span></button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn-action" id="btnStrike" style="background: #1e3a8a; border-color: #38bdf8; font-weight: bold;">⚔️ HEAVY STRIKE (+0.08 SOOT)</button>
+                    <button class="btn-action" id="btnPolish" style="background: #065f46; border-color: #10b981; font-weight: bold;">✨ POLISH BLADE (RESET SOOT)</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "Naphtha oil applied! Next heavy strike will ignite!"
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT SLAG TELEMETRY</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Soot Level / State</div>
+                <div class="telemetry-val" id="sootVal" style="color: var(--accent-cyan);">0% (POLISHED)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Active Coating</div>
+                <div class="telemetry-val" id="coatingVal" style="color: var(--accent-red);">NAPHTHA (5/5)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Thermal Reaction Ready</div>
+                <div class="telemetry-val" id="reactionVal">CONFLAGRATION</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Bonus Heat Dmg</div>
+                <div class="telemetry-val" id="heatVal" style="color: var(--accent-emerald);">+0.0 HEAT</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Deflagration Booms, Ice Cracks, Acid Sizzles)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTone(freq, type, duration, gainVal = 0.25) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Slag State
+        let sootLevel = 0.0;
+        let activeCoating = 'Naphtha';
+        let remainingCharges = 5;
+        let bSuperheated = false;
+
+        const barkBox = document.getElementById('barkBox');
+
+        function setCoating(coating) {
+            activeCoating = coating;
+            remainingCharges = 5;
+            document.querySelectorAll('.btn-coating').forEach(btn => btn.classList.remove('active'));
+
+            switch (coating) {
+                case 'Naphtha':
+                    document.getElementById('btnNaphtha').classList.add('active');
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Naphtha oil applied! Next heavy strike will ignite!"`;
+                    playTone(220, 'sawtooth', 0.3, 0.2);
+                    break;
+                case 'Frost':
+                    document.getElementById('btnFrost').classList.add('active');
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Frost resin spread. Slow them down, Kaelen!"`;
+                    playTone(600, 'sine', 0.4, 0.25);
+                    break;
+                case 'Acid':
+                    document.getElementById('btnAcid').classList.add('active');
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Vitriol acid active. Carve straight through their plates!"`;
+                    playTone(340, 'triangle', 0.4, 0.3);
+                    break;
+                case 'Copper':
+                    document.getElementById('btnCopper').classList.add('active');
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Copper salve primed. Call the storm down!"`;
+                    playTone(880, 'sine', 0.5, 0.3);
+                    break;
+            }
+            updateTelemetry();
+        }
+
+        document.getElementById('btnNaphtha').onclick = () => setCoating('Naphtha');
+        document.getElementById('btnFrost').onclick = () => setCoating('Frost');
+        document.getElementById('btnAcid').onclick = () => setCoating('Acid');
+        document.getElementById('btnCopper').onclick = () => setCoating('Copper');
+
+        document.getElementById('btnStrike').onclick = () => {
+            sootLevel = Math.min(1.0, sootLevel + 0.15);
+            bSuperheated = (sootLevel >= 0.80);
+
+            if (bSuperheated && activeCoating === 'Naphtha') {
+                playTone(60, 'sawtooth', 0.8, 0.5); // Conflagration Boom
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Boom! That naphtha cooked them to a crisp!"`;
+                sootLevel = 0.0;
+                bSuperheated = false;
+            } else if (bSuperheated && activeCoating === 'Frost') {
+                playTone(1200, 'triangle', 0.6, 0.4); // Thermal Shock Crackle
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Thermal shock! Their armor just cracked like eggshells!"`;
+            } else {
+                playTone(150, 'sawtooth', 0.2, 0.2);
+            }
+
+            if (remainingCharges > 0) {
+                remainingCharges--;
+            }
+            updateTelemetry();
+        };
+
+        document.getElementById('btnPolish').onclick = () => {
+            sootLevel = 0.0;
+            bSuperheated = false;
+            playTone(900, 'sine', 0.6, 0.3);
+            barkBox.innerHTML = `<strong>[Garrett]:</strong> "Clean as a mirror. Resolve restored, Kaelen."`;
+            updateTelemetry();
+        };
+
+        function updateTelemetry() {
+            const sootPercent = Math.round(sootLevel * 100);
+            let stateStr = "POLISHED";
+            let stateColor = "var(--accent-cyan)";
+
+            if (sootLevel >= 0.80) {
+                stateStr = "SUPERHEATED SLAG";
+                stateColor = "var(--accent-red)";
+            } else if (sootLevel > 0.20) {
+                stateStr = "CHARRED NIGHTSTEEL";
+                stateColor = "var(--accent-amber)";
+            }
+
+            document.getElementById('sootVal').innerText = `${sootPercent}% (${stateStr})`;
+            document.getElementById('sootVal').style.color = stateColor;
+            document.getElementById('coatingVal').innerText = `${activeCoating.toUpperCase()} (${remainingCharges}/5)`;
+            document.getElementById('heatVal').innerText = bSuperheated ? "+35.0 HEAT" : "+0.0 HEAT";
+        }
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "ALCHEMICAL_SLAG_TELEMETRY",
+                soot_level: sootLevel,
+                active_coating: activeCoating,
+                remaining_charges: remainingCharges,
+                is_superheated: bSuperheated
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Greatsword Canvas Visualizer
+        const canvas = document.getElementById('slagCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 335;
+            const centerY = 220;
+
+            // Draw Background Flame / Soot Aura
+            if (sootLevel >= 0.80) {
+                const grad = ctx.createRadialGradient(centerX, centerY, 40, centerX, centerY, 180);
+                grad.addColorStop(0, 'rgba(239, 68, 68, 0.3)');
+                grad.addColorStop(1, 'transparent');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 180, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.save();
+            ctx.translate(centerX, centerY);
+
+            // Greatsword Hilt & Crossguard
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(-25, 90, 50, 10);
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(-6, 100, 12, 45);
+            ctx.fillStyle = '#94a3b8';
+            ctx.beginPath(); ctx.arc(0, 150, 8, 0, Math.PI * 2); ctx.fill();
+
+            // Nightsteel Blade (Colors from dark steel to fiery red slag)
+            let bladeColor = '#0f172a';
+            if (sootLevel >= 0.80) {
+                bladeColor = '#ef4444'; // Glowing red-hot slag
+            } else if (sootLevel > 0.20) {
+                bladeColor = '#27272a'; // Charred soot
+            }
+
+            ctx.fillStyle = bladeColor;
+            ctx.beginPath();
+            ctx.moveTo(-18, 90);
+            ctx.lineTo(0, -170); // Tip
+            ctx.lineTo(18, 90);
+            ctx.closePath();
+            ctx.fill();
+
+            // Draw Active Coating Liquid Aura
+            let coatingColor = '#ef4444';
+            switch (activeCoating) {
+                case 'Frost': coatingColor = '#38bdf8'; break;
+                case 'Acid': coatingColor = '#22c55e'; break;
+                case 'Copper': coatingColor = '#f59e0b'; break;
+            }
+
+            if (remainingCharges > 0) {
+                ctx.strokeStyle = coatingColor;
+                ctx.lineWidth = 4;
+                ctx.shadowColor = coatingColor;
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.moveTo(-18, 90);
+                ctx.lineTo(0, -170);
+                ctx.lineTo(18, 90);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+
+            requestAnimationFrame(animate);
+        }
+
+        updateTelemetry();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

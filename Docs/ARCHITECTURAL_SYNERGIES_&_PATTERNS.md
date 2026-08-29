@@ -58,10 +58,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-036`** | **Cognitive Dissonance Delta Solver, Dynamic Contradiction Quest Branching & Companion Alignment Invariant** | `CSE-SPEC-092` / Narrative / Combat / AI / UI / Haptics | Dissonance index calculation ($D \in [0.0, 1.0]$), $+30\%$ harmony synergy bonus, $+20\%$ fracture tandem stamina penalty, 3 contract archetypes, and companion alignment ultimatums. |
 | **`SYN-037`** | **Chaos Rubble NavMesh Chokepoints, Weather Perception Clamping & Conductive Lightning Arcing Invariant** | `DESTRUCTION-WEATHER-AI-SPEC-093` / World / Combat / AI / Audio / UI / Haptics | Dynamic Lock-On clamping ($1500\text{uu} \to 500\text{uu}$), AI vision cone narrowing ($90^\circ \to 45^\circ$), $350\text{uu}$ chain-lightning arcs ($350\text{ Shock Dmg}$, $1.2\text{s}$ stagger), and $\pm 65^\circ$ AI pincer flanking around rubble chokepoints. |
 | **`SYN-038`** | **Oathbringer 4-Guard Martial Kinematics, Rhythm Flow Recovery Canceling & Runic Seam Inscription Invariant** | `STANCE-SPEC-094` / Combat / UI / AI / Audio / Haptics | 4 historical guards (Vom Tag $+40\%$ poise, Pflug $-30\%$ stamina, Ochs $+0.12\text{s}$ parry, Mordhau $100\%$ armor pen), $0.15\text{s}$ Flow Glint cancels ($0\text{ stamina}$ cost, $+25\%$ momentum), and fuller seam runic transitions. |
+| **`SYN-039`** | **Oathbringer Soot Battery, Garrett Alchemical Blade Coatings & Thermal Shock Reaction Invariant** | `ALCHEMICAL-SLAG-SPEC-095` / Combat / UI / AI / Audio / Haptics | Soot accumulation ($0.0 \to 1.0$), Superheated Slag ($\ge 0.80$, $+35\text{ Heat}$), $450\text{ Heat AoE}$ Conflagration Deflagration, and $+100\%$ Thermal Shock poise shatter. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-039`: Oathbringer Soot Battery, Garrett Alchemical Blade Coatings & Thermal Shock Reaction Invariant
+
+* **Target Subsystems:** `UAshenAlchemicalSlagConvergenceSubsystem`, `UAshenBladeSootAccumulatorEvaluator`, `UAshenThermalReactionEvaluator`, `UAshenGarrettAlchemicalCoatingDirectorComponent`, `UAshenAlchemicalSlagHapticBridge`
+* **Related Specifications:** [`ALCHEMICAL-SLAG-SPEC-095`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/ALCHEMICAL-SLAG-SPEC-095%20%28THE%20ALCHEMICAL%20WEAPON%20COATING%20&%20THERMAL%20SLAG%20REACTION%20LOOP%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{SootGain} = \begin{cases} +0.04, & \text{Standard Strike} \\ +0.08, & \text{Heavy Cleave} \\ +0.15, & \text{Corrupted Beast Execution} \end{cases}$$
+$$\text{SurfaceState}(\text{Soot}) = \begin{cases} \text{PolishedResolve} \text{ (+15\% Parry Window, Gold Runes)}, & \text{Soot} \le 0.20 \\ \text{AccumulatingSoot} \text{ (Charred Nightsteel)}, & 0.21 \le \text{Soot} < 0.80 \\ \text{SuperheatedThermalSlag} \text{ (+35 Heat Dmg, Slag Burst Ready)}, & \text{Soot} \ge 0.80 \end{cases}$$
+$$\text{ConflagrationDeflagration} = \{ \text{Soot} \ge 0.80 \land \text{Coating} = \text{Naphtha} \implies \text{Dmg} = 450.0\text{ Heat}, R = 400.0\text{uu}, \text{Soot} \to 0.0 \}$$
+$$\text{ThermalShockShatter} = \{ \text{Soot} \ge 0.80 \land \text{TargetChilled} \implies \text{PoiseMultiplier} = 2.0\times (+100\% \text{ Poise Shatter}) \}$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Living Blade Maintenance Economy:** Bridges campfire cooking/maintenance with dynamic in-combat thermodynamics. Choosing between polishing Oathbringer for defensive Resolve vs leaving it charred as a superheated slag bomb adds deep tactical agency.
+* **Multi-Domain Reaction Cascades:** Seamlessly connects Garrett's brewed flask chemistry with environmental dynamic weather (blizzards and acid rain), transforming status effects into explosive tactical finishers.
+
+---
 
 ---
 

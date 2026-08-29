@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 3095: Master Batch #154 — The Alchemical Weapon Coating & Thermal Slag Reaction Loop (ALCHEMICAL-SLAG-SPEC-095)
+**Domain:** Combat / UI / AI / Audio / Core / Orchestration / Narrative / World / QA  
+**Status:** 3,095 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 3076 | `AshenAlchemicalSlagTypes.h` | `AshenAlchemicalSlagTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Combat |
+| 3077 | `AshenAlchemicalSlagConvergenceSubsystem.h/.cpp` | `UAshenAlchemicalSlagConvergenceSubsystem` — Master alchemical slag subsystem | Combat |
+| 3078 | `AshenBladeSootAccumulatorEvaluator.h/.cpp` | `UAshenBladeSootAccumulatorEvaluator` — Evaluates strike/kill soot accumulation | Combat |
+| 3079 | `AshenThermalReactionEvaluator.h/.cpp` | `UAshenThermalReactionEvaluator` — Solves Conflagration & Thermal Shock formulas | Combat |
+| 3080 | `AshenGarrettAlchemicalCoatingDirectorComponent.h/.cpp` | `UAshenGarrettAlchemicalCoatingDirectorComponent` — Garrett flask inventory tracker | Combat |
+| 3081 | `AshenApplyAlchemicalCoatingGASAbility.h/.cpp` | `UAshenApplyAlchemicalCoatingGASAbility` — Coating application ability (5 charges) | Combat |
+| 3082 | `AshenConflagrationSlagBurstGASAbility.h/.cpp` | `UAshenConflagrationSlagBurstGASAbility` — 450 Dmg Conflagration slag explosion | Combat |
+| 3083 | `AshenThermalShockShatterGASAbility.h/.cpp` | `UAshenThermalShockShatterGASAbility` — +100% poise shatter & armor break ability | Combat |
+| 3084 | `AshenGalvanicLightningPullGASAbility.h/.cpp` | `UAshenGalvanicLightningPullGASAbility` — 500 Dmg galvanic lightning pull ability | Combat |
+| 3085 | `AshenCampfireBladePolishBuffGASAbility.h/.cpp` | `UAshenCampfireBladePolishBuffGASAbility` — Campfire polishing Resolve buff ability | Combat |
+| 3086 | `UBTService_AshenAIElementalHazardReactionAI.h/.cpp` | `UBTService_AshenAIElementalHazardReactionAI` — AI service reacting to thermal blasts | AI |
+| 3087 | `AshenUserWidget_AlchemicalSlagHUD.h/.cpp` | `UAshenUserWidget_AlchemicalSlagHUD` — UMG HUD for circular soot battery | UI |
+| 3088 | `AshenAlchemicalSlagAudioSubsystem.h/.cpp` | `UAshenAlchemicalSlagAudioSubsystem` — MetaSounds 60Hz deflagration & liquid sizzle | Audio |
+| 3089 | `AshenThermalReactionCameraShakeAdapter.h/.cpp` | `UAshenThermalReactionCameraShakeAdapter` — Camera explosion kick & radial blur adapter | Combat |
+| 3090 | `AAshenAlchemicalCoatingCrucibleWorldActor.h/.cpp` | `AAshenAlchemicalCoatingCrucibleWorldActor` — Campfire cauldron crucible world actor | World |
+| 3091 | `AshenAlchemicalSlagSaveGameAdapter.h/.cpp` | `UAshenAlchemicalSlagSaveGameAdapter` — Serializes soot level & Garrett flasks | Core |
+| 3092 | `AshenAlchemicalSlagNarrativeBridge.h/.cpp` | `UAshenAlchemicalSlagNarrativeBridge` — Contextual companion reaction barks | Narrative |
+| 3093 | `AshenAlchemicalSlagHapticBridge.h/.cpp` | `UAshenAlchemicalSlagHapticBridge` — DualSense 0.95 heavy blast & crackle haptics | Combat |
+| 3094 | `AshenAlchemicalSlagMasterBridge.h/.cpp` | `UAshenAlchemicalSlagMasterBridge` — Master bridge connecting soot, cauldron & HUD | Orchestration |
+| 3095 | `AshenMasterBatch154AutomationTest.cpp` | `FAshenMasterBatch154AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 3075: Master Batch #153 — The Oathbringer Historical Greatsword Stance Flow & Runic Mastery Loop (STANCE-SPEC-094)
 **Domain:** Combat / UI / AI / Audio / Core / Orchestration / Narrative / World / QA  
 **Status:** 3,075 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
