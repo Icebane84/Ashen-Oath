@@ -1,16 +1,17 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "Combat/AshenBladeSanityConductorTypes.h"
+#include "Combat/AshenBladeSanityBalanceDataAsset.h"
 #include "AshenBladeSanityConductorConvergenceSubsystem.generated.h"
 
 /**
  * UAshenBladeSanityConductorConvergenceSubsystem
  * 
- * Central world subsystem orchestrating the 4-way feedback loop between Oathbringer blade hunger, sanity collapse, Quartz music stems, and flow state purges.
+ * Central world subsystem orchestrating the 4-way feedback loop between Oathbringer blade hunger,
+ * sanity collapse, Quartz music stems, and flow state purges (CONVERGENCE-SPEC-090).
  */
 UCLASS()
 class ASHENOATH_API UAshenBladeSanityConductorConvergenceSubsystem : public UWorldSubsystem
@@ -42,6 +43,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Ashen|Convergence")
 	FOnSanityDissonanceTierChanged OnSanityDissonanceTierChanged;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|Convergence|Balancing")
+	UAshenBladeSanityBalanceDataAsset* BalanceDataAsset;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Convergence")

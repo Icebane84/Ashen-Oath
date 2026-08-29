@@ -234,10 +234,13 @@ async def generate_embeddings_and_upsert_to_supabase(
         logger.warning("[RAG] generate_embeddings_and_upsert_to_supabase: no records — skipping.")
         return 0
 
-    # --- resolve credentials (matches TS resolveEnv() key priority) -----------
+    # --- resolve credentials --------------------------------------------------
+    # Prefer the service-role key for writes (bypasses RLS).
+    # Falls back through the publishable/anon key chain for read-only contexts.
     supabase_url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
     supabase_key = (
-        os.environ.get("SUPABASE_ANON_KEY")
+        os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_ANON_KEY")
         or os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY")
         or os.environ.get("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY")
     )

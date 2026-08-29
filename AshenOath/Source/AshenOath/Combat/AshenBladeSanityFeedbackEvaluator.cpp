@@ -5,24 +5,47 @@
 UAshenBladeSanityFeedbackEvaluator::UAshenBladeSanityFeedbackEvaluator()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	BalanceDataAsset = nullptr;
 }
 
 float UAshenBladeSanityFeedbackEvaluator::EvaluateBladeDamageMultiplier(float BladeHunger01) const
 {
-	const float SafeHunger = FMath::Clamp(BladeHunger01, 0.0f, 1.0f);
-	return 1.0f + (SafeHunger * 0.45f); // Up to +45% bonus damage at max hunger
+	const float ClampedHunger = FMath::Clamp(BladeHunger01, 0.0f, 1.0f);
+	float MaxMultiplier = 1.45f;
+
+	if (BalanceDataAsset)
+	{
+		MaxMultiplier = BalanceDataAsset->GetClampedBladeHunger().MaxDamageMultiplier;
+	}
+
+	// Linear scaling from 1.0x to MaxMultiplier
+	return 1.0f + ((MaxMultiplier - 1.0f) * ClampedHunger);
 }
 
 float UAshenBladeSanityFeedbackEvaluator::EvaluateParryWindowPenalty(float CurrentSanity) const
 {
-	const float SafeSanity = FMath::Clamp(CurrentSanity, 0.0f, 100.0f);
-	const float Deficit = (100.0f - SafeSanity) / 100.0f;
-	return Deficit * 0.35f; // Up to -35% narrower parry window at 0 sanity
+	const float NormalizedSanity = FMath::Clamp(CurrentSanity / 100.0f, 0.0f, 1.0f);
+	float MaxPenalty = 0.35f;
+
+	if (BalanceDataAsset)
+	{
+		MaxPenalty = BalanceDataAsset->GetClampedBladeHunger().MaxParryWindowPenalty;
+	}
+
+	// 100 Sanity -> 0.0 penalty, 0 Sanity -> MaxPenalty
+	return (1.0f - NormalizedSanity) * MaxPenalty;
 }
 
 float UAshenBladeSanityFeedbackEvaluator::EvaluateDodgeStaminaMultiplier(float CurrentSanity) const
 {
-	const float SafeSanity = FMath::Clamp(CurrentSanity, 0.0f, 100.0f);
-	const float Deficit = (100.0f - SafeSanity) / 100.0f;
-	return 1.0f + (Deficit * 0.50f); // 1.0x to 1.5x stamina cost on dodge
+	const float NormalizedSanity = FMath::Clamp(CurrentSanity / 100.0f, 0.0f, 1.0f);
+	float MaxDodgeMultiplier = 1.50f;
+
+	if (BalanceDataAsset)
+	{
+		MaxDodgeMultiplier = BalanceDataAsset->GetClampedBladeHunger().MaxDodgeStaminaMultiplier;
+	}
+
+	// 100 Sanity -> 1.0x cost, 0 Sanity -> MaxDodgeMultiplier
+	return 1.0f + ((MaxDodgeMultiplier - 1.0f) * (1.0f - NormalizedSanity));
 }
