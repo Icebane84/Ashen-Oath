@@ -23,6 +23,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|TrustAtrophy")
 	void ApplyDevilsBargainTrustAtrophy(float AtrophyAmount = 25.0f);
 
+	/** Restores party trust after cathartic memory resolutions or shared victories */
+	UFUNCTION(BlueprintCallable, Category = "AshenOath|TrustAtrophy")
+	void RestoreTrust(float RecoveryAmount = 5.0f);
+
 	UPROPERTY(BlueprintAssignable, Category = "AshenOath|TrustAtrophy|Events")
 	FOnTrustAtrophyAppliedSignature OnTrustAtrophyApplied;
 

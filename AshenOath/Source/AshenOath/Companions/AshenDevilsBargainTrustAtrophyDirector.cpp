@@ -21,3 +21,15 @@ void UAshenDevilsBargainTrustAtrophyDirector::ApplyDevilsBargainTrustAtrophy(flo
 	UE_LOG(LogTemp, Warning, TEXT("UAshenDevilsBargainTrustAtrophyDirector: TRUST ATROPHY APPLIED -> Remaining Trust: %.1f%% | Combo Delay: +%.2fs | Healing Delay: +%.2fs."),
 		ActivePartyTrustLevel, ComboDelay, HealingDelay);
 }
+
+void UAshenDevilsBargainTrustAtrophyDirector::RestoreTrust(float RecoveryAmount)
+{
+	ActivePartyTrustLevel = FMath::Clamp(ActivePartyTrustLevel + RecoveryAmount, 0.0f, 100.0f);
+	const float ComboDelay = (100.0f - ActivePartyTrustLevel) * 0.05f;
+	const float HealingDelay = (100.0f - ActivePartyTrustLevel) * 0.08f;
+
+	OnTrustAtrophyApplied.Broadcast(ActivePartyTrustLevel, ComboDelay, HealingDelay);
+
+	UE_LOG(LogTemp, Log, TEXT("UAshenDevilsBargainTrustAtrophyDirector: TRUST RESTORED -> Active Trust: %.1f%%."),
+		ActivePartyTrustLevel);
+}
