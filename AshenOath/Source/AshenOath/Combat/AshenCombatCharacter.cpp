@@ -11,6 +11,10 @@
 #include "Combat/AshenExecuteSeveranceCleaveGASAbility.h"
 #include "Combat/AshenAdrenalineSurgeBuffGASAbility.h"
 #include "Combat/AshenDecapitationExecutionGASAbility.h"
+#include "Combat/AshenAlchemicalSlagConvergenceSubsystem.h"
+#include "Combat/AshenApplyAlchemicalCoatingGASAbility.h"
+#include "Combat/AshenConflagrationSlagBurstGASAbility.h"
+#include "Combat/AshenThermalShockShatterGASAbility.h"
 #include "AbilitySystemComponent.h"
 #include "CombatEnemy.h"
 #include "Components/CapsuleComponent.h"
@@ -188,6 +192,12 @@ void AAshenCombatCharacter::BeginPlay()
 			// Initialize with active seam color
 			HandleRunicSeamColorUpdated(StanceSubsystem->GetCurrentKinematics().RunicSeamColor, 1.0f);
 		}
+
+		if (UAshenAlchemicalSlagConvergenceSubsystem* SlagSubsystem = World->GetSubsystem<UAshenAlchemicalSlagConvergenceSubsystem>())
+		{
+			SlagSubsystem->OnBladeSootLevelChanged.AddDynamic(this, &AAshenCombatCharacter::HandleBladeSootLevelChanged);
+			SlagSubsystem->OnAlchemicalCoatingApplied.AddDynamic(this, &AAshenCombatCharacter::HandleAlchemicalCoatingApplied);
+		}
 	}
 
 	// Grant Master Batch Core Gameplay Abilities
@@ -202,6 +212,9 @@ void AAshenCombatCharacter::BeginPlay()
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenExecuteSeveranceCleaveGASAbility::StaticClass(), 1, 6, this));
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenAdrenalineSurgeBuffGASAbility::StaticClass(), 1, 7, this));
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenDecapitationExecutionGASAbility::StaticClass(), 1, 8, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenApplyAlchemicalCoatingGASAbility::StaticClass(), 1, 9, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenConflagrationSlagBurstGASAbility::StaticClass(), 1, 10, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenThermalShockShatterGASAbility::StaticClass(), 1, 11, this));
 	}
 }
 
@@ -223,6 +236,69 @@ void AAshenCombatCharacter::HandleStanceChanged(EOathbringerMartialStance NewSta
 	HandleRunicSeamColorUpdated(Kinematics.RunicSeamColor, 1.25f);
 	UE_LOG(LogTemp, Log, TEXT("AAshenCombatCharacter: Switched stance to %d (Runic Seam R: %.2f, G: %.2f, B: %.2f)"),
 		static_cast<int32>(NewStance), Kinematics.RunicSeamColor.R, Kinematics.RunicSeamColor.G, Kinematics.RunicSeamColor.B);
+}
+
+void AAshenCombatCharacter::ProcessMeleeHitSootAndCoating(AActor* HitTarget, bool bIsHeavyCleave)
+{
+	if (UWorld* World = GetWorld())
+	{
+		if (UAshenAlchemicalSlagConvergenceSubsystem* SlagSubsystem = World->GetSubsystem<UAshenAlchemicalSlagConvergenceSubsystem>())
+		{
+			const float SootGain = bIsHeavyCleave ? 0.08f : 0.04f;
+			SlagSubsystem->AddSoot(SootGain);
+
+			// Process potential thermal reaction
+			const FThermalReactionResult Reaction = SlagSubsystem->ProcessHitReaction(false, false, false);
+			if (Reaction.ReactionType != EThermalReactionType::None)
+			{
+				TriggerStrikeImpact();
+			}
+		}
+	}
+}
+
+void AAshenCombatCharacter::HandleBladeSootLevelChanged(float NewSootLevel, EOathbringerBladeSurfaceState NewSurfaceState)
+{
+	for (UMaterialInstanceDynamic* MID : DynamicMaterials)
+	{
+		if (MID)
+		{
+			MID->SetScalarParameterValue(TEXT("SootBatteryAmount"), NewSootLevel);
+			MID->SetScalarParameterValue(TEXT("SuperheatedSlagActive"), (NewSurfaceState == EOathbringerBladeSurfaceState::SuperheatedThermalSlag) ? 1.0f : 0.0f);
+		}
+	}
+}
+
+void AAshenCombatCharacter::HandleAlchemicalCoatingApplied(EAlchemicalBladeCoating NewCoating, int32 RemainingCharges)
+{
+	FLinearColor CoatingColor = FLinearColor::White;
+	switch (NewCoating)
+	{
+	case EAlchemicalBladeCoating::PyrophoricNaphtha:
+		CoatingColor = FLinearColor(1.0f, 0.35f, 0.05f, 1.0f);
+		break;
+	case EAlchemicalBladeCoating::GlacialFrostResin:
+		CoatingColor = FLinearColor(0.25f, 0.75f, 1.0f, 1.0f);
+		break;
+	case EAlchemicalBladeCoating::VitriolAcid:
+		CoatingColor = FLinearColor(0.40f, 0.95f, 0.15f, 1.0f);
+		break;
+	case EAlchemicalBladeCoating::ConductiveCopperSalve:
+		CoatingColor = FLinearColor(0.85f, 0.55f, 0.15f, 1.0f);
+		break;
+	default:
+		CoatingColor = FLinearColor(0.1f, 0.1f, 0.1f, 0.0f);
+		break;
+	}
+
+	for (UMaterialInstanceDynamic* MID : DynamicMaterials)
+	{
+		if (MID)
+		{
+			MID->SetVectorParameterValue(TEXT("WeaponCoatingColor"), CoatingColor);
+			MID->SetScalarParameterValue(TEXT("WeaponCoatingActive"), (RemainingCharges > 0) ? 1.0f : 0.0f);
+		}
+	}
 }
 
 void AAshenCombatCharacter::Tick(float DeltaSeconds)

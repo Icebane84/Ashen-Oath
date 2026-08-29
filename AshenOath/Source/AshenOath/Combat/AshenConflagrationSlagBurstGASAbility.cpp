@@ -1,6 +1,10 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
 
 #include "Combat/AshenConflagrationSlagBurstGASAbility.h"
+#include "Combat/AshenAlchemicalSlagConvergenceSubsystem.h"
+#include "Combat/AshenCombatCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 
 UAshenConflagrationSlagBurstGASAbility::UAshenConflagrationSlagBurstGASAbility()
 {
@@ -17,6 +21,49 @@ void UAshenConflagrationSlagBurstGASAbility::ActivateAbility(
 	const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	AActor* Avatar = GetAvatarActorFromActorInfo();
+	if (!Avatar)
+	{
+		Avatar = Cast<AActor>(GetOuter());
+	}
+
+	if (Avatar)
+	{
+		if (UWorld* World = Avatar->GetWorld())
+		{
+			TArray<AActor*> IgnoredActors;
+			IgnoredActors.Add(Avatar);
+
+			// 450 Heat AoE Firestorm
+			UGameplayStatics::ApplyRadialDamageWithFalloff(
+				World,
+				BlastDamage,
+				BlastDamage * 0.40f,
+				Avatar->GetActorLocation(),
+				BlastRadiusUU * 0.25f,
+				BlastRadiusUU,
+				1.0f,
+				UDamageType::StaticClass(),
+				IgnoredActors,
+				Avatar,
+				nullptr
+			);
+
+			// Reset soot battery after deflagration
+			if (UAshenAlchemicalSlagConvergenceSubsystem* SlagSubsystem = World->GetSubsystem<UAshenAlchemicalSlagConvergenceSubsystem>())
+			{
+				SlagSubsystem->PolishBladeAtCampfire();
+			}
+		}
+
+		if (AAshenCombatCharacter* CombatChar = Cast<AAshenCombatCharacter>(Avatar))
+		{
+			CombatChar->TriggerStrikeImpact();
+		}
+	}
+
+	EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 }
 
 void UAshenConflagrationSlagBurstGASAbility::EndAbility(

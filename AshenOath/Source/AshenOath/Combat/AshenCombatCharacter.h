@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AshenOathCharacter.h"
 #include "Combat/AshenOathbringerStanceTypes.h"
+#include "Combat/AshenAlchemicalSlagTypes.h"
 #include "AshenCombatCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDevilsBargainCrisisEntered);
@@ -64,6 +65,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ashen|Corruption")
 	void TransitionCorruptionState(bool bBecomeDarkState);
 
+	UFUNCTION(BlueprintCallable, Category = "Ashen|Combat|Slag")
+	void ProcessMeleeHitSootAndCoating(AActor* HitTarget, bool bIsHeavyCleave);
+
+	UFUNCTION()
+	void HandleRunicSeamColorUpdated(FLinearColor NewColor, float EmissiveIntensity);
+
+	UFUNCTION()
+	void HandleStanceChanged(EOathbringerMartialStance NewStance, const FOathbringerStanceKinematics& Kinematics);
+
+	UFUNCTION()
+	void HandleBladeSootLevelChanged(float NewSootLevel, EOathbringerBladeSurfaceState NewSurfaceState);
+
+	UFUNCTION()
+	void HandleAlchemicalCoatingApplied(EAlchemicalBladeCoating NewCoating, int32 RemainingCharges);
+
 protected:
 	void ResetHitStop();
 
@@ -73,12 +89,6 @@ protected:
 	 */
 	UFUNCTION()
 	void HandleHealthChanged(float CurrentHealth, float MaxHealth);
-
-	UFUNCTION()
-	void HandleRunicSeamColorUpdated(FLinearColor NewColor, float EmissiveIntensity);
-
-	UFUNCTION()
-	void HandleStanceChanged(EOathbringerMartialStance NewStance, const FOathbringerStanceKinematics& Kinematics);
 
 	UFUNCTION()
 	void ResetDevilsBargainTimeDilation();
