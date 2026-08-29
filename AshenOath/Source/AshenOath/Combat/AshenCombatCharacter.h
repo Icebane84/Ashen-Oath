@@ -6,6 +6,7 @@
 #include "AshenOathCharacter.h"
 #include "Combat/AshenOathbringerStanceTypes.h"
 #include "Combat/AshenAlchemicalSlagTypes.h"
+#include "Core/AshenOath_OathRegistryComponent.h"
 #include "AshenCombatCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDevilsBargainCrisisEntered);
@@ -85,6 +86,15 @@ public:
 
 	UFUNCTION()
 	void HandleAlchemicalCoatingApplied(EAlchemicalBladeCoating NewCoating, int32 RemainingCharges);
+
+	UFUNCTION()
+	void HandleOathSworn(const FOathRecord& Oath);
+
+	UFUNCTION()
+	void HandleOathFulfilled(const FOathRecord& Oath);
+
+	UFUNCTION()
+	void HandleOathBroken(const FOathRecord& Oath);
 
 protected:
 	void ResetHitStop();

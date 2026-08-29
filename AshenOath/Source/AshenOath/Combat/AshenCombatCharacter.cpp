@@ -15,6 +15,8 @@
 #include "Combat/AshenApplyAlchemicalCoatingGASAbility.h"
 #include "Combat/AshenConflagrationSlagBurstGASAbility.h"
 #include "Combat/AshenThermalShockShatterGASAbility.h"
+#include "Combat/AshenLivingOathGASAbility.h"
+#include "Combat/AshenOathBurnStaminaDrainGASAbility.h"
 #include "AbilitySystemComponent.h"
 #include "CombatEnemy.h"
 #include "Components/CapsuleComponent.h"
@@ -212,6 +214,14 @@ void AAshenCombatCharacter::BeginPlay()
 		}
 	}
 
+	// Connect to Living Oath Registry Component
+	if (OathRegistryComponent)
+	{
+		OathRegistryComponent->OnOathSworn.AddDynamic(this, &AAshenCombatCharacter::HandleOathSworn);
+		OathRegistryComponent->OnOathFulfilled.AddDynamic(this, &AAshenCombatCharacter::HandleOathFulfilled);
+		OathRegistryComponent->OnOathBroken.AddDynamic(this, &AAshenCombatCharacter::HandleOathBroken);
+	}
+
 	// Grant Master Batch Core Gameplay Abilities
 	if (UAbilitySystemComponent* ASC = GetAbilitySystemComponent())
 	{
@@ -227,6 +237,8 @@ void AAshenCombatCharacter::BeginPlay()
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenApplyAlchemicalCoatingGASAbility::StaticClass(), 1, 9, this));
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenConflagrationSlagBurstGASAbility::StaticClass(), 1, 10, this));
 		ASC->GiveAbility(FGameplayAbilitySpec(UAshenThermalShockShatterGASAbility::StaticClass(), 1, 11, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenLivingOathGASAbility::StaticClass(), 1, 12, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenOathBurnStaminaDrainGASAbility::StaticClass(), 1, 13, this));
 	}
 }
 
@@ -311,6 +323,50 @@ void AAshenCombatCharacter::HandleAlchemicalCoatingApplied(EAlchemicalBladeCoati
 			MID->SetScalarParameterValue(TEXT("WeaponCoatingActive"), (RemainingCharges > 0) ? 1.0f : 0.0f);
 		}
 	}
+}
+
+void AAshenCombatCharacter::HandleOathSworn(const FOathRecord& Oath)
+{
+	const float Burden = OathRegistryComponent ? OathRegistryComponent->GetOathBurden() : 0.0f;
+	for (UMaterialInstanceDynamic* MID : DynamicMaterials)
+	{
+		if (MID)
+		{
+			MID->SetScalarParameterValue(TEXT("OathBurdenAmount"), Burden);
+			MID->SetScalarParameterValue(TEXT("OathBurnActive"), (Burden >= 1.0f) ? 1.0f : 0.0f);
+		}
+	}
+	UE_LOG(LogTemp, Log, TEXT("AAshenCombatCharacter: Swore living oath '%s' (Burden: %.2f)"), *Oath.OathID.ToString(), Burden);
+}
+
+void AAshenCombatCharacter::HandleOathFulfilled(const FOathRecord& Oath)
+{
+	const float Burden = OathRegistryComponent ? OathRegistryComponent->GetOathBurden() : 0.0f;
+	for (UMaterialInstanceDynamic* MID : DynamicMaterials)
+	{
+		if (MID)
+		{
+			MID->SetScalarParameterValue(TEXT("OathBurdenAmount"), Burden);
+			MID->SetScalarParameterValue(TEXT("OathBurnActive"), (Burden >= 1.0f) ? 1.0f : 0.0f);
+			MID->SetScalarParameterValue(TEXT("OathResonanceGlow"), 1.0f);
+		}
+	}
+	UE_LOG(LogTemp, Log, TEXT("AAshenCombatCharacter: Fulfilled living oath '%s' (Burden: %.2f)"), *Oath.OathID.ToString(), Burden);
+}
+
+void AAshenCombatCharacter::HandleOathBroken(const FOathRecord& Oath)
+{
+	const float Burden = OathRegistryComponent ? OathRegistryComponent->GetOathBurden() : 0.0f;
+	for (UMaterialInstanceDynamic* MID : DynamicMaterials)
+	{
+		if (MID)
+		{
+			MID->SetScalarParameterValue(TEXT("OathBurdenAmount"), Burden);
+			MID->SetScalarParameterValue(TEXT("OathBurnActive"), 1.0f);
+			MID->SetScalarParameterValue(TEXT("OathResonanceGlow"), 0.0f);
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("AAshenCombatCharacter: Broken living oath '%s'! Oath Burn triggered (Burden: %.2f)"), *Oath.OathID.ToString(), Burden);
 }
 
 void AAshenCombatCharacter::Tick(float DeltaSeconds)
