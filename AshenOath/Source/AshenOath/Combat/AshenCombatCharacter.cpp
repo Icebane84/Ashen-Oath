@@ -57,6 +57,8 @@
 #include "World/AshenDualityEngineShaderModulator.h"
 #include "World/AshenDualityMaterialInstanceAdapterComponent.h"
 #include "World/AshenDualityPostProcessVolumeAdapter.h"
+#include "Core/AshenFocusModeInvestigationComponent.h"
+#include "Core/AshenMartyrsTitheComponent.h"
 
 AAshenCombatCharacter::AAshenCombatCharacter()
 {
@@ -82,6 +84,10 @@ AAshenCombatCharacter::AAshenCombatCharacter()
 	DualityEngineShaderModulator = CreateDefaultSubobject<UAshenDualityEngineShaderModulator>(TEXT("DualityEngineShaderModulator"));
 	DualityMaterialInstanceAdapter = CreateDefaultSubobject<UAshenDualityMaterialInstanceAdapterComponent>(TEXT("DualityMaterialInstanceAdapter"));
 	DualityPostProcessAdapter = CreateDefaultSubobject<UAshenDualityPostProcessVolumeAdapter>(TEXT("DualityPostProcessAdapter"));
+
+	// Focus Mode & Martyr's Tithe Pipelines
+	FocusModeInvestigationComponent = CreateDefaultSubobject<UAshenFocusModeInvestigationComponent>(TEXT("FocusModeInvestigationComponent"));
+	MartyrsTitheComponent = CreateDefaultSubobject<UAshenMartyrsTitheComponent>(TEXT("MartyrsTitheComponent"));
 
 
 

@@ -66,6 +66,8 @@ public:
 	FORCEINLINE class UAshenDualityEngineShaderModulator* GetDualityEngineShaderModulator() const { return DualityEngineShaderModulator; }
 	FORCEINLINE class UAshenDualityMaterialInstanceAdapterComponent* GetDualityMaterialInstanceAdapter() const { return DualityMaterialInstanceAdapter; }
 	FORCEINLINE class UAshenDualityPostProcessVolumeAdapter* GetDualityPostProcessAdapter() const { return DualityPostProcessAdapter; }
+	FORCEINLINE class UAshenFocusModeInvestigationComponent* GetFocusModeInvestigationComponent() const { return FocusModeInvestigationComponent; }
+	FORCEINLINE class UAshenMartyrsTitheComponent* GetMartyrsTitheComponent() const { return MartyrsTitheComponent; }
 
 public:
 	/** Toggle the sundered corruption state visually (Light ↔ Dark) */
@@ -264,6 +266,14 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Combat|Stance")
 	FOathbringerStanceKinematics CurrentStanceKinematics;
+
+	/** Focus Mode sensory dilation & investigation component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	class UAshenFocusModeInvestigationComponent* FocusModeInvestigationComponent;
+
+	/** Martyr's Tithe altruistic max health sacrifice component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	class UAshenMartyrsTitheComponent* MartyrsTitheComponent;
 
 private:
 	/** Guards against firing the crisis delegate more than once per life. Reset in HandleCharacterDeath(). */
