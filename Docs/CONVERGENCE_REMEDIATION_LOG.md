@@ -18,15 +18,15 @@
        ┌───────────────────┬───────────────────┼───────────────────┐
        ▼                   ▼                   ▼                   ▼
 [ PRIORITY 1: DUALITY ] [ PRIORITY 2: OATHS ] [ PRIORITY 3: TRIO ] [ PRIORITY 4: TRIAGE ]
-   [100% COMPLETE]         [100% COMPLETE]      [READY TO WIRE]     [READY TO PURGE]
+   [100% COMPLETE]         [100% COMPLETE]      [100% COMPLETE]     [READY TO TRIAGE]
 ```
 
 | Priority Layer | Target Domain | Key Components & Subsystems | Verification Suite | Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **Priority 1: Duality Pipeline** | `Soul/`, `World/`, `Combat/` | `UAshenSovereignDualityTransformationAbility`, `UAshenDualityStateVectorCompiler`, `UAshenDualityShaderShiftComponent`, `UAshenDualityEngineShaderModulator`, `UAshenDualityMaterialInstanceAdapterComponent`, `UAshenDualityPostProcessVolumeAdapter`, `AAshenDualityTransformationLocusActor` | `FAshenMasterEndToEndIntegrationAutomationTest` (Asserts live `CompiledDualityStateScalar`, `CurrentDualityBlendRatio`, material parameters) | **COMPLETED & VERIFIED** (Commit `1b510b2`) |
 | **Priority 2: Living Oaths & Oath Burn** | `Combat/`, `Soul/`, `Core/` | `UAshenOath_OathRegistryComponent`, `UAshenLivingOathRegistrySubsystem`, `UAshenLivingOathGASAbility`, `UAshenOathBurnStaminaDrainGASAbility` | `FAshenLivingOathIntegrationTest` (Asserts swearing oaths, burden accumulation, burn state activation, fulfillment/breach) | **COMPLETED & VERIFIED** (Commit `1544729`) |
-| **Priority 3: Sanctuary & Companion Trio** | `Companions/`, `World/`, `UI/` | `UAshenCompanionFatigueSubsystem`, `UAshenTrioPartySpawnerComponent`, `UAshenSanctuarySurvivalConvergenceSubsystem`, `UAshenCampfireRestSubsystem` | `FAshenCompanionTrioFatigueIntegrationTest` (Asserts fatigue decay, tactical assists, campfire rest reset) | **IN QUEUE (Next)** |
-| **Priority 4: Scaffolding Deprecation** | `Tooling/`, `Orchestration/` | Deprecate 129 hardcoded `SynthesisOrchestrator` `return true;` tautologies in favor of deep value-asserting QA test suites | `run_all_checks.py` & UBT 5.8 Clean Suite | **PENDING** |
+| **Priority 3: Sanctuary & Companion Trio** | `Companions/`, `World/`, `UI/` | `UAshenCompanionFatigueSubsystem`, `UAshenTrioPartySpawnerComponent`, `UAshenSanctuarySurvivalConvergenceSubsystem`, `UAshenCampfireRestSubsystem` | `FAshenCompanionTrioFatigueIntegrationTest` (Asserts fatigue decay, tactical assists, campfire rest reset) | **COMPLETED & VERIFIED** (Commit `eacf843`) |
+| **Priority 4: Scaffolding Triage & Purge** | `Tooling/`, `Orchestration/` | Triage the 129 `SynthesisOrchestrator` classes and 0%-wired legacy pillars; keep core spine lean and 100% causal | `run_all_checks.py` & UBT 5.8 Clean Suite | **IN QUEUE (Next)** |
 
 ---
 
@@ -50,6 +50,12 @@
    - `OathBurnActive` ($1.0$ if burden $\ge 1.0$ or on breach)
    - `OathResonanceGlow` ($1.0$ on fulfillment, $0.0$ on breach)
 3. **GAS Execution Payloads:**
-   - [`UAshenLivingOathGASAbility`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Combat/AshenLivingOathGASAbility.cpp): Unleashes radial resonance damage scaling with accumulated burden.
+   - [`UAshenLivingOathGASAbility`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Combat/AshenLivingOathGASAbility.cpp): Unleashes radial resonance damage scaled by Kaelen's current `ActiveOathBurden`.
    - [`UAshenOathBurnStaminaDrainGASAbility`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/Combat/AshenOathBurnStaminaDrainGASAbility.cpp): Drains $-15.0\text{ Stamina}$ and drives glowing crack shaders when burden exceeds threshold.
 4. **Automation Suite:** Verified via [`FAshenLivingOathIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenLivingOathIntegrationTest.cpp).
+
+### ✅ Priority 3: Sanctuary & Companion Trio Fatigue Loop (100% Complete — Commit `eacf843`)
+1. **Authoritative Fatigue Subsystem:** `UAshenCompanionFatigueSubsystem` managing Tripartite Fatigue (Garrett Control via Twin-Blade X-Lock & Alchemical Flasks, Serafina Poise via Healing Prayers, Kaelen Transference).
+2. **Sanctuary / Campfire Rest Integration:** Added `ResetAllFatigue()` to purge companion fatigue upon resting at campfire havens or consuming hot meals.
+3. **Vulnerability State Enforcement:** Enforces vulnerability threshold ($\ge 0.70\text{ Fatigue}$) increasing assist cooldowns and lowering defense.
+4. **Automation Suite:** Verified via [`FAshenCompanionTrioFatigueIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenCompanionTrioFatigueIntegrationTest.cpp).

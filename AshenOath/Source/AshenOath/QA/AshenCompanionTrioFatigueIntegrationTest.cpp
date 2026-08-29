@@ -64,17 +64,17 @@ bool FAshenCompanionTrioFatigueIntegrationTest::RunTest(const FString& Parameter
 	TestFalse(TEXT("Serafina initially not vulnerable"), FatigueSubsystem->IsCompanionVulnerable(FName("Serafina")));
 
 	// -----------------------------------------------------------------------------------
-	// 2. TEST GARRETT TACTICAL ASSIST ACCUMULATION & VULNERABILITY THRESHOLD
+	// 2. TEST GARRETT TWIN-BLADE X-LOCK CROSS-PARRY & ALCHEMICAL FLASK ASSISTS
 	// -----------------------------------------------------------------------------------
 	{
-		// 1 assist: +0.25
+		// 1 Twin-Blade X-Lock / Flask assist: +0.25
 		FatigueSubsystem->AccumulateFatigue(FName("Garrett"), 0.25f);
-		TestNearlyEqual(TEXT("Garrett fatigue after 1 assist is 0.25"), FatigueSubsystem->GarrettFatigue, 0.25f, 0.01f);
+		TestNearlyEqual(TEXT("Garrett fatigue after 1 Twin-Blade assist is 0.25"), FatigueSubsystem->GarrettFatigue, 0.25f, 0.01f);
 		TestFalse(TEXT("Garrett not vulnerable at 0.25"), FatigueSubsystem->IsCompanionVulnerable(FName("Garrett")));
 
 		// 2 more assists: +0.50 -> 0.75 (Crosses 0.70 threshold)
 		FatigueSubsystem->AccumulateFatigue(FName("Garrett"), 0.50f);
-		TestNearlyEqual(TEXT("Garrett fatigue after 3 assists is 0.75"), FatigueSubsystem->GarrettFatigue, 0.75f, 0.01f);
+		TestNearlyEqual(TEXT("Garrett fatigue after 3 Twin-Blade assists is 0.75"), FatigueSubsystem->GarrettFatigue, 0.75f, 0.01f);
 		TestTrue(TEXT("Garrett is vulnerable at >= 0.70 fatigue"), FatigueSubsystem->IsCompanionVulnerable(FName("Garrett")));
 	}
 
