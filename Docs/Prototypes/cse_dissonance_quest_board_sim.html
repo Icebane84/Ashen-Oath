@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Cognitive Synchronization Engine & Dissonance Quest Board Simulator</title>
+    <!-- Traceability: CSE-SPEC-092 | Builds 3016-3035 -->
+    <style>
+        :root {
+            --bg-primary: #060911;
+            --bg-secondary: #0d1527;
+            --panel-bg: #152238;
+            --border-color: #2b3d5c;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #04070e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #04070e;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .btn-resolve-garrett {
+            background: #78350f;
+            border-color: #f59e0b;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .btn-resolve-serafina {
+            background: #1e3a8a;
+            border-color: #38bdf8;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fef08a;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>COGNITIVE SYNCHRONIZATION ENGINE & DISSONANCE QUEST BOARD</h1>
+                <p>Kaelen ↔ Garrett ↔ Serafina Perspective Deltas ↔ Dynamic Contradiction Trials (CSE-SPEC-092)</p>
+            </div>
+            <div class="badge">BUILD 3035</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="cseCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Garrett Pragmatism Weight:</span>
+                        <span class="control-val" id="garrettVal">0.70</span>
+                    </div>
+                    <input type="range" id="garrettSlider" min="0" max="100" value="70" style="width: 100%; accent-color: var(--accent-amber);">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Serafina Dogma Weight:</span>
+                        <span class="control-val" id="serafinaVal">0.80</span>
+                    </div>
+                    <input type="range" id="serafinaSlider" min="0" max="100" value="80" style="width: 100%; accent-color: var(--accent-cyan);">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Historical Objective Truth Offset:</span>
+                        <span class="control-val" id="truthVal">0.20</span>
+                    </div>
+                    <input type="range" id="truthSlider" min="0" max="100" value="20" style="width: 100%; accent-color: var(--accent-emerald);">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn btn-resolve-garrett" id="garrettResolveBtn">🧪 RESOLVE: GARRETT PRAGMATISM</button>
+                    <button class="btn btn-resolve-serafina" id="serafinaResolveBtn">✨ RESOLVE: SERAFINA DOGMA</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Serafina]: "Our spirits move as one flame. Strike without doubt!"
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT CSE QUEST EVENT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Dissonance Index</div>
+                <div class="telemetry-val" id="dissonanceVal">0.18</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Cognitive Tier</div>
+                <div class="telemetry-val" id="tierVal" style="color: var(--accent-emerald);">HARMONY</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Synergy Combo Dmg</div>
+                <div class="telemetry-val" id="synergyVal">+30.0%</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Assist Hesitation</div>
+                <div class="telemetry-val" id="delayVal">0.00 s</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Harmony Chime 432Hz vs Dissonant Scrape 110Hz)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playAcoustic(freq, type, duration) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Perspective State
+        let garrettWeight = 0.70;
+        let serafinaWeight = 0.80;
+        let truthOffset = 0.20;
+        let activeDissonance = 0.18;
+
+        const garrettSlider = document.getElementById('garrettSlider');
+        const serafinaSlider = document.getElementById('serafinaSlider');
+        const truthSlider = document.getElementById('truthSlider');
+        const barkBox = document.getElementById('barkBox');
+
+        function solveDissonance() {
+            // Euclidean delta solver between Garrett (Pragmatism), Serafina (Dogma), and Truth
+            const dG = Math.abs(garrettWeight - (1.0 - truthOffset));
+            const dS = Math.abs(serafinaWeight - truthOffset);
+            activeDissonance = Math.min(1.0, Math.max(0.0, (dG + dS) / 2.0));
+
+            document.getElementById('garrettVal').innerText = garrettWeight.toFixed(2);
+            document.getElementById('serafinaVal').innerText = serafinaWeight.toFixed(2);
+            document.getElementById('truthVal').innerText = truthOffset.toFixed(2);
+            document.getElementById('dissonanceVal').innerText = activeDissonance.toFixed(2);
+
+            let tierText = "HARMONY";
+            let synergyText = "+0.0%";
+            let delayText = (activeDissonance * 0.60).toFixed(2) + " s";
+
+            if (activeDissonance < 0.25) {
+                tierText = "HARMONY";
+                const bonus = ((0.25 - activeDissonance) / 0.25 * 30.0).toFixed(1);
+                synergyText = "+" + bonus + "%";
+                document.getElementById('tierVal').style.color = "var(--accent-emerald)";
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "Our spirits move as one flame. Strike without doubt!"`;
+            } else if (activeDissonance <= 0.50) {
+                tierText = "FRICTION";
+                document.getElementById('tierVal').style.color = "var(--accent-amber)";
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "I disagree with your strategy, but I'll watch your back."`;
+            } else if (activeDissonance <= 0.75) {
+                tierText = "DIVERGENCE";
+                document.getElementById('tierVal').style.color = "var(--accent-purple)";
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "Your methods border on heresy. We must seek the true light."`;
+            } else {
+                tierText = "FRACTURE";
+                document.getElementById('tierVal').style.color = "var(--accent-red)";
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "We can't keep pretending we're fighting for the same thing, Kaelen!"`;
+            }
+
+            document.getElementById('tierVal').innerText = tierText;
+            document.getElementById('synergyVal').innerText = synergyText;
+            document.getElementById('delayVal').innerText = delayText;
+        }
+
+        garrettSlider.oninput = () => {
+            garrettWeight = parseFloat(garrettSlider.value) / 100.0;
+            solveDissonance();
+        };
+
+        serafinaSlider.oninput = () => {
+            serafinaWeight = parseFloat(serafinaSlider.value) / 100.0;
+            solveDissonance();
+        };
+
+        truthSlider.oninput = () => {
+            truthOffset = parseFloat(truthSlider.value) / 100.0;
+            solveDissonance();
+        };
+
+        document.getElementById('garrettResolveBtn').onclick = () => {
+            garrettWeight = Math.min(1.0, garrettWeight + 0.20);
+            serafinaWeight = Math.max(0.0, serafinaWeight - 0.25);
+            garrettSlider.value = garrettWeight * 100;
+            serafinaSlider.value = serafinaWeight * 100;
+            playAcoustic(220, 'sawtooth', 0.5);
+            solveDissonance();
+        };
+
+        document.getElementById('serafinaResolveBtn').onclick = () => {
+            serafinaWeight = Math.min(1.0, serafinaWeight + 0.20);
+            garrettWeight = Math.max(0.0, garrettWeight - 0.25);
+            garrettSlider.value = garrettWeight * 100;
+            serafinaSlider.value = serafinaWeight * 100;
+            playAcoustic(432, 'sine', 0.8);
+            solveDissonance();
+        };
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "CSE_DISSONANCE_QUEST_TELEMETRY",
+                dissonance_index: activeDissonance.toFixed(2),
+                garrett_pragmatism: garrettWeight.toFixed(2),
+                serafina_dogma: serafinaWeight.toFixed(2),
+                historical_truth_offset: truthOffset.toFixed(2),
+                synergy_bonus_percent: document.getElementById('synergyVal').innerText
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Canvas Cognitive Triangle Visualizer
+        const canvas = document.getElementById('cseCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 335;
+            const centerY = 220;
+            const radius = 130;
+
+            // 3 Triangle Vertices: Kaelen (Top), Garrett (Bottom-Left), Serafina (Bottom-Right)
+            const pKaelen = { x: centerX, y: centerY - radius };
+            const pGarrett = { x: centerX - radius * 0.866, y: centerY + radius * 0.5 };
+            const pSerafina = { x: centerX + radius * 0.866, y: centerY + radius * 0.5 };
+
+            // Draw Cognitive Triangle
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = activeDissonance > 0.75 ? '#ef4444' : (activeDissonance < 0.25 ? '#10b981' : '#f59e0b');
+            ctx.beginPath();
+            ctx.moveTo(pKaelen.x, pKaelen.y);
+            ctx.lineTo(pGarrett.x, pGarrett.y);
+            ctx.lineTo(pSerafina.x, pSerafina.y);
+            ctx.closePath();
+            ctx.stroke();
+
+            // Draw Perspective Node Circles
+            ctx.fillStyle = '#f8fafc';
+            ctx.beginPath(); ctx.arc(pKaelen.x, pKaelen.y, 16, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath(); ctx.arc(pGarrett.x, pGarrett.y, 16, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath(); ctx.arc(pSerafina.x, pSerafina.y, 16, 0, Math.PI * 2); ctx.fill();
+
+            // Labels
+            ctx.font = 'bold 11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText("KAELEN", pKaelen.x, pKaelen.y - 22);
+            ctx.fillText("GARRETT (Pragmatism)", pGarrett.x - 20, pGarrett.y + 30);
+            ctx.fillText("SERAFINA (Dogma)", pSerafina.x + 20, pSerafina.y + 30);
+
+            // Center Dynamic State Vector Position
+            const pCenter = {
+                x: centerX + (serafinaWeight - garrettWeight) * 60,
+                y: centerY + (activeDissonance - 0.5) * 40
+            };
+
+            ctx.fillStyle = activeDissonance > 0.75 ? '#ef4444' : (activeDissonance < 0.25 ? '#10b981' : '#f59e0b');
+            ctx.beginPath();
+            ctx.arc(pCenter.x, pCenter.y, 22, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 10px monospace';
+            ctx.fillText(`D:${activeDissonance.toFixed(2)}`, pCenter.x, pCenter.y + 3);
+
+            requestAnimationFrame(animate);
+        }
+
+        solveDissonance();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

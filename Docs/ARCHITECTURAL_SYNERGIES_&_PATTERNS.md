@@ -55,10 +55,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-033`** | **Dynamic Weather State Cycling, Biome Thermal Degradation & Electro-Acidic Hazard Invariant** | `WEATHER-SPEC-089` / World / Combat / AI / Audio / UI / Haptics | Blizzard sub-zero slow ($-30\%$), acid rain armor corrosion ($-2.5\%/\text{s}$), $1.5\text{s}$ lightning telegraphs ($850-1250\text{ Dmg}$), and $100\%$ hearth shelter immunity. |
 | **`SYN-034`** | **Parasitic Blade Hunger Decay, Sanity Dissonance Audio Gating & Flow State Catharsis Invariant** | `CONVERGENCE-SPEC-090` / Combat / Audio / AI / UI / Haptics | Blade strike bonus ($+45\%$), parry window reduction ($-35\%$), Stem 02 whisper gain ($0.0 \leftrightarrow 1.0$), $-18\text{dB}$ melodic ducking, and $8\text{s}$ Flow State $+40$ sanity catharsis purge. |
 | **`SYN-035`** | **Equipment Weight Class Dodge Scaling, Cardiac Pulse Exhaustion & Poise-Break Hitstop Invariant** | `KINEMATICS-SPEC-091` / Combat / Audio / AI / UI / Haptics | Weight class roll duration ($0.32\text{s}-0.70\text{s}$), i-frames ($0.28\text{s}-0.05\text{s}$), cardiac exhaustion swing slowdown ($+25\%$), $0.20\text{s}$ poise break hitstop ($0.02\times$), and perfect deflection surge ($+50$ stamina, $+35$ Flame, $+25\%$ riposte). |
+| **`SYN-036`** | **Cognitive Dissonance Delta Solver, Dynamic Contradiction Quest Branching & Companion Alignment Invariant** | `CSE-SPEC-092` / Narrative / Combat / AI / UI / Haptics | Dissonance index calculation ($D \in [0.0, 1.0]$), $+30\%$ harmony synergy bonus, $+20\%$ fracture tandem stamina penalty, 3 contract archetypes, and companion alignment ultimatums. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-036`: Cognitive Dissonance Delta Solver, Dynamic Contradiction Quest Branching & Companion Alignment Invariant
+
+* **Target Subsystems:** `UAshenCSESubsystem`, `UAshenDissonanceQuestBoardSubsystem`, `UAshenCognitiveDissonanceEvaluator`, `UAshenCompanionPerspectiveDirectorComponent`, `UAshenCSEHapticBridge`
+* **Related Specifications:** [`CSE-SPEC-092`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CSE-SPEC-092%20%28THE%20COGNITIVE%20SYNCHRONIZATION%20ENGINE%20&%20DISSONANCE%20QUEST%20BOARD%29.md)
+
+#### 📐 Mathematical Invariants:
+$$D = \frac{1}{3} \sum_{i \in \{K, G, S\}} \frac{\|\vec{V}_i - \vec{V}_{\text{Objective}}\|}{\sqrt{3}}$$
+$$\text{SynergyBonus}(D) = \begin{cases} \frac{0.25 - D}{0.25} \cdot 0.30, & D < 0.25 \\ 0.0, & \text{otherwise} \end{cases} \quad [+30\% \text{ Damage Bonus at Harmony}]$$
+$$\text{TandemStaminaMultiplier}(D) = \begin{cases} 1.0 + \left(\frac{D - 0.50}{0.50} \cdot 0.20\right), & D > 0.50 \\ 1.0, & \text{otherwise} \end{cases} \quad [1.0\times \to 1.20\times \text{ Drain}]$$
+$$\text{AssistHesitation}(D) = D \cdot 0.60\text{s} \quad [0.0\text{s} \to 0.60\text{s Delay}]$$
+
+#### 💡 Architectural Insight & Impact:
+* **Psychological Mechanics Driving Quests:** The party's philosophical alignment directly governs dynamic quest generation. Unresolved historical contradictions spawn investigation trials, while deep companion divergence forces moral ultimatums that reshape combat synergies.
+* **Diegetic Somatosensory Consensus:** High consensus produces smooth $60\text{Hz}$ purrs on the DualSense controller and $432\text{Hz}$ crystalline musical chimes, while psychological fracture vibrates with harsh $120\text{Hz}$ friction pulses and spectral post-process static.
+
+---
 
 ---
 
