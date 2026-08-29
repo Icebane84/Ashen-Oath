@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Core Combat Kinematics & Somatosensory Simulator</title>
+    <!-- Traceability: KINEMATICS-SPEC-091 | Builds 2996-3015 -->
+    <style>
+        :root {
+            --bg-primary: #080c14;
+            --bg-secondary: #0f172a;
+            --panel-bg: #1e293b;
+            --border-color: #334155;
+            --accent-cyan: #38bdf8;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #050810;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #050810;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-weight: 600;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+
+        .btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--border-color);
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-parry {
+            background: #1e3a8a;
+            border-color: #3b82f6;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 14px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-parry:hover {
+            background: #2563eb;
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #bae6fd;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>CORE COMBAT KINEMATICS & SOMATOSENSORY CONVERGENCE LOOP</h1>
+                <p>Weight Classes ↔ Cardiac Stamina ↔ Poise-Break Hitstop ↔ Perfect Parry Surge (KINEMATICS-SPEC-091)</p>
+            </div>
+            <div class="badge">BUILD 3015</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="kinematicsCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Equipment Load (kg):</span>
+                        <span class="control-val" id="weightDisplay">25.0 kg / 50.0 kg (Medium)</span>
+                    </div>
+                    <input type="range" id="weightSlider" min="5" max="60" value="25" style="width: 100%; accent-color: var(--accent-cyan);">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-header">
+                        <span>Current Stamina:</span>
+                        <span class="control-val" id="staminaDisplay">100.0 / 100.0</span>
+                    </div>
+                    <input type="range" id="staminaSlider" min="0" max="100" value="100" style="width: 100%; accent-color: var(--accent-emerald);">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn" id="dodgeBtn" style="color: var(--accent-cyan);">🏃 EXECUTE DODGE ROLL</button>
+                    <button class="btn" id="poiseBreakBtn" style="color: var(--accent-red);">💥 BREAK POISE (HITSTOP)</button>
+                </div>
+
+                <button class="btn btn-parry" id="parryBtn">🛡️ PERFECT DEFLECTION RIPOSTE (+50 STAMINA, +35 FLAME)</button>
+
+                <div class="bark-box" id="barkBox">
+                    [Kaelen]: "Solid stance. Ready for their charge."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT KINEMATICS EVENT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Weight Class</div>
+                <div class="telemetry-val" id="weightClassVal">MEDIUM</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">i-Frame Window</div>
+                <div class="telemetry-val" id="iframeVal">0.24 s</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Cardiac Trigger Res</div>
+                <div class="telemetry-val" id="triggerResVal">0.10</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Riposte Damage Bonus</div>
+                <div class="telemetry-val" id="riposteBonusVal">+0.0%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Heartbeat, Armor Foley, Parry Chimes)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'parry') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Pure 880Hz A5 Chime
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.8);
+            } else if (type === 'heartbeat') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(55, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } else if (type === 'dodge') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.35);
+            }
+        }
+
+        // Kinematics State
+        let weightKg = 25.0;
+        const maxLoadKg = 50.0;
+        let stamina = 100.0;
+        let poise = 100.0;
+        let bIsDodging = false;
+        let dodgeTimer = 0.0;
+        let hitstopTimer = 0.0;
+        let bRiposteActive = false;
+        let riposteTimer = 0.0;
+
+        const weightSlider = document.getElementById('weightSlider');
+        const staminaSlider = document.getElementById('staminaSlider');
+        const weightDisplay = document.getElementById('weightDisplay');
+        const staminaDisplay = document.getElementById('staminaDisplay');
+        const barkBox = document.getElementById('barkBox');
+
+        function getWeightClass(w, maxL) {
+            const ratio = w / maxL;
+            if (ratio > 1.0) return "OVERBURDENED";
+            if (ratio > 0.70) return "HEAVY";
+            if (ratio <= 0.30) return "LIGHT";
+            return "MEDIUM";
+        }
+
+        function updateUI() {
+            const weightClass = getWeightClass(weightKg, maxLoadKg);
+            weightDisplay.innerText = `${weightKg.toFixed(1)} kg / ${maxLoadKg.toFixed(1)} kg (${weightClass})`;
+            staminaDisplay.innerText = `${stamina.toFixed(1)} / 100.0`;
+
+            document.getElementById('weightClassVal').innerText = weightClass;
+
+            let iframe = "0.24 s";
+            if (weightClass === "LIGHT") iframe = "0.28 s";
+            else if (weightClass === "HEAVY") iframe = "0.16 s";
+            else if (weightClass === "OVERBURDENED") iframe = "0.05 s";
+            document.getElementById('iframeVal').innerText = iframe;
+
+            const bExhausted = stamina < 35.0;
+            const triggerRes = bExhausted ? (0.50 + ((35.0 - stamina) / 35.0) * 0.35).toFixed(2) : "0.10";
+            document.getElementById('triggerResVal').innerText = triggerRes;
+
+            document.getElementById('riposteBonusVal').innerText = bRiposteActive ? "+25.0%" : "+0.0%";
+
+            // Dialogue Barks
+            if (poise <= 0.0) {
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "KAELEN'S GUARD IS SHATTERED! Covering you now!"`;
+            } else if (bRiposteActive) {
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "BEAUTIFUL DEFLECTION! Take his head!"`;
+            } else if (bExhausted) {
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Stamina's running dry, wielder! Don't overcommit!"`;
+            } else {
+                barkBox.innerHTML = `<strong>[Kaelen]:</strong> "Solid stance. Ready for their charge."`;
+            }
+        }
+
+        weightSlider.oninput = () => {
+            weightKg = parseFloat(weightSlider.value);
+            updateUI();
+        };
+
+        staminaSlider.oninput = () => {
+            stamina = parseFloat(staminaSlider.value);
+            updateUI();
+        };
+
+        document.getElementById('dodgeBtn').onclick = () => {
+            const weightClass = getWeightClass(weightKg, maxLoadKg);
+            let cost = 20.0;
+            let duration = 0.40;
+            if (weightClass === "LIGHT") { cost = 15.0; duration = 0.32; }
+            else if (weightClass === "HEAVY") { cost = 35.0; duration = 0.55; }
+            else if (weightClass === "OVERBURDENED") { cost = 50.0; duration = 0.70; }
+
+            if (stamina >= cost) {
+                stamina -= cost;
+                staminaSlider.value = stamina;
+                bIsDodging = true;
+                dodgeTimer = duration;
+                playSound('dodge');
+                updateUI();
+            }
+        };
+
+        document.getElementById('poiseBreakBtn').onclick = () => {
+            poise = 0.0;
+            hitstopTimer = 0.20;
+            playSound('heartbeat');
+            updateUI();
+            setTimeout(() => { poise = 100.0; updateUI(); }, 2000);
+        };
+
+        document.getElementById('parryBtn').onclick = () => {
+            stamina = Math.min(100.0, stamina + 50.0);
+            staminaSlider.value = stamina;
+            bRiposteActive = true;
+            riposteTimer = 3.0;
+            playSound('parry');
+            updateUI();
+        };
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "COMBAT_KINEMATICS_CONVERGENCE_TELEMETRY",
+                equipment_weight_kg: weightKg,
+                weight_class: getWeightClass(weightKg, maxLoadKg),
+                current_stamina: stamina,
+                cardiac_exhaustion: stamina < 35.0,
+                poise_broken: poise <= 0.0,
+                riposte_active: bRiposteActive
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Loop & Canvas Visualizer
+        const canvas = document.getElementById('kinematicsCanvas');
+        const ctx = canvas.getContext('2d');
+        let lastTime = performance.now();
+        let beatTimer = 0.0;
+
+        function animate(now) {
+            const dt = (now - lastTime) / 1000.0;
+            lastTime = now;
+
+            // Stamina Pulse Heartbeat Audio
+            if (stamina < 35.0) {
+                beatTimer += dt;
+                if (beatTimer > 0.6) {
+                    playSound('heartbeat');
+                    beatTimer = 0.0;
+                }
+            }
+
+            // Timers
+            if (dodgeTimer > 0) dodgeTimer -= dt;
+            if (hitstopTimer > 0) hitstopTimer -= dt;
+            if (riposteTimer > 0) {
+                riposteTimer -= dt;
+                if (riposteTimer <= 0) bRiposteActive = false;
+            }
+
+            updateUI();
+
+            // Render Arena & Combat Vector Visuals
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 335;
+            const centerY = 220;
+
+            // Poise & Guard Circle
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = poise <= 0 ? '#ef4444' : (bRiposteActive ? '#3b82f6' : '#10b981');
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 90, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Center Character Avatar
+            ctx.fillStyle = bIsDodging ? '#38bdf8' : (stamina < 35 ? '#f59e0b' : '#f8fafc');
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 28, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Status Indicator
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            let statusText = "SOLID GUARD";
+            if (hitstopTimer > 0) statusText = "⚡ HITSTOP (0.02x)";
+            else if (bIsDodging) statusText = "🏃 ACTIVE ROLL";
+            else if (stamina < 35) statusText = "💓 CARDIAC EXHAUSTION";
+            ctx.fillText(statusText, centerX, centerY + 4);
+
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>

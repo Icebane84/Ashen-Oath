@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 3015: Master Batch #150 — Core Combat Kinematics & Somatosensory Convergence Loop (KINEMATICS-SPEC-091)
+**Domain:** Combat / Audio / AI / UI / Core / Orchestration / Narrative / World / QA  
+**Status:** 3,015 Builds Clean (0 Errors, 0 Warnings) — *3,000+ Milestone Officially Achieved!*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 2996 | `AshenCombatKinematicsTypes.h` | `AshenCombatKinematicsTypes` — Enums (3), Structs (2), Multicast Delegates (4) | Combat |
+| 2997 | `AshenCombatKinematicsConvergenceSubsystem.h/.cpp` | `UAshenCombatKinematicsConvergenceSubsystem` — Master kinematics convergence subsystem | Combat |
+| 2998 | `AshenWeightClassDodgeEvaluator.h/.cpp` | `UAshenWeightClassDodgeEvaluator` — Evaluates dynamic dodge scaling by weight class | Combat |
+| 2999 | `AshenCardiacExhaustionEvaluator.h/.cpp` | `UAshenCardiacExhaustionEvaluator` — Computes swing windup & parry penalties | Combat |
+| 3000 | `AshenPoiseBreakHitstopEvaluator.h/.cpp` | `UAshenPoiseBreakHitstopEvaluator` — Evaluates hitstop dilation & camera kick | Combat |
+| 3001 | `AshenDynamicWeightDodgeGASAbility.h/.cpp` | `UAshenDynamicWeightDodgeGASAbility` — Dynamic roll ability adapting to weight class | Combat |
+| 3002 | `AshenCardiacExhaustionDebuffGASAbility.h/.cpp` | `UAshenCardiacExhaustionDebuffGASAbility` — Debuff state at <35% stamina | Combat |
+| 3003 | `AshenPoiseBreakStaggerGASAbility.h/.cpp` | `UAshenPoiseBreakStaggerGASAbility` — Shattered guard state with 0.20s hitstop | Combat |
+| 3004 | `AshenGlancingDeflectionRiposteGASAbility.h/.cpp` | `UAshenGlancingDeflectionRiposteGASAbility` — Perfect parry +50 stamina & +25% riposte | Combat |
+| 3005 | `AshenHeavyArmorPoiseHyperarmorGASAbility.h/.cpp` | `UAshenHeavyArmorPoiseHyperarmorGASAbility` — Heavy armor poise hyper-armor ability | Combat |
+| 3006 | `UBTService_AshenAIPoiseBreakPunishAI.h/.cpp` | `UBTService_AshenAIPoiseBreakPunishAI` — AI service executing guard-break punishes | AI |
+| 3007 | `AshenUserWidget_CombatKinematicsHUD.h/.cpp` | `UAshenUserWidget_CombatKinematicsHUD` — UMG HUD displaying weight & cardiac gauge | UI |
+| 3008 | `AshenCombatKinematicsAudioSubsystem.h/.cpp` | `UAshenCombatKinematicsAudioSubsystem` — MetaSounds armor Foley & parry 880Hz chime | Audio |
+| 3009 | `AshenPoiseHitstopCameraShakeAdapter.h/.cpp` | `UAshenPoiseHitstopCameraShakeAdapter` — Camera kick adapter on poise break & fat roll | Combat |
+| 3010 | `AAshenTrainingDummyKinematicsWorldActor.h/.cpp` | `AAshenTrainingDummyKinematicsWorldActor` — Combat training dummy world actor | World |
+| 3011 | `AshenCombatKinematicsSaveGameAdapter.h/.cpp` | `UAshenCombatKinematicsSaveGameAdapter` — Serializes weight class & combat calibration | Core |
+| 3012 | `AshenCombatKinematicsNarrativeBridge.h/.cpp` | `UAshenCombatKinematicsNarrativeBridge` — Contextual companion posture & parry barks | Narrative |
+| 3013 | `AshenCombatKinematicsHapticBridge.h/.cpp` | `UAshenCombatKinematicsHapticBridge` — DualSense 0.85 trigger res & 0.95 stagger rumble | Combat |
+| 3014 | `AshenCombatKinematicsMasterBridge.h/.cpp` | `UAshenCombatKinematicsMasterBridge` — Master bridge connecting weight, stamina & poise | Orchestration |
+| 3015 | `AshenMasterBatch150AutomationTest.cpp` | `FAshenMasterBatch150AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 2995: Master Batch #149 — The Oathbringer Blade, Sanity Collapse & Quartz Conductor Flow Loop (CONVERGENCE-SPEC-090)
 **Domain:** Combat / Audio / AI / UI / Core / Orchestration / Narrative / World / QA  
 **Status:** 2,995 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

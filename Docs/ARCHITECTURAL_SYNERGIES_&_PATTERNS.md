@@ -54,10 +54,31 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-032`** | **Tactical Map Cartography Fog Unveiling, Sanctuary Beacon Attunement & Travel Hazard Ambush Invariant** | `MAP-SPEC-088` / World / Combat / AI / Audio / UI / Haptics | Fog of war reveal radius ($500\text{uu} \leftrightarrow 3500\text{uu}$), $3.0\text{s}$ beacon teleportation ($15\text{ stamina/km}$), travel ambush risk ($0-75\%$), and $-15\%$ surprise posture penalty. |
 | **`SYN-033`** | **Dynamic Weather State Cycling, Biome Thermal Degradation & Electro-Acidic Hazard Invariant** | `WEATHER-SPEC-089` / World / Combat / AI / Audio / UI / Haptics | Blizzard sub-zero slow ($-30\%$), acid rain armor corrosion ($-2.5\%/\text{s}$), $1.5\text{s}$ lightning telegraphs ($850-1250\text{ Dmg}$), and $100\%$ hearth shelter immunity. |
 | **`SYN-034`** | **Parasitic Blade Hunger Decay, Sanity Dissonance Audio Gating & Flow State Catharsis Invariant** | `CONVERGENCE-SPEC-090` / Combat / Audio / AI / UI / Haptics | Blade strike bonus ($+45\%$), parry window reduction ($-35\%$), Stem 02 whisper gain ($0.0 \leftrightarrow 1.0$), $-18\text{dB}$ melodic ducking, and $8\text{s}$ Flow State $+40$ sanity catharsis purge. |
+| **`SYN-035`** | **Equipment Weight Class Dodge Scaling, Cardiac Pulse Exhaustion & Poise-Break Hitstop Invariant** | `KINEMATICS-SPEC-091` / Combat / Audio / AI / UI / Haptics | Weight class roll duration ($0.32\text{s}-0.70\text{s}$), i-frames ($0.28\text{s}-0.05\text{s}$), cardiac exhaustion swing slowdown ($+25\%$), $0.20\text{s}$ poise break hitstop ($0.02\times$), and perfect deflection surge ($+50$ stamina, $+35$ Flame, $+25\%$ riposte). |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-035`: Equipment Weight Class Dodge Scaling, Cardiac Pulse Exhaustion & Poise-Break Hitstop Invariant
+
+* **Target Subsystems:** `UAshenCombatKinematicsConvergenceSubsystem`, `UAshenWeightClassDodgeEvaluator`, `UAshenCardiacExhaustionEvaluator`, `UAshenPoiseBreakHitstopEvaluator`, `UAshenCombatKinematicsHapticBridge`
+* **Related Specifications:** [`KINEMATICS-SPEC-091`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/KINEMATICS-SPEC-091%20%28CORE%20COMBAT%20KINEMATICS%20&%20SOMATOSENSORY%20CONVERGENCE%20LOOP%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{RollDuration}(\text{WeightClass}) = \begin{cases} 0.32\text{s}, & \text{LightLoad } (<30\%) \\ 0.40\text{s}, & \text{MediumLoad } (30-70\%) \\ 0.55\text{s}, & \text{HeavyLoad } (71-100\%) \\ 0.70\text{s}, & \text{Overburdened } (>100\%) \end{cases}$$
+$$\text{IFrameDuration}(\text{WeightClass}) = \begin{cases} 0.28\text{s}, & \text{LightLoad} \\ 0.24\text{s}, & \text{MediumLoad} \\ 0.16\text{s}, & \text{HeavyLoad} \\ 0.05\text{s}, & \text{Overburdened} \end{cases}$$
+$$\text{StaminaCost}_{\text{Dodge}}(\text{WeightClass}) = \begin{cases} 15.0, & \text{LightLoad} \\ 20.0, & \text{MediumLoad} \\ 35.0, & \text{HeavyLoad} \\ 50.0, & \text{Overburdened} \end{cases}$$
+$$\text{TimeDilation}_{\text{PoiseBreak}} = 0.02\times \quad (\text{for } 0.20\text{s Global Hitstop})$$
+$$\text{Surge}_{\text{PerfectParry}} = \{ +50.0\text{ Stamina}, +35.0\text{ White Flame}, +25.0\% \text{ Riposte Damage} \}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Tactical Equipment Identity:** Equipment weight is directly expressed through kinematic momentum and tactile agility—light armor allows fluid evasive evasion, while heavy armor requires tactical commitment and calculated hyper-armor timing.
+* **Cardiac Somatosensory Feedback:** When stamina reaches the critical heartbeat threshold ($<35\%$), the player physically feels the fatigue through DualSense adaptive trigger tension ($0.85$), slower attack windups, and diegetic cardiac audio pulses.
+
+---
 
 ---
 
