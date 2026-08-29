@@ -60,6 +60,12 @@ public:
 	/** Returns TrioPartySpawnerComponent subobject */
 	FORCEINLINE class UAshenTrioPartySpawnerComponent* GetTrioPartySpawnerComponent() const { return TrioPartySpawnerComponent; }
 
+	FORCEINLINE class UAshenDualityStateVectorCompiler* GetDualityStateVectorCompiler() const { return DualityStateVectorCompiler; }
+	FORCEINLINE class UAshenDualityShaderShiftComponent* GetDualityShaderShiftComponent() const { return DualityShaderShiftComponent; }
+	FORCEINLINE class UAshenDualityEngineShaderModulator* GetDualityEngineShaderModulator() const { return DualityEngineShaderModulator; }
+	FORCEINLINE class UAshenDualityMaterialInstanceAdapterComponent* GetDualityMaterialInstanceAdapter() const { return DualityMaterialInstanceAdapter; }
+	FORCEINLINE class UAshenDualityPostProcessVolumeAdapter* GetDualityPostProcessAdapter() const { return DualityPostProcessAdapter; }
+
 public:
 	/** Toggle the sundered corruption state visually (Light ↔ Dark) */
 	UFUNCTION(BlueprintCallable, Category = "Ashen|Corruption")
@@ -211,6 +217,26 @@ protected:
 	/** Trio Party Spawner Component -- Spawns Serafina & Garrett companions on flanks */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	class UAshenTrioPartySpawnerComponent* TrioPartySpawnerComponent;
+
+	/** Duality State Vector Compiler (Soul Domain authoritative truth) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	class UAshenDualityStateVectorCompiler* DualityStateVectorCompiler;
+
+	/** Duality Shader Shift Component (World Domain blend ratio driver) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	class UAshenDualityShaderShiftComponent* DualityShaderShiftComponent;
+
+	/** Duality Engine Shader Modulator (World Domain MPC driver) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	class UAshenDualityEngineShaderModulator* DualityEngineShaderModulator;
+
+	/** Duality Material Instance Adapter (World Domain MID updater) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	class UAshenDualityMaterialInstanceAdapterComponent* DualityMaterialInstanceAdapter;
+
+	/** Duality Post Process Volume Adapter (World Domain post-process shifter) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	class UAshenDualityPostProcessVolumeAdapter* DualityPostProcessAdapter;
 
 private:
 	/** Guards against firing the crisis delegate more than once per life. Reset in HandleCharacterDeath(). */

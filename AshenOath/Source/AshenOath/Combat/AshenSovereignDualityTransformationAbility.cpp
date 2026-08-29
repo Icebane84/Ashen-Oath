@@ -4,6 +4,13 @@
 #include "Combat/AshenCombatCharacter.h"
 #include "World/AshenCorruptionMaskInterpolator.h"
 #include "World/AshenDiegeticVisualCorruptionSubsystem.h"
+#include "Soul/AshenDualityStateVectorCompiler.h"
+#include "World/AshenDualityShaderShiftComponent.h"
+#include "World/AshenDualityEngineShaderModulator.h"
+#include "World/AshenDualityMaterialInstanceAdapterComponent.h"
+#include "World/AshenDualityPostProcessVolumeAdapter.h"
+#include "World/AshenDualityTransformationLocusActor.h"
+#include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "GameFramework/Character.h"
@@ -69,6 +76,30 @@ bool UAshenSovereignDualityTransformationAbility::TriggerDualityTransformationPu
 		const bool bBecomingDark = (CurrentCorr < 0.5f);
 		TargetCorruption = bBecomingDark ? 1.0f : 0.0f;
 		CombatChar->TransitionCorruptionState(bBecomingDark);
+
+		// Route authoritative state vector compilation (Soul Domain)
+		if (UAshenDualityStateVectorCompiler* Compiler = CombatChar->GetDualityStateVectorCompiler())
+		{
+			Compiler->CompileDualityStateVector(TargetCorruption);
+		}
+
+		// Fan out to World Domain adapters
+		if (UAshenDualityShaderShiftComponent* ShaderShift = CombatChar->GetDualityShaderShiftComponent())
+		{
+			ShaderShift->SetDualityBlendRatio(TargetCorruption);
+		}
+		if (UAshenDualityEngineShaderModulator* ShaderMod = CombatChar->GetDualityEngineShaderModulator())
+		{
+			ShaderMod->UpdateDualityShaderParameters(TargetCorruption);
+		}
+		if (UAshenDualityMaterialInstanceAdapterComponent* MatAdapter = CombatChar->GetDualityMaterialInstanceAdapter())
+		{
+			MatAdapter->UpdateMaterialInstanceParameters(TEXT("DualityBlendRatio"), TargetCorruption);
+		}
+		if (UAshenDualityPostProcessVolumeAdapter* PPAdapter = CombatChar->GetDualityPostProcessAdapter())
+		{
+			PPAdapter->AdjustPostProcessForRealmShift(TargetCorruption);
+		}
 	}
 
 	// 2. Calculate channel-packed corruption mask values (R=Soot, G=Grime, B=Raggedness, A=Emissive)
@@ -102,7 +133,16 @@ bool UAshenSovereignDualityTransformationAbility::TriggerDualityTransformationPu
 		VisualSubsystem->ModulateVisualCorruptionForTrauma(TargetCorruption * 100.0f);
 	}
 
-	// 5. Radial pulse damage and stagger sweep
+	// 5. Trigger environmental Duality Transformation Locus Actors within range
+	for (TActorIterator<AAshenDualityTransformationLocusActor> It(World); It; ++It)
+	{
+		if (FVector::DistSquared(Avatar->GetActorLocation(), It->GetActorLocation()) <= FMath::Square(TransformationPulseRadius))
+		{
+			It->TriggerDualityTransformationAuraPulse();
+		}
+	}
+
+	// 6. Radial pulse damage and stagger sweep
 	TArray<AActor*> IgnoredActors;
 	IgnoredActors.Add(Avatar);
 

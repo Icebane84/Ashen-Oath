@@ -11,6 +11,8 @@
 #include "Combat/AshenColossusRuptureCleaveGASAbility.h"
 #include "Combat/AshenGravimetricPommelShatterGASAbility.h"
 #include "Combat/AshenRunicForgeConvergenceSubsystem.h"
+#include "Soul/AshenDualityStateVectorCompiler.h"
+#include "World/AshenDualityShaderShiftComponent.h"
 #include "AbilitySystemComponent.h"
 #include "Engine/World.h"
 
@@ -56,7 +58,19 @@ bool FAshenMasterEndToEndIntegrationAutomationTest::RunTest(const FString& Param
 		// Execute full transformation pulse
 		const bool bPulseSuccess = DualityAbility->TriggerDualityTransformationPulse();
 		TestTrue(TEXT("Duality Transformation pulse executed cleanly"), bPulseSuccess);
-		TestNearlyEqual(TEXT("Target corruption transitioned to 1.0 (Dark state)"), CombatChar->GetCorruptionAmount(), 0.0f, 1.0f);
+		TestNearlyEqual(TEXT("Target corruption transitioned to 1.0 (Dark state)"), CombatChar->GetCorruptionAmount(), 1.0f, 0.01f);
+
+		// Assert Soul Domain compiler authoritative scalar
+		if (UAshenDualityStateVectorCompiler* Compiler = CombatChar->GetDualityStateVectorCompiler())
+		{
+			TestNearlyEqual(TEXT("CompiledDualityStateScalar updated to 1.0"), Compiler->CompiledDualityStateScalar, 1.0f, 0.01f);
+		}
+
+		// Assert World Domain shader shift blend ratio
+		if (UAshenDualityShaderShiftComponent* ShaderShift = CombatChar->GetDualityShaderShiftComponent())
+		{
+			TestNearlyEqual(TEXT("CurrentDualityBlendRatio updated to 1.0"), ShaderShift->CurrentDualityBlendRatio, 1.0f, 0.01f);
+		}
 	}
 
 	// -----------------------------------------------------------------------------------

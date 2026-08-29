@@ -50,6 +50,11 @@
 
 #include "Companions/AshenTrioPartySpawnerComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Soul/AshenDualityStateVectorCompiler.h"
+#include "World/AshenDualityShaderShiftComponent.h"
+#include "World/AshenDualityEngineShaderModulator.h"
+#include "World/AshenDualityMaterialInstanceAdapterComponent.h"
+#include "World/AshenDualityPostProcessVolumeAdapter.h"
 
 AAshenCombatCharacter::AAshenCombatCharacter()
 {
@@ -68,6 +73,13 @@ AAshenCombatCharacter::AAshenCombatCharacter()
 	OathRegistryComponent = CreateDefaultSubobject<UAshenOath_OathRegistryComponent>(TEXT("OathRegistryComponent"));
 	CurrencyComponent = CreateDefaultSubobject<UAshenOath_CurrencyComponent>(TEXT("CurrencyComponent"));
 	TrioPartySpawnerComponent = CreateDefaultSubobject<UAshenTrioPartySpawnerComponent>(TEXT("TrioPartySpawnerComponent"));
+
+	// Duality Transformation Pipeline (Soul & World Domains)
+	DualityStateVectorCompiler = CreateDefaultSubobject<UAshenDualityStateVectorCompiler>(TEXT("DualityStateVectorCompiler"));
+	DualityShaderShiftComponent = CreateDefaultSubobject<UAshenDualityShaderShiftComponent>(TEXT("DualityShaderShiftComponent"));
+	DualityEngineShaderModulator = CreateDefaultSubobject<UAshenDualityEngineShaderModulator>(TEXT("DualityEngineShaderModulator"));
+	DualityMaterialInstanceAdapter = CreateDefaultSubobject<UAshenDualityMaterialInstanceAdapterComponent>(TEXT("DualityMaterialInstanceAdapter"));
+	DualityPostProcessAdapter = CreateDefaultSubobject<UAshenDualityPostProcessVolumeAdapter>(TEXT("DualityPostProcessAdapter"));
 
 
 
