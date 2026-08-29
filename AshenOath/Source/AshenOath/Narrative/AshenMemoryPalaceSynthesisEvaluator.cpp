@@ -5,21 +5,33 @@
 UAshenMemoryPalaceSynthesisEvaluator::UAshenMemoryPalaceSynthesisEvaluator()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	BalanceDataAsset = nullptr;
 }
 
 float UAshenMemoryPalaceSynthesisEvaluator::EvaluateSynthesisScore(
 	int32 PinnedCluesCount,
 	float AverageReliability) const
 {
-	// 3 valid clues with 1.0 reliability reaches ~1.0 synthesis
-	const float BaseScore = static_cast<float>(PinnedCluesCount) * 0.35f;
+	float BaseMultiplier = 0.35f;
+	if (BalanceDataAsset)
+	{
+		BaseMultiplier = BalanceDataAsset->GetClampedDeduction().ClueBaseWeightMultiplier;
+	}
+
+	const float BaseScore = static_cast<float>(PinnedCluesCount) * BaseMultiplier;
 	return FMath::Clamp(BaseScore * AverageReliability, 0.0f, 1.0f);
 }
 
 bool UAshenMemoryPalaceSynthesisEvaluator::IsCaseResolvable(
 	float SynthesisScore) const
 {
-	return SynthesisScore >= 0.85f;
+	float Threshold = 0.85f;
+	if (BalanceDataAsset)
+	{
+		Threshold = BalanceDataAsset->GetClampedDeduction().ResolutionSynthesisThreshold;
+	}
+
+	return SynthesisScore >= Threshold;
 }
 
 bool UAshenMemoryPalaceSynthesisEvaluator::DetectContradiction(
