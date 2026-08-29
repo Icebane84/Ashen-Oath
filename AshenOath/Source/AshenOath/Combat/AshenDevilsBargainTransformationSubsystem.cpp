@@ -2,6 +2,8 @@
 // Build 657: Ashen Devils Bargain Transformation Subsystem
 
 #include "AshenDevilsBargainTransformationSubsystem.h"
+#include "Companions/AshenDevilsBargainTrustAtrophyDirector.h"
+#include "Engine/GameInstance.h"
 
 void UAshenDevilsBargainTransformationSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -17,6 +19,14 @@ void UAshenDevilsBargainTransformationSubsystem::AcceptDevilsBargain()
 	ActiveAttackSpeedMultiplier = 3.0f; // +200% Attack Speed (3.0x multiplier)
 	const float TrustAtrophy = 25.0f;
 	const float SpiritualStain = 20.0f;
+
+	if (UGameInstance* GI = GetGameInstance())
+	{
+		if (UAshenDevilsBargainTrustAtrophyDirector* AtrophyDirector = GI->GetSubsystem<UAshenDevilsBargainTrustAtrophyDirector>())
+		{
+			AtrophyDirector->ApplyDevilsBargainTrustAtrophy(TrustAtrophy);
+		}
+	}
 
 	OnBargainAccepted.Broadcast(ActiveAttackSpeedMultiplier, TrustAtrophy, SpiritualStain);
 
