@@ -57,10 +57,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-035`** | **Equipment Weight Class Dodge Scaling, Cardiac Pulse Exhaustion & Poise-Break Hitstop Invariant** | `KINEMATICS-SPEC-091` / Combat / Audio / AI / UI / Haptics | Weight class roll duration ($0.32\text{s}-0.70\text{s}$), i-frames ($0.28\text{s}-0.05\text{s}$), cardiac exhaustion swing slowdown ($+25\%$), $0.20\text{s}$ poise break hitstop ($0.02\times$), and perfect deflection surge ($+50$ stamina, $+35$ Flame, $+25\%$ riposte). |
 | **`SYN-036`** | **Cognitive Dissonance Delta Solver, Dynamic Contradiction Quest Branching & Companion Alignment Invariant** | `CSE-SPEC-092` / Narrative / Combat / AI / UI / Haptics | Dissonance index calculation ($D \in [0.0, 1.0]$), $+30\%$ harmony synergy bonus, $+20\%$ fracture tandem stamina penalty, 3 contract archetypes, and companion alignment ultimatums. |
 | **`SYN-037`** | **Chaos Rubble NavMesh Chokepoints, Weather Perception Clamping & Conductive Lightning Arcing Invariant** | `DESTRUCTION-WEATHER-AI-SPEC-093` / World / Combat / AI / Audio / UI / Haptics | Dynamic Lock-On clamping ($1500\text{uu} \to 500\text{uu}$), AI vision cone narrowing ($90^\circ \to 45^\circ$), $350\text{uu}$ chain-lightning arcs ($350\text{ Shock Dmg}$, $1.2\text{s}$ stagger), and $\pm 65^\circ$ AI pincer flanking around rubble chokepoints. |
+| **`SYN-038`** | **Oathbringer 4-Guard Martial Kinematics, Rhythm Flow Recovery Canceling & Runic Seam Inscription Invariant** | `STANCE-SPEC-094` / Combat / UI / AI / Audio / Haptics | 4 historical guards (Vom Tag $+40\%$ poise, Pflug $-30\%$ stamina, Ochs $+0.12\text{s}$ parry, Mordhau $100\%$ armor pen), $0.15\text{s}$ Flow Glint cancels ($0\text{ stamina}$ cost, $+25\%$ momentum), and fuller seam runic transitions. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-038`: Oathbringer 4-Guard Martial Kinematics, Rhythm Flow Recovery Canceling & Runic Seam Inscription Invariant
+
+* **Target Subsystems:** `UAshenOathbringerStanceFlowConvergenceSubsystem`, `UAshenStanceKinematicsEvaluator`, `UAshenFlowChainingTimingEvaluator`, `UAshenOathbringerRunicSeamDirectorComponent`, `UAshenOathbringerStanceHapticBridge`
+* **Related Specifications:** [`STANCE-SPEC-094`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/STANCE-SPEC-094%20%28THE%20OATHBRINGER%20HISTORICAL%20GREATSWORD%20STANCE%20FLOW%20&%20RUNIC%20MASTERY%20LOOP%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{DamageMultiplier}(\text{Stance}) = \begin{cases} 1.40\times, & \text{VomTag (High Wrath)} \\ 1.00\times, & \text{Pflug (Low Plow)} \\ 1.10\times, & \text{Ochs (Crown Guard)} \\ 1.25\times, & \text{Mordhau (Half-Sword / Pommel)} \end{cases}$$
+$$\text{PoiseDamageMultiplier}(\text{Stance}) = \begin{cases} 1.40\times (+40\%), & \text{VomTag} \\ 0.90\times, & \text{Pflug} \\ 1.15\times, & \text{Ochs} \\ 1.75\times (+75\% \text{ Shield Shatter}), & \text{Mordhau} \end{cases}$$
+$$\text{ArmorPenetration}(\text{Stance}) = \begin{cases} 20\%, & \text{VomTag} \\ 35\%, & \text{Pflug} \\ 15\%, & \text{Ochs} \\ 100\% \text{ (True Damage)}, & \text{Mordhau} \end{cases}$$
+$$\text{FlowCancelTiming} = \{ t \in [t_{\text{start}}, t_{\text{start}} + 0.15\text{s}] \implies \text{Cost} = 0.0\text{ Stamina}, \text{Momentum} = +25.0\%, \text{FlowCharge} = +15.0 \}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Historical Greatsword Martial Purity:** Eliminates inappropriate dual-wielding in favor of deep, historically grounded two-handed German greatsword martial guards (Liechtenauer tradition). Each guard commands distinct tactical utility against differing enemy armor classes and postures.
+* **Diegetic Runic Feedback & Haptics:** Seamless stance transitions dynamically shift Oathbringer's fuller seam shader between Crimson Embers, White Flame Wind, Golden Shield Shimmer, and Umbral Shock, with corresponding DualSense acoustic resonance.
+
+---
 
 ---
 

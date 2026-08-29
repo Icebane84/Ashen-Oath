@@ -6,6 +6,35 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Build 3075: Master Batch #153 — The Oathbringer Historical Greatsword Stance Flow & Runic Mastery Loop (STANCE-SPEC-094)
+**Domain:** Combat / UI / AI / Audio / Core / Orchestration / Narrative / World / QA  
+**Status:** 3,075 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*
+
+| Build | File | Class | Domain |
+|-------|------|-------|--------|
+| 3056 | `AshenOathbringerStanceTypes.h` | `AshenOathbringerStanceTypes` — Enums (2), Structs (2), Multicast Delegates (4) | Combat |
+| 3057 | `AshenOathbringerStanceFlowConvergenceSubsystem.h/.cpp` | `UAshenOathbringerStanceFlowConvergenceSubsystem` — Master stance subsystem | Combat |
+| 3058 | `AshenStanceKinematicsEvaluator.h/.cpp` | `UAshenStanceKinematicsEvaluator` — Computes poise damage & armor penetration | Combat |
+| 3059 | `AshenFlowChainingTimingEvaluator.h/.cpp` | `UAshenFlowChainingTimingEvaluator` — Evaluates 0.15s Flow Glint 0 stamina cancels | Combat |
+| 3060 | `AshenOathbringerRunicSeamDirectorComponent.h/.cpp` | `UAshenOathbringerRunicSeamDirectorComponent` — Directs fuller seam shader colors | Combat |
+| 3061 | `AshenVomTagOverheadCleaveGASAbility.h/.cpp` | `UAshenVomTagOverheadCleaveGASAbility` — Vom Tag +40% poise cleave with hyper-armor | Combat |
+| 3062 | `AshenPflugLungingThrustGASAbility.h/.cpp` | `UAshenPflugLungingThrustGASAbility` — Pflug lunging point-pierce (-30% stamina) | Combat |
+| 3063 | `AshenOchsCrownCounterBindGASAbility.h/.cpp` | `UAshenOchsCrownCounterBindGASAbility` — Ochs +0.12s crown deflection counter-bind | Combat |
+| 3064 | `AshenMordhauArmorShatterGASAbility.h/.cpp` | `UAshenMordhauArmorShatterGASAbility` — Mordhau 100% armor pen & +75% shield shatter | Combat |
+| 3065 | `AshenStanceFlowCancelRhythmGASAbility.h/.cpp` | `UAshenStanceFlowCancelRhythmGASAbility` — Stamina-neutral recovery cancel ability | Combat |
+| 3066 | `UBTService_AshenAIStanceReactionTactics.h/.cpp` | `UBTService_AshenAIStanceReactionTactics` — AI service for stance reaction tactics | AI |
+| 3067 | `AshenUserWidget_OathbringerStanceMatrixHUD.h/.cpp` | `UAshenUserWidget_OathbringerStanceMatrixHUD` — UMG HUD for 4-guard stance diamond | UI |
+| 3068 | `AshenOathbringerStanceAudioSubsystem.h/.cpp` | `UAshenOathbringerStanceAudioSubsystem` — MetaSounds 90Hz swoosh & 880Hz steel bind | Audio |
+| 3069 | `AshenStanceCameraTraumaAdapter.h/.cpp` | `UAshenStanceCameraTraumaAdapter` — Camera kick adapter for heavy overheads | Combat |
+| 3070 | `AAshenStanceTrainingTargetWorldActor.h/.cpp` | `AAshenStanceTrainingTargetWorldActor` — Stance training combat dummy actor | World |
+| 3071 | `AshenOathbringerStanceSaveGameAdapter.h/.cpp` | `UAshenOathbringerStanceSaveGameAdapter` — Serializes stance mastery & Flow Charge | Core |
+| 3072 | `AshenOathbringerStanceNarrativeBridge.h/.cpp` | `UAshenOathbringerStanceNarrativeBridge` — Contextual companion stance barks | Narrative |
+| 3073 | `AshenOathbringerStanceHapticBridge.h/.cpp` | `UAshenOathbringerStanceHapticBridge` — DualSense 0.90 thud & 0.95 flow ping haptics | Combat |
+| 3074 | `AshenOathbringerStanceMasterBridge.h/.cpp` | `UAshenOathbringerStanceMasterBridge` — Master bridge connecting stances & HUD | Orchestration |
+| 3075 | `AshenMasterBatch153AutomationTest.cpp` | `FAshenMasterBatch153AutomationTest` — Comprehensive QA automation test suite | QA |
+
+---
+
 ### Build 3055: Master Batch #152 — Environmental Destruction, Weather Hazards & AI Combat Tactics Loop (DESTRUCTION-WEATHER-AI-SPEC-093)
 **Domain:** World / Combat / AI / UI / Core / Orchestration / Audio / Narrative / QA  
 **Status:** 3,055 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

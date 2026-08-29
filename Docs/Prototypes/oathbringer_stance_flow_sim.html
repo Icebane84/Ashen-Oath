@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Oathbringer Stance Flow & Runic Mastery Simulator</title>
+    <!-- Traceability: STANCE-SPEC-094 | Builds 3056-3075 -->
+    <style>
+        :root {
+            --bg-primary: #060911;
+            --bg-secondary: #0d1527;
+            --panel-bg: #152238;
+            --border-color: #2b3d5c;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #04070e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #04070e;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stance-diamond-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 44px);
+            gap: 6px;
+            align-items: center;
+            justify-items: center;
+            margin: 4px 0;
+        }
+
+        .btn-stance {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .btn-stance:hover {
+            border-color: var(--accent-amber);
+        }
+
+        .btn-stance.active {
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-vomtag { background: #450a0a; border-color: #ef4444; color: #fca5a5; }
+        .btn-pflug { background: #0c4a6e; border-color: #38bdf8; color: #bae6fd; }
+        .btn-ochs { background: #713f12; border-color: #eab308; color: #fef08a; }
+        .btn-mordhau { background: #3b0764; border-color: #c084fc; color: #e9d5ff; }
+
+        .btn-action {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fef08a;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>OATHBRINGER GREATSWORD STANCE FLOW & RUNIC MASTERY SIMULATOR</h1>
+                <p>4 Historical Guards (Vom Tag, Pflug, Ochs, Mordhau) ↔ Rhythm Flow Cancels (STANCE-SPEC-094)</p>
+            </div>
+            <div class="badge">BUILD 3075</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="stanceCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Directional D-Pad Stance Matrix:</div>
+                <div class="stance-diamond-grid">
+                    <div></div>
+                    <button class="btn-stance btn-vomtag active" id="btnVomTag">▲ VOM TAG<br><span style="font-size: 9px;">(High Wrath)</span></button>
+                    <div></div>
+
+                    <button class="btn-stance btn-ochs" id="btnOchs">◀ OCHS<br><span style="font-size: 9px;">(Crown Guard)</span></button>
+                    <div style="font-size: 10px; color: var(--text-muted); text-align: center; font-weight: bold;">OATHBRINGER</div>
+                    <button class="btn-stance btn-mordhau" id="btnMordhau">▶ MORDHAU<br><span style="font-size: 9px;">(Half-Sword)</span></button>
+
+                    <div></div>
+                    <button class="btn-stance btn-pflug" id="btnPflug">▼ PFLUG<br><span style="font-size: 9px;">(Low Plow)</span></button>
+                    <div></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="btn-action" id="btnAttack" style="background: #1e3a8a; border-color: #38bdf8; font-weight: bold;">⚔️ EXECUTE STRIKE</button>
+                    <button class="btn-action" id="btnFlowCancel" style="background: #065f46; border-color: #10b981; font-weight: bold;">✨ FLOW GLINT CANCEL</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "Bring the hammer down! Split them open!"
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT STANCE TELEMETRY</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Active Guard</div>
+                <div class="telemetry-val" id="stanceVal" style="color: var(--accent-red);">VOM TAG</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Poise / Armor Pen</div>
+                <div class="telemetry-val" id="poiseVal">+40% / 20%</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Flow Charge Battery</div>
+                <div class="telemetry-val" id="flowVal">0 / 100</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Kinetic Momentum</div>
+                <div class="telemetry-val" id="momentumVal" style="color: var(--accent-emerald);">1.00x (+0%)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Acoustics for Vom Tag, Pflug, Ochs, Mordhau, Flow Chime)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTone(freq, type, duration, gainVal = 0.25) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Stance State
+        let activeStance = 'VomTag';
+        let flowCharge = 0;
+        let momentumMultiplier = 1.00;
+        let bFlowGlintActive = false;
+        let bSwinging = false;
+
+        const barkBox = document.getElementById('barkBox');
+
+        function setStance(stance) {
+            activeStance = stance;
+            document.querySelectorAll('.btn-stance').forEach(btn => btn.classList.remove('active'));
+
+            let stanceText = "VOM TAG";
+            let poiseText = "+40% / 20%";
+            let stanceColor = "var(--accent-red)";
+
+            switch (stance) {
+                case 'VomTag':
+                    document.getElementById('btnVomTag').classList.add('active');
+                    stanceText = "VOM TAG";
+                    poiseText = "+40% / 20%";
+                    stanceColor = "#ef4444";
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Bring the hammer down! Split them open!"`;
+                    playTone(90, 'sawtooth', 0.6, 0.4);
+                    break;
+                case 'Pflug':
+                    document.getElementById('btnPflug').classList.add('active');
+                    stanceText = "PFLUG";
+                    poiseText = "-10% / 35%";
+                    stanceColor = "#38bdf8";
+                    barkBox.innerHTML = `<strong>[Serafina]:</strong> "Pierce their line, quick and true!"`;
+                    playTone(480, 'sine', 0.3, 0.2);
+                    break;
+                case 'Ochs':
+                    document.getElementById('btnOchs').classList.add('active');
+                    stanceText = "OCHS";
+                    poiseText = "+15% / 15%";
+                    stanceColor = "#eab308";
+                    barkBox.innerHTML = `<strong>[Garrett]:</strong> "Good bind! Riposte through their guard!"`;
+                    playTone(880, 'triangle', 0.5, 0.3);
+                    break;
+                case 'Mordhau':
+                    document.getElementById('btnMordhau').classList.add('active');
+                    stanceText = "MORDHAU";
+                    poiseText = "+75% / 100%";
+                    stanceColor = "#c084fc";
+                    barkBox.innerHTML = `<strong>[Serafina]:</strong> "Crumble their armor! Strike with the pommel!"`;
+                    playTone(140, 'square', 0.4, 0.35);
+                    break;
+            }
+
+            document.getElementById('stanceVal').innerText = stanceText;
+            document.getElementById('stanceVal').style.color = stanceColor;
+            document.getElementById('poiseVal').innerText = poiseText;
+        }
+
+        document.getElementById('btnVomTag').onclick = () => setStance('VomTag');
+        document.getElementById('btnPflug').onclick = () => setStance('Pflug');
+        document.getElementById('btnOchs').onclick = () => setStance('Ochs');
+        document.getElementById('btnMordhau').onclick = () => setStance('Mordhau');
+
+        document.getElementById('btnAttack').onclick = () => {
+            bSwinging = true;
+            bFlowGlintActive = false;
+            setTimeout(() => {
+                bSwinging = false;
+                bFlowGlintActive = true;
+                setTimeout(() => { bFlowGlintActive = false; }, 400);
+            }, 300);
+        };
+
+        document.getElementById('btnFlowCancel').onclick = () => {
+            if (bFlowGlintActive) {
+                flowCharge = Math.min(100, flowCharge + 15);
+                momentumMultiplier = 1.25;
+                playTone(1320, 'sine', 0.5, 0.3); // High resonance flow chime
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Flawless transition, Kaelen! Press the momentum!"`;
+                document.getElementById('flowVal').innerText = `${flowCharge} / 100`;
+                document.getElementById('momentumVal').innerText = "1.25x (+25%)";
+                bFlowGlintActive = false;
+            } else {
+                momentumMultiplier = 1.00;
+                document.getElementById('momentumVal').innerText = "1.00x (+0%)";
+                playTone(110, 'sawtooth', 0.2, 0.2);
+            }
+        };
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "OATHBRINGER_STANCE_FLOW_TELEMETRY",
+                active_stance: activeStance,
+                flow_charge: flowCharge,
+                momentum_multiplier: momentumMultiplier,
+                flow_glint_active: bFlowGlintActive
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Greatsword Canvas Visualizer
+        const canvas = document.getElementById('stanceCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 335;
+            const centerY = 220;
+
+            // Draw Background Stance Diamond
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - 140);
+            ctx.lineTo(centerX + 140, centerY);
+            ctx.lineTo(centerX, centerY + 140);
+            ctx.lineTo(centerX - 140, centerY);
+            ctx.closePath();
+            ctx.stroke();
+
+            // Draw Oathbringer Blade Silhouette
+            let angle = -Math.PI / 4;
+            let seamColor = "#ef4444";
+
+            switch (activeStance) {
+                case 'VomTag': angle = -Math.PI / 2; seamColor = "#ef4444"; break; // Pointing straight up
+                case 'Pflug': angle = -Math.PI / 6; seamColor = "#38bdf8"; break;  // Pointing low forward
+                case 'Ochs': angle = -Math.PI * 0.8; seamColor = "#eab308"; break; // Crossguard high
+                case 'Mordhau': angle = Math.PI / 2; seamColor = "#c084fc"; break; // Inverted pointing down
+            }
+
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(angle);
+
+            // Greatsword Hilt & Crossguard
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(-15, 60, 30, 8); // Crossguard
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(-4, 68, 8, 30);  // Hilt
+            ctx.fillStyle = '#94a3b8';
+            ctx.beginPath(); ctx.arc(0, 102, 6, 0, Math.PI * 2); ctx.fill(); // Pommel
+
+            // Nightsteel Blade
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.moveTo(-10, 60);
+            ctx.lineTo(0, -120); // Tip
+            ctx.lineTo(10, 60);
+            ctx.closePath();
+            ctx.fill();
+
+            // Runic Fuller Seam Glow
+            ctx.strokeStyle = seamColor;
+            ctx.lineWidth = bFlowGlintActive ? 6 : 3;
+            ctx.shadowColor = seamColor;
+            ctx.shadowBlur = bFlowGlintActive ? 25 : 12;
+            ctx.beginPath();
+            ctx.moveTo(0, 50);
+            ctx.lineTo(0, -90);
+            ctx.stroke();
+
+            ctx.restore();
+
+            // Draw Flow Glint Flash Ring
+            if (bFlowGlintActive) {
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 160, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#10b981';
+                ctx.font = 'bold 12px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText("✨ FLOW GLINT CANCEL READY (0 STAMINA)", centerX, centerY + 185);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        setStance('VomTag');
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
