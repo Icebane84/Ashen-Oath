@@ -5,19 +5,32 @@
 UAshenAdrenalineSurgeEvaluator::UAshenAdrenalineSurgeEvaluator()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+	BalanceDataAsset = nullptr;
 }
 
 float UAshenAdrenalineSurgeEvaluator::EvaluateAdrenalineGain(
 	ESeveranceSeverityTier Severity) const
 {
+	float DecapAdrenaline = 35.0f;
+	float BisectionAdrenaline = 40.0f;
+	float MajorLimbAdrenaline = 25.0f;
+
+	if (BalanceDataAsset)
+	{
+		FAdrenalineSurgeBalancing Adrenaline = BalanceDataAsset->GetClampedAdrenaline();
+		DecapAdrenaline = Adrenaline.DecapitationAdrenaline;
+		BisectionAdrenaline = Adrenaline.BisectionAdrenaline;
+		MajorLimbAdrenaline = Adrenaline.MajorLimbAdrenaline;
+	}
+
 	switch (Severity)
 	{
 	case ESeveranceSeverityTier::Decapitation:
-		return 35.0f;
+		return DecapAdrenaline;
 	case ESeveranceSeverityTier::TotalBisection:
-		return 40.0f;
+		return BisectionAdrenaline;
 	case ESeveranceSeverityTier::MajorLimb:
-		return 25.0f;
+		return MajorLimbAdrenaline;
 	case ESeveranceSeverityTier::MinorLimb:
 	default:
 		return 15.0f;
@@ -27,5 +40,11 @@ float UAshenAdrenalineSurgeEvaluator::EvaluateAdrenalineGain(
 float UAshenAdrenalineSurgeEvaluator::EvaluateStaminaRefill(
 	float CurrentAdrenaline) const
 {
-	return FMath::Clamp(CurrentAdrenaline * 0.50f, 15.0f, 50.0f);
+	float RefillScalar = 0.50f;
+	if (BalanceDataAsset)
+	{
+		RefillScalar = BalanceDataAsset->GetClampedAdrenaline().StaminaRefillScalar;
+	}
+
+	return FMath::Clamp(CurrentAdrenaline * RefillScalar, 15.0f, 50.0f);
 }

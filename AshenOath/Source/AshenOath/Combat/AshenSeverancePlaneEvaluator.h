@@ -1,16 +1,17 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Combat/AshenSeveranceTypes.h"
+#include "Combat/AshenSeveranceBalanceDataAsset.h"
 #include "AshenSeverancePlaneEvaluator.generated.h"
 
 /**
  * UAshenSeverancePlaneEvaluator
  * 
- * Computes cutting plane normals, procedural slice orientations, and ragdoll impulse vectors based on attack strike direction.
+ * Computes cutting plane normals, procedural slice orientations, and ragdoll impulse vectors
+ * based on attack strike direction with DataAsset support.
  */
 UCLASS(ClassGroup=(Ashen), meta=(BlueprintSpawnableComponent))
 class ASHENOATH_API UAshenSeverancePlaneEvaluator : public UActorComponent
@@ -23,4 +24,7 @@ public:
 	/** Evaluates cutting plane parameters from strike vector */
 	UFUNCTION(BlueprintPure, Category = "Ashen|Severance|Evaluator")
 	FSeveranceSlicePlaneData EvaluateSlicePlane(const FVector& HitLocation, const FVector& SwingTrajectory, ESeveranceBoneTarget BoneTarget) const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|Severance|Balancing")
+	UAshenSeveranceBalanceDataAsset* BalanceDataAsset;
 };
