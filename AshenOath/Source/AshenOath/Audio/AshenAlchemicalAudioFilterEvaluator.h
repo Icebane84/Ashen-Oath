@@ -1,16 +1,17 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Audio/AshenQuartzAudioTypes.h"
+#include "Audio/AshenQuartzAudioBalanceDataAsset.h"
 #include "AshenAlchemicalAudioFilterEvaluator.generated.h"
 
 /**
  * UAshenAlchemicalAudioFilterEvaluator
  * 
- * Computes frequency cutoff values (Hz), side-chain ducking gain (dB), and pitch offsets for Garrett's tactical interventions.
+ * Computes frequency cutoff values (Hz), side-chain ducking gain (dB),
+ * and pitch offsets for Garrett's tactical interventions with DataAsset support.
  */
 UCLASS(ClassGroup=(Ashen), meta=(BlueprintSpawnableComponent))
 class ASHENOATH_API UAshenAlchemicalAudioFilterEvaluator : public UActorComponent
@@ -31,4 +32,7 @@ public:
 	/** Evaluates pitch offset in semitones [0.0 to -12.0] */
 	UFUNCTION(BlueprintPure, Category = "Ashen|Audio|Filter")
 	float EvaluatePitchOffsetSemitones(EAlchemicalAudioFilter Filter) const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|Audio|Balancing")
+	UAshenQuartzAudioBalanceDataAsset* BalanceDataAsset;
 };
