@@ -1,6 +1,7 @@
 // Copyright Ashen Oath Tactical RPG. All Rights Reserved.
 
 #include "Combat/AshenOathbringerStanceFlowConvergenceSubsystem.h"
+#include "Combat/AshenMartialStanceBalanceDataAsset.h"
 
 UAshenOathbringerStanceFlowConvergenceSubsystem::UAshenOathbringerStanceFlowConvergenceSubsystem()
 {
@@ -54,9 +55,31 @@ void UAshenOathbringerStanceFlowConvergenceSubsystem::OpenFlowGlintWindow(
 	FlowWindowData.WindowDurationSeconds = DurationSeconds;
 }
 
+void UAshenOathbringerStanceFlowConvergenceSubsystem::SetBalanceDataAsset(UAshenMartialStanceBalanceDataAsset* NewDataAsset)
+{
+	BalanceDataAsset = NewDataAsset;
+	ReloadBalanceConfig();
+}
+
+void UAshenOathbringerStanceFlowConvergenceSubsystem::ReloadBalanceConfig()
+{
+	UpdateKinematicsForStance(CurrentStance);
+	OnOathbringerStanceChanged.Broadcast(CurrentStance, CurrentKinematics);
+	OnRunicSeamColorUpdated.Broadcast(CurrentKinematics.RunicSeamColor, 4.0f);
+	UE_LOG(LogTemp, Log, TEXT("UAshenOathbringerStanceFlowConvergenceSubsystem: Live balance config reloaded."));
+}
+
 void UAshenOathbringerStanceFlowConvergenceSubsystem::UpdateKinematicsForStance(
 	EOathbringerMartialStance Stance)
 {
+	if (BalanceDataAsset)
+	{
+		// 1. Data-Driven path: Pull designer-tuned kinematics from DataAsset
+		CurrentKinematics = BalanceDataAsset->GetKinematicsForStance(Stance);
+		return;
+	}
+
+	// 2. Canonical Fallback path: Preserves loop integrity if DataAsset is null
 	CurrentKinematics.Stance = Stance;
 
 	switch (Stance)

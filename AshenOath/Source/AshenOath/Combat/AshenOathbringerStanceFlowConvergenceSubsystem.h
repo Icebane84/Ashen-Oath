@@ -41,6 +41,17 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ashen|Oathbringer|Stance")
 	float GetCurrentFlowCharge() const { return FlowWindowData.CurrentFlowCharge; }
 
+	/** Assigns a dynamic balance data asset to live-tune stance numbers safely */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|Oathbringer|Tuning")
+	void SetBalanceDataAsset(class UAshenMartialStanceBalanceDataAsset* NewDataAsset);
+
+	/** Re-reads current stance kinematics from the assigned balance data asset */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|Oathbringer|Tuning")
+	void ReloadBalanceConfig();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|Oathbringer|Tuning")
+	class UAshenMartialStanceBalanceDataAsset* BalanceDataAsset;
+
 	UPROPERTY(BlueprintAssignable, Category = "Ashen|Oathbringer|Stance")
 	FOnOathbringerStanceChanged OnOathbringerStanceChanged;
 

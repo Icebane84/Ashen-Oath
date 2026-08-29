@@ -11,6 +11,7 @@
 #include "Combat/AshenColossusRuptureCleaveGASAbility.h"
 #include "Combat/AshenGravimetricPommelShatterGASAbility.h"
 #include "Combat/AshenRunicForgeConvergenceSubsystem.h"
+#include "Combat/AshenMartialStanceBalanceDataAsset.h"
 #include "Soul/AshenDualityStateVectorCompiler.h"
 #include "World/AshenDualityShaderShiftComponent.h"
 #include "AbilitySystemComponent.h"
@@ -89,6 +90,19 @@ bool FAshenMasterEndToEndIntegrationAutomationTest::RunTest(const FString& Param
 			// Switch to Ochs (Crown Guard)
 			StanceSubsystem->SwitchStance(EOathbringerMartialStance::Ochs_CrownGuard);
 			TestTrue(TEXT("Current stance is Ochs"), StanceSubsystem->GetCurrentStance() == EOathbringerMartialStance::Ochs_CrownGuard);
+
+			// Test Live Data-Driven Balancing via UAshenMartialStanceBalanceDataAsset
+			UAshenMartialStanceBalanceDataAsset* CustomBalance = NewObject<UAshenMartialStanceBalanceDataAsset>(World);
+			CustomBalance->VomTagConfig.DamageMultiplier = 2.20f;
+			CustomBalance->PflugConfig.StaminaCost = 8.0f;
+
+			StanceSubsystem->SetBalanceDataAsset(CustomBalance);
+			StanceSubsystem->SwitchStance(EOathbringerMartialStance::VomTag_HighWrath);
+
+			TestNearlyEqual(TEXT("Vom Tag tuned damage multiplier applied live"), StanceSubsystem->GetCurrentKinematics().DamageMultiplier, 2.20f, 0.01f);
+
+			StanceSubsystem->SwitchStance(EOathbringerMartialStance::Pflug_LowPlow);
+			TestNearlyEqual(TEXT("Pflug tuned stamina cost applied live"), StanceSubsystem->GetCurrentKinematics().StaminaCost, 8.0f, 0.01f);
 		}
 	}
 
