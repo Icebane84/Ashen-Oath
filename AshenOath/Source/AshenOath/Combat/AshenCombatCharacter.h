@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AshenOathCharacter.h"
+#include "Combat/AshenOathbringerStanceTypes.h"
 #include "AshenCombatCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDevilsBargainCrisisEntered);
@@ -72,6 +73,12 @@ protected:
 	 */
 	UFUNCTION()
 	void HandleHealthChanged(float CurrentHealth, float MaxHealth);
+
+	UFUNCTION()
+	void HandleRunicSeamColorUpdated(FLinearColor NewColor, float EmissiveIntensity);
+
+	UFUNCTION()
+	void HandleStanceChanged(EOathbringerMartialStance NewStance, const FOathbringerStanceKinematics& Kinematics);
 
 	UFUNCTION()
 	void ResetDevilsBargainTimeDilation();

@@ -1,6 +1,14 @@
 // Copyright Phoenix Protocol. All rights reserved.
 
 #include "AshenCombatCharacter.h"
+#include "Combat/AshenOathbringerStanceFlowConvergenceSubsystem.h"
+#include "Combat/AshenSovereignDualityTransformationAbility.h"
+#include "Combat/AshenExecuteFlowResonanceFinisherGASAbility.h"
+#include "Combat/AshenInscribeGuardSigilGASAbility.h"
+#include "Combat/AshenAscendOathbringerTierGASAbility.h"
+#include "Combat/AshenColossusRuptureCleaveGASAbility.h"
+#include "Combat/AshenGravimetricPommelShatterGASAbility.h"
+#include "AbilitySystemComponent.h"
 #include "CombatEnemy.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -165,6 +173,50 @@ void AAshenCombatCharacter::BeginPlay()
 			}
 		}
 	}
+
+	// Connect to Oathbringer Stance Flow Convergence Subsystem
+	if (UWorld* World = GetWorld())
+	{
+		if (UAshenOathbringerStanceFlowConvergenceSubsystem* StanceSubsystem = World->GetSubsystem<UAshenOathbringerStanceFlowConvergenceSubsystem>())
+		{
+			StanceSubsystem->OnRunicSeamColorUpdated.AddDynamic(this, &AAshenCombatCharacter::HandleRunicSeamColorUpdated);
+			StanceSubsystem->OnOathbringerStanceChanged.AddDynamic(this, &AAshenCombatCharacter::HandleStanceChanged);
+			
+			// Initialize with active seam color
+			HandleRunicSeamColorUpdated(StanceSubsystem->GetCurrentKinematics().RunicSeamColor, 1.0f);
+		}
+	}
+
+	// Grant Master Batch Core Gameplay Abilities
+	if (UAbilitySystemComponent* ASC = GetAbilitySystemComponent())
+	{
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenSovereignDualityTransformationAbility::StaticClass(), 1, 0, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenExecuteFlowResonanceFinisherGASAbility::StaticClass(), 1, 1, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenInscribeGuardSigilGASAbility::StaticClass(), 1, 2, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenAscendOathbringerTierGASAbility::StaticClass(), 1, 3, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenColossusRuptureCleaveGASAbility::StaticClass(), 1, 4, this));
+		ASC->GiveAbility(FGameplayAbilitySpec(UAshenGravimetricPommelShatterGASAbility::StaticClass(), 1, 5, this));
+	}
+}
+
+void AAshenCombatCharacter::HandleRunicSeamColorUpdated(FLinearColor NewColor, float EmissiveIntensity)
+{
+	for (UMaterialInstanceDynamic* MID : DynamicMaterials)
+	{
+		if (MID)
+		{
+			MID->SetVectorParameterValue(TEXT("RunicSeamColor"), NewColor);
+			MID->SetVectorParameterValue(TEXT("EmissiveColor"), NewColor * EmissiveIntensity);
+			MID->SetScalarParameterValue(TEXT("EmissiveIntensity"), EmissiveIntensity);
+		}
+	}
+}
+
+void AAshenCombatCharacter::HandleStanceChanged(EOathbringerMartialStance NewStance, const FOathbringerStanceKinematics& Kinematics)
+{
+	HandleRunicSeamColorUpdated(Kinematics.RunicSeamColor, 1.25f);
+	UE_LOG(LogTemp, Log, TEXT("AAshenCombatCharacter: Switched stance to %d (Runic Seam R: %.2f, G: %.2f, B: %.2f)"),
+		static_cast<int32>(NewStance), Kinematics.RunicSeamColor.R, Kinematics.RunicSeamColor.G, Kinematics.RunicSeamColor.B);
 }
 
 void AAshenCombatCharacter::Tick(float DeltaSeconds)
