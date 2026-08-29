@@ -60,10 +60,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-038`** | **Oathbringer 4-Guard Martial Kinematics, Rhythm Flow Recovery Canceling & Runic Seam Inscription Invariant** | `STANCE-SPEC-094` / Combat / UI / AI / Audio / Haptics | 4 historical guards (Vom Tag $+40\%$ poise, Pflug $-30\%$ stamina, Ochs $+0.12\text{s}$ parry, Mordhau $100\%$ armor pen), $0.15\text{s}$ Flow Glint cancels ($0\text{ stamina}$ cost, $+25\%$ momentum), and fuller seam runic transitions. |
 | **`SYN-039`** | **Oathbringer Soot Battery, Garrett Alchemical Blade Coatings & Thermal Shock Reaction Invariant** | `ALCHEMICAL-SLAG-SPEC-095` / Combat / UI / AI / Audio / Haptics | Soot accumulation ($0.0 \to 1.0$), Superheated Slag ($\ge 0.80$, $+35\text{ Heat}$), $450\text{ Heat AoE}$ Conflagration Deflagration, and $+100\%$ Thermal Shock poise shatter. |
 | **`SYN-040`** | **Campfire Cooking Meal Hazard Immunities, Thermal Shelter Thermodynamic Gating & Sanctuary Beacon Journal Inscription Invariant** | `SANCTUARY-SURVIVAL-SPEC-096` / World / Combat / UI / AI / Audio / Haptics | Meal hazard immunities ($100\%$), 3-tier shelter thermodynamics ($-2.5\text{ HP/s}$ hypothermia vs $2.0\times$ cavern cooking), $1200\text{uu}$ beacon haven, and auto-logging Forensic Journal entries. |
+| **`SYN-041`** | **Forensic Clue Deduction Pinning, Mindscape Memory Shard Synthesis & Trauma Catharsis Invariant** | `FORENSIC-MINDSCAPE-SPEC-097` / Narrative / World / Combat / UI / AI / Audio / Haptics | Clue reliability weights ($0.65-1.0$), deduction synthesis threshold ($S \ge 0.85$), $+50.0\text{ Sanity}$ catharsis purge, and $+25\%$ crit $/ +40\%$ poise anatomical mastery. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-041`: Forensic Clue Deduction Pinning, Mindscape Memory Shard Synthesis & Trauma Catharsis Invariant
+
+* **Target Subsystems:** `UAshenForensicMindscapeConvergenceSubsystem`, `UAshenMemoryPalaceSynthesisEvaluator`, `UAshenForensicClueRegistryEvaluator`, `UAshenMindscapeSpectralDioramaComponent`, `UAshenForensicMindscapeHapticBridge`
+* **Related Specifications:** [`FORENSIC-MINDSCAPE-SPEC-097`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/FORENSIC-MINDSCAPE-SPEC-097%20%28THE%20FORENSIC%20JOURNAL%20&%20MEMORY%20PALACE%20RECONSTRUCTION%20LOOP%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{Reliability}(C) = \begin{cases} 1.00, & \text{PhysicalAutopsyEvidence} \\ 0.95, & \text{BotanicalChemicalSample} \\ 0.85, & \text{HistoricalRunicInscription} \\ 0.65, & \text{CompanionTestimony} \end{cases}$$
+$$S = \min\left( \sum_{i=1}^{N} (0.35 \cdot \text{Reliability}(C_i)), 1.0 \right)$$
+$$\text{MemoryPalaceResolution} = \{ S \ge 0.85 \implies \text{SanityPurge} = +50.0, \text{FactionCritBonus} = +25\%, \text{PoiseBonus} = +40\% \}$$
+$$\text{ContradictionBreakthrough} = \{ C_{\text{Autopsy}} \land C_{\text{Testimony}} \implies \Delta D = -0.40 \text{ (Cognitive Harmony)} \}$$
+
+#### 💡 Architectural Insight & Impact:
+* **The Unified Investigative-Combat Pipeline:** Investigating the dark world transforms from static lore reading into high-stakes tactical advantage. Every autopsy solved in the Memory Palace grants Kaelen permanent anatomical precision against that faction in real-time combat.
+* **Psychic Trauma Catharsis:** Linking memory reconstruction directly to Sanity restoration gives the player a deliberate cognitive loop to heal psychological fracture caused by Eldrin whispers and nightfall madness.
+
+---
 
 ---
 

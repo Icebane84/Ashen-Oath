@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Forensic Journal & Memory Palace Simulator</title>
+    <!-- Traceability: FORENSIC-MINDSCAPE-SPEC-097 | Builds 3116-3135 -->
+    <style>
+        :root {
+            --bg-primary: #060911;
+            --bg-secondary: #0d1527;
+            --panel-bg: #152238;
+            --border-color: #2b3d5c;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-purple);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #04070e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #04070e;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .clue-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .clue-item {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .clue-item:hover {
+            border-color: var(--accent-purple);
+        }
+
+        .clue-item.pinned {
+            border-color: var(--accent-emerald);
+            background: #064e3b;
+        }
+
+        .btn-action {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action:hover {
+            background: var(--border-color);
+            border-color: var(--accent-purple);
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fef08a;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-purple);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>FORENSIC JOURNAL & MEMORY PALACE SIMULATOR</h1>
+                <p>Physical Autopsy Evidence ↔ Contradiction Matrix ↔ 3D Spectral Reenactment (SPEC-097)</p>
+            </div>
+            <div class="badge">BUILD 3135</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="mindscapeCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Active Forensic Case: Massacre at the Sunken Shrine</div>
+                
+                <div class="clue-list">
+                    <div class="clue-item pinned" id="clue1" onclick="toggleClue(1)">
+                        <span>🔍 Severed Sternum (Autopsy)</span>
+                        <span style="color: var(--accent-emerald);">PINNED</span>
+                    </div>
+                    <div class="clue-item pinned" id="clue2" onclick="toggleClue(2)">
+                        <span>🧪 Vitriol Acid Residue (Chemical)</span>
+                        <span style="color: var(--accent-emerald);">PINNED</span>
+                    </div>
+                    <div class="clue-item" id="clue3" onclick="toggleClue(3)">
+                        <span>📜 Inquisitor Dogma (Testimony)</span>
+                        <span style="color: var(--accent-red);">CONTRADICTION</span>
+                    </div>
+                    <div class="clue-item" id="clue4" onclick="toggleClue(4)">
+                        <span>🪨 Pre-Sundering Stela (Runic)</span>
+                        <span style="color: var(--text-muted);">UNPINNED</span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                    <button class="btn-action" id="btnSynthesize" style="background: #4c1d95; border-color: #c084fc; font-weight: bold;">✨ SYNTHESIZE MEMORY PALACE CASE (ENTER MINDSCAPE)</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "Look at that bone fracture. No beast did that—that's military steel."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT INVESTIGATION TELEMETRY</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Synthesis Index</div>
+                <div class="telemetry-val" id="synthesisVal">0.70 (IN PROGRESS)</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Case Status</div>
+                <div class="telemetry-val" id="statusVal" style="color: var(--accent-amber);">DEDUCTION ACTIVE</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Sanity Catharsis</div>
+                <div class="telemetry-val" id="sanityVal" style="color: var(--accent-emerald);">+50.0 READY</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Autopsy Mastery</div>
+                <div class="telemetry-val" id="masteryVal" style="color: var(--accent-cyan);">+25% CRIT DMG</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Spectral Chime, Epiphany Swell, Quill Scratch)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTone(freq, type, duration, gainVal = 0.25) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Investigation State
+        let pinnedClues = [1, 2];
+        let synthesisScore = 0.70;
+        let bMindscapeReenacting = false;
+        let bCaseSolved = false;
+
+        const barkBox = document.getElementById('barkBox');
+
+        function toggleClue(id) {
+            initAudio();
+            const idx = pinnedClues.indexOf(id);
+            const el = document.getElementById(`clue${id}`);
+
+            if (idx > -1) {
+                pinnedClues.splice(idx, 1);
+                el.classList.remove('pinned');
+                el.children[1].innerText = "UNPINNED";
+                el.children[1].style.color = "var(--text-muted)";
+                playTone(300, 'triangle', 0.15, 0.2);
+            } else {
+                pinnedClues.push(id);
+                el.classList.add('pinned');
+                el.children[1].innerText = "PINNED";
+                el.children[1].style.color = "var(--accent-emerald)";
+                playTone(800, 'sine', 0.2, 0.3); // Sharp mechanical pin snap
+            }
+
+            synthesisScore = Math.min(pinnedClues.length * 0.35, 1.0);
+            updateTelemetry();
+        }
+
+        document.getElementById('btnSynthesize').onclick = () => {
+            initAudio();
+            if (synthesisScore >= 0.85) {
+                bCaseSolved = true;
+                bMindscapeReenacting = true;
+                playTone(2100, 'sine', 1.2, 0.4); // Ethereal glass chime
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "The physical wounds don't lie. My Order's scriptures were forged to conceal this slaughter."`;
+            } else {
+                playTone(180, 'sawtooth', 0.3, 0.3);
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "We need more evidence before the memory will stabilize, Kaelen."`;
+            }
+            updateTelemetry();
+        };
+
+        function updateTelemetry() {
+            document.getElementById('synthesisVal').innerText = `${synthesisScore.toFixed(2)} (${synthesisScore >= 0.85 ? 'RESOLVED' : 'IN PROGRESS'})`;
+            document.getElementById('synthesisVal').style.color = (synthesisScore >= 0.85) ? 'var(--accent-emerald)' : 'var(--accent-amber)';
+
+            document.getElementById('statusVal').innerText = bCaseSolved ? "TRUTH RECONSTRUCTED" : "DEDUCTION ACTIVE";
+            document.getElementById('statusVal').style.color = bCaseSolved ? "var(--accent-emerald)" : "var(--accent-amber)";
+        }
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "FORENSIC_MINDSCAPE_TELEMETRY",
+                synthesis_score: synthesisScore,
+                case_solved: bCaseSolved,
+                pinned_clues_count: pinnedClues.length,
+                sanity_restored: bCaseSolved ? 50.0 : 0.0
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Memory Palace Hologram Visualizer
+        const canvas = document.getElementById('mindscapeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 335;
+            const centerY = 220;
+
+            // Draw Ethereal Mindscape Hologram Geometry
+            ctx.strokeStyle = (bCaseSolved) ? 'rgba(192, 132, 252, 0.8)' : 'rgba(56, 189, 248, 0.4)';
+            ctx.lineWidth = 1.5;
+
+            // Holographic Deduction Pin Threads
+            ctx.beginPath();
+            ctx.moveTo(centerX - 120, centerY - 80);
+            ctx.lineTo(centerX, centerY);
+            ctx.lineTo(centerX + 120, centerY - 80);
+            ctx.lineTo(centerX, centerY + 100);
+            ctx.closePath();
+            ctx.stroke();
+
+            // Pinned Clue Node Spheres
+            const nodes = [
+                { x: centerX - 120, y: centerY - 80, label: "Autopsy" },
+                { x: centerX + 120, y: centerY - 80, label: "Chemical" },
+                { x: centerX, y: centerY + 100, label: "Runic Stela" },
+                { x: centerX, y: centerY, label: "Nexus" }
+            ];
+
+            nodes.forEach(node => {
+                ctx.fillStyle = (bCaseSolved) ? '#c084fc' : '#38bdf8';
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = '10px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText(node.label, node.x, node.y - 14);
+            });
+
+            if (bMindscapeReenacting) {
+                // Spectral Reenactment Hologram Wave
+                ctx.fillStyle = 'rgba(192, 132, 252, 0.15)';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 150 + Math.sin(Date.now() * 0.005) * 15, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#c084fc';
+                ctx.font = 'bold 12px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText("✨ 3D SPECTRAL REENACTMENT ACTIVE (TRUTH RESTORED)", centerX, centerY + 180);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateTelemetry();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
