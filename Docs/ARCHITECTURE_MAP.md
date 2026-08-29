@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Patch v158.1.0**: The Causal Convergence & Sentinel Anti-Theater Remediation Suite ([`CONVERGENCE_REMEDIATION_LOG.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CONVERGENCE_REMEDIATION_LOG.md)) — Complete Causal Wiring of Duality Pipeline, Living Oaths, Companion Fatigue, Devil's Bargain, 4-Way Combat Synergy, and Live DataAsset Stance Tuning.
 - **Master Batch #158 (Builds 3156–3175)**: The Executioner's Severance & Dismemberment Physics Pipeline (SEVERANCE-DISMEMBERMENT-SPEC-099) (100% Pure Gameplay Density)
 - **Master Batch #157 (Builds 3136–3155)**: The Runic Forge Weapon Evolution & Sigil Inscription Matrix (RUNIC-FORGE-SPEC-098) (100% Pure Gameplay Density)
 - **Master Batch #156 (Builds 3116–3135)**: The Forensic Journal & Memory Palace Reconstruction Loop (FORENSIC-MINDSCAPE-SPEC-097) (100% Pure Gameplay Density)

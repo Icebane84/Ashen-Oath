@@ -6,6 +6,23 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Patch v158.1.0: The Causal Convergence & Sentinel Anti-Theater Remediation Suite
+**Governing Directives:** Sentinel Audit Response (`Ashen_Oath_Theater_Pattern_Audit.md` & `Ashen_Oath_Wiring_Remediation_Guide.md`), SKILL.md 6-Step Causal Wiring Law  
+**Status:** All 4 Core Priority Layers & 6 Value-Asserting Automation Test Suites Clean (0 Errors, 0 Warnings)
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Priority 1: Duality Pipeline` | `Soul/`, `World/`, `Combat/` | `SanityComponent` $\to$ `UAshenDualityStateVectorCompiler` $\to$ 5 World Adapters (`ShaderModulator`, `MIDAdapter`, `PostProcessAdapter`, `ShaderShift`, `LocusActor`) | `FAshenMasterEndToEndIntegrationAutomationTest` |
+| `Priority 2: Living Oaths & Oath Burn` | `Combat/`, `Soul/`, `Core/` | `UAshenOath_OathRegistryComponent` & `UAshenLivingOathRegistrySubsystem` driving material glow (`OathBurdenAmount`, `OathBurnActive`, `OathResonanceGlow`) and `-15.0 stamina/s` Oath Burn debuff | `FAshenLivingOathIntegrationTest` |
+| `Priority 3: Sanctuary & Companion Trio` | `Companions/`, `World/`, `UI/` | `UAshenCompanionFatigueSubsystem` tracking Garrett (Twin-Blade X-Lock / Flasks) and Serafina (Healing Prayers), $\ge 0.70$ vulnerability, and `ResetAllFatigue()` campfire rest | `FAshenCompanionTrioFatigueIntegrationTest` |
+| `Priority 4: Devil's Bargain Crisis` | `Combat/`, `Companions/`, `Core/` | HP $\le 25\%$ slow-motion window ($0.1\times$), `UAshenDevilsBargainTransformationSubsystem` $+200\%$ attack speed surge, and `UAshenDevilsBargainTrustAtrophyDirector` ($-25\%$ trust) | `FAshenDevilsBargainIntegrationTest` |
+| `Combat Synergy: Sanctuary Field` | `World/`, `Combat/` | `UAshenSerafinaSacredBarrierGASAbility` spawning `AAshenSanctuaryField` ($500\text{uu}$ dome) granting $+250\%$ stamina acceleration ($3.50\times$) and AoE damage protection | `FAshenCoreCombatSynergyIntegrationTest` |
+| `Combat Synergy: Garrett Flank Assist` | `Combat/`, `Companions/` | `UAshenGarrettFlankAssistAbility` motion-warping behind target with $1.8\times$ stagger multiplier against Recovery state | `FAshenCoreCombatSynergyIntegrationTest` |
+| `Combat Synergy: Oathbringer Riposte` | `Combat/` | `UAshenOathbringerRiposteAbility` executing on Staggered targets, syncing front transform, dealing $450\text{ damage}$, and resetting posture | `FAshenCoreCombatSynergyIntegrationTest` |
+| `Data-Driven Balance Asset` | `Combat/`, `World/` | `UAshenMartialStanceBalanceDataAsset` exposing inspector sliders and color pickers for live tuning of Vom Tag, Pflug, Ochs, Mordhau with boundary clamps | `FAshenMasterEndToEndIntegrationAutomationTest` |
+
+---
+
 ### Build 3175: Master Batch #158 — The Executioner's Severance & Dismemberment Physics Pipeline (SEVERANCE-DISMEMBERMENT-SPEC-099)
 **Domain:** Combat / UI / AI / Audio / Core / Orchestration / Narrative / World / QA  
 **Status:** 3,175 Builds Clean (0 Errors, 0 Warnings) — *100% Pure Gameplay Density*

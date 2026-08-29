@@ -63,10 +63,29 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-041`** | **Forensic Clue Deduction Pinning, Mindscape Memory Shard Synthesis & Trauma Catharsis Invariant** | `FORENSIC-MINDSCAPE-SPEC-097` / Narrative / World / Combat / UI / AI / Audio / Haptics | Clue reliability weights ($0.65-1.0$), deduction synthesis threshold ($S \ge 0.85$), $+50.0\text{ Sanity}$ catharsis purge, and $+25\%$ crit $/ +40\%$ poise anatomical mastery. |
 | **`SYN-042`** | **Oathbringer 5-Tier Ascension, 4-Guard Sigil Inscription & Flow Hybrid Finisher Invariant** | `RUNIC-FORGE-SPEC-098` / Combat / UI / AI / Audio / Haptics | 5-Tier ascension ($1.0\times \to 1.5\times$ base dmg, $100 \to 250\text{ Flow}$), 4 dedicated guard sockets, and $0.15\text{s}$ Flow Glint dual-sigil hybrid finisher ($1.40\times$). |
 | **`SYN-043`** | **Poise Break Execution Severance, Dynamic Slice Planes & Adrenaline Momentum Invariant** | `SEVERANCE-DISMEMBERMENT-SPEC-099` / Combat / UI / AI / Audio / Haptics | Poise break decapitations ($+35\text{ Adrenaline}$), total bisections ($+40$), stamina refills ($+25$), hyper-armor ($\ge 50\text{ Adrenaline}$), and $180\text{Hz}$ bone cleave audio. |
+| **`SYN-044`** | **Causal Combat Synergy, Sacred Sanctuary Acceleration & Data-Driven Stance Invariant** | `CONVERGENCE-SPEC-100` / Combat / World / Companions / UI / QA | $+250\%$ stamina acceleration in $500\text{uu}$ sanctuary dome, Garrett $1.8\times$ rear recovery stagger, $450\text{ damage}$ paired riposte posture reset, and live `UAshenMartialStanceBalanceDataAsset` data-driven tuning. |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-044`: Causal Combat Synergy, Sacred Sanctuary Acceleration & Data-Driven Stance Invariant
+
+* **Target Subsystems:** `UAshenOathbringerStanceFlowConvergenceSubsystem`, `AAshenSanctuaryField`, `UAshenSerafinaSacredBarrierGASAbility`, `UAshenGarrettFlankAssistAbility`, `UAshenOathbringerRiposteAbility`, `UAshenMartialStanceBalanceDataAsset`
+* **Related Documentation:** [`Docs/CONVERGENCE_REMEDIATION_LOG.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/CONVERGENCE_REMEDIATION_LOG.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{StaminaRegenRate}_{\text{Sanctuary}}(\text{Actor}) = \text{StaminaRegenRate}_{\text{Base}} \times 3.50\quad (+250\%)$$
+$$\text{FlankStaggerMultiplier}(\text{TargetState}) = \begin{cases} 1.80\times, & \text{if Target in } \text{State.Combat.Recovery} \\ 1.00\times, & \text{Otherwise} \end{cases}$$
+$$\vec{P}_{\text{GarrettWarp}} = \vec{P}_{\text{Target}} - (\hat{v}_{\text{TargetForward}} \cdot 150.0\text{uu})$$
+$$\vec{P}_{\text{RiposteExecution}} = \vec{P}_{\text{Target}} + (\hat{v}_{\text{TargetForward}} \cdot 120.0\text{uu})$$
+$$\text{DamageMultiplier}(\text{Stance}) = \text{Clamp}(\text{DataAssetConfig}, 0.10, 10.0)$$
+
+#### 💡 Architectural Insight & Impact:
+* **Zero-Entropy Live Tuning:** Balance iterations no longer require engine recompilation or binary hot-reloads; designers live-tune greatsword guards, stamina costs, and parry windows via `UPrimaryDataAsset` while C++ boundary invariants prevent mechanical desynchronization.
+* **100% Non-Tautological Testing:** Backed by `FAshenCoreCombatSynergyIntegrationTest` asserting live positional coordinates, mutated stamina acceleration rates, and posture resets.
 
 ---
 
