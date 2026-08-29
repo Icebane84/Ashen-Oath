@@ -61,10 +61,30 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-039`** | **Oathbringer Soot Battery, Garrett Alchemical Blade Coatings & Thermal Shock Reaction Invariant** | `ALCHEMICAL-SLAG-SPEC-095` / Combat / UI / AI / Audio / Haptics | Soot accumulation ($0.0 \to 1.0$), Superheated Slag ($\ge 0.80$, $+35\text{ Heat}$), $450\text{ Heat AoE}$ Conflagration Deflagration, and $+100\%$ Thermal Shock poise shatter. |
 | **`SYN-040`** | **Campfire Cooking Meal Hazard Immunities, Thermal Shelter Thermodynamic Gating & Sanctuary Beacon Journal Inscription Invariant** | `SANCTUARY-SURVIVAL-SPEC-096` / World / Combat / UI / AI / Audio / Haptics | Meal hazard immunities ($100\%$), 3-tier shelter thermodynamics ($-2.5\text{ HP/s}$ hypothermia vs $2.0\times$ cavern cooking), $1200\text{uu}$ beacon haven, and auto-logging Forensic Journal entries. |
 | **`SYN-041`** | **Forensic Clue Deduction Pinning, Mindscape Memory Shard Synthesis & Trauma Catharsis Invariant** | `FORENSIC-MINDSCAPE-SPEC-097` / Narrative / World / Combat / UI / AI / Audio / Haptics | Clue reliability weights ($0.65-1.0$), deduction synthesis threshold ($S \ge 0.85$), $+50.0\text{ Sanity}$ catharsis purge, and $+25\%$ crit $/ +40\%$ poise anatomical mastery. |
+| **`SYN-042`** | **Oathbringer 5-Tier Ascension, 4-Guard Sigil Inscription & Flow Hybrid Finisher Invariant** | `RUNIC-FORGE-SPEC-098` / Combat / UI / AI / Audio / Haptics | 5-Tier ascension ($1.0\times \to 1.5\times$ base dmg, $100 \to 250\text{ Flow}$), 4 dedicated guard sockets, and $0.15\text{s}$ Flow Glint dual-sigil hybrid finisher ($1.40\times$). |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-042`: Oathbringer 5-Tier Ascension, 4-Guard Sigil Inscription & Flow Hybrid Finisher Invariant
+
+* **Target Subsystems:** `UAshenRunicForgeConvergenceSubsystem`, `UAshenSigilResonanceEvaluator`, `UAshenBladeAscensionEvaluator`, `UAshenRunicSeamGlyphDirectorComponent`, `UAshenRunicForgeHapticBridge`
+* **Related Specifications:** [`RUNIC-FORGE-SPEC-098`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/RUNIC-FORGE-SPEC-098%20%28THE%20RUNIC%20FORGE%20WEAPON%20EVOLUTION%20&%20SIGIL%20INSCRIPTION%20MATRIX%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{BaseDmgMultiplier}(\text{Tier}) = \begin{cases} 1.00\times, & \text{Tier 1: Dull Nightsteel} \\ 1.10\times, & \text{Tier 2: Awakened Fuller} \\ 1.20\times, & \text{Tier 3: Sundered Sovereign (4 Sockets)} \\ 1.30\times, & \text{Tier 4: Eldrin's Crucible} \\ 1.50\times, & \text{Tier 5: Godslayer Apex} \end{cases}$$
+$$\text{FlowResonanceDamage}(S_A, S_B) = \begin{cases} 1.40\times \text{ Hybrid Strike}, & S_A \ne \text{None} \land S_B \ne \text{None} \land S_A \ne S_B \\ 1.00\times, & \text{Otherwise} \end{cases}$$
+$$\text{VomTagColossus} = \{ R_{\text{Fissure}} = 600.0\text{uu}, \text{PoiseDamage} = +150.0 \}$$
+$$\text{PflugZephyr} = \{ R_{\text{Suction}} = 400.0\text{uu}, \text{PullForce} = 1200.0\text{uu/s} \}$$
+
+#### 💡 Architectural Insight & Impact:
+* **True Weapon Permanence & Mastery:** Oathbringer grows alongside Kaelen rather than being discarded for generic tiered loot. The 4 dedicated guard sockets reward deep martial specialization, turning stance transitions into creative elemental puzzle-solving in combat.
+* **Flow Glint Hybrid Synergy:** Rhythm-timed cancels ($0.15\text{s}$) seamlessly bridge stance kinematics with runic metallurgy, transforming fast guard shifts into devastating hybrid finishers.
+
+---
 
 ---
 

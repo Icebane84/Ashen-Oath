@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Combat/AshenRunicForgeTypes.h"
 #include "Crafting/AshenRunicReliquaryTypes.h"
 #include "AshenRunicForgeSaveGameAdapter.generated.h"
 
 /**
  * UAshenRunicForgeSaveGameAdapter
  * 
- * Serializes and restores socketed weapon states, active mass configurations,
- * and boss core infusions.
+ * Serializes Oathbringer's ascension tier, 4 guard socketed sigils, and legacy soul forge states into SaveGame archives.
  */
 UCLASS(ClassGroup=(Ashen), meta=(BlueprintSpawnableComponent))
 class ASHENOATH_API UAshenRunicForgeSaveGameAdapter : public UActorComponent
@@ -21,11 +21,19 @@ class ASHENOATH_API UAshenRunicForgeSaveGameAdapter : public UActorComponent
 public:
 	UAshenRunicForgeSaveGameAdapter();
 
-	/** Packages weapon state for save file */
+	/** Packages forge state for SaveGame */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|Core|SaveGame")
+	void PackageForgeState(EOathbringerAscensionTier Tier, ESigilResonanceEffect VomTagSigil, ESigilResonanceEffect PflugSigil);
+
+	/** Restores forge state from SaveGame */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|Core|SaveGame")
+	bool RestoreForgeState(EOathbringerAscensionTier& OutTier, ESigilResonanceEffect& OutVomTag, ESigilResonanceEffect& OutPflug);
+
+	/** Packages legacy soul forge weapon state */
 	UFUNCTION(BlueprintCallable, Category = "Ashen|Core|SaveGame")
 	void PackageWeaponState(const FSoulForgeWeaponState& State);
 
-	/** Restores weapon state from save archive */
+	/** Restores legacy soul forge weapon state */
 	UFUNCTION(BlueprintCallable, Category = "Ashen|Core|SaveGame")
 	bool RestoreWeaponState(FSoulForgeWeaponState& OutState);
 
@@ -34,7 +42,16 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Ashen|Core|SaveGame")
-	FSoulForgeWeaponState SavedState;
+	EOathbringerAscensionTier SavedTier = EOathbringerAscensionTier::Tier1_DullNightsteel;
+
+	UPROPERTY(VisibleAnywhere, Category = "Ashen|Core|SaveGame")
+	ESigilResonanceEffect SavedVomTag = ESigilResonanceEffect::None;
+
+	UPROPERTY(VisibleAnywhere, Category = "Ashen|Core|SaveGame")
+	ESigilResonanceEffect SavedPflug = ESigilResonanceEffect::None;
+
+	UPROPERTY(VisibleAnywhere, Category = "Ashen|Core|SaveGame")
+	FSoulForgeWeaponState SavedWeaponState;
 
 private:
 	bool bHasSavedData = false;

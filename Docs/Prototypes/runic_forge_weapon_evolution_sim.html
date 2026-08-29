@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Runic Forge Weapon Evolution Simulator</title>
+    <!-- Traceability: RUNIC-FORGE-SPEC-098 | Builds 3136-3155 -->
+    <style>
+        :root {
+            --bg-primary: #060911;
+            --bg-secondary: #0d1527;
+            --panel-bg: #152238;
+            --border-color: #2b3d5c;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1140px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-amber);
+            font-family: monospace;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+        }
+
+        .canvas-card {
+            background: #04070e;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #04070e;
+            display: block;
+            width: 100%;
+            height: 440px;
+        }
+
+        .controls-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .socket-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .btn-socket {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn-socket:hover {
+            border-color: var(--accent-amber);
+        }
+
+        .btn-socket.active {
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-vomtag { border-color: #ef4444; color: #fca5a5; }
+        .btn-pflug  { border-color: #38bdf8; color: #bae6fd; }
+        .btn-ochs   { border-color: #f59e0b; color: #fde68a; }
+        .btn-mordhau{ border-color: #c084fc; color: #e9d5ff; }
+
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            margin: 4px 0;
+        }
+
+        .btn-tier {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 2px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn-tier.active {
+            border-color: var(--accent-amber);
+            background: #1e293b;
+        }
+
+        .btn-action {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action:hover {
+            background: var(--border-color);
+            border-color: var(--accent-amber);
+        }
+
+        .bark-box {
+            background: #0a1120;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            font-style: italic;
+            color: #fef08a;
+            line-height: 1.4;
+            min-height: 52px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .telemetry-title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .telemetry-val {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+            font-family: monospace;
+            color: var(--accent-amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>RUNIC FORGE WEAPON EVOLUTION & SIGIL MATRIX SIMULATOR</h1>
+                <p>Oathbringer 5-Tier Ascension ↔ 4 Guard Sigil Sockets ↔ Flow Hybrid Finisher (SPEC-098)</p>
+            </div>
+            <div class="badge">BUILD 3155</div>
+        </header>
+
+        <div class="main-grid">
+            <div class="canvas-card">
+                <canvas id="forgeCanvas" width="670" height="440"></canvas>
+            </div>
+
+            <div class="controls-card">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Oathbringer Ascension Tier:</div>
+                <div class="tier-grid">
+                    <button class="btn-tier" id="tier1" onclick="setTier(1)">T1 DULL</button>
+                    <button class="btn-tier" id="tier2" onclick="setTier(2)">T2 AWAKEN</button>
+                    <button class="btn-tier active" id="tier3" onclick="setTier(3)">T3 SOVEREIGN</button>
+                    <button class="btn-tier" id="tier4" onclick="setTier(4)">T4 CRUCIBLE</button>
+                    <button class="btn-tier" id="tier5" onclick="setTier(5)">T5 GODSLAYER</button>
+                </div>
+
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;">4 Guard Sigil Inscription Sockets:</div>
+                <div class="socket-grid">
+                    <button class="btn-socket btn-vomtag active" id="socketVomTag" onclick="toggleSocket('VomTag')">⚔️ VOM TAG<br><span style="font-size: 9px;">Colossus Cleave</span></button>
+                    <button class="btn-socket btn-pflug active" id="socketPflug" onclick="toggleSocket('Pflug')">💨 PFLUG<br><span style="font-size: 9px;">Zephyr Vacuum</span></button>
+                    <button class="btn-socket btn-ochs" id="socketOchs" onclick="toggleSocket('Ochs')">🛡️ OCHS<br><span style="font-size: 9px;">Sunken Sun Parry</span></button>
+                    <button class="btn-socket btn-mordhau" id="socketMordhau" onclick="toggleSocket('Mordhau')">🔨 MORDHAU<br><span style="font-size: 9px;">Gravity Pommel</span></button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                    <button class="btn-action" id="btnResonance" style="background: #78350f; border-color: #f59e0b; font-weight: bold;">⚡ TRIGGER 0.15s FLOW GLINT DUAL-SIGIL FINISHER (1.40x)</button>
+                </div>
+
+                <div class="bark-box" id="barkBox">
+                    [Garrett]: "That Colossus sigil will turn your Vom Tag overhead into an earthquake."
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action" id="copySeltBtn" style="flex: 1; color: var(--accent-emerald);">📋 COPY SELT RUNIC FORGE TELEMETRY</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="telemetry-grid">
+            <div class="telemetry-box">
+                <div class="telemetry-title">Ascension Tier</div>
+                <div class="telemetry-val" id="tierVal" style="color: var(--accent-amber);">T3 SUNDERED SOVEREIGN</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Base Dmg Multiplier</div>
+                <div class="telemetry-val" id="dmgVal" style="color: var(--accent-cyan);">1.20x BASE DMG</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Active Sockets</div>
+                <div class="telemetry-val" id="socketsVal" style="color: var(--accent-emerald);">4 UNLOCKED</div>
+            </div>
+            <div class="telemetry-box">
+                <div class="telemetry-title">Flow Resonance</div>
+                <div class="telemetry-val" id="flowVal" style="color: var(--accent-purple);">1.40x HYBRID READY</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Web Audio Synthesizer (Anvil Clangs, Quench Sizzle, Resonant Chime)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTone(freq, type, duration, gainVal = 0.25) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Forge State
+        let currentTier = 3;
+        let activeSockets = {
+            VomTag: true,
+            Pflug: true,
+            Ochs: false,
+            Mordhau: false
+        };
+        let bResonating = false;
+
+        const barkBox = document.getElementById('barkBox');
+
+        function setTier(tier) {
+            initAudio();
+            currentTier = tier;
+            document.querySelectorAll('.btn-tier').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tier${tier}`).classList.add('active');
+
+            playTone(850, 'triangle', 0.5, 0.4); // Ringing heavy anvil clang
+
+            if (tier === 5) {
+                barkBox.innerHTML = `<strong>[Serafina]:</strong> "The blade resonates with the primordial White Flame. No shadow can endure this steel."`;
+            } else if (tier === 3) {
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "All four guard sockets are cleared of slag. Time to inscribe the ancient glyphs."`;
+            } else {
+                barkBox.innerHTML = `<strong>[Garrett]:</strong> "Hold the tongs steady, Kaelen. Let the steel take the rune."`;
+            }
+            updateTelemetry();
+        }
+
+        function toggleSocket(socketName) {
+            initAudio();
+            activeSockets[socketName] = !activeSockets[socketName];
+            const btn = document.getElementById(`socket${socketName}`);
+
+            if (activeSockets[socketName]) {
+                btn.classList.add('active');
+                playTone(620, 'sine', 0.25, 0.3);
+            } else {
+                btn.classList.remove('active');
+                playTone(240, 'sine', 0.2, 0.2);
+            }
+
+            updateTelemetry();
+        }
+
+        document.getElementById('btnResonance').onclick = () => {
+            initAudio();
+            bResonating = true;
+            playTone(1200, 'sawtooth', 0.8, 0.45); // Massive flow resonance burst
+            barkBox.innerHTML = `<strong>[Flow Resonance Finisher]:</strong> "Vom Tag Cleave + Pflug Vacuum merged! 1.40x Hybrid Finisher Damage!"`;
+            setTimeout(() => { bResonating = false; }, 1200);
+            updateTelemetry();
+        };
+
+        function updateTelemetry() {
+            const tierNames = ["", "T1 DULL NIGHTSTEEL", "T2 AWAKENED FULLER", "T3 SUNDERED SOVEREIGN", "T4 ELDRIN'S CRUCIBLE", "T5 GODSLAYER APEX"];
+            const dmgScales = ["", "1.00x", "1.10x", "1.20x", "1.30x", "1.50x"];
+
+            document.getElementById('tierVal').innerText = tierNames[currentTier];
+            document.getElementById('dmgVal').innerText = `${dmgScales[currentTier]} BASE DMG`;
+            document.getElementById('socketsVal').innerText = (currentTier >= 3) ? "4 UNLOCKED" : (currentTier === 2 ? "2 UNLOCKED" : "0 UNLOCKED");
+        }
+
+        document.getElementById('copySeltBtn').onclick = () => {
+            const seltEvent = {
+                timestamp: new Date().toISOString(),
+                event_type: "RUNIC_FORGE_TELEMETRY",
+                ascension_tier: currentTier,
+                active_sockets: activeSockets,
+                flow_resonating: bResonating
+            };
+            navigator.clipboard.writeText(JSON.stringify(seltEvent, null, 2));
+            alert("📋 SELT-001 Telemetry Event Copied to Clipboard!\n\n" + JSON.stringify(seltEvent, null, 2));
+        };
+
+        // Real-Time Oathbringer Seam Visualizer
+        const canvas = document.getElementById('forgeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 335;
+            const centerY = 220;
+
+            // Draw Oathbringer Blade Silhouette
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.moveTo(centerX - 24, centerY - 140);
+            ctx.lineTo(centerX + 24, centerY - 140);
+            ctx.lineTo(centerX + 18, centerY + 140);
+            ctx.lineTo(centerX, centerY + 180);
+            ctx.lineTo(centerX - 18, centerY + 140);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw Fuller Seam Glowing Channel
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = (currentTier === 5 || bResonating) ? '#f8fafc' : (currentTier >= 3 ? '#f59e0b' : '#38bdf8');
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - 120);
+            ctx.lineTo(centerX, centerY + 130);
+            ctx.stroke();
+
+            // 4 Guard Sigil Sockets along the Fuller
+            const socketY = [centerY - 80, centerY - 20, centerY + 40, centerY + 100];
+            const socketColors = ['#ef4444', '#38bdf8', '#f59e0b', '#c084fc'];
+            const socketKeys = ['VomTag', 'Pflug', 'Ochs', 'Mordhau'];
+
+            for (let i = 0; i < 4; i++) {
+                const bActive = activeSockets[socketKeys[i]] && (currentTier >= 3);
+                ctx.fillStyle = bActive ? socketColors[i] : '#0f172a';
+                ctx.beginPath();
+                ctx.arc(centerX, socketY[i], 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = bActive ? '#fff' : '#334155';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            if (bResonating) {
+                // Radial Shockwave Finisher
+                ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 160 + Math.sin(Date.now() * 0.01) * 20, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#f59e0b';
+                ctx.font = 'bold 12px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText("⚡ 1.40x FLOW HYBRID FINISHER DISCHARGE", centerX, centerY + 205);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        updateTelemetry();
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
