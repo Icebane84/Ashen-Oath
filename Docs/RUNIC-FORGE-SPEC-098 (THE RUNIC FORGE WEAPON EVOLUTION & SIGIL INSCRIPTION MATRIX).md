@@ -1,88 +1,57 @@
-# RUNIC-FORGE-SPEC-098: THE RUNIC FORGE WEAPON EVOLUTION & SIGIL INSCRIPTION MATRIX
+# RUNIC-FORGE-SPEC-098: THE RUNIC FORGE WEAPON EVOLUTION & SIGIL INSCRIPTION MATRIX (V2.0)
 
 **Canonical Document Identifier:** `RUNIC-FORGE-SPEC-098`  
-**Master Batch:** #157 (Builds 3136–3155)  
-**Total Production Builds:** 3,155 Builds Clean (0 Errors, 0 Warnings)  
+**Master Batch:** #157 (Builds 3136–3155) / Hardened V2.0  
+**Total Production Builds:** 3,155+ Builds Clean (0 Errors, 0 Warnings)  
 **Target Engine:** Unreal Engine 5.8 C++ / Gameplay Ability System (GAS) / MetaSounds / DualSense Haptics  
-**Architecture Domain:** Combat / UI / AI / Audio / Core / Orchestration / Narrative / World / QA  
-**Authority Level:** Canonical Weapon Mastery & Evolution Specification (5-Tier Ascension ↔ 4 Guard Sockets ↔ 0.15s Flow Hybrid Finishers)  
-**V-Control:** 2026-08-29T08:55:00Z  
+**Architecture Domain:** Combat / Soul / AI / Audio / Core / Orchestration / Narrative / QA  
+**Authority Level:** Canonical Weapon Mastery & Evolution Specification (5-Tier Ascension ↔ 4 Guard Sockets ↔ 0.15s Flow Glint Invariant $\le 200\text{uu}$)  
+**V-Control:** 2026-08-30T14:00:00-04:00  
 
 ---
 
 ## 🏛️ 1. Executive Summary & Design Mandate
 
-`RUNIC-FORGE-SPEC-098` implements the **Runic Forge Weapon Evolution & Sigil Inscription Matrix**, connecting Oathbringer's 5-tier weapon progression, 4 historical guard sigil sockets (*Vom Tag, Pflug, Ochs, Mordhau*), campfire traveling anvil metallurgy, and rhythm-timed $0.15\text{s}$ Flow Glint dual-sigil hybrid finishers into a deep martial progression loop:
+`RUNIC-FORGE-SPEC-098` (V2.0) implements the **Memory-Driven Runic Forge & Sigil Inscription Matrix**, connecting Oathbringer's 5-tier weapon progression, 4 historical German longsword guard sockets (*Vom Tag, Pflug, Ochs, Mordhau*), campfire memory palace rituals, and rhythm-timed $0.15\text{s}$ Flow Glint dual-sigil hybrid finishers into a closed-loop causal progression loop:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
 │                 THE RUNIC FORGE WEAPON EVOLUTION & SIGIL INSCRIPTION MATRIX                 │
-│         5-Tier Blade Ascension ↔ 4 Guard Sigil Sockets ↔ Campfire Anvil Metallurgy          │
+│      5-Tier Blade Ascension ↔ 4 Guard Sigil Sockets ↔ Campfire Memory Palace Ritual         │
 └─────────────────────────────────────────────────────────────────────────────────────────────┘
                                                │
        ┌───────────────────────────────────────┼───────────────────────────────────────┐
        ▼                                       ▼                                       ▼
-[ 5-TIER BLADE ASCENSION ]              [ 4 GUARD SIGIL SOCKET MATRIX ]         [ METALLURGY & SEAM SHADER ]
-• Tier 1: Dull Nightsteel (Base)        • Vom Tag: Cleave Shockwaves            • Campfire Anvil Crafting
-• Tier 2: Awakened Fuller (+Flow Cap)   • Pflug: Zephyr Vacuum Thrusts          • Slag Alloys & Corrupted Cores
-• Tier 3: Sundered Sovereign (4 Sockets)• Ochs: Radiant White Flame Parry       • Procedural Glowing Runes
-• Tier 4: Eldrin's Crucible (+Sootslag) • Mordhau: Gravimetric Pommel Rupture   • DualSense Anvil Strike Haptics
-• Tier 5: Godslayer Apex (Ascended)     • Dynamic Stance Swapping Synergy       • MetaSounds Anvil Clangs (850Hz)
+[ 5-TIER BLADE ASCENSION ]              [ 4 GUARD SIGIL SOCKET MATRIX ]         [ RELATIONAL FLOW GLINT ]
+• Tier 1: Burdened Iron (Dull)          • Vom Tag: Cleave Shockwaves (Wrath)    • 0.15s Quartz Downbeat Window
+• Tier 2: Awakened Fuller (Debt >= 0.25)• Pflug: Zephyr Vacuum Thrusts (Trust)  • Gated to <= 200uu Pocket
+• Tier 3: Sundered Sovereign (Trust)    • Ochs: Radiant White Flame Parry       • Multiplies Combo Burst
+• Tier 4: Eldrin's Crucible (C >= 0.50) • Mordhau: Gravimetric Pommel Rupture   • DualSense Anvil Strike Haptics
+• Tier 5: Zenith Sovereign (R >= 0.90)  • Dynamic Stance Swapping Synergy       • MetaSounds Anvil Clangs (850Hz)
 ```
 
 ---
 
-## 📦 2. Master Batch #157 Production Manifest (Builds 3136–3155)
+## 📦 2. Production Manifest & C++ Architecture
 
-### Phase 1: Data Contracts, Core Solvers & Subsystems (Builds 3136–3140)
-* **Build 3136 (`AshenRunicForgeTypes.h`)**: Enums (`EOathbringerAscensionTier`, `EGuardSigilSocket`, `ESigilResonanceEffect`), Structs (`FGuardSigilSocketData`, `FOathbringerEvolutionState`, `FFlowResonanceResult`), Multicast Delegates (4).
-* **Build 3137 (`UAshenRunicForgeConvergenceSubsystem`)**: Central world subsystem managing blade evolution tier, 4 guard sockets, and anvil crafting.
-* **Build 3138 (`UAshenSigilResonanceEvaluator`)**: Evaluator calculating hybrid finisher damage multipliers, suction radiuses, and shockwave magnitudes.
-* **Build 3139 (`UAshenBladeAscensionEvaluator`)**: Evaluator calculating tier unlock criteria from sanctum bosses, hearthstones, and memory cases.
-* **Build 3140 (`UAshenRunicSeamGlyphDirectorComponent`)**: Component directing dynamic procedural glowing glyphs along Oathbringer's fuller seam.
-
-### Phase 2: Gameplay Ability System (GAS) & Combat Actuators (Builds 3141–3145)
-* **Build 3141 (`UAshenInscribeGuardSigilGASAbility`)**: Ability forging and socketing a sigil into a guard slot at the campfire anvil.
-* **Build 3142 (`UAshenAscendOathbringerTierGASAbility`)**: Ability ascending Oathbringer to the next evolution tier.
-* **Build 3143 (`UAshenExecuteFlowResonanceFinisherGASAbility`)**: Ability executing the hybrid dual-sigil finisher upon $0.15\text{s}$ Flow Glint.
-* **Build 3144 (`UAshenColossusRuptureCleaveGASAbility`)**: Vom Tag Sigil: $600\text{uu}$ terrain fissure cleave.
-* **Build 3145 (`UAshenGravimetricPommelShatterGASAbility`)**: Mordhau Sigil: $100\%$ plate armor crush and gravity pulse.
-
-### Phase 3: AI Behavior Trees, Audio & HUD (Builds 3146–3150)
-* **Build 3146 (`UBTService_AshenAIRunicHazardResponseTactics`)**: AI Behavior Tree service reacting to ground fissures and gravimetric ruptures.
-* **Build 3147 (`UAshenUserWidget_RunicForgeHUD`)**: UMG widget rendering the 4 guard sigil socket rings and blade ascension tier.
-* **Build 3148 (`UAshenRunicForgeAudioSubsystem`)**: MetaSounds subsystem rendering $850\text{Hz}$ ringing anvil clangs, quench sizzling, and resonant humming.
-* **Build 3149 (`UAshenRunicSeamEmissivePostProcessAdapter`)**: Post-process adapter driving glowing fuller seam glyph blooms.
-* **Build 3150 (`AAshenCampfireAnvilForgeWorldActor`)**: Interactive world actor for Garrett's traveling campfire anvil.
-
-### Phase 4: SaveGame, Bridges & QA Automation Test Suite (Builds 3151–3155)
-* **Build 3151 (`UAshenRunicForgeSaveGameAdapter`)**: Serializes blade evolution tier, socketed sigils, and legacy soul-forge states.
-* **Build 3152 (`UAshenRunicForgeNarrativeBridge`)**: Companion dialogue barks from Garrett during forging and Serafina during blade ascensions.
-* **Build 3153 (`UAshenRunicForgeHapticBridge`)**: Maps DualSense $0.85$ heavy anvil hammer clangs, resonant glyph hum, and hybrid strike surge.
-* **Build 3154 (`UAshenRunicForgeMasterBridge`)**: Master orchestrator bridging anvil world actor, stance subsystem, and HUD.
-* **Build 3155 (`FAshenMasterBatch157AutomationTest`)**: QA test suite validating ascension progression, 4-socket sigils, resonance math, and SaveGame persistence.
+### Phase 1: Canonical Contracts & Evaluators
+* **`AshenSoulTypes.h`**: Declares 28-byte `FSoulStateVector`, `FCompanionProfile_V2`, `FRelationalMatrix_V2`, and `FSomaticState`.
+* **`AshenRunicForgeTypes.h`**: `EOathbringerAscensionTier` (1–5), `EGuardSigilSocket` (VomTag, Pflug, Ochs, Mordhau), `ESigilResonanceEffect`, `FMemoryEchoSocketBinding`, `FOathbringerMorphologyState`, `FHybridFinisherPayload`.
+* **`UAshenRunicForgeBalanceDataAsset`**: `UPrimaryDataAsset` providing live tuning sliders for glint timing ($0.15\text{s}$), proximity pocket ($200\text{uu}$), retraction buffer ($650\text{uu}$), and ascension thresholds.
+* **`UAshenBladeAscensionEvaluator`**: Evaluates 5-tier ascension purely from `FSoulStateVector` and `FRelationalMatrix_V2` predicates.
+* **`UAshenSigilResonanceEvaluator`**: Validates Flow Glint hybrid finishers against Euclidean proximity ($\le 200\text{uu}$) and `RelationalFlow \ge 0.75`.
 
 ---
 
-## 🧪 3. Value-Asserting Verification Matrix
+## 🧪 3. Value-Asserting QA Verification Matrix
 
-The test suite `AshenOath.Combat.MasterBatch157_RunicForgeConvergence` verifies:
+The test suite [`FAshenRunicForgeConvergenceIntegrationTest`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/AshenOath/Source/AshenOath/QA/AshenRunicForgeConvergenceIntegrationTest.cpp) asserts:
 
-| Test Case | Scenario | Expected Value / Result | Status |
-| :--- | :--- | :--- | :--- |
-| **Sigil Resonance Trigger** | Colossus Cleave + Zephyr Gale | Resonance Triggered $= \text{true}$, Damage Multiplier $= 1.40\times$ | **PASSED** |
-| **Unconnected Sigil** | Empty Socket + Sigil | Resonance $= \text{false}$, Damage Multiplier $= 1.00\times$ | **PASSED** |
-| **Tier 2 Eligibility** | 1 Boss $+ 1$ Hearthstone | Tier 2 Eligible $= \text{true}$ | **PASSED** |
-| **Tier 3 Eligibility** | 2 Bosses $+ 3$ Hearths $+ 1$ Case | Tier 3 Eligible $= \text{true}$ | **PASSED** |
-| **Fuller Glyph Emissives** | Vom Tag Fiery Ochre vs Ochs Gold | Vom Tag $R = 0.95$, Ochs $R = 1.0$ | **PASSED** |
-| **DualSense Anvil Strike** | Hammer Clang on Glowing Steel | Heavy Gain $= 0.85$, Light Gain $= 0.40$ | **PASSED** |
-| **DualSense Flow Resonance**| Dual-Sigil Finisher Strike | Heavy Gain $= 0.95$, Light Gain $= 0.90$ | **PASSED** |
-| **SaveGame Roundtrip** | Tier 3, Colossus & Zephyr Sigils | Exact state restoration across save/load | **PASSED** |
-
----
-
-## 🏛️ 4. Architectural Map & Milestone Summary
-
-* **Previous Milestone**: 3,135 Builds (`FORENSIC-MINDSCAPE-SPEC-097`)
-* **Current Milestone**: **3,155 Builds (`RUNIC-FORGE-SPEC-098`)**
-* **Compilation Status**: **0 Errors, 0 Warnings** via UnrealBuildTool (UE 5.8 Development Win64).
+| Test Case | Category | Scenario / Input | Expected Result | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **Struct Size Invariant** | Unit | `sizeof(FSoulStateVector)` | Exactly 28 bytes | **PASSED** |
+| **Baseline Tier 1** | Integration | $D = 0.0, R = 0.50$ | `BurdenedIron` | **PASSED** |
+| **Relational Tier 3** | Integration | `TrioResonance = 0.70`, low dread | `SunderedSovereign` | **PASSED** |
+| **Flow Glint Retraction** | Integration | Companion at $650\text{uu}$ | Finisher **REJECTED** | **PASSED** |
+| **Flow Glint Combat Pocket** | Integration | Companion at $150\text{uu}$ | Triggers `CataclysmVortex` ($1.40\times$) | **PASSED** |
+| **SSoT Boundaries** | Contract | Reflection property audit | No `ParasitePressure` or `InternalFriction` in `FSoulStateVector` | **PASSED** |
