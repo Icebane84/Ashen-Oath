@@ -1,46 +1,78 @@
 // Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
-// Build 353: Ashen Companion Trust Divergence Subsystem
 
 #include "AshenCompanionTrustDivergenceSubsystem.h"
+#include "Soul/AshenSoulPublisher.h"
+#include "Soul/AshenSoulStateVector.h"
+#include "Engine/World.h"
+#include "Engine/GameInstance.h"
 
 void UAshenCompanionTrustDivergenceSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
-	DivergenceRisks.Empty();
-	UE_LOG(LogTemp, Log, TEXT("UAshenCompanionTrustDivergenceSubsystem: Initialized — Companion Divergence Tracker active."));
+	UE_LOG(LogTemp, Log, TEXT("UAshenCompanionTrustDivergenceSubsystem: Initialized — Zero-Entropy SSoT Divergence Tracker active."));
 }
 
-void UAshenCompanionTrustDivergenceSubsystem::EvaluateCompanionDivergenceRisk(FName CompanionID, float CurrentOathbondTrust)
+float UAshenCompanionTrustDivergenceSubsystem::EvaluateCompanionDivergenceRisk(FName CompanionID)
 {
-	if (CompanionID.IsNone()) return;
+	const float Risk = GetDivergenceRisk(CompanionID);
+	OnDivergenceRiskChanged.Broadcast(CompanionID, Risk * 100.0f);
 
-	const float Risk = FMath::Clamp(100.0f - CurrentOathbondTrust, 0.0f, 100.0f);
-	DivergenceRisks.Add(CompanionID, Risk);
-
-	OnDivergenceRiskChanged.Broadcast(CompanionID, Risk);
-
-	if (Risk >= 75.0f)
+	if (Risk >= 0.75f)
 	{
 		UE_LOG(LogTemp, Error, TEXT("UAshenCompanionTrustDivergenceSubsystem: CRITICAL DIVERGENCE RISK FOR '%s' — Risk: %.1f%% (Companion Betrayal Imminent!)."),
-			*CompanionID.ToString(), Risk);
+			*CompanionID.ToString(), Risk * 100.0f);
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UAshenCompanionTrustDivergenceSubsystem: Companion '%s' Divergence Risk: %.1f%%."),
-			*CompanionID.ToString(), Risk);
-	}
+	return Risk;
 }
 
-void UAshenCompanionTrustDivergenceSubsystem::RecordTrustShift(FName CompanionID, float TrustDelta)
+float UAshenCompanionTrustDivergenceSubsystem::GetDivergenceRisk(FName CompanionID) const
+{
+	if (CompanionID.IsNone()) return 0.0f;
+
+	if (UAshenSoulPublisher* Publisher = GetSoulPublisher())
+	{
+		const FRelationalMatrix_V2 Matrix = Publisher->GetRelationalMatrix();
+		if (CompanionID == FName("Garrett"))
+		{
+			// Garrett divergence driven by Somatic Dread tempered by trust
+			return FMath::Clamp(Matrix.GarrettProfile.SomaticDread * (1.0f - Matrix.GarrettProfile.InterpersonalTrust * 0.5f), 0.0f, 1.0f);
+		}
+		if (CompanionID == FName("Serafina"))
+		{
+			// Serafina divergence driven by Transference Burnout tempered by trust
+			return FMath::Clamp(Matrix.SerafinaProfile.TransferenceBurnout * (1.0f - Matrix.SerafinaProfile.InterpersonalTrust * 0.5f), 0.0f, 1.0f);
+		}
+	}
+	return 0.20f;
+}
+
+void UAshenCompanionTrustDivergenceSubsystem::RecordTrustShift(FName CompanionID, float NormalizedTrustDelta)
 {
 	if (CompanionID.IsNone()) return;
 
-	float CurrentRisk = DivergenceRisks.Contains(CompanionID) ? DivergenceRisks[CompanionID] : 0.0f;
-	float NewRisk = FMath::Clamp(CurrentRisk - TrustDelta, 0.0f, 100.0f);
-	DivergenceRisks.Add(CompanionID, NewRisk);
+	if (UAshenSoulPublisher* Publisher = GetSoulPublisher())
+	{
+		FSoulStateVector Delta;
+		Delta.Resolve = 0.0f;
+		Delta.Corruption = 0.0f;
+		Delta.IntegrationDebt = 0.0f;
+		Delta.Isolation = 0.0f;
+		Delta.GarrettTrust = (CompanionID == FName("Garrett")) ? NormalizedTrustDelta : 0.0f;
+		Delta.SerafinaTrust = (CompanionID == FName("Serafina")) ? NormalizedTrustDelta : 0.0f;
+		Publisher->CommitState(Delta);
 
-	OnDivergenceRiskChanged.Broadcast(CompanionID, NewRisk);
+		EvaluateCompanionDivergenceRisk(CompanionID);
+	}
+}
 
-	UE_LOG(LogTemp, Warning, TEXT("UAshenCompanionTrustDivergenceSubsystem: TRUST SHIFT RECORDED FOR '%s' (%+f) -> Divergence Risk: %.1f%%."),
-		*CompanionID.ToString(), TrustDelta, NewRisk);
+UAshenSoulPublisher* UAshenCompanionTrustDivergenceSubsystem::GetSoulPublisher() const
+{
+	if (const UWorld* World = GetWorld())
+	{
+		if (const UGameInstance* GI = World->GetGameInstance())
+		{
+			return GI->GetSubsystem<UAshenSoulPublisher>();
+		}
+	}
+	return nullptr;
 }

@@ -38,8 +38,8 @@ bool FAshenMartyrGuardCorruptionSpikeCalculatorTest::RunTest(const FString& Para
 	UAshenMartyrGuardCorruptionSpikeCalculator* Calc = NewObject<UAshenMartyrGuardCorruptionSpikeCalculator>();
 	if (!TestNotNull(TEXT("MartyrGuardCorruptionSpikeCalculator must be constructable"), Calc)) return false;
 
-	const float Spike = Calc->CalculateMartyrCorruptionSpike(100.0f, 20.0f);
-	TestEqual(TEXT("Calculated Corruption Spike must equal 15.0"), Spike, 15.0f);
+	const float Spike = Calc->CalculateMartyrCorruptionSpike(600.0f, 0.0f);
+	TestEqual(TEXT("Calculated Corruption Spike must equal 0.15"), Spike, 0.15f);
 
 	return true;
 }

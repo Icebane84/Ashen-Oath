@@ -4,6 +4,19 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.9.0: Relational & Somatic Pipeline Remediation Pass
+**Governing Directives:** Constitutional Law I (SSoT), `TAM-001`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Divergence Risk Remediation` | `Companions/`, `Soul/` | `UAshenCompanionTrustDivergenceSubsystem` stripped of private risk maps; derives betrayal risk mathematically from `FRelationalMatrix_V2` (Garrett Dread / Serafina Burnout) | `FAshenCompanionDivergenceSSoTIntegrationTest` |
+| `Martyr Corruption Normalization` | `Combat/`, `Soul/` | `UAshenMartyrGuardCorruptionSpikeCalculator` converted to normalized $[0.0, 1.0]$ bounds, committing $\Delta C$ and $\Delta D$ atomically to `UAshenSoulPublisher` | `FAshenMartyrCorruptionSpikeSSoTIntegrationTest` |
+| `Trust Diegetic Audio Subscription` | `Audio/`, `Soul/` | `UAshenDiegeticCompanionTrustAudioComponent` subscribing to `OnRelationalMatrixUpdated` to modulate Solfeggio harmony chords and divergence discord drones | `FAshenRelationalSomaticRemediationIntegrationTest` |
+| `Shadow Mark Surge SSoT Gating` | `Combat/`, `Soul/` | `UAshenShadowMarkSurgeGASAbility` automatically querying authoritative corruption ($C \ge 0.70$) from `UAshenSoulPublisher` and committing dysregulation deltas | `FAshenShadowMarkSurgeSSoTIntegrationTest` |
+
+---
+
 ### Patch v158.8.0: SSoT Legacy Seam Remediation Pass (Companions & Sanity Unification)
 **Governing Directives:** Constitutional Law I (SSoT), `CONTRACT-SPEC-051`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified
