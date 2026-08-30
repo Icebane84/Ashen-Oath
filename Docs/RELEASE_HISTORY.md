@@ -4,6 +4,20 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.12.0: Greatsword Stance Flow & 115 BPM Runic Mastery (CONVERGENCE-SPEC-101 / PRS-001-ENG-STANCE-101)
+**Governing Directives:** `CONVERGENCE-SPEC-101`, `PRS-001-MECH-010-MANIFES-V5`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Tri-Partite QA Automation Suite Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Liechtenauer 4-Guard Flow` | `Combat/` | `UAshenGreatswordStanceFlowComponent` continuous kinetic routing (*Vom Tag* $+40\%$ poise, *Pflug* $-30\%$ stamina, *Ochs* $+0.12\text{s}$ parry, *Mordhau* $100\%$ armor pen) | `FAshenStanceFlowUnitModifiersTest` |
+| `Dynamic 3-Zone Flow Glint` | `Combat/`, `Audio/`, `Haptics/` | $0.15\text{s}$ at $115\text{ BPM}$ apex recovery cancel ($0\text{ stamina}$, $+25\%$ speed, $+15\%$ translation, $528\text{ Hz}$ silver bell chime, $-3\text{ dB}$ world duck, DualSense tap) | `FAshenFlowGlint3ZoneIntegrationTest` |
+| `Dual-Sigil Companion Resonance` | `Combat/`, `Companions/`, `Soul/` | Gated to $\le 200\text{uu}$ companion pocket: Garrett (*Vom Tag/Mordhau*) triggers *Twin Flank Shred* ($1.8\times$ posture); Serafina (*Ochs/Pflug*) triggers *Aegis Harmonic Pulse* ($+35\text{ stamina}$); commits $+0.05$ trust | `FAshenFlowGlint3ZoneIntegrationTest` |
+| `Oathbringer 3-Stage Lifecycle` | `Combat/`, `Soul/` | `UAshenOathbringerLifecycleComponent` 3-stage mass scaling (Dormant $120\text{kg} \to$ Predictive $45\text{kg} \to$ Autonomous $0\text{kg}$ + $400\text{uu/s}$ pull) and 4 dedicated fuller seam runic loci sockets | `FAshenOathbringerLifecycleContractTest` |
+| `Zero-Recompile Balance Asset` | `Combat/` | `UAshenStanceFlowBalanceDataAsset` exposing live editor sliders and safety clamps for all stance scalars, timing windows, and companion pocket radii | `FAshenStanceFlowUnitModifiersTest` |
+
+---
+
 ### Patch v158.11.0: Dialogue Gating & Trust Dynamics Remediation Pass
 **Governing Directives:** Constitutional Law I (SSoT), `CONTRACT-SPEC-051`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified
