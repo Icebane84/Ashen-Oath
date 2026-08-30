@@ -4,7 +4,39 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
-## 📈 Summary of Builds
+### Patch v158.7.0: Squad Command Wheel & Tactical Co-Op Combos (TACTICAL-SPEC-066 / COMPANION-SPEC-075)
+**Governing Directives:** `TACTICAL-SPEC-066`, `COMPANION-SPEC-075`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Squad Command Wheel Component` | `Combat/`, `Companions/` | `UAshenSquadCommandWheelComponent` engaging decoupled $0.20\times$ bullet-time dilation and multi-dimensional `FRelationalMatrix_V2` gating | `FAshenSquadCommandWheelIntegrationTest` |
+| `Companion Tactical Order Ability` | `Combat/` | `UAshenCompanionTacticalOrderAbility` executing targeted companion commands with motion warping and asymmetric fatigue accrual | `FAshenSquadCommandWheelIntegrationTest` |
+| `Multi-Dimensional Relational Gating` | `Combat/`, `Soul/` | Garrett high fear (`SomaticDread >= 0.60`) fallback to Caltrop Snare; Serafina burnout (`TransferenceBurnout >= 0.70`) locking offensive burst into Aegis Barrier | `FAshenSquadCommandWheelIntegrationTest` |
+
+---
+
+### Patch v158.6.0: Biome & Chaos Destruction Physics Loop (DESTRUCTION-WEATHER-AI-SPEC-093 / WEATHER-SPEC-089)
+**Governing Directives:** `DESTRUCTION-WEATHER-AI-SPEC-093`, `WEATHER-SPEC-089`, `CHAOS-SPEC-086`  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Chaos NavMesh Cutter Component` | `World/`, `AI/` | `UAshenChaosNavMeshCutterComponent` capturing fracture events, cutting dynamic obstacle volumes, elevating `ImmediateThreat`, and signaling parabolic vault arcs | `FAshenChaosDestructionWeatherIntegrationTest` |
+| `Weather Shelter Thermodynamics` | `World/`, `Soul/` | `UAshenWeatherShelterThermodynamicsComponent` managing 3-tier shelter thermodynamics and converting unsheltered exposure to `IntegrationDebt` ($D$) at $+0.02/\text{s}$ | `FAshenChaosDestructionWeatherIntegrationTest` |
+
+---
+
+### Patch v158.5.0: ASC Lifecycle & Event Dispatch Spine (AshenAbilitySystemComponent / Live Event Spine)
+**Governing Directives:** `CONTRACT-SPEC-051`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Contract & Integration Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `ASC Event Spine & Routing` | `Combat/`, `Soul/` | `UAshenAbilitySystemComponent` routing attribute mutations (Sanity $\to \Delta N \uparrow, \Delta C \uparrow$, Poise $\to \Delta D \uparrow$) directly to `UAshenSoulPublisher` without leaking derived signals | `FAshenASCLifecycleConvergenceIntegrationTest` |
+| `Hardware Cardiac Telemetry` | `Combat/`, `Audio/` | Exhausted stamina ($<40$) logging cardiac tension telemetry and dispatching to haptic layers | `FAshenASCLifecycleConvergenceIntegrationTest` |
+
+---
 
 ### Patch v158.4.0: Closed-Loop Causal Architecture & Calculated Deference (AOP-MASTER-CONVERGENCE-SPEC-V2.0)
 **Governing Directives:** `AOP-MASTER-CONVERGENCE-SPEC-V2.0` (PRS-001), Constitutional Laws I–IV, Memory Axiom  
