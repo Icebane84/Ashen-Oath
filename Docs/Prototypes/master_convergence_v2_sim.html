@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — Master Convergence V2.0 Simulation Sandbox</title>
+    <style>
+        :root {
+            --bg-primary: #0b0d10;
+            --bg-card: #13171d;
+            --bg-darker: #07090b;
+            --border-dim: #262c36;
+            --border-highlight: #455268;
+            --text-primary: #e6ebf2;
+            --text-muted: #8a96a8;
+            --accent-cyan: #38bdf8;
+            --accent-orange: #fb923c;
+            --accent-gold: #facc15;
+            --accent-purple: #c084fc;
+            --accent-red: #f87171;
+            --accent-holy: #fef08a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-dim);
+            padding-bottom: 16px;
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .badge-grid {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .badge.gold {
+            background: rgba(250, 204, 21, 0.1);
+            color: var(--accent-gold);
+            border-color: rgba(250, 204, 21, 0.3);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 340px 1fr 380px;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 10px;
+        }
+
+        .card-header h2 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .slider-label span:first-child {
+            color: var(--text-muted);
+        }
+
+        .slider-label span.value {
+            font-weight: 600;
+            font-family: monospace;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 6px;
+            background: #202630;
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--accent-cyan);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .metric-box {
+            background: var(--bg-darker);
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .metric-val {
+            font-size: 20px;
+            font-weight: 700;
+            font-family: monospace;
+        }
+
+        .metric-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        canvas {
+            background: var(--bg-darker);
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .stance-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-stance {
+            background: #1a202c;
+            border: 1px solid var(--border-dim);
+            color: var(--text-primary);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: center;
+        }
+
+        .btn-stance:hover {
+            border-color: var(--border-highlight);
+            background: #222b3a;
+        }
+
+        .btn-stance.active {
+            border-color: var(--accent-cyan);
+            background: rgba(56, 189, 248, 0.15);
+            color: #fff;
+        }
+
+        .btn-stance span.lens {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border: 1px solid #3b82f6;
+            color: #fff;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .action-button:hover {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .action-button:active {
+            transform: scale(0.98);
+        }
+
+        .journal-container {
+            background: #0f1318;
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .journal-entry {
+            border-left: 2px solid var(--border-highlight);
+            padding-left: 10px;
+        }
+
+        .journal-entry.kaelen { border-color: var(--text-primary); color: #d1d5db; }
+        .journal-entry.garrett { border-color: var(--accent-orange); color: #fdba74; }
+        .journal-entry.serafina { border-color: var(--accent-holy); color: #fef08a; }
+
+        .journal-author {
+            font-weight: 700;
+            font-size: 11px;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Ashen Oath — Master Convergence V2.0 Simulation Sandbox</h1>
+            <p>Unified Causal Soul-to-Blade Engine | AOP-MASTER-CONVERGENCE-SPEC-V2.0</p>
+        </div>
+        <div class="badge-grid">
+            <div class="badge">SSoT: 28-Byte Kernel</div>
+            <div class="badge gold">Normalized Manifolds (&Sigma;=1.00)</div>
+            <div class="badge">Quartz 115 BPM</div>
+        </div>
+    </header>
+
+    <div class="grid-layout">
+
+        <!-- COLUMN 1: SSoT KERNEL SLIDERS -->
+        <div class="card">
+            <div class="card-header">
+                <h2>1. Canonical 28-Byte State (SSoT)</h2>
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Resolve (R)</span>
+                        <span class="value" id="val-resolve">0.65</span>
+                    </div>
+                    <input type="range" id="input-resolve" min="0" max="1" step="0.01" value="0.65">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Corruption (C)</span>
+                        <span class="value" id="val-corruption">0.20</span>
+                    </div>
+                    <input type="range" id="input-corruption" min="0" max="1" step="0.01" value="0.20">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Integration Debt (D)</span>
+                        <span class="value" id="val-debt">0.15</span>
+                    </div>
+                    <input type="range" id="input-debt" min="0" max="1" step="0.01" value="0.15">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Isolation (N / Dysreg)</span>
+                        <span class="value" id="val-isolation">0.10</span>
+                    </div>
+                    <input type="range" id="input-isolation" min="0" max="1" step="0.01" value="0.10">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Garrett Trust</span>
+                        <span class="value" id="val-garrett">0.70</span>
+                    </div>
+                    <input type="range" id="input-garrett" min="0" max="1" step="0.01" value="0.70">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Serafina Trust</span>
+                        <span class="value" id="val-serafina">0.70</span>
+                    </div>
+                    <input type="range" id="input-serafina" min="0" max="1" step="0.01" value="0.70">
+                </div>
+            </div>
+
+            <div class="card-header" style="margin-top: 10px;">
+                <h2>4 Liechtenauer Guard Loci</h2>
+            </div>
+
+            <div class="stance-buttons">
+                <button class="btn-stance active" data-stance="VomTag">
+                    VOM TAG
+                    <span class="lens">Roof (Wrath / Cleave)</span>
+                </button>
+                <button class="btn-stance" data-stance="Pflug">
+                    PFLUG
+                    <span class="lens">Plow (Trust / Vortex)</span>
+                </button>
+                <button class="btn-stance" data-stance="Ochs">
+                    OCHS
+                    <span class="lens">Window (Order / Bind)</span>
+                </button>
+                <button class="btn-stance" data-stance="Mordhau">
+                    MORDHAU
+                    <span class="lens">Pommel (Defiance / Shatter)</span>
+                </button>
+            </div>
+
+            <button class="action-button" id="btn-deference">
+                🛡️ Execute Calculated Deference (Ochs)
+            </button>
+        </div>
+
+        <!-- COLUMN 2: VISUAL ARENA & BLADE MORPHOLOGY -->
+        <div class="card">
+            <div class="card-header">
+                <h2>2. Real-Time Spatial Arena & Blade Morphology</h2>
+                <span id="tier-badge" style="font-size: 12px; font-weight: 700; color: var(--accent-cyan);">TIER 3: SUNDERED SOVEREIGN</span>
+            </div>
+
+            <canvas id="arenaCanvas" height="300"></canvas>
+
+            <div class="metric-grid">
+                <div class="metric-box">
+                    <span class="metric-title">Companion Spacing</span>
+                    <span class="metric-val" id="metric-spacing" style="color: var(--accent-cyan);">165 uu</span>
+                    <span class="metric-desc" id="metric-spacing-status">Tight Pocket (&le; 200uu)</span>
+                </div>
+
+                <div class="metric-box">
+                    <span class="metric-title">Flow Glint Window</span>
+                    <span class="metric-val" id="metric-glint" style="color: var(--accent-gold);">ACTIVE (0.15s)</span>
+                    <span class="metric-desc">115 BPM Downbeat Quantized</span>
+                </div>
+            </div>
+
+            <canvas id="bladeCanvas" height="120"></canvas>
+        </div>
+
+        <!-- COLUMN 3: DERIVED SOMATICS & LIVING JOURNAL -->
+        <div class="card">
+            <div class="card-header">
+                <h2>3. Derived Somatics (Normalized Manifolds)</h2>
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric-box">
+                    <span class="metric-title">&Phi; Internal Friction</span>
+                    <span class="metric-val" id="metric-friction">0.18</span>
+                    <span class="metric-desc">Intention / Execution Drag</span>
+                </div>
+
+                <div class="metric-box">
+                    <span class="metric-title">H Parasite Pressure</span>
+                    <span class="metric-val" id="metric-hunger">0.22</span>
+                    <span class="metric-desc" id="metric-hunger-status">Contained [0.15, 0.35]</span>
+                </div>
+
+                <div class="metric-box">
+                    <span class="metric-title">&Psi; Relational Flow</span>
+                    <span class="metric-val" id="metric-flow">0.82</span>
+                    <span class="metric-desc">Cooperative Bandwidth</span>
+                </div>
+
+                <div class="metric-box">
+                    <span class="metric-title">I Isolation Pressure</span>
+                    <span class="metric-val" id="metric-isolation">0.14</span>
+                    <span class="metric-desc">Spatial / Soul Detachment</span>
+                </div>
+            </div>
+
+            <div class="card-header" style="margin-top: 6px;">
+                <h2>Living Journal Multi-Author Ledger (UMB-UI-004)</h2>
+            </div>
+
+            <div class="journal-container">
+                <div class="journal-entry kaelen">
+                    <div class="journal-author">Kaelen (Ink):</div>
+                    <div id="journal-kaelen">"The iron wanted to drag me into the dark. I stopped swinging. I locked into Ochs and held. Garrett took the flank. Serafina cleared the soot."</div>
+                </div>
+                <div class="journal-entry garrett">
+                    <div class="journal-author">Garrett (Charcoal):</div>
+                    <div id="journal-garrett">"Clean fulcrum, brother. Keep your pauldron tucked like that and we won't have to keep patching your plate."</div>
+                </div>
+                <div class="journal-entry serafina">
+                    <div class="journal-author">Serafina (Silver Ash Leaf):</div>
+                    <div id="journal-serafina">"The White Flame didn't burn you because you didn't carry it alone. The line held."</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // State State Model
+        const state = {
+            resolve: 0.65,
+            corruption: 0.20,
+            debt: 0.15,
+            isolation: 0.10,
+            garrettTrust: 0.70,
+            serafinaTrust: 0.70,
+            currentStance: 'VomTag',
+            deferenceActive: false,
+            deferenceTimer: 0.0,
+            beatTimer: 0.0
+        };
+
+        // DOM references
+        const inResolve = document.getElementById('input-resolve');
+        const inCorruption = document.getElementById('input-corruption');
+        const inDebt = document.getElementById('input-debt');
+        const inIsolation = document.getElementById('input-isolation');
+        const inGarrett = document.getElementById('input-garrett');
+        const inSerafina = document.getElementById('input-serafina');
+
+        // Inputs listener
+        function bindInputs() {
+            inResolve.addEventListener('input', e => { state.resolve = parseFloat(e.target.value); update(); });
+            inCorruption.addEventListener('input', e => { state.corruption = parseFloat(e.target.value); update(); });
+            inDebt.addEventListener('input', e => { state.debt = parseFloat(e.target.value); update(); });
+            inIsolation.addEventListener('input', e => { state.isolation = parseFloat(e.target.value); update(); });
+            inGarrett.addEventListener('input', e => { state.garrettTrust = parseFloat(e.target.value); update(); });
+            inSerafina.addEventListener('input', e => { state.serafinaTrust = parseFloat(e.target.value); update(); });
+
+            document.querySelectorAll('.btn-stance').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.btn-stance').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.currentStance = btn.getAttribute('data-stance');
+                    update();
+                });
+            });
+
+            document.getElementById('btn-deference').addEventListener('click', () => {
+                state.deferenceActive = true;
+                state.deferenceTimer = 0.60; // 0.60s lockout
+                setTimeout(() => {
+                    // Strike Delivered
+                    state.debt = Math.max(0, state.debt - 0.15);
+                    state.isolation = Math.max(0, state.isolation - 0.10);
+                    state.garrettTrust = Math.min(1.0, state.garrettTrust + 0.20);
+                    state.serafinaTrust = Math.min(1.0, state.serafinaTrust + 0.20);
+                    state.corruption = Math.max(0, state.corruption - 0.05);
+                    state.resolve = Math.min(1.0, state.resolve + 0.10);
+                    syncSliders();
+                    state.deferenceActive = false;
+                    update();
+                }, 600);
+                update();
+            });
+        }
+
+        function syncSliders() {
+            inResolve.value = state.resolve;
+            inCorruption.value = state.corruption;
+            inDebt.value = state.debt;
+            inIsolation.value = state.isolation;
+            inGarrett.value = state.garrettTrust;
+            inSerafina.value = state.serafinaTrust;
+        }
+
+        // Normalized mathematical manifolds
+        function deriveSomatics() {
+            const trioResonance = (state.garrettTrust + state.serafinaTrust) * 0.5;
+            
+            // Internal Friction: 0.25*D + 0.25*N + 0.15*(1-R)
+            const friction = Math.min(1.0, Math.max(0.0,
+                (0.25 * state.debt) + (0.25 * state.isolation) + (0.15 * (1.0 - state.resolve)) + 0.05
+            ));
+
+            // Parasite Pressure (H): 0.40*C + 0.35*Friction + 0.25*(1-R)
+            const hunger = Math.min(1.0, Math.max(0.0,
+                (0.40 * state.corruption) + (0.35 * friction) + (0.25 * (1.0 - state.resolve))
+            ));
+
+            // Companion Spacing based on Dread / Isolation (150uu to 650uu)
+            const proximityFactor = Math.max(0.0, 1.0 - (hunger * 0.7 + state.isolation * 0.3));
+            const spacing = 150 + (1.0 - proximityFactor) * 500;
+
+            // Relational Flow (Psi): 0.45*TrioResonance + 0.25*ProximityFactor + 0.20
+            const flow = Math.min(1.0, Math.max(0.0,
+                (0.45 * trioResonance) + (0.25 * proximityFactor) + 0.15
+            ));
+
+            // Isolation Pressure (I): 0.55*(1-Psi) + 0.45*(1-Proximity)
+            const isolationPres = Math.min(1.0, Math.max(0.0,
+                (0.55 * (1.0 - flow)) + (0.45 * (1.0 - proximityFactor))
+            ));
+
+            return { friction, hunger, flow, isolationPres, spacing, proximityFactor, trioResonance };
+        }
+
+        function update() {
+            // Update labels
+            document.getElementById('val-resolve').innerText = state.resolve.toFixed(2);
+            document.getElementById('val-corruption').innerText = state.corruption.toFixed(2);
+            document.getElementById('val-debt').innerText = state.debt.toFixed(2);
+            document.getElementById('val-isolation').innerText = state.isolation.toFixed(2);
+            document.getElementById('val-garrett').innerText = state.garrettTrust.toFixed(2);
+            document.getElementById('val-serafina').innerText = state.serafinaTrust.toFixed(2);
+
+            const somatics = deriveSomatics();
+
+            document.getElementById('metric-friction').innerText = somatics.friction.toFixed(2);
+            document.getElementById('metric-hunger').innerText = somatics.hunger.toFixed(2);
+            document.getElementById('metric-flow').innerText = somatics.flow.toFixed(2);
+            document.getElementById('metric-isolation').innerText = somatics.isolationPres.toFixed(2);
+            document.getElementById('metric-spacing').innerText = Math.round(somatics.spacing) + ' uu';
+
+            const glintEl = document.getElementById('metric-glint');
+            if (somatics.spacing <= 200 && somatics.flow >= 0.75) {
+                glintEl.innerText = "ACTIVE (0.15s)";
+                glintEl.style.color = "var(--accent-gold)";
+                document.getElementById('metric-spacing-status').innerText = "Tight Pocket (<= 200uu)";
+                document.getElementById('metric-spacing-status').style.color = "var(--accent-cyan)";
+            } else {
+                glintEl.innerText = "LOCKED OUT";
+                glintEl.style.color = "var(--accent-red)";
+                document.getElementById('metric-spacing-status').innerText = "Retracted / Isolated (> 200uu)";
+                document.getElementById('metric-spacing-status').style.color = "var(--accent-red)";
+            }
+
+            // Tier evaluation
+            const tierBadge = document.getElementById('tier-badge');
+            if (state.resolve >= 0.90 && state.debt === 0) {
+                tierBadge.innerText = "TIER 5: ZENITH SOVEREIGN";
+                tierBadge.style.color = "var(--accent-holy)";
+            } else if (state.corruption >= 0.50 && state.resolve >= 0.70) {
+                tierBadge.innerText = "TIER 4: ELDRIN'S CRUCIBLE";
+                tierBadge.style.color = "var(--accent-orange)";
+            } else if (somatics.trioResonance >= 0.65) {
+                tierBadge.innerText = "TIER 3: SUNDERED SOVEREIGN";
+                tierBadge.style.color = "var(--accent-cyan)";
+            } else if (state.debt >= 0.25) {
+                tierBadge.innerText = "TIER 2: RESONANT FULLER";
+                tierBadge.style.color = "#93c5fd";
+            } else {
+                tierBadge.innerText = "TIER 1: BURDENED IRON";
+                tierBadge.style.color = "var(--text-muted)";
+            }
+
+            drawArena(somatics);
+            drawBlade(somatics);
+        }
+
+        function drawArena(somatics) {
+            const canvas = document.getElementById('arenaCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            // Draw grid
+            ctx.strokeStyle = "rgba(255,255,255,0.04)";
+            ctx.lineWidth = 1;
+            for(let r=40; r<180; r+=40) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI*2);
+                ctx.stroke();
+            }
+
+            // 200uu combat pocket boundary
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.25)";
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.arc(cx, cy, 60, 0, Math.PI*2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Kaelen Center
+            ctx.fillStyle = state.deferenceActive ? "var(--accent-holy)" : "#e2e8f0";
+            ctx.beginPath();
+            ctx.arc(cx, cy, 10, 0, Math.PI*2);
+            ctx.fill();
+            ctx.fillStyle = "#fff";
+            ctx.font = "10px sans-serif";
+            ctx.fillText(state.deferenceActive ? "KAELEN (OCHS BIND)" : "KAELEN", cx - 22, cy + 22);
+
+            // Spacing visual
+            const dist = (somatics.spacing / 650) * 120 + 30;
+
+            // Garrett (Left flank)
+            const gx = cx - dist * 0.86;
+            const gy = cy + dist * 0.5;
+            ctx.fillStyle = "var(--accent-orange)";
+            ctx.beginPath();
+            ctx.arc(gx, gy, 8, 0, Math.PI*2);
+            ctx.fill();
+            ctx.fillText("GARRETT", gx - 20, gy + 18);
+
+            // Serafina (Right flank)
+            const sx = cx + dist * 0.86;
+            const sy = cy + dist * 0.5;
+            ctx.fillStyle = "var(--accent-holy)";
+            ctx.beginPath();
+            ctx.arc(sx, sy, 8, 0, Math.PI*2);
+            ctx.fill();
+            ctx.fillText("SERAFINA", sx - 20, sy + 18);
+
+            // Lines
+            ctx.strokeStyle = somatics.spacing <= 200 ? "rgba(56, 189, 248, 0.6)" : "rgba(248, 113, 113, 0.4)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(gx, gy);
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(sx, sy);
+            ctx.stroke();
+        }
+
+        function drawBlade(somatics) {
+            const canvas = document.getElementById('bladeCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cy = canvas.height / 2;
+
+            // Draw Longsword
+            ctx.strokeStyle = "#475569";
+            ctx.lineWidth = 8;
+            ctx.beginPath();
+            ctx.moveTo(40, cy);
+            ctx.lineTo(canvas.width - 40, cy);
+            ctx.stroke();
+
+            // Fuller Glow based on Stance
+            let glowColor = "rgba(56, 189, 248, 0.8)";
+            if (state.currentStance === 'VomTag') glowColor = "rgba(251, 146, 60, 0.9)";
+            if (state.currentStance === 'Pflug') glowColor = "rgba(56, 189, 248, 0.9)";
+            if (state.currentStance === 'Ochs') glowColor = "rgba(250, 204, 21, 0.9)";
+            if (state.currentStance === 'Mordhau') glowColor = "rgba(192, 132, 252, 0.9)";
+
+            ctx.strokeStyle = glowColor;
+            ctx.lineWidth = 3;
+            ctx.shadowColor = glowColor;
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.moveTo(90, cy);
+            ctx.lineTo(canvas.width - 60, cy);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Crossguard & Pommel
+            ctx.fillStyle = "#94a3b8";
+            ctx.fillRect(80, cy - 25, 10, 50); // Crossguard
+            ctx.beginPath();
+            ctx.arc(35, cy, 9, 0, Math.PI*2); // Pommel
+            ctx.fill();
+        }
+
+        bindInputs();
+        update();
+    </script>
+</body>
+</html>
