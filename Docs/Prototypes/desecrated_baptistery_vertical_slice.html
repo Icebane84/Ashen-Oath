@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath — The Desecrated Baptistery Vertical Slice Prototype</title>
+    <style>
+        :root {
+            --bg-primary: #07090c;
+            --bg-card: #10141a;
+            --bg-darker: #050709;
+            --border-dim: #212832;
+            --border-highlight: #3b4759;
+            --text-primary: #e2e8f0;
+            --text-muted: #8391a5;
+            --accent-cyan: #38bdf8;
+            --accent-orange: #fb923c;
+            --accent-gold: #facc15;
+            --accent-purple: #c084fc;
+            --accent-red: #ef4444;
+            --accent-holy: #fef08a;
+            --accent-green: #34d399;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 1440px;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-dim);
+            padding-bottom: 14px;
+        }
+
+        .header-title h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .badge-grid {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.gold {
+            background: rgba(250, 204, 21, 0.1);
+            color: var(--accent-gold);
+            border-color: rgba(250, 204, 21, 0.3);
+        }
+
+        /* 7-BEAT TIMELINE BAR */
+        .timeline-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .timeline-steps {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .step-btn {
+            background: #141a22;
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 8px 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .step-btn:hover {
+            border-color: var(--border-highlight);
+            background: #1c2430;
+            color: #fff;
+        }
+
+        .step-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--accent-cyan);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .step-btn.completed {
+            border-color: rgba(52, 211, 153, 0.4);
+            color: var(--accent-green);
+        }
+
+        .step-btn span.beat-num {
+            font-size: 9px;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+
+        /* 3-COLUMN MAIN GRID */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr 380px;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 8px;
+        }
+
+        .card-header h2 {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* CANVAS ARENA CONTAINER & SOOT VIGNETTE */
+        .arena-wrapper {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-dim);
+            background: var(--bg-darker);
+        }
+
+        canvas#arenaCanvas {
+            display: block;
+            width: 100%;
+            background: #06090d;
+        }
+
+        .soot-vignette {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            box-shadow: inset 0 0 80px 40px rgba(0,0,0,0.85);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .soot-vignette.active {
+            opacity: 1;
+        }
+
+        /* DUALSENSE & AUDIO METRICS */
+        .telemetry-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .telemetry-box {
+            background: var(--bg-darker);
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .telemetry-box span.title {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .telemetry-box span.val {
+            font-size: 16px;
+            font-weight: 700;
+            font-family: monospace;
+        }
+
+        /* INTERACTION BUTTONS */
+        .btn-action {
+            background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+            border: 1px solid #3b82f6;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-action:active {
+            transform: scale(0.98);
+        }
+
+        .btn-action.gold {
+            background: linear-gradient(135deg, #854d0e, #ca8a04);
+            border-color: var(--accent-gold);
+        }
+
+        .btn-action.gold:hover {
+            background: linear-gradient(135deg, #ca8a04, #eab308);
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.4);
+        }
+
+        /* NARRATIVE & CHOREOGRAPHY BOX */
+        .narrative-box {
+            background: #090c10;
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .narrative-box h3 {
+            font-size: 12px;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+        }
+
+        /* LIVING JOURNAL WIDGET */
+        .journal-container {
+            background: #0c0f14;
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .journal-entry {
+            border-left: 2px solid var(--border-highlight);
+            padding-left: 8px;
+        }
+
+        .journal-entry.kaelen { border-color: var(--text-primary); color: #cbd5e1; }
+        .journal-entry.garrett { border-color: var(--accent-orange); color: #fdba74; }
+        .journal-entry.serafina { border-color: var(--accent-holy); color: #fef08a; }
+
+        .journal-author {
+            font-weight: 700;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Ashen Oath — The Desecrated Baptistery Vertical Slice Prototype</h1>
+            <p>Interactive 7-Beat Closed-Loop Causal Encounter | AOP-SLICE-BAPTISTERY-104-PROD</p>
+        </div>
+        <div class="badge-grid">
+            <div class="badge">Tier II Trauma Inflection</div>
+            <div class="badge gold">Tier 3 Sundered Sovereign</div>
+            <div class="badge">Quartz 115 BPM</div>
+        </div>
+    </header>
+
+    <!-- 7-BEAT TIMELINE BAR -->
+    <div class="timeline-container">
+        <div class="timeline-header">
+            <span>Encounter Progress (7-Beat Convergence Pipeline)</span>
+            <span id="current-beat-label" style="color: var(--accent-cyan);">BEAT 1: THE ATTUNED VANGUARD</span>
+        </div>
+        <div class="timeline-steps">
+            <button class="step-btn active" data-beat="1">
+                <span class="beat-num">Beat 1</span>
+                Attuned Vanguard
+            </button>
+            <button class="step-btn" data-beat="2">
+                <span class="beat-num">Beat 2</span>
+                Martyrdom Trap
+            </button>
+            <button class="step-btn" data-beat="3">
+                <span class="beat-num">Beat 3</span>
+                Predatory Momentum
+            </button>
+            <button class="step-btn" data-beat="4">
+                <span class="beat-num">Beat 4</span>
+                Calculated Deference
+            </button>
+            <button class="step-btn" data-beat="5">
+                <span class="beat-num">Beat 5</span>
+                Companion Payoff
+            </button>
+            <button class="step-btn" data-beat="6">
+                <span class="beat-num">Beat 6</span>
+                Cataclysm Vortex
+            </button>
+            <button class="step-btn" data-beat="7">
+                <span class="beat-num">Beat 7</span>
+                Living Journal
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN 3-COLUMN GRID -->
+    <div class="main-grid">
+
+        <!-- COLUMN 1: SSoT METRICS & SOMATIC DERIVATIONS -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Canonical 28-Byte State (SSoT)</h2>
+            </div>
+
+            <div class="telemetry-row">
+                <div class="telemetry-box">
+                    <span class="title">Resolve (R)</span>
+                    <span class="val" id="val-resolve">0.65</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">Corruption (C)</span>
+                    <span class="val" id="val-corruption">0.15</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">Integration Debt (D)</span>
+                    <span class="val" id="val-debt">0.10</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">Isolation (N)</span>
+                    <span class="val" id="val-isolation">0.10</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">Garrett Trust</span>
+                    <span class="val" id="val-garrett">0.70</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">Serafina Trust</span>
+                    <span class="val" id="val-serafina">0.70</span>
+                </div>
+            </div>
+
+            <div class="card-header" style="margin-top: 4px;">
+                <h2>Derived Somatic Signals (&Sigma; = 1.00)</h2>
+            </div>
+
+            <div class="telemetry-row">
+                <div class="telemetry-box">
+                    <span class="title">&Phi; Internal Friction</span>
+                    <span class="val" id="val-friction">0.14</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">H Parasite Pressure</span>
+                    <span class="val" id="val-hunger" style="color: var(--accent-green);">0.19</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">&Psi; Relational Flow</span>
+                    <span class="val" id="val-flow" style="color: var(--accent-cyan);">0.72</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">I Isolation Pressure</span>
+                    <span class="val" id="val-iso-pres">0.22</span>
+                </div>
+            </div>
+
+            <div class="card-header" style="margin-top: 4px;">
+                <h2>Interactive Actuator Action</h2>
+            </div>
+
+            <button class="btn-action" id="btn-next-beat">
+                Advance Next Beat &rarr;
+            </button>
+            <button class="btn-action gold" id="btn-trigger-deference" style="display: none;">
+                🛡️ L2 + R-Stick Left: Execute Ochs Bind
+            </button>
+        </div>
+
+        <!-- COLUMN 2: 2D FLOODED BAPTISTERY ARENA -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Flooded Baptistery Undercroft (3-Actor Centroid Probe)</h2>
+                <span id="stance-label" style="font-size: 11px; font-weight: 700; color: var(--accent-cyan);">STANCE: PFLUG (GALE CYAN)</span>
+            </div>
+
+            <div class="arena-wrapper">
+                <canvas id="arenaCanvas" height="320"></canvas>
+                <div class="soot-vignette" id="sootVignette"></div>
+            </div>
+
+            <div class="telemetry-row">
+                <div class="telemetry-box">
+                    <span class="title">Companion Spacing</span>
+                    <span class="val" id="val-spacing" style="color: var(--accent-cyan);">150 uu</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">0.15s Flow Glint Status</span>
+                    <span class="val" id="val-glint-status" style="color: var(--accent-gold);">ACTIVE (0.15s)</span>
+                </div>
+            </div>
+
+            <div class="narrative-box">
+                <h3 id="beat-title">Beat 1: The Attuned Vanguard</h3>
+                <p id="beat-desc">Kaelen enters in Pflug (Gale Cyan). On the 115 BPM downbeat, he shifts to Vom Tag (Molten Ember Orange) and cleaves through the Grief-Sworn Sentinel's shield with pure poise leverage.</p>
+            </div>
+        </div>
+
+        <!-- COLUMN 3: DUALSENSE, QUARTZ AUDIO & LIVING JOURNAL -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Hardware Haptics & Quartz Audio</h2>
+            </div>
+
+            <div class="telemetry-row">
+                <div class="telemetry-box">
+                    <span class="title">DualSense L2 Resistance</span>
+                    <span class="val" id="val-haptics" style="color: var(--accent-cyan);">30 / 255 (Clean)</span>
+                </div>
+                <div class="telemetry-box">
+                    <span class="title">Quartz Audio Matrix</span>
+                    <span class="val" id="val-audio">Stem 02: Muted</span>
+                </div>
+            </div>
+
+            <div class="card-header" style="margin-top: 4px;">
+                <h2>Living Journal Post-Combat Inscription (UMB-UI-004)</h2>
+            </div>
+
+            <div class="journal-container">
+                <div class="journal-entry kaelen">
+                    <div class="journal-author">Kaelen (Ink):</div>
+                    <div id="j-kaelen">"Point on line. Weight on the back heel. Hold the center."</div>
+                </div>
+                <div class="journal-entry garrett">
+                    <div class="journal-author">Garrett (Charcoal):</div>
+                    <div id="j-garrett">"Right flank covered. Keep your point leveled, brother."</div>
+                </div>
+                <div class="journal-entry serafina">
+                    <div class="journal-author">Serafina (Pressed Leaf):</div>
+                    <div id="j-serafina">"The light is steady. The line holds."</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 7-Beat Data Definitions
+        const beats = {
+            1: {
+                title: "Beat 1: The Attuned Vanguard",
+                desc: "Kaelen enters in Pflug (Gale Cyan). On the 115 BPM downbeat, he shifts to Vom Tag (Molten Ember Orange) and cleaves the Grief-Sworn Sentinel's wooden shield with pure poise leverage.",
+                resolve: 0.65, corruption: 0.15, debt: 0.10, isolation: 0.10, garrettTrust: 0.70, serafinaTrust: 0.70,
+                friction: 0.14, hunger: 0.19, flow: 0.72, isoPres: 0.22,
+                spacing: 150, glint: "ACTIVE (0.15s)", glintColor: "var(--accent-gold)",
+                haptics: "30 / 255 (Crisp Spring)", audio: "Balanced Mix (115 BPM)",
+                stance: "PFLUG ──► VOM TAG", stanceColor: "var(--accent-orange)",
+                soot: false,
+                kaelenLoc: {x: 200, y: 160}, garrettLoc: {x: 130, y: 220}, serafinaLoc: {x: 130, y: 100},
+                bossLoc: {x: 380, y: 160},
+                jKaelen: "\"Point on line. Weight on the back heel. Hold the center.\"",
+                jGarrett: "\"Right flank covered. Keep your point leveled, brother.\"",
+                jSerafina: "\"The light is steady. The line holds.\""
+            },
+            2: {
+                title: "Beat 2: Tactical Disruption & The Martyrdom Trap",
+                desc: "Inquisitorial Cinder-Justiciar enters sweeping white fire. Kaelen shouts 'Fall back! I have the center!' taking 3 heavy solo hits. Isolation spikes; companions retreat to 650uu.",
+                resolve: 0.55, corruption: 0.25, debt: 0.25, isolation: 0.30, garrettTrust: 0.50, serafinaTrust: 0.50,
+                friction: 0.52, hunger: 0.65, flow: 0.34, isoPres: 0.55,
+                spacing: 650, glint: "LOCKED OUT (650uu)", glintColor: "var(--accent-red)",
+                haptics: "160 / 255 (Strain Vibration)", audio: "Stem 02 Whispers Active (-14dB)",
+                stance: "SOLO VOM TAG OVER-EXTENSION", stanceColor: "var(--accent-red)",
+                soot: true,
+                kaelenLoc: {x: 320, y: 160}, garrettLoc: {x: 70, y: 270}, serafinaLoc: {x: 70, y: 50},
+                bossLoc: {x: 380, y: 160},
+                jKaelen: "\"I told them to fall back. I took the fire alone. My shoulders ache.\"",
+                jGarrett: "\"He's swinging wild again. I can't get inside his arc without getting cleaved.\"",
+                jSerafina: "\"The soot is choking the line. He won't let us near him.\""
+            },
+            3: {
+                title: "Beat 3: The Loss of Agency (Predatory Momentum)",
+                desc: "Kaelen inputs Mordhau slash. Skew-Warp pulls him +120uu into boss; over-swing +0.35s buries blade tip into floor. Screen blackens with Soot Tunnel. 0.15s Glint flashes and dies.",
+                resolve: 0.50, corruption: 0.30, debt: 0.30, isolation: 0.40, garrettTrust: 0.45, serafinaTrust: 0.45,
+                friction: 0.62, hunger: 0.75, flow: 0.24, isoPres: 0.68,
+                spacing: 650, glint: "LOCKED OUT (Companions at 650uu)", glintColor: "var(--accent-red)",
+                haptics: "220 / 255 (Cardiac Tremor)", audio: "Stem 02 Whispers Loud",
+                stance: "MORDHAU OVER-SWING (+0.35s Lock)", stanceColor: "var(--accent-purple)",
+                soot: true,
+                kaelenLoc: {x: 360, y: 160}, garrettLoc: {x: 60, y: 280}, serafinaLoc: {x: 60, y: 40},
+                bossLoc: {x: 390, y: 160},
+                jKaelen: "\"The sword pulled me forward. The iron bit into the floor. I couldn't move.\"",
+                jGarrett: "\"Brother! Watch your recovery!\"",
+                jSerafina: "\"Eldrin's voice is drowning him out.\""
+            },
+            4: {
+                title: "Beat 4: The Crisis Point & Calculated Deference (Ochs Bind)",
+                desc: "Boss winds up execution strike on trapped Garrett. Player inputs L2 + R-Stick Left. Camera expands to 95° FOV. Kaelen drops into Ochs Bind (0.60s Lockout, 80% Poise Strain). L2 locks at 245/255.",
+                resolve: 0.60, corruption: 0.25, debt: 0.25, isolation: 0.20, garrettTrust: 0.65, serafinaTrust: 0.65,
+                friction: 0.38, hunger: 0.45, flow: 0.62, isoPres: 0.32,
+                spacing: 400, glint: "PREPARING DEFERENCE", glintColor: "var(--accent-gold)",
+                haptics: "245 / 255 (SOLID IMMOVABLE LOCK)", audio: "Heavy Anvil Clang (850Hz Primed)",
+                stance: "OCHS BIND (Martial Fulcrum - 0.60s)", stanceColor: "var(--accent-gold)",
+                soot: false,
+                kaelenLoc: {x: 180, y: 240}, garrettLoc: {x: 120, y: 260}, serafinaLoc: {x: 100, y: 70},
+                bossLoc: {x: 230, y: 220},
+                jKaelen: "\"I stopped swinging. I locked into Ochs and planted my heels. I trusted the steel.\"",
+                jGarrett: "\"Brother. Now.\"",
+                jSerafina: "\"The fulcrum is holding! Step through!\""
+            },
+            5: {
+                title: "Beat 5: Asymmetric Companion Payoff & Thermal Cleansing",
+                desc: "Garrett vaults off Kaelen's pauldron (1100uu/s) delivering 100% Critical Stagger. Serafina strikes fuller grounding socket, setting ThermalSlag = 1.0. L2 tension snaps to 0/255. Stem 02 silenced (-24dB).",
+                resolve: 0.70, corruption: 0.15, debt: 0.10, isolation: 0.05, garrettTrust: 0.85, serafinaTrust: 0.85,
+                friction: 0.20, hunger: 0.30, flow: 0.85, isoPres: 0.12,
+                spacing: 150, glint: "RE-ARMED (0.15s)", glintColor: "var(--accent-gold)",
+                haptics: "245 ──► 0 / 255 (TACTILE SNAP RELIEF)", audio: "850Hz Harmonic Chime (Stem 02 -24dB)",
+                stance: "THERMAL SLAG GROUNDED (Incandescent)", stanceColor: "var(--accent-holy)",
+                soot: false,
+                kaelenLoc: {x: 220, y: 160}, garrettLoc: {x: 280, y: 140}, serafinaLoc: {x: 180, y: 170},
+                bossLoc: {x: 270, y: 170},
+                jKaelen: "\"Garrett vaulted the pauldron. Serafina cleared the soot with White Flame. The line snapped clean.\"",
+                jGarrett: "\"Clean fulcrum, brother. We won't have to keep patching your breastplate.\"",
+                jSerafina: "\"The White Flame didn't burn you because you didn't carry it alone.\""
+            },
+            6: {
+                title: "Beat 6: Relational Hybrid Finisher (Cataclysm Vortex)",
+                desc: "Kaelen pivots to Vom Tag on 115 BPM downbeat. With party within 150uu, 0.15s Flow Glint fires Cataclysm Vortex: vacuum collapse + chandelier drop + vertical smite. State resolves to H = 0.28 (Contained).",
+                resolve: 0.85, corruption: 0.10, debt: 0.00, isolation: 0.00, garrettTrust: 0.95, serafinaTrust: 0.95,
+                friction: 0.15, hunger: 0.28, flow: 0.92, isoPres: 0.08,
+                spacing: 150, glint: "EXECUTED: CATACLYSM VORTEX", glintColor: "var(--accent-green)",
+                haptics: "0 / 255 (Harmonized Flow)", audio: "Full Dynamic Choral Symphony",
+                stance: "CATACLYSM VORTEX FINISHER", stanceColor: "var(--accent-green)",
+                soot: false,
+                kaelenLoc: {x: 260, y: 160}, garrettLoc: {x: 210, y: 200}, serafinaLoc: {x: 210, y: 120},
+                bossLoc: {x: 260, y: 160},
+                jKaelen: "\"The Justiciar fell to ash. The blade rests. The scars remain, but they are quiet.\"",
+                jGarrett: "\"Chandelier dropped right on his helm. Masterclass.\"",
+                jSerafina: "\"The sanctuary is clear. The line held.\""
+            },
+            7: {
+                title: "Beat 7: Aftermath Synthesis & Living Journal Inscription",
+                desc: "The soul transaction compiles into the Living Journal (UMB-UI-004) with permanent multi-author entries: Kaelen unhurried black ink, Garrett technical pauldron diagram, Serafina pressed silver-ash leaf.",
+                resolve: 0.85, corruption: 0.10, debt: 0.00, isolation: 0.00, garrettTrust: 0.95, serafinaTrust: 0.95,
+                friction: 0.15, hunger: 0.28, flow: 0.92, isoPres: 0.08,
+                spacing: 150, glint: "COMBAT RESOLVED", glintColor: "var(--accent-cyan)",
+                haptics: "Standard Rest Tension", audio: "Campfire Embers & Ambient Wind",
+                stance: "RESTING AT BAPTISTERY HEARTH", stanceColor: "var(--text-muted)",
+                soot: false,
+                kaelenLoc: {x: 220, y: 160}, garrettLoc: {x: 170, y: 190}, serafinaLoc: {x: 170, y: 130},
+                bossLoc: null,
+                jKaelen: "\"The iron wanted to drag me into the dark. I stopped swinging. I locked into Ochs and waited. The steel held. Garrett took the flank; Serafina cleared the soot.\"",
+                jGarrett: "\"Clean fulcrum, brother. Keep your pauldron tucked like that on the intercept and we won't have to keep patching your breastplate.\"",
+                jSerafina: "\"The White Flame didn't burn you because you didn't carry it alone. The line held.\""
+            }
+        };
+
+        let currentBeat = 1;
+
+        function setBeat(beatNum) {
+            currentBeat = parseInt(beatNum);
+            const data = beats[currentBeat];
+
+            // Update Timeline buttons
+            document.querySelectorAll('.step-btn').forEach(btn => {
+                const b = parseInt(btn.getAttribute('data-beat'));
+                btn.classList.remove('active', 'completed');
+                if (b === currentBeat) btn.classList.add('active');
+                else if (b < currentBeat) btn.classList.add('completed');
+            });
+
+            // Update SSoT metrics
+            document.getElementById('val-resolve').innerText = data.resolve.toFixed(2);
+            document.getElementById('val-corruption').innerText = data.corruption.toFixed(2);
+            document.getElementById('val-debt').innerText = data.debt.toFixed(2);
+            document.getElementById('val-isolation').innerText = data.isolation.toFixed(2);
+            document.getElementById('val-garrett').innerText = data.garrettTrust.toFixed(2);
+            document.getElementById('val-serafina').innerText = data.serafinaTrust.toFixed(2);
+
+            // Update Somatics
+            document.getElementById('val-friction').innerText = data.friction.toFixed(2);
+            document.getElementById('val-hunger').innerText = data.hunger.toFixed(2);
+            document.getElementById('val-hunger').style.color = data.hunger >= 0.60 ? "var(--accent-red)" : "var(--accent-green)";
+            document.getElementById('val-flow').innerText = data.flow.toFixed(2);
+            document.getElementById('val-iso-pres').innerText = data.isoPres.toFixed(2);
+
+            // Update Labels
+            document.getElementById('current-beat-label').innerText = data.title.toUpperCase();
+            document.getElementById('beat-title').innerText = data.title;
+            document.getElementById('beat-desc').innerText = data.desc;
+            document.getElementById('stance-label').innerText = "STANCE: " + data.stance;
+            document.getElementById('stance-label').style.color = data.stanceColor;
+
+            // Update Telemetry
+            document.getElementById('val-spacing').innerText = data.spacing + " uu";
+            document.getElementById('val-spacing').style.color = data.spacing <= 200 ? "var(--accent-cyan)" : "var(--accent-red)";
+            document.getElementById('val-glint-status').innerText = data.glint;
+            document.getElementById('val-glint-status').style.color = data.glintColor;
+            document.getElementById('val-haptics').innerText = data.haptics;
+            document.getElementById('val-audio').innerText = data.audio;
+
+            // Vignette
+            const vig = document.getElementById('sootVignette');
+            if (data.soot) vig.classList.add('active');
+            else vig.classList.remove('active');
+
+            // Journal
+            document.getElementById('j-kaelen').innerText = data.jKaelen;
+            document.getElementById('j-garrett').innerText = data.jGarrett;
+            document.getElementById('j-serafina').innerText = data.jSerafina;
+
+            // Buttons
+            const btnDeference = document.getElementById('btn-trigger-deference');
+            const btnNext = document.getElementById('btn-next-beat');
+            if (currentBeat === 4) {
+                btnDeference.style.display = "block";
+                btnNext.style.display = "none";
+            } else {
+                btnDeference.style.display = "none";
+                btnNext.style.display = "block";
+                btnNext.innerText = currentBeat === 7 ? "Restart Vertical Slice ↺" : "Advance to Beat " + (currentBeat + 1) + " →";
+            }
+
+            drawArena(data);
+        }
+
+        function drawArena(data) {
+            const canvas = document.getElementById('arenaCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Flooded Baptistery Undercroft Background
+            ctx.fillStyle = "#070b10";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Water ripples
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.06)";
+            ctx.lineWidth = 1;
+            for (let i = 20; i < canvas.width; i += 35) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+
+            // Central Baptismal Basin Font
+            ctx.strokeStyle = "rgba(148, 163, 184, 0.15)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, 90, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Hanging Chandelier Shadow
+            ctx.fillStyle = "rgba(0,0,0,0.4)";
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2 + 10, canvas.height / 2 + 10, 30, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Boss if active
+            if (data.bossLoc) {
+                ctx.fillStyle = "#ef4444";
+                ctx.shadowColor = "#ef4444";
+                ctx.shadowBlur = 10;
+                ctx.beginPath();
+                ctx.arc(data.bossLoc.x, data.bossLoc.y, 16, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = "#fff";
+                ctx.font = "10px sans-serif";
+                ctx.fillText("CINDER-JUSTICIAR", data.bossLoc.x - 45, data.bossLoc.y - 20);
+
+                // Poleaxe fire arc in Beat 2
+                if (currentBeat === 2) {
+                    ctx.strokeStyle = "rgba(251, 146, 60, 0.8)";
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.arc(data.bossLoc.x, data.bossLoc.y, 60, -Math.PI / 3, Math.PI / 3);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw Kaelen
+            ctx.fillStyle = currentBeat === 4 ? "var(--accent-holy)" : (data.hunger >= 0.60 ? "#dc2626" : "#e2e8f0");
+            ctx.shadowColor = currentBeat === 4 ? "var(--accent-holy)" : (data.hunger >= 0.60 ? "#dc2626" : "#38bdf8");
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.arc(data.kaelenLoc.x, data.kaelenLoc.y, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = "#fff";
+            ctx.font = "10px sans-serif";
+            ctx.fillText(currentBeat === 4 ? "KAELEN (OCHS BIND)" : "KAELEN", data.kaelenLoc.x - 22, data.kaelenLoc.y + 24);
+
+            // Draw Garrett
+            ctx.fillStyle = "var(--accent-orange)";
+            ctx.beginPath();
+            ctx.arc(data.garrettLoc.x, data.garrettLoc.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("GARRETT", data.garrettLoc.x - 20, data.garrettLoc.y + 18);
+
+            // Draw Serafina
+            ctx.fillStyle = "var(--accent-holy)";
+            ctx.beginPath();
+            ctx.arc(data.serafinaLoc.x, data.serafinaLoc.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText("SERAFINA", data.serafinaLoc.x - 22, data.serafinaLoc.y + 18);
+
+            // Draw Formation / Spacing lines
+            ctx.strokeStyle = data.spacing <= 200 ? "rgba(56, 189, 248, 0.6)" : "rgba(239, 68, 68, 0.4)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(data.kaelenLoc.x, data.kaelenLoc.y);
+            ctx.lineTo(data.garrettLoc.x, data.garrettLoc.y);
+            ctx.moveTo(data.kaelenLoc.x, data.kaelenLoc.y);
+            ctx.lineTo(data.serafinaLoc.x, data.serafinaLoc.y);
+            ctx.stroke();
+
+            // Beat 5 Vault Motion-Warp Curve
+            if (currentBeat === 5) {
+                ctx.strokeStyle = "rgba(251, 146, 60, 0.9)";
+                ctx.setLineDash([4, 4]);
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(180, 240);
+                ctx.quadraticCurveTo(220, 100, 280, 140);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = "var(--accent-orange)";
+                ctx.fillText("VAULT SKEW-WARP (1100uu/s)", 160, 95);
+            }
+        }
+
+        // Event listeners
+        document.querySelectorAll('.step-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setBeat(btn.getAttribute('data-beat'));
+            });
+        });
+
+        document.getElementById('btn-next-beat').addEventListener('click', () => {
+            if (currentBeat >= 7) setBeat(1);
+            else setBeat(currentBeat + 1);
+        });
+
+        document.getElementById('btn-trigger-deference').addEventListener('click', () => {
+            // Trigger companion strike delivered
+            setBeat(5);
+        });
+
+        // Initialize at Beat 1
+        setBeat(1);
+    </script>
+</body>
+</html>
