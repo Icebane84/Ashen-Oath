@@ -1,15 +1,142 @@
 // Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
+
 #include "Soul/AshenSoulConstellationSubsystem.h"
+#include "HttpModule.h"
+#include "Interfaces/IHttpRequest.h"
+#include "Interfaces/IHttpResponse.h"
 
 void UAshenSoulConstellationSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
-	UE_LOG(LogTemp, Log, TEXT("UAshenSoulConstellationSubsystem: ENGINE-SPEC-001 Sovereign Kernel initialized. FSoulStateVector ready for imprint ingestion."));
+	EnsureGovernanceValidator();
+	UE_LOG(LogTemp, Log, TEXT("UAshenSoulConstellationSubsystem: ENGINE-SPEC-001 Sovereign Kernel initialized with RIC-003 Governance Validator."));
 }
 
 void UAshenSoulConstellationSubsystem::Deinitialize()
 {
 	Super::Deinitialize();
+}
+
+void UAshenSoulConstellationSubsystem::EnsureGovernanceValidator()
+{
+	if (!GovernanceValidator)
+	{
+		GovernanceValidator = NewObject<UAshenIdentityGovernanceValidator>(this);
+		if (GovernanceBalanceDataAsset)
+		{
+			GovernanceValidator->BalanceDataAsset = GovernanceBalanceDataAsset;
+		}
+	}
+}
+
+void UAshenSoulConstellationSubsystem::RegisterUnsealedMemory(const FString& MemoryId, EImprintSalienceCategory Category)
+{
+	if (MemoryId.IsEmpty())
+	{
+		return;
+	}
+
+	if (!AuthoritativeImprintBuffer.Contains(MemoryId))
+	{
+		AuthoritativeImprintBuffer.Add(MemoryId);
+
+		FAshenImprintRecord NewRecord;
+		NewRecord.MemoryId = MemoryId;
+		NewRecord.Category = Category;
+		NewRecord.Salience = 1.0f;
+		NewRecord.RestCyclesElapsed = 0;
+		ActiveImprintRecords.Add(NewRecord);
+
+		UE_LOG(LogTemp, Log, TEXT("UAshenSoulConstellationSubsystem: Registered unsealed memory '%s' (Category: %d) into AuthoritativeImprintBuffer."), *MemoryId, (int32)Category);
+	}
+}
+
+bool UAshenSoulConstellationSubsystem::ProcessHeartstoneReflectionSession(const FString& RawJsonData)
+{
+	EnsureGovernanceValidator();
+	if (!GovernanceValidator)
+	{
+		return false;
+	}
+
+	if (GovernanceBalanceDataAsset)
+	{
+		GovernanceValidator->BalanceDataAsset = GovernanceBalanceDataAsset;
+	}
+
+	// 1. Pack current operational state
+	FAshenIdentityCognitiveStateVector CurrentState;
+	CurrentState.Resolve = CurrentStateVector.Resolve;
+	CurrentState.Corruption = CurrentStateVector.Corruption;
+	CurrentState.Isolation = CurrentStateVector.Isolation;
+	CurrentState.CompanionTrust = (CurrentStateVector.GarrettTrust + CurrentStateVector.SerafinaTrust) * 0.5f;
+
+	// 2. Validate & compile payload through C++ Governance Firewall
+	const FAshenIdentityCognitiveStateVector NewState = GovernanceValidator->ValidateAndCompilePayload(
+		RawJsonData,
+		AuthoritativeImprintBuffer,
+		CurrentState
+	);
+
+	const bool bStateMutated = !FMath::IsNearlyEqual(NewState.Resolve, CurrentState.Resolve) ||
+	                           !FMath::IsNearlyEqual(NewState.Corruption, CurrentState.Corruption) ||
+	                           !FMath::IsNearlyEqual(NewState.Isolation, CurrentState.Isolation) ||
+	                           !FMath::IsNearlyEqual(NewState.CompanionTrust, CurrentState.CompanionTrust);
+
+	// 3. Apply state mutation if verified
+	CurrentStateVector.Resolve = NewState.Resolve;
+	CurrentStateVector.Corruption = NewState.Corruption;
+	CurrentStateVector.Isolation = NewState.Isolation;
+	CurrentStateVector.GarrettTrust = NewState.CompanionTrust;
+	CurrentStateVector.SerafinaTrust = NewState.CompanionTrust;
+
+	KernelIdentityState.ResolveScore = NewState.Resolve;
+
+	// 4. Apply Asymmetric Memory Decay over rest cycle
+	GovernanceValidator->ApplyMemoryDecay(ActiveImprintRecords, 1);
+
+	// 5. Broadcast state invalidation
+	PublishStateVector();
+
+	if (OnHeartstoneReflectionProcessed.IsBound())
+	{
+		OnHeartstoneReflectionProcessed.Broadcast(bStateMutated, NewState);
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("UAshenSoulConstellationSubsystem: Heartstone Reflection processed (Mutated: %d, Resolve: %f, Corruption: %f, Isolation: %f, Trust: %f)"),
+		bStateMutated, NewState.Resolve, NewState.Corruption, NewState.Isolation, NewState.CompanionTrust);
+
+	return bStateMutated;
+}
+
+void UAshenSoulConstellationSubsystem::RequestAsyncSLMReflectionSession(const FString& EndpointUrl)
+{
+	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
+	Request->SetURL(EndpointUrl);
+	Request->SetVerb(TEXT("POST"));
+	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+
+	// Construct minimal prompt payload for local LM Studio / Faraday Cage
+	FString PromptPayload = TEXT("{\"model\": \"local-model\", \"messages\": [{\"role\": \"system\", \"content\": \"You are the Reflective Identity Compiler. Output strictly JSON matching FAshenIdentityDeltaPayload schema.\"}, {\"role\": \"user\", \"content\": \"Analyze recent rest imprints.\"}]}");
+	Request->SetContentAsString(PromptPayload);
+
+	Request->OnProcessRequestComplete().BindLambda([this](FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded)
+	{
+		if (bSucceeded && HttpResponse.IsValid() && HttpResponse->GetResponseCode() == 200)
+		{
+			const FString ResponseString = HttpResponse->GetContentAsString();
+			ProcessHeartstoneReflectionSession(ResponseString);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UAshenSoulConstellationSubsystem: Async SLM request failed or returned non-200 status code. Preserving deterministic state."));
+			// Process empty string to safely trigger memory decay without state corruption
+			ProcessHeartstoneReflectionSession(TEXT("{}"));
+		}
+	});
+
+	Request->ProcessRequest();
+	UE_LOG(LogTemp, Log, TEXT("UAshenSoulConstellationSubsystem: Dispatched async SLM reflection request to '%s'."), *EndpointUrl);
 }
 
 void UAshenSoulConstellationSubsystem::InvokeIntegration(bool bForcedCollapse)

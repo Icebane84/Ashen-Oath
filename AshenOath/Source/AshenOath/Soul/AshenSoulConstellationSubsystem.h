@@ -4,12 +4,17 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Soul/AshenSoulConstellationTypes.h"
+#include "Narrative/AshenIdentityCompilerTypes.h"
+#include "Narrative/AshenIdentityGovernanceBalanceDataAsset.h"
+#include "Narrative/AshenIdentityGovernanceValidator.h"
 #include "AshenSoulConstellationSubsystem.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHeartstoneReflectionProcessed, bool, bSuccess, const FAshenIdentityCognitiveStateVector&, NewState);
 
 /**
  * UAshenSoulConstellationSubsystem
  * ENGINE-SPEC-001 SOVEREIGN KERNEL — UGameInstanceSubsystem holding the canonical FSoulStateVector.
- * Single source of truth. Fires FOnSoulStateVectorInvalidated to wire AnimBP, Shaders, AI, Audio, and Dialogue simultaneously.
+ * Single source of truth. Integrates Reflective Identity Compiler (RIC-003) & SLM Governance Firewall.
  */
 UCLASS()
 class ASHENOATH_API UAshenSoulConstellationSubsystem : public UGameInstanceSubsystem
@@ -31,6 +36,10 @@ public:
 	/** Fired after CompileIdentity() completes successfully */
 	UPROPERTY(BlueprintAssignable, Category = "Ashen Oath | Soul Kernel")
 	FOnIdentityCompilationComplete OnIdentityCompilationComplete;
+
+	/** Fired after Heartstone reflection session is processed via governance firewall */
+	UPROPERTY(BlueprintAssignable, Category = "Ashen Oath | Soul Kernel")
+	FOnHeartstoneReflectionProcessed OnHeartstoneReflectionProcessed;
 
 	/** The authoritative canonical soul state vector for game systems */
 	UPROPERTY(BlueprintReadOnly, Category = "Ashen Oath | Soul Kernel")
@@ -100,8 +109,44 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Soul Kernel")
 	void ApplyRawWeightDeltas(float StanceDelta, float EmpathicDelta, float TacticalDelta, float DebtDelta);
 
+	// -----------------------------------------------------------------------------------
+	// RIC-003 GOVERNANCE & SLM INTEGRATION API
+	// -----------------------------------------------------------------------------------
+
+	/**
+	 * Ingests and audits an unparsed JSON payload from the offline SLM through the Governance Validator.
+	 * Mutates soul state vector on success, applies asymmetric memory decay, and publishes state.
+	 * @param RawJsonData - Raw JSON string from SLM
+	 * @return True if payload passed schema, size, and provenance validation without error
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Governance")
+	bool ProcessHeartstoneReflectionSession(const FString& RawJsonData);
+
+	/** Registers an unsealed memory ID into the authoritative imprint buffer */
+	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Governance")
+	void RegisterUnsealedMemory(const FString& MemoryId, EImprintSalienceCategory Category = EImprintSalienceCategory::Trauma);
+
+	/** Requests an asynchronous reflection session to local Faraday Cage endpoint */
+	UFUNCTION(BlueprintCallable, Category = "Ashen Oath | Governance")
+	void RequestAsyncSLMReflectionSession(const FString& EndpointUrl = TEXT("http://localhost:1234/v1/chat/completions"));
+
+	/** Authoritative list of memory IDs unsealed by the engine (Anti-Hallucination Buffer) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen Oath | Governance")
+	TArray<FString> AuthoritativeImprintBuffer;
+
+	/** Detailed imprint records with salience tracking for memory decay */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen Oath | Governance")
+	TArray<FAshenImprintRecord> ActiveImprintRecords;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen Oath | Governance|Balancing")
+	UAshenIdentityGovernanceBalanceDataAsset* GovernanceBalanceDataAsset;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen Oath | Governance")
+	UAshenIdentityGovernanceValidator* GovernanceValidator;
+
 private:
 	void EvaluateBehavioralProfile();
 	void EvaluateDebtStage();
 	void InvalidateSubsystems();
+	void EnsureGovernanceValidator();
 };
