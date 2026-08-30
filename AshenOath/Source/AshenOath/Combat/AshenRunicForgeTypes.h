@@ -1,80 +1,56 @@
-// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
+// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "GameplayTagContainer.h"
+#include "Orchestration/AshenMacroSystemicContractTypes.h"
 #include "AshenRunicForgeTypes.generated.h"
 
-/**
- * EOathbringerAscensionTier
- * 
- * Metallurgical and spiritual evolution tiers of Oathbringer.
- */
 UENUM(BlueprintType)
 enum class EOathbringerAscensionTier : uint8
 {
-	Tier1_DullNightsteel   UMETA(DisplayName = "Tier 1: Dull Nightsteel (1.0x Base Dmg, 100 Flow Cap)"),
-	Tier2_AwakenedFuller   UMETA(DisplayName = "Tier 2: Awakened Fuller (1.1x Dmg, 150 Flow Cap, Flow Glint)"),
-	Tier3_SunderedSovereign UMETA(DisplayName = "Tier 3: Sundered Sovereign (1.2x Dmg, 4 Sigil Sockets Unlocked)"),
-	Tier4_EldrinsCrucible  UMETA(DisplayName = "Tier 4: Eldrin's Crucible (1.3x Dmg, 1.50 Soot Battery Cap)"),
-	Tier5_GodslayerApex    UMETA(DisplayName = "Tier 5: Godslayer Apex (1.5x Dmg, 0.0s Stance Latency, White Flame Aura)")
+	Tier1_DullNightsteel = 0 UMETA(DisplayName = "Tier 1: The Burdened Iron (Dull Nightsteel)"),
+	Tier2_AwakenedFuller = 1 UMETA(DisplayName = "Tier 2: The Resonant Fuller (Awakened Fuller)"),
+	Tier3_SunderedSovereign = 2 UMETA(DisplayName = "Tier 3: Sundered Sovereign"),
+	Tier4_EldrinsCrucible = 3 UMETA(DisplayName = "Tier 4: Eldrin's Crucible"),
+	Tier5_GodslayerApex = 4 UMETA(DisplayName = "Tier 5: Zenith Sovereign (Godslayer Apex)"),
+
+	BurdenedIron = Tier1_DullNightsteel,
+	AwakenedFuller = Tier2_AwakenedFuller,
+	SunderedSovereign = Tier3_SunderedSovereign,
+	EldrinsCrucible = Tier4_EldrinsCrucible,
+	ZenithSovereign = Tier5_GodslayerApex
 };
 
-/**
- * EGuardSigilSocket
- * 
- * The 4 dedicated martial guard sigil sockets along Oathbringer's fuller seam.
- */
 UENUM(BlueprintType)
 enum class EGuardSigilSocket : uint8
 {
-	VomTagSocket  UMETA(DisplayName = "Vom Tag Socket (High Wrath - Cleaves)"),
-	PflugSocket   UMETA(DisplayName = "Pflug Socket (Low Plow - Thrusts & Sprints)"),
-	OchsSocket    UMETA(DisplayName = "Ochs Socket (Crown Guard - Parries & Counters)"),
-	MordhauSocket UMETA(DisplayName = "Mordhau Socket (Half-Sword / Pommel - Plate Crushing)")
+	VomTagSocket = 0 UMETA(DisplayName = "High Guard (Vom Tag)"),
+	PflugSocket = 1 UMETA(DisplayName = "Plow Guard (Pflug)"),
+	OchsSocket = 2 UMETA(DisplayName = "Window Guard (Ochs)"),
+	MordhauSocket = 3 UMETA(DisplayName = "Murder Stroke (Mordhau)"),
+
+	VomTag = VomTagSocket,
+	Pflug = PflugSocket,
+	Ochs = OchsSocket,
+	Mordhau = MordhauSocket
 };
 
-/**
- * ESigilResonanceEffect
- * 
- * Ancient runic glyphs that can be socketed into Oathbringer's guards.
- */
 UENUM(BlueprintType)
 enum class ESigilResonanceEffect : uint8
 {
-	None              UMETA(DisplayName = "None (Empty Socket)"),
-	ShatteredColossus UMETA(DisplayName = "Sigil of the Shattered Colossus (600uu Terrain Fissure, +150 Poise Dmg)"),
-	ZephyrGale        UMETA(DisplayName = "Sigil of the Zephyr Gale (400uu Aerodynamic Vacuum Suction)"),
-	SunkenSun         UMETA(DisplayName = "Sigil of the Sunken Sun (+0.15s Parry Leniency, 2.5s Radial Blind)"),
-	GravimetricCore   UMETA(DisplayName = "Sigil of the Gravimetric Core (100% Armor Penetration, Gravity Pulse)")
+	None = 0,
+	ShatteredColossus = 1 UMETA(DisplayName = "Colossus Rupture / Shattered Colossus"),
+	ZephyrGale = 2 UMETA(DisplayName = "Zephyr Gale / Vacuum Thrust"),
+	SunkenSun = 3 UMETA(DisplayName = "Sunken Sun / Aegis White Flame"),
+	GravimetricCore = 4 UMETA(DisplayName = "Gravimetric Core / Pommel Shatter"),
+
+	ColossusRuptureCleave = ShatteredColossus,
+	ZephyrVacuumThrust = ZephyrGale,
+	AegisWhiteFlameParry = SunkenSun,
+	GravimetricPommelShatter = GravimetricCore
 };
 
-/**
- * FGuardSigilSocketData
- * 
- * Inscription state for a single guard socket.
- */
-USTRUCT(BlueprintType)
-struct FGuardSigilSocketData
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
-	EGuardSigilSocket SocketType = EGuardSigilSocket::VomTagSocket;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
-	ESigilResonanceEffect InscribedSigil = ESigilResonanceEffect::None;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
-	bool bSocketUnlocked = true;
-};
-
-/**
- * FOathbringerEvolutionState
- * 
- * Master progression state of Oathbringer.
- */
 USTRUCT(BlueprintType)
 struct FOathbringerEvolutionState
 {
@@ -93,11 +69,24 @@ struct FOathbringerEvolutionState
 	int32 UnlockedSocketsCount = 0;
 };
 
-/**
- * FFlowResonanceResult
- * 
- * Metrics calculated when executing a hybrid dual-sigil finisher strike.
- */
+USTRUCT(BlueprintType)
+struct FGuardSigilSocketData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
+	EGuardSigilSocket SocketType = EGuardSigilSocket::VomTagSocket;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
+	ESigilResonanceEffect InscribedSigil = ESigilResonanceEffect::None;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
+	bool bSocketUnlocked = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
+	bool bIsUnlocked = false;
+};
+
 USTRUCT(BlueprintType)
 struct FFlowResonanceResult
 {
@@ -107,20 +96,67 @@ struct FFlowResonanceResult
 	bool bResonanceTriggered = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
-	float HybridDamageMultiplier = 1.40f;
+	float HybridDamageMultiplier = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
-	float FissureRadiusUU = 600.0f;
+	float FissureRadiusUU = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
-	float VacuumSuctionRadiusUU = 400.0f;
+	float VacuumSuctionRadiusUU = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
 	FText ResonanceDescription;
 };
 
-// Multicast Delegates
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOathbringerTierAscended, EOathbringerAscensionTier, NewTier, const FOathbringerEvolutionState&, State);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGuardSigilInscribed, EGuardSigilSocket, Socket, ESigilResonanceEffect, InscribedSigil);
+USTRUCT(BlueprintType)
+struct FMemoryEchoSocketBinding
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
+	FGuid BoundMemoryImprintId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
+	EOntologicalLens AppliedLens = EOntologicalLens::Uncompiled;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
+	EGuardSigilSocket TargetSocket = EGuardSigilSocket::VomTagSocket;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ashen|RunicForge")
+	FGameplayTag GrantedCombatTrait;
+};
+
+USTRUCT(BlueprintType)
+struct FOathbringerMorphologyState
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Morphology")
+	EOathbringerAscensionTier CurrentTier = EOathbringerAscensionTier::Tier1_DullNightsteel;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Morphology")
+	TMap<EGuardSigilSocket, FMemoryEchoSocketBinding> SocketBindings;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ashen|Morphology")
+	bool bIsFlowGlintActive = false;
+};
+
+USTRUCT(BlueprintType)
+struct FHybridFinisherPayload
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ashen|Finisher")
+	FGameplayTag FinisherTag;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ashen|Finisher")
+	float PoiseBreakMultiplier = 1.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ashen|Finisher")
+	float DebtPurgeDelta = 0.0f;
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOathbringerTierAscended, EOathbringerAscensionTier, NewTier, const FOathbringerEvolutionState&, NewState);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGuardSigilInscribed, EGuardSigilSocket, Socket, ESigilResonanceEffect, Sigil);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFlowResonanceFinisherExecuted, const FFlowResonanceResult&, Result);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRunicSeamGlyphsUpdated, EGuardSigilSocket, ActiveGuard);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRunicSeamGlyphsUpdated, EGuardSigilSocket, ActiveSocket);

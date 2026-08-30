@@ -1,30 +1,38 @@
-// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
+// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "UObject/NoExportTypes.h"
+#include "Soul/AshenSoulTypes.h"
 #include "Combat/AshenRunicForgeTypes.h"
 #include "AshenSigilResonanceEvaluator.generated.h"
 
+class UAshenRunicForgeBalanceDataAsset;
+
 /**
  * UAshenSigilResonanceEvaluator
- * 
- * Computes hybrid dual-sigil finisher strike damage scaling (1.40x), suction gravity radiuses, and poise shatter values.
+ * Evaluates 0.15s Flow Glint hybrid finisher triggers strictly against spatial distance (<=200uu) and Relational Flow.
  */
-UCLASS(ClassGroup=(Ashen), meta=(BlueprintSpawnableComponent))
-class ASHENOATH_API UAshenSigilResonanceEvaluator : public UActorComponent
+UCLASS(BlueprintType)
+class ASHENOATH_API UAshenSigilResonanceEvaluator : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	UAshenSigilResonanceEvaluator();
+	UFUNCTION(BlueprintCallable, Category = "Ashen|SigilResonance")
+	bool EvaluateHybridFinisher(
+		EGuardSigilSocket StanceA,
+		EGuardSigilSocket StanceB,
+		const FSomaticState& SomaticState,
+		float CompanionDistance,
+		const UAshenRunicForgeBalanceDataAsset* BalanceData,
+		FHybridFinisherPayload& OutPayload) const;
 
-	/** Evaluates hybrid finisher bonus damage multiplier */
-	UFUNCTION(BlueprintPure, Category = "Ashen|RunicForge|Evaluator")
-	float EvaluateHybridFinisherDamage(ESigilResonanceEffect SigilA, ESigilResonanceEffect SigilB) const;
-
-	/** Evaluates whether two socketed sigils can create a Flow Resonance strike */
-	UFUNCTION(BlueprintPure, Category = "Ashen|RunicForge|Evaluator")
+	/** Legacy/Direct evaluator checking if two sigils can trigger dual resonance */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|SigilResonance")
 	bool CanTriggerResonance(ESigilResonanceEffect SigilA, ESigilResonanceEffect SigilB) const;
+
+	/** Evaluates damage multiplier from dual sigil combinations */
+	UFUNCTION(BlueprintCallable, Category = "Ashen|SigilResonance")
+	float EvaluateHybridFinisherDamage(ESigilResonanceEffect SigilA, ESigilResonanceEffect SigilB) const;
 };

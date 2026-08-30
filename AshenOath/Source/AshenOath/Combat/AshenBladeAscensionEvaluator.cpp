@@ -1,38 +1,71 @@
-// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
+// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
 
 #include "Combat/AshenBladeAscensionEvaluator.h"
+#include "Combat/AshenRunicForgeBalanceDataAsset.h"
 
-UAshenBladeAscensionEvaluator::UAshenBladeAscensionEvaluator()
+EOathbringerAscensionTier UAshenBladeAscensionEvaluator::EvaluateAscensionTier(
+	const FSoulStateVector& CanonicalSoul,
+	const FRelationalMatrix_V2& RelationalMatrix,
+	const UAshenRunicForgeBalanceDataAsset* BalanceData) const
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	if (!BalanceData)
+	{
+		return EOathbringerAscensionTier::Tier1_DullNightsteel;
+	}
+
+	// Tier 5: Zenith Sovereign (Symbiotic Equilibrium: Resolve >= 0.90, Debt == 0.0)
+	if (CanonicalSoul.Resolve >= BalanceData->Tier5ResolveThreshold &&
+		CanonicalSoul.IntegrationDebt <= KINDA_SMALL_NUMBER)
+	{
+		return EOathbringerAscensionTier::Tier5_GodslayerApex;
+	}
+
+	// Tier 4: Eldrin's Crucible (Bifurcated Will: Corruption >= 0.50, Resolve >= 0.70)
+	if (CanonicalSoul.Corruption >= BalanceData->Tier4CorruptionThreshold &&
+		CanonicalSoul.Resolve >= BalanceData->Tier4ResolveThreshold)
+	{
+		return EOathbringerAscensionTier::Tier4_EldrinsCrucible;
+	}
+
+	// Tier 3: Sundered Sovereign (Relational Synchronization Matrix Predicate)
+	if (RelationalMatrix.IsEligibleForRelationalFinisher() &&
+		RelationalMatrix.TrioResonance >= BalanceData->Tier3TrioResonanceThreshold)
+	{
+		return EOathbringerAscensionTier::Tier3_SunderedSovereign;
+	}
+
+	// Tier 2: The Resonant Fuller (Integration Debt Fracturing Steel: Debt >= 0.25)
+	if (CanonicalSoul.IntegrationDebt >= BalanceData->Tier2DebtThreshold)
+	{
+		return EOathbringerAscensionTier::Tier2_AwakenedFuller;
+	}
+
+	// Tier 1: The Burdened Iron (Dormant Baseline)
+	return EOathbringerAscensionTier::Tier1_DullNightsteel;
 }
 
 bool UAshenBladeAscensionEvaluator::IsEligibleForAscension(
 	EOathbringerAscensionTier CurrentTier,
-	int32 DefeatedSanctumBosses,
-	int32 IgnitedHearthstones,
-	int32 SolvedForensicCases) const
+	int32 BossKills,
+	int32 HearthsLit,
+	int32 ForensicCases) const
 {
 	switch (CurrentTier)
 	{
 	case EOathbringerAscensionTier::Tier1_DullNightsteel:
-		// Requires 1 Sanctum Boss + 1 Hearthstone
-		return (DefeatedSanctumBosses >= 1 && IgnitedHearthstones >= 1);
+		return (BossKills >= 1 && HearthsLit >= 1);
 
 	case EOathbringerAscensionTier::Tier2_AwakenedFuller:
-		// Requires 2 Bosses + 3 Hearthstones + 1 Forensic Case (Unlocks 4 sockets)
-		return (DefeatedSanctumBosses >= 2 && IgnitedHearthstones >= 3 && SolvedForensicCases >= 1);
+		return (BossKills >= 2 && HearthsLit >= 3 && ForensicCases >= 1);
 
 	case EOathbringerAscensionTier::Tier3_SunderedSovereign:
-		// Requires 4 Bosses + 5 Hearthstones + 3 Cases (Eldrin's Crucible)
-		return (DefeatedSanctumBosses >= 4 && IgnitedHearthstones >= 5 && SolvedForensicCases >= 3);
+		return (BossKills >= 3 && HearthsLit >= 4 && ForensicCases >= 2);
 
 	case EOathbringerAscensionTier::Tier4_EldrinsCrucible:
-		// Requires 6 Bosses + 8 Hearthstones + 5 Cases (Godslayer Apex)
-		return (DefeatedSanctumBosses >= 6 && IgnitedHearthstones >= 8 && SolvedForensicCases >= 5);
+		return (BossKills >= 4 && HearthsLit >= 5 && ForensicCases >= 3);
 
 	case EOathbringerAscensionTier::Tier5_GodslayerApex:
 	default:
-		return false; // Max tier achieved
+		return false;
 	}
 }
