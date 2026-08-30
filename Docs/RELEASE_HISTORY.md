@@ -4,6 +4,19 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.10.0: Narrative Contemplation & Tactical Intervention Remediation Pass
+**Governing Directives:** Constitutional Law I (SSoT), `CONTRACT-SPEC-051`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Campfire Contemplation SSoT Rest` | `Narrative/`, `Soul/` | `UAshenCampfireContemplationDirectorComponent` committing $+0.25$ Resolve, $-0.25$ Dysregulation ($N$), and $-0.15$ Corruption ($C$) directly to `UAshenSoulPublisher`, while clearing companion fatigue | `FAshenCampfireRestSSoTIntegrationTest` |
+| `Multi-Author Marginalia SSoT Gating` | `Narrative/`, `Soul/` | `UAshenMultiAuthorMarginaliaEvaluator` automatically querying SSoT `FSoulStateVector` trust thresholds (Garrett $\ge 0.40$, Serafina $\ge 0.70$) | `FAshenMultiAuthorMarginaliaSSoTIntegrationTest` |
+| `Martyr Solitary Parry SSoT Commits` | `Combat/`, `Soul/` | `UAshenMartyrSolitaryParryGASAbility` committing $-0.05$ companion trust and $+0.05$ Dysregulation ($N$) atomically to `UAshenSoulPublisher` upon execution | `FAshenTacticalInterventionSSoTIntegrationTest` |
+| `Transference Intervention SSoT Reward` | `Combat/`, `Soul/` | `UAshenTransferenceInterventionInterceptGASAbility` absorbing companion damage and awarding $+0.20$ companion trust directly to `UAshenSoulPublisher` | `FAshenTacticalInterventionSSoTIntegrationTest` |
+
+---
+
 ### Patch v158.9.0: Relational & Somatic Pipeline Remediation Pass
 **Governing Directives:** Constitutional Law I (SSoT), `TAM-001`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified

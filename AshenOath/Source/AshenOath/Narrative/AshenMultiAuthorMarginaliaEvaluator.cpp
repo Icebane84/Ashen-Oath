@@ -1,28 +1,62 @@
-// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
+// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
 
 #include "Narrative/AshenMultiAuthorMarginaliaEvaluator.h"
+#include "Soul/AshenSoulPublisher.h"
+#include "Soul/AshenSoulStateVector.h"
+#include "Engine/World.h"
+#include "Engine/GameInstance.h"
 
 UAshenMultiAuthorMarginaliaEvaluator::UAshenMultiAuthorMarginaliaEvaluator()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-bool UAshenMultiAuthorMarginaliaEvaluator::IsAuthorMarginaliaUnlocked(EForensicMarginaliaAuthor Author, float TrustScore01) const
+bool UAshenMultiAuthorMarginaliaEvaluator::IsAuthorMarginaliaUnlocked(
+	EForensicMarginaliaAuthor Author,
+	float TrustScore01) const
 {
-	const float SafeTrust = FMath::Clamp(TrustScore01, 0.0f, 1.0f);
+	float EvaluatedTrust = TrustScore01;
+
+	if (EvaluatedTrust < 0.0f)
+	{
+		if (UAshenSoulPublisher* Publisher = GetSoulPublisher())
+		{
+			const FSoulStateVector State = Publisher->GetSoulState();
+			if (Author == EForensicMarginaliaAuthor::Garrett)
+			{
+				EvaluatedTrust = State.GarrettTrust;
+			}
+			else if (Author == EForensicMarginaliaAuthor::Serafina)
+			{
+				EvaluatedTrust = State.SerafinaTrust;
+			}
+			else
+			{
+				EvaluatedTrust = 1.0f; // Kaelen always unlocked
+			}
+		}
+		else
+		{
+			EvaluatedTrust = 0.50f;
+		}
+	}
 
 	switch (Author)
 	{
-	case EForensicMarginaliaAuthor::SystemCanon:
-		return true; // Always visible
 	case EForensicMarginaliaAuthor::Kaelen:
-		return true; // Protagonist baseline
-	case EForensicMarginaliaAuthor::Garrett:
-		return SafeTrust >= 0.40f; // Unlocks at 40% trust
-	case EForensicMarginaliaAuthor::Serafina:
-		return SafeTrust >= 0.70f; // Unlocks at 70% trust
-	default:
+		// Kaelen's notes are always unlocked
 		return true;
+
+	case EForensicMarginaliaAuthor::Garrett:
+		// Garrett writes when trust reaches 40% (0.40)
+		return EvaluatedTrust >= 0.40f;
+
+	case EForensicMarginaliaAuthor::Serafina:
+		// Serafina writes when trust reaches 70% (0.70)
+		return EvaluatedTrust >= 0.70f;
+
+	default:
+		return false;
 	}
 }
 
@@ -31,13 +65,30 @@ FLinearColor UAshenMultiAuthorMarginaliaEvaluator::GetAuthorInkColor(EForensicMa
 	switch (Author)
 	{
 	case EForensicMarginaliaAuthor::Kaelen:
-		return FLinearColor(0.12f, 0.12f, 0.14f); // Black Iron Carbon Ink
+		// Charcoal Black
+		return FLinearColor(0.08f, 0.08f, 0.08f, 1.0f);
+
 	case EForensicMarginaliaAuthor::Garrett:
-		return FLinearColor(0.18f, 0.45f, 0.22f); // Verdant Gall Ink
+		// Copper Brown
+		return FLinearColor(0.65f, 0.35f, 0.15f, 1.0f);
+
 	case EForensicMarginaliaAuthor::Serafina:
-		return FLinearColor(0.85f, 0.65f, 0.15f); // Golden Radiant White Flame Ink
-	case EForensicMarginaliaAuthor::SystemCanon:
+		// Silver Blue
+		return FLinearColor(0.40f, 0.60f, 0.85f, 1.0f);
+
 	default:
-		return FLinearColor(0.88f, 0.85f, 0.78f); // Illuminated Parchment Cream
+		return FLinearColor::Black;
 	}
+}
+
+UAshenSoulPublisher* UAshenMultiAuthorMarginaliaEvaluator::GetSoulPublisher() const
+{
+	if (const UWorld* World = GetWorld())
+	{
+		if (const UGameInstance* GI = World->GetGameInstance())
+		{
+			return GI->GetSubsystem<UAshenSoulPublisher>();
+		}
+	}
+	return nullptr;
 }

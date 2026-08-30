@@ -35,6 +35,7 @@
 ## 📦 2. Production Manifest & C++ Architecture
 
 ### Phase 1: Canonical Contracts & Evaluators
+
 * **`AshenSoulTypes.h`**: Declares 28-byte `FSoulStateVector`, `FCompanionProfile_V2`, `FRelationalMatrix_V2`, and `FSomaticState`.
 * **`AshenRunicForgeTypes.h`**: `EOathbringerAscensionTier` (1–5), `EGuardSigilSocket` (VomTag, Pflug, Ochs, Mordhau), `ESigilResonanceEffect`, `FMemoryEchoSocketBinding`, `FOathbringerMorphologyState`, `FHybridFinisherPayload`.
 * **`UAshenRunicForgeBalanceDataAsset`**: `UPrimaryDataAsset` providing live tuning sliders for glint timing ($0.15\text{s}$), proximity pocket ($200\text{uu}$), retraction buffer ($650\text{uu}$), and ascension thresholds.

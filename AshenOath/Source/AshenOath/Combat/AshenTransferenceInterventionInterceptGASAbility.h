@@ -1,16 +1,17 @@
-// Copyright Ashen Oath Tactical RPG. All Rights Reserved.
-
+// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "AshenTransferenceInterventionInterceptGASAbility.generated.h"
 
+class UAshenSoulPublisher;
+
 /**
  * UAshenTransferenceInterventionInterceptGASAbility
  * 
  * Kaelen intervention ability: Intercepts a lethal boss attack on a companion,
- * absorbing the blow and forging deep trust (+0.20 Trust).
+ * absorbing the blow and forging deep trust (+0.20 Trust committed to UAshenSoulPublisher).
  */
 UCLASS()
 class ASHENOATH_API UAshenTransferenceInterventionInterceptGASAbility : public UGameplayAbility
@@ -35,4 +36,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ashen|Combat|Intervention")
 	float TrustRewardScalar = 0.20f;
+
+private:
+	UAshenSoulPublisher* GetSoulPublisher() const;
 };
