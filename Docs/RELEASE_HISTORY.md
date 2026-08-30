@@ -6,6 +6,42 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ## 📈 Summary of Builds
 
+### Patch v158.4.0: Closed-Loop Causal Architecture & Calculated Deference (AOP-MASTER-CONVERGENCE-SPEC-V2.0)
+**Governing Directives:** `AOP-MASTER-CONVERGENCE-SPEC-V2.0` (PRS-001), Constitutional Laws I–IV, Memory Axiom  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), 23 Master QA Suites Passing Clean
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `SSoT Soul Publisher` | `Soul/`, `Core/` | `UAshenSoulPublisher` acting as Constitutional Law I Single Source of Truth for 28-byte `FSoulStateVector` and `FRelationalMatrix_V2` | `FAshenMasterConvergenceV2AutomationTest` |
+| `Somatic Derivation Engine` | `Soul/` | `UAshenSoulDerivationSubsystem` deriving continuous somatic signals ($\Phi_{\text{internal}}, H, \Psi, I$) using normalized manifolds ($\sum = 1.00$) | `FAshenMasterConvergenceV2AutomationTest` |
+| `Calculated Deference Fulcrum` | `Combat/`, `Companions/` | `UAshenDeferenceComponent` surrendering offensive DPS ($0.60\text{s}$ lockout) and absorbing $80\%$ poise strain to stabilize post-strike state | `FAshenMasterConvergenceV2AutomationTest` |
+
+---
+
+### Patch v158.3.0: Memory-Driven Runic Forge & Sigil Inscription Matrix (RUNIC-FORGE-SPEC-098 V2.0)
+**Governing Directives:** `RUNIC-FORGE-SPEC-098`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Tri-Partite QA Automation Suite Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `5-Tier Blade Ascension` | `Combat/`, `Soul/` | `UAshenBladeAscensionEvaluator` deriving blade evolution tier purely from `FSoulStateVector` and `FRelationalMatrix_V2` predicates | `FAshenRunicForgeConvergenceIntegrationTest` |
+| `Memory Echo Sockets` | `Combat/`, `Narrative/` | `FMemoryEchoSocketBinding` binding unsealed memory imprint IDs to 4 guard sockets (*Vom Tag, Pflug, Ochs, Mordhau*) via `EOntologicalLens` | `FAshenRunicForgeConvergenceIntegrationTest` |
+| `Relational Flow Glint Gating` | `Combat/`, `Companions/` | `UAshenSigilResonanceEvaluator` gating $0.15\text{s}$ Flow Glint strictly to $\le 200\text{uu}$ companion combat pocket | `FAshenRunicForgeConvergenceIntegrationTest` |
+
+---
+
+### Patch v158.2.0: Reflective Identity Compiler (RIC-003) & SLM Governance Firewall
+**Governing Directives:** `RIC-003`, Faraday Cage Protocol (Law 11), Offline SLM Governance  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), 6-Vector Automation Test Suite Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Zero-Trust Governance Firewall` | `Narrative/`, `Soul/` | `UAshenIdentityGovernanceValidator` enforcing $4\text{KB}$ size limits, JSON schema validation, Provenance Audit, delta hard-clamping ($\pm 0.25$), and asymmetric memory decay | `FAshenGovernanceAutomationTest` |
+| `Identity Governance Balance Asset` | `Narrative/` | `UAshenIdentityGovernanceBalanceDataAsset` exposing live editor tuning for clamp limits, payload ceilings, and decay lambdas | `FAshenGovernanceAutomationTest` |
+| `Async SLM Rest Client` | `Soul/`, `Network/` | `UAshenSoulConstellationSubsystem` async `FHttpModule` client connecting to local Faraday Cage endpoint (`http://localhost:1234/v1`) | `FAshenGovernanceAutomationTest` |
+
+---
+
 ### Patch v158.1.0: The Causal Convergence & Sentinel Anti-Theater Remediation Suite
 **Governing Directives:** Sentinel Audit Response (`Ashen_Oath_Theater_Pattern_Audit.md` & `Ashen_Oath_Wiring_Remediation_Guide.md`), SKILL.md 6-Step Causal Wiring Law  
 **Status:** All 4 Core Priority Layers & 6 Value-Asserting Automation Test Suites Clean (0 Errors, 0 Warnings)

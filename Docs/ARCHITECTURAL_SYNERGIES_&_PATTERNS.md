@@ -64,10 +64,61 @@ This registry serves as the **permanent, living knowledge base** to capture, pre
 | **`SYN-042`** | **Oathbringer 5-Tier Ascension, 4-Guard Sigil Inscription & Flow Hybrid Finisher Invariant** | `RUNIC-FORGE-SPEC-098` / Combat / UI / AI / Audio / Haptics | 5-Tier ascension ($1.0\times \to 1.5\times$ base dmg, $100 \to 250\text{ Flow}$), 4 dedicated guard sockets, and $0.15\text{s}$ Flow Glint dual-sigil hybrid finisher ($1.40\times$). |
 | **`SYN-043`** | **Poise Break Execution Severance, Dynamic Slice Planes & Adrenaline Momentum Invariant** | `SEVERANCE-DISMEMBERMENT-SPEC-099` / Combat / UI / AI / Audio / Haptics | Poise break decapitations ($+35\text{ Adrenaline}$), total bisections ($+40$), stamina refills ($+25$), hyper-armor ($\ge 50\text{ Adrenaline}$), and $180\text{Hz}$ bone cleave audio. |
 | **`SYN-044`** | **Causal Combat Synergy, Sacred Sanctuary Acceleration & Data-Driven Stance Invariant** | `CONVERGENCE-SPEC-100` / Combat / World / Companions / UI / QA | $+250\%$ stamina acceleration in $500\text{uu}$ sanctuary dome, Garrett $1.8\times$ rear recovery stagger, $450\text{ damage}$ paired riposte posture reset, and live `UAshenMartialStanceBalanceDataAsset` data-driven tuning. |
+| **`SYN-045`** | **Reflective Identity Compiler & Zero-Trust SLM Governance Firewall Invariant** | `RIC-003` / Narrative / Soul / Network / QA | Offline Small Language Model (SLM) JSON validation, Provenance Audit buffer verification ($0$ state mutation on hallucinated citations), $\pm 0.25$ delta clamping, and asymmetric memory decay ($S(t) = S_0 \cdot e^{-\lambda t}$). |
+| **`SYN-046`** | **Memory Echo Loci Inscription & Relational Flow Glint Spatial Invariant** | `RUNIC-FORGE-SPEC-098` / Combat / Soul / Companions / QA | 5-Tier blade ascension derived from `FSoulStateVector` & `FRelationalMatrix_V2`, 4 Liechtenauer guard loci, and $0.15\text{s}$ Flow Glint strictly gated to $\le 200\text{uu}$ companion combat pocket. |
+| **`SYN-047`** | **Closed-Loop Causal Architecture & Calculated Deference Martial Fulcrum Invariant** | `AOP-MASTER-CONVERGENCE-SPEC-V2.0` / Soul / Combat / Companions / QA | 28-Byte `FSoulStateVector` SSoT (`UAshenSoulPublisher`), non-saturating normalized manifolds ($\sum = 1.00$), and Calculated Deference ($0.60\text{s}$ lockout, $80\%$ poise strain absorption, post-strike stabilization). |
 
 ---
 
 ## 🔬 3. Detailed Architectural Synergy Profiles
+
+---
+
+### `SYN-047`: Closed-Loop Causal Architecture & Calculated Deference Martial Fulcrum Invariant
+
+* **Target Subsystems:** `UAshenSoulPublisher`, `UAshenSoulDerivationSubsystem`, `UAshenDeferenceComponent`
+* **Related Specifications:** [`AOP-MASTER-CONVERGENCE-SPEC-V2.0`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/AOP-MASTER-CONVERGENCE-SPEC-V2.0%20%28THE%20CLOSED-LOOP%20CAUSAL%20SOUL%20ARCHITECTURE%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\Phi_{\text{internal}} = \text{Clamp}\Big(0.25 \cdot D + 0.25 \cdot \text{Isolation} + 0.20 \cdot \text{LensShift} + 0.15 \cdot \text{Threat} + 0.15 \cdot (1.0 - R), \,\, 0.0, \,\, 1.0\Big)$$
+$$H = \text{Clamp}\Big(0.40 \cdot C + 0.35 \cdot \Phi_{\text{internal}} + 0.25 \cdot (1.0 - R), \,\, 0.0, \,\, 1.0\Big)$$
+$$\Psi_{\text{relational}} = \text{Clamp}\Big(0.45 \cdot \text{TrioResonance} + 0.25 \cdot \text{ProximityFactor} + 0.20 \cdot (1.0 - \text{Threat}) + 0.10 \cdot \text{bSupportActive}, \,\, 0.0, \,\, 1.0\Big)$$
+$$I = \text{Clamp}\Big(0.55 \cdot (1.0 - \Psi_{\text{relational}}) + 0.45 \cdot (1.0 - \text{ProximityFactor}), \,\, 0.0, \,\, 1.0\Big)$$
+$$\text{PoiseAbsorption}_{\text{Deference}} = 0.80\quad (-80\% \text{ Poise Strain})$$
+$$\text{AgencyLockout}_{\text{Deference}} = 0.60\text{s}$$
+
+#### 💡 Architectural Insight & Impact:
+* **"Don't Confuse Suffering with Responsibility":** Eliminates flat damage martyrdom. Calculated Deference provides an immovable martial fulcrum via longsword binds (*Ochs/Mordhau*), enabling companions to strike vulnerable targets while stabilizing Kaelen's derived Parasite Pressure into the **Contained** range ($[0.15, 0.35]$).
+* **Single Source of Truth (SSoT):** `FSoulStateVector` (28 bytes) is the sole persistent state; `FSomaticState` is evaluated purely on demand, eliminating desynced meter traps.
+
+---
+
+### `SYN-046`: Memory Echo Loci Inscription & Relational Flow Glint Spatial Invariant
+
+* **Target Subsystems:** `UAshenBladeAscensionEvaluator`, `UAshenSigilResonanceEvaluator`, `UAshenRunicForgeBalanceDataAsset`
+* **Related Specifications:** [`RUNIC-FORGE-SPEC-098`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/RUNIC-FORGE-SPEC-098%20%28THE%20RUNIC%20FORGE%20WEAPON%20EVOLUTION%20&%20SIGIL%20INSCRIPTION%20MATRIX%29.md)
+
+#### 📐 Mathematical Invariants:
+$$\text{FlowGlintEligibility}(d, \Psi) = (d \le 200.0\text{uu}) \land (\Psi_{\text{relational}} \ge 0.75)$$
+$$\text{RetractionBufferLockout}(d) = (d > 650.0\text{uu}) \implies \text{FlowGlint} = \text{False}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Euclidean Spatial Constraint:** Rejects loose $800\text{uu}$ radial finishers. Flow Glint requires genuine tactical proximity ($\le 200\text{uu}$) in the combat pocket, modeling true cooperative synchronization.
+
+---
+
+### `SYN-045`: Reflective Identity Compiler & Zero-Trust SLM Governance Firewall Invariant
+
+* **Target Subsystems:** `UAshenIdentityGovernanceValidator`, `UAshenIdentityGovernanceBalanceDataAsset`, `UAshenSoulConstellationSubsystem`
+* **Related Specifications:** [`RIC-003`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/RIC-SLM%20Integration%20Synthesis.md)
+
+#### 📐 Mathematical Invariants:
+$$S(t) = S_0 \cdot e^{-\lambda t},\quad \lambda_{\text{Trauma}} = 0.005 < \lambda_{\text{Bond}} = 0.020$$
+$$|\Delta \text{SoulState}| \le 0.25\quad (\text{Strict Clamping Ceiling})$$
+$$\text{PayloadSizeLimit} = 4096\text{ Bytes}$$
+
+#### 💡 Architectural Insight & Impact:
+* **Faraday Cage Defense (Law 11):** Fully safeguards native C++ gameplay systems against hallucinated SLM payloads; ungrounded citations are immediately audited and rejected with $0.0$ state mutation.
 
 ---
 
