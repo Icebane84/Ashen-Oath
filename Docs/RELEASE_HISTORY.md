@@ -4,6 +4,18 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.13.0: Grounded Metallurgy & Material Horror Transformation (METALLURGY-SPEC-102 / Anti-Arcade Law)
+**Governing Directives:** `METALLURGY-SPEC-102`, `PRS-001-MECH-010-MANIFES-V5`, `CONVERGENCE-SPEC-101`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Sentinel Contract Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `5-Tier Grounded Metallurgy` | `Combat/` | `UAshenOathbringerLifecycleComponent` driving 5 grounded physical tiers (*Burdened Iron*, *Honed Damascus*, *The Scribed Vow*, *Devouring Nightsteel*, *Cold Monolith*) with PBR roughness and mass scaling | `FAshenMetallurgyAntiArcadeContractTest` |
+| `The Anti-Arcade Law (Zero Neon)` | `Combat/`, `Visuals/` | Enforced `EmissiveIntensity = 0.0f` across Tiers 1, 2, 3, 5; Tier 3 cold silver inlays reflect ambient light; Tier 4 activates $2.0\text{-inch}$ light absorption envelope and *Tapetum Lucidum* wolf eye retroreflection | `FAshenMetallurgyAntiArcadeContractTest` |
+| `Acoustic Foley & Stillness` | `Combat/`, `Audio/` | Replaced arcade power-up sounds with foley steel grinding (Tier 1), $2400\text{Hz}$ wind hiss (Tier 2), $528\text{Hz}$ silver chime (Tier 3), vacuum sub-bass (Tier 4), and **absolute swing silence** (Tier 5) | `FAshenMetallurgyAntiArcadeContractTest` |
+
+---
+
 ### Patch v158.12.0: Greatsword Stance Flow & 115 BPM Runic Mastery (CONVERGENCE-SPEC-101 / PRS-001-ENG-STANCE-101)
 **Governing Directives:** `CONVERGENCE-SPEC-101`, `PRS-001-MECH-010-MANIFES-V5`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`, Constitutional Law I (SSoT)  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Tri-Partite QA Automation Suite Verified

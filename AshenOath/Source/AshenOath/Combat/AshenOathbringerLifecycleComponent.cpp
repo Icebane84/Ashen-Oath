@@ -9,9 +9,24 @@
 UAshenOathbringerLifecycleComponent::UAshenOathbringerLifecycleComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-	CurrentLifecycle = EOathbringerLifecycleState::Dormant;
+	CurrentTier = EOathbringerMetallurgicalTier::BurdenedIron;
 	EffectiveMass = 120.0f;
 	ForwardPullImpulse = 0.0f;
+
+	// Baseline Tier 1 parameters
+	MaterialParameters.Roughness = 0.65f;
+	MaterialParameters.Metallic = 0.98f;
+	MaterialParameters.AnisotropyAngle = 0.45f;
+	MaterialParameters.LightAbsorptionRadius = 0.0f;
+	MaterialParameters.ViscousSeepageNormalStrength = 0.0f;
+	MaterialParameters.TapetumLucidumRetroreflection = 0.0f;
+	MaterialParameters.EmissiveIntensity = 0.0f;
+
+	AcousticProfile.AirHissFrequency = 1200.0f;
+	AcousticProfile.FoleyGrindIntensity = 0.80f;
+	AcousticProfile.SilverChimeDecaySeconds = 0.0f;
+	AcousticProfile.VacuumSuctionVolume = 0.0f;
+	AcousticProfile.bDeadAcousticIsolation = false;
 }
 
 void UAshenOathbringerLifecycleComponent::BeginPlay()
@@ -20,43 +35,130 @@ void UAshenOathbringerLifecycleComponent::BeginPlay()
 	EvaluateWeaponLifecycle();
 }
 
-EOathbringerLifecycleState UAshenOathbringerLifecycleComponent::EvaluateWeaponLifecycle()
+EOathbringerMetallurgicalTier UAshenOathbringerLifecycleComponent::EvaluateWeaponLifecycle()
 {
-	EOathbringerLifecycleState NewLifecycle = EOathbringerLifecycleState::Dormant;
-	EffectiveMass = 120.0f;
-	ForwardPullImpulse = 0.0f;
-	FLinearColor EmissiveColor = FLinearColor(0.1f, 0.1f, 0.1f, 1.0f); // Matte iron
+	EOathbringerMetallurgicalTier NewTier = EOathbringerMetallurgicalTier::BurdenedIron;
 
 	if (UAshenSoulPublisher* Publisher = GetSoulPublisher())
 	{
 		const FSoulStateVector State = Publisher->GetSoulState();
+
 		if (State.Corruption >= 0.70f)
 		{
-			// Autonomous: Shadow pull
-			NewLifecycle = EOathbringerLifecycleState::Autonomous;
+			// Tier 4: Devouring Nightsteel (Light-Absorbing Parasitic Horror)
+			NewTier = EOathbringerMetallurgicalTier::DevouringNightsteel;
 			EffectiveMass = 0.0f;
-			ForwardPullImpulse = 400.0f; // +400 uu/s forward impulse pull
-			EmissiveColor = FLinearColor(0.85f, 0.05f, 0.05f, 1.0f); // Crimson Nightsteel
+			ForwardPullImpulse = 400.0f;
+
+			MaterialParameters.Roughness = 0.92f; // Light-absorbing velvet matte black
+			MaterialParameters.Metallic = 0.95f;
+			MaterialParameters.AnisotropyAngle = 0.80f; // Organic muscle veining
+			MaterialParameters.LightAbsorptionRadius = 2.0f; // 2-inch ambient light dip
+			MaterialParameters.ViscousSeepageNormalStrength = 0.65f; // Heat-haze bile vapor
+			MaterialParameters.TapetumLucidumRetroreflection = 1.0f; // Wolf pommel eye shine
+			MaterialParameters.EmissiveIntensity = 0.0f; // Zero Neon Law
+
+			AcousticProfile.AirHissFrequency = 45.0f; // Sub-bass vacuum
+			AcousticProfile.FoleyGrindIntensity = 0.10f;
+			AcousticProfile.SilverChimeDecaySeconds = 0.0f;
+			AcousticProfile.VacuumSuctionVolume = 0.85f;
+			AcousticProfile.bDeadAcousticIsolation = false;
+		}
+		else if (State.Resolve >= 0.90f)
+		{
+			// Tier 5: Cold Monolith (Monolithic Obsidian-Steel / Absolute Stillness)
+			NewTier = EOathbringerMetallurgicalTier::ColdMonolith;
+			EffectiveMass = 35.0f; // Impossibly fine balance
+			ForwardPullImpulse = 0.0f;
+
+			MaterialParameters.Roughness = 0.05f; // Flawless surgical 2D edge
+			MaterialParameters.Metallic = 1.0f;
+			MaterialParameters.AnisotropyAngle = 0.0f;
+			MaterialParameters.LightAbsorptionRadius = 0.0f;
+			MaterialParameters.ViscousSeepageNormalStrength = 0.0f;
+			MaterialParameters.TapetumLucidumRetroreflection = 0.0f;
+			MaterialParameters.EmissiveIntensity = 0.0f; // Zero Neon Law
+
+			AcousticProfile.AirHissFrequency = 0.0f;
+			AcousticProfile.FoleyGrindIntensity = 0.0f;
+			AcousticProfile.SilverChimeDecaySeconds = 0.0f;
+			AcousticProfile.VacuumSuctionVolume = 0.0f;
+			AcousticProfile.bDeadAcousticIsolation = true; // Complete swing silence
 		}
 		else if (State.Resolve >= 0.70f)
 		{
-			// Predictive: Flow State
-			NewLifecycle = EOathbringerLifecycleState::Predictive;
-			EffectiveMass = 45.0f; // Lightweight flow mass
+			// Tier 3: The Scribed Vow (Cold Silver Inlays Catching Real Light)
+			NewTier = EOathbringerMetallurgicalTier::ScribedVow;
+			EffectiveMass = 50.0f;
 			ForwardPullImpulse = 0.0f;
-			EmissiveColor = FLinearColor(0.40f, 0.75f, 1.0f, 1.0f); // Azure / Silver White Flame
+
+			MaterialParameters.Roughness = 0.15f; // Mirror-honed Damascus
+			MaterialParameters.Metallic = 0.98f;
+			MaterialParameters.AnisotropyAngle = 0.45f;
+			MaterialParameters.LightAbsorptionRadius = 0.0f;
+			MaterialParameters.ViscousSeepageNormalStrength = 0.0f;
+			MaterialParameters.TapetumLucidumRetroreflection = 0.0f;
+			MaterialParameters.EmissiveIntensity = 0.0f; // Zero Neon Law: Reflects ambient light
+
+			AcousticProfile.AirHissFrequency = 2400.0f;
+			AcousticProfile.FoleyGrindIntensity = 0.20f;
+			AcousticProfile.SilverChimeDecaySeconds = 2.4f; // 528 Hz bell chime
+			AcousticProfile.VacuumSuctionVolume = 0.0f;
+			AcousticProfile.bDeadAcousticIsolation = false;
+		}
+		else if (State.Resolve >= 0.35f)
+		{
+			// Tier 2: Honed Damascus (Disciplined Folded Steel)
+			NewTier = EOathbringerMetallurgicalTier::HonedDamascus;
+			EffectiveMass = 85.0f;
+			ForwardPullImpulse = 0.0f;
+
+			MaterialParameters.Roughness = 0.35f;
+			MaterialParameters.Metallic = 0.98f;
+			MaterialParameters.AnisotropyAngle = 0.45f;
+			MaterialParameters.LightAbsorptionRadius = 0.0f;
+			MaterialParameters.ViscousSeepageNormalStrength = 0.0f;
+			MaterialParameters.TapetumLucidumRetroreflection = 0.0f;
+			MaterialParameters.EmissiveIntensity = 0.0f;
+
+			AcousticProfile.AirHissFrequency = 2400.0f;
+			AcousticProfile.FoleyGrindIntensity = 0.40f;
+			AcousticProfile.SilverChimeDecaySeconds = 0.0f;
+			AcousticProfile.VacuumSuctionVolume = 0.0f;
+			AcousticProfile.bDeadAcousticIsolation = false;
+		}
+		else
+		{
+			// Tier 1: Burdened Iron (Neglected Trauma)
+			NewTier = EOathbringerMetallurgicalTier::BurdenedIron;
+			EffectiveMass = 120.0f;
+			ForwardPullImpulse = 0.0f;
+
+			MaterialParameters.Roughness = 0.65f;
+			MaterialParameters.Metallic = 0.95f;
+			MaterialParameters.AnisotropyAngle = 0.20f;
+			MaterialParameters.LightAbsorptionRadius = 0.0f;
+			MaterialParameters.ViscousSeepageNormalStrength = 0.0f;
+			MaterialParameters.TapetumLucidumRetroreflection = 0.0f;
+			MaterialParameters.EmissiveIntensity = 0.0f;
+
+			AcousticProfile.AirHissFrequency = 1200.0f;
+			AcousticProfile.FoleyGrindIntensity = 0.80f;
+			AcousticProfile.SilverChimeDecaySeconds = 0.0f;
+			AcousticProfile.VacuumSuctionVolume = 0.0f;
+			AcousticProfile.bDeadAcousticIsolation = false;
 		}
 	}
 
-	if (CurrentLifecycle != NewLifecycle)
+	if (CurrentTier != NewTier)
 	{
-		CurrentLifecycle = NewLifecycle;
-		OnLifecycleChanged.Broadcast(CurrentLifecycle, EffectiveMass, EmissiveColor);
-		UE_LOG(LogTemp, Log, TEXT("UAshenOathbringerLifecycleComponent: Lifecycle transitioned to [%d] (Mass: %.1fkg, Pull: %.1fuu/s)."),
-			(int32)CurrentLifecycle, EffectiveMass, ForwardPullImpulse);
+		CurrentTier = NewTier;
+		OnMetallurgyChanged.Broadcast(CurrentTier, EffectiveMass, MaterialParameters, AcousticProfile);
+		UE_LOG(LogTemp, Log, TEXT("UAshenOathbringerLifecycleComponent: Metallurgical Tier [%d] (Mass: %.1fkg, Roughness: %.2f, LightAbsorb: %.1f, Silence: %d)."),
+			(int32)CurrentTier, EffectiveMass, MaterialParameters.Roughness, MaterialParameters.LightAbsorptionRadius, AcousticProfile.bDeadAcousticIsolation ? 1 : 0);
 	}
 
-	return CurrentLifecycle;
+	return CurrentTier;
 }
 
 bool UAshenOathbringerLifecycleComponent::InscribeMemoryEchoToGuardSocket(
@@ -72,31 +174,6 @@ bool UAshenOathbringerLifecycleComponent::InscribeMemoryEchoToGuardSocket(
 		*MemoryEchoID.ToString(), (int32)Guard);
 
 	return true;
-}
-
-FLinearColor UAshenOathbringerLifecycleComponent::GetGuardSocketEmissiveColor(EOathbringerMartialStance Guard) const
-{
-	switch (Guard)
-	{
-	case EOathbringerMartialStance::VomTag_HighWrath:
-		// Charcoal Gold
-		return FLinearColor(0.85f, 0.65f, 0.15f, 1.0f);
-
-	case EOathbringerMartialStance::Pflug_LowPlow:
-		// Copper Amber
-		return FLinearColor(0.80f, 0.40f, 0.10f, 1.0f);
-
-	case EOathbringerMartialStance::Ochs_CrownGuard:
-		// Silver Blue (528 Hz White Flame)
-		return FLinearColor(0.35f, 0.70f, 1.0f, 1.0f);
-
-	case EOathbringerMartialStance::Mordhau_HalfSword:
-		// Crimson Ash
-		return FLinearColor(0.70f, 0.10f, 0.15f, 1.0f);
-
-	default:
-		return FLinearColor::White;
-	}
 }
 
 FName UAshenOathbringerLifecycleComponent::GetSocketInscribedEcho(EOathbringerMartialStance Guard) const

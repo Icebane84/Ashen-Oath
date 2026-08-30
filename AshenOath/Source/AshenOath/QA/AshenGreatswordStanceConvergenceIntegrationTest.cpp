@@ -158,34 +158,34 @@ bool FAshenOathbringerLifecycleContractTest::RunTest(const FString& Parameters)
 
 			if (WeaponLifecycle)
 			{
-				// Stage 1: Baseline Dormant (Resolve < 0.70, Corruption < 0.70)
+				// Stage 1: Baseline Burdened Iron (Resolve < 0.35, Corruption < 0.70)
 				FSoulStateVector DormantState;
-				DormantState.Resolve = 0.50f;
-				DormantState.Corruption = 0.20f;
+				DormantState.Resolve = 0.20f;
+				DormantState.Corruption = 0.10f;
 				Publisher->CommitStateDirect(DormantState);
 
 				WeaponLifecycle->EvaluateWeaponLifecycle();
-				TestEqual(TEXT("Dormant lifecycle state"), WeaponLifecycle->GetCurrentLifecycleState(), EOathbringerLifecycleState::Dormant);
-				TestEqual(TEXT("Dormant weapon mass is 120kg"), WeaponLifecycle->GetEffectiveWeaponMass(), 120.0f);
+				TestEqual(TEXT("Burdened Iron metallurgical tier"), WeaponLifecycle->GetCurrentMetallurgicalTier(), EOathbringerMetallurgicalTier::BurdenedIron);
+				TestEqual(TEXT("Burdened Iron weapon mass is 120kg"), WeaponLifecycle->GetEffectiveWeaponMass(), 120.0f);
 
-				// Stage 2: Predictive Flow State (Resolve >= 0.70)
+				// Stage 2: Scribed Vow (Resolve >= 0.70)
 				FSoulStateVector FlowState;
 				FlowState.Resolve = 0.85f;
 				FlowState.Corruption = 0.10f;
 				Publisher->CommitStateDirect(FlowState);
 
 				WeaponLifecycle->EvaluateWeaponLifecycle();
-				TestEqual(TEXT("Predictive lifecycle state"), WeaponLifecycle->GetCurrentLifecycleState(), EOathbringerLifecycleState::Predictive);
-				TestEqual(TEXT("Predictive weapon mass is 45kg"), WeaponLifecycle->GetEffectiveWeaponMass(), 45.0f);
+				TestEqual(TEXT("Scribed Vow metallurgical tier"), WeaponLifecycle->GetCurrentMetallurgicalTier(), EOathbringerMetallurgicalTier::ScribedVow);
+				TestEqual(TEXT("Scribed Vow weapon mass is 50kg"), WeaponLifecycle->GetEffectiveWeaponMass(), 50.0f);
 
-				// Stage 3: Autonomous Shadow Pull (Corruption >= 0.70)
+				// Stage 3: Autonomous Devouring Nightsteel (Corruption >= 0.70)
 				FSoulStateVector ShadowState;
 				ShadowState.Corruption = 0.75f;
 				Publisher->CommitStateDirect(ShadowState);
 
 				WeaponLifecycle->EvaluateWeaponLifecycle();
-				TestEqual(TEXT("Autonomous lifecycle state"), WeaponLifecycle->GetCurrentLifecycleState(), EOathbringerLifecycleState::Autonomous);
-				TestEqual(TEXT("Autonomous weapon mass is 0kg"), WeaponLifecycle->GetEffectiveWeaponMass(), 0.0f);
+				TestEqual(TEXT("Devouring Nightsteel metallurgical tier"), WeaponLifecycle->GetCurrentMetallurgicalTier(), EOathbringerMetallurgicalTier::DevouringNightsteel);
+				TestEqual(TEXT("Nightsteel weapon mass is 0kg"), WeaponLifecycle->GetEffectiveWeaponMass(), 0.0f);
 				TestEqual(TEXT("Forward pull impulse is +400uu/s"), WeaponLifecycle->GetForwardPullImpulse(), 400.0f);
 
 				// Sockets Inscription Test
