@@ -1,4 +1,4 @@
-// Copyright Phoenix Protocol. All rights reserved.
+// Copyright Phoenix Protocol / Ashen Oath. All Rights Reserved.
 
 #pragma once
 
@@ -6,14 +6,19 @@
 #include "Components/ActorComponent.h"
 #include "AshenOath_SanityComponent.generated.h"
 
+class UAshenAbilitySystemComponent;
+class UAshenSoulPublisher;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSanityChangedSignature, float, CurrentSanity, float, MaxSanity);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSanityDepletedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInstabilitySpikeTriggeredSignature, float, InstabilityAmount);
 
 /**
  * UAshenOath_SanityComponent
- * Psychological health tracker managing Sanity pools, Shadow Resonance,
- * and Instability events. Includes ticking passive recovery.
+ *
+ * Lightweight legacy-compatible view adapter over UAshenAbilitySystemComponent
+ * and UAshenSoulPublisher. Eliminates private split-brain sanity pools while
+ * preserving BP-callable interfaces for existing gameplay blueprints.
  */
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ASHENOATH_API UAshenOath_SanityComponent : public UActorComponent
@@ -23,33 +28,28 @@ class ASHENOATH_API UAshenOath_SanityComponent : public UActorComponent
 public:
 	UAshenOath_SanityComponent();
 
-protected:
 	virtual void BeginPlay() override;
 
-public:
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	/** Reduce sanity. Emits sanity_depleted if hitting 0. */
+	/** Routes mental damage to UAshenAbilitySystemComponent & Soul Publisher */
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|Sanity")
 	void SufferMentalDamage(float Amount);
 
-	/** Add to current sanity. Clamps to MaxSanity. */
+	/** Restores sanity, committing negative dysregulation/corruption deltas */
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|Sanity")
 	void HealSanity(float Amount);
 
-	/** Consume shadow power, decreasing sanity and generating resonance and instability spikes. */
+	/** Consumes shadow power, triggering instability deltas */
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|Sanity")
 	void ConsumeShadowPower(float BaseCost);
 
-	// Getters and Setters
 	UFUNCTION(BlueprintPure, Category = "AshenOath|Sanity")
-	float GetCurrentSanity() const { return CurrentSanity; }
+	float GetCurrentSanity() const;
 
 	UFUNCTION(BlueprintPure, Category = "AshenOath|Sanity")
 	float GetMaxSanity() const { return MaxSanity; }
 
 	UFUNCTION(BlueprintPure, Category = "AshenOath|Sanity")
-	float GetCurrentResonance() const { return CurrentResonance; }
+	float GetCurrentResonance() const;
 
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|Sanity")
 	void SetCurrentSanity(float NewSanity);
@@ -57,7 +57,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|Sanity")
 	void SetCurrentResonance(float NewResonance);
 
-public:
 	UPROPERTY(BlueprintAssignable, Category = "AshenOath|Sanity|Events")
 	FOnSanityChangedSignature OnSanityChanged;
 
@@ -67,19 +66,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "AshenOath|Sanity|Events")
 	FOnInstabilitySpikeTriggeredSignature OnInstabilitySpikeTriggered;
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sanity Settings")
+	float MaxSanity = 100.0f;
+
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sanity Settings", meta = (AllowPrivateAccess = "true"))
-	float MaxSanity;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sanity Settings", meta = (AllowPrivateAccess = "true"))
-	float PassiveRecoveryRate;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sanity Settings", meta = (AllowPrivateAccess = "true"))
-	float ShadowCostMultiplier;
-
-	UPROPERTY(VisibleAnywhere, Category = "Sanity State")
-	float CurrentSanity;
-
-	UPROPERTY(VisibleAnywhere, Category = "Sanity State")
-	float CurrentResonance;
+	UAshenAbilitySystemComponent* GetOwnerASC() const;
+	UAshenSoulPublisher* GetSoulPublisher() const;
 };

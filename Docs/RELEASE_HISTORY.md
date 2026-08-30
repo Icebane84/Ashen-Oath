@@ -4,6 +4,17 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.8.0: SSoT Legacy Seam Remediation Pass (Companions & Sanity Unification)
+**Governing Directives:** Constitutional Law I (SSoT), `CONTRACT-SPEC-051`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Trust Accumulation Remediation` | `Companions/`, `Soul/` | `UAshenTrustAccumulationComponent` stripped of private `CompanionTrustMap`; all trust mutations and queries route atomically through `UAshenSoulPublisher` and `FRelationalMatrix_V2` | `FAshenTrustAccumulationSSoTIntegrationTest` |
+| `Sanity Component Remediation` | `Combat/`, `Soul/` | `UAshenOath_SanityComponent` converted into pure adapter over `UAshenAbilitySystemComponent` and `UAshenSoulPublisher`, eliminating private split-brain sanity pools | `FAshenSanityComponentSSoTIntegrationTest` |
+
+---
+
 ### Patch v158.7.0: Squad Command Wheel & Tactical Co-Op Combos (TACTICAL-SPEC-066 / COMPANION-SPEC-075)
 **Governing Directives:** `TACTICAL-SPEC-066`, `COMPANION-SPEC-075`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified

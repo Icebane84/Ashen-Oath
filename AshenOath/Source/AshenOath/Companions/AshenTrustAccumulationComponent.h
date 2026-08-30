@@ -5,13 +5,16 @@
 #include "Components/ActorComponent.h"
 #include "AshenTrustAccumulationComponent.generated.h"
 
+class UAshenSoulPublisher;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCompanionTrustChangedSignature, FName, CompanionName, float, NewTrustScore);
 
 /**
  * UAshenTrustAccumulationComponent
  *
- * Tracks dynamic companion trust scores (0.0 to 100.0) between Kaelen, Garrett, and Serafina.
- * Unlocks companion combo multipliers and joint synergy abilities as trust accumulates.
+ * Lightweight view adapter routing trust queries and deltas directly to
+ * Constitutional Law I Single Source of Truth (UAshenSoulPublisher).
+ * Eliminates private state maps and synchronizes with FSoulStateVector & FRelationalMatrix_V2.
  */
 UCLASS(ClassGroup=(AshenOath), meta=(BlueprintSpawnableComponent))
 class ASHENOATH_API UAshenTrustAccumulationComponent : public UActorComponent
@@ -21,16 +24,17 @@ class ASHENOATH_API UAshenTrustAccumulationComponent : public UActorComponent
 public:
 	UAshenTrustAccumulationComponent();
 
-protected:
 	virtual void BeginPlay() override;
 
-public:
+	/** Adds trust delta to canonical soul state via UAshenSoulPublisher */
 	UFUNCTION(BlueprintCallable, Category = "AshenOath|Trust")
 	void AddTrust(FName CompanionName, float TrustDelta);
 
+	/** Queries normalized trust score (0.0 to 100.0) from UAshenSoulPublisher */
 	UFUNCTION(BlueprintPure, Category = "AshenOath|Trust")
 	float GetTrustScore(FName CompanionName) const;
 
+	/** Queries synergy damage multiplier from multi-dimensional relational matrix */
 	UFUNCTION(BlueprintPure, Category = "AshenOath|Trust")
 	float GetSynergyDamageMultiplier(FName CompanionName) const;
 
@@ -41,5 +45,5 @@ public:
 	FOnCompanionTrustChangedSignature OnTrustChanged;
 
 private:
-	TMap<FName, float> CompanionTrustMap;
+	UAshenSoulPublisher* GetSoulPublisher() const;
 };
