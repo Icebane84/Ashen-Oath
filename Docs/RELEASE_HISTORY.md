@@ -4,6 +4,18 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.11.0: Dialogue Gating & Trust Dynamics Remediation Pass
+**Governing Directives:** Constitutional Law I (SSoT), `CONTRACT-SPEC-051`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Dialogue Tree SSoT Gating` | `Narrative/`, `Soul/` | `UAshenCompanionTrustDialogueTreeAdapter` automatically querying SSoT `FSoulStateVector` trust levels to gate dialogue nodes (Vulnerability $\ge 0.40$, Trauma Confession $\ge 0.65$) | `FAshenDialogueTrustGatingSSoTIntegrationTest` |
+| `Relational Trust Atrophy SSoT` | `Companions/`, `Soul/` | `UAshenRelationalTrustAtrophyCalculator::ApplyTrustAtrophy` committing trust decay directly to `UAshenSoulPublisher` when companion advice is ignored | `FAshenTrustDynamicsSSoTIntegrationTest` |
+| `Relational Trust Recovery SSoT` | `Companions/`, `Soul/` | `UAshenRelationalTrustRecoveryCalculator::ApplyTrustRecovery` committing $+0.15$ trust recovery to `UAshenSoulPublisher` upon tactical synergy | `FAshenTrustDynamicsSSoTIntegrationTest` |
+
+---
+
 ### Patch v158.10.0: Narrative Contemplation & Tactical Intervention Remediation Pass
 **Governing Directives:** Constitutional Law I (SSoT), `CONTRACT-SPEC-051`, `AOP-MASTER-CONVERGENCE-SPEC-V2.0`  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Automation Test Verified

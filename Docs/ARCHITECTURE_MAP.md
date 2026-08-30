@@ -8,6 +8,7 @@
 
 Ashen Oath is structured across **12 Domain-Driven Vertical Slices** with strict one-way dependency flow, zero cyclic inclusions, zero circular header references, and 100% deterministic test coverage via automated QA test suites.
 
+- **Patch v158.11.0**: Dialogue Gating & Trust Dynamics Remediation Pass — `UAshenCompanionTrustDialogueTreeAdapter`, `UAshenRelationalTrustAtrophyCalculator`, and `UAshenRelationalTrustRecoveryCalculator` aligned to SSoT `UAshenSoulPublisher` and `FSoulStateVector`.
 - **Patch v158.10.0**: Narrative Contemplation & Tactical Intervention Remediation Pass — `UAshenCampfireContemplationDirectorComponent`, `UAshenMultiAuthorMarginaliaEvaluator`, `UAshenMartyrSolitaryParryGASAbility`, and `UAshenTransferenceInterventionInterceptGASAbility` aligned to SSoT `UAshenSoulPublisher` and 28-byte `FSoulStateVector`.
 - **Patch v158.9.0**: Relational & Somatic Pipeline Remediation Pass — `UAshenCompanionTrustDivergenceSubsystem`, `UAshenMartyrGuardCorruptionSpikeCalculator`, `UAshenDiegeticCompanionTrustAudioComponent`, and `UAshenShadowMarkSurgeGASAbility` aligned to `FRelationalMatrix_V2` and `UAshenSoulPublisher`.
 - **Patch v158.8.0**: SSoT Legacy Seam Remediation Pass — `UAshenTrustAccumulationComponent` & `UAshenOath_SanityComponent` converted into pure adapters over `UAshenSoulPublisher` and `UAshenAbilitySystemComponent`, eliminating private split-brain meters across legacy companion and combat code.
