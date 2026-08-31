@@ -4,6 +4,18 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.14.0: Combat Determinism & Temporal Contract (PRS-001-CDTC-001)
+**Governing Directives:** `PRS-001-CDTC-001`, `PRS-001-MECH-010-MANIFES-V5`, `CONVERGENCE-SPEC-101`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting CI/CD Test Suite Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Montage-Track Traversal Task` | `Combat/`, `GAS` | `UAbilityTask_EvaluateMontageFlowPosition` tracking `P_montage` directly on active `UAnimMontage`; 100% frozen during Hit-Stop ($\Delta t_{effective} = 0$) and scaled by `MontagePlayRate` | `FAshenMontagePositionHitStopTest` |
+| `Directional Convex Hull Evaluator` | `Spatial/`, `AI` | `UAshenSpatialEvaluator::EvaluateFlankConvexHull` validating companion distance ($\le 250\text{uu}$), rear arc dot product ($\ge \cos 45^\circ$), and Line-of-Sight collision raycasts | `FAshenSpatialConvexHullValidationTest` |
+| `9-Stage Intra-Frame Pipeline` | `Core/`, `Soul/` | Authoritative 9-stage execution sequence in `TG_PrePhysics` and `TG_PostPhysics`; monotonic `StateVersion++` increment with zero upward contamination | `FAshenCDTCTestSuite` |
+
+---
+
 ### Patch v158.13.0: Grounded Metallurgy & Material Horror Transformation (METALLURGY-SPEC-102 / Anti-Arcade Law)
 **Governing Directives:** `METALLURGY-SPEC-102`, `PRS-001-MECH-010-MANIFES-V5`, `CONVERGENCE-SPEC-101`, Constitutional Law I (SSoT)  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting Sentinel Contract Test Verified
