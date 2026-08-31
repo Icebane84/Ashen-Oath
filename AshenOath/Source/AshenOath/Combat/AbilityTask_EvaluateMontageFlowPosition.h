@@ -11,21 +11,14 @@ class UAnimInstance;
 UENUM(BlueprintType)
 enum class EAshenFlowTimingResult : uint8
 {
-	Early   UMETA(DisplayName = "Early (Queued / 100% Stamina)"),
-	Perfect UMETA(DisplayName = "Perfect (0-Stamina Cancel / +25% Speed Boost)"),
-	Late    UMETA(DisplayName = "Late (Recovery Lockout / -10% Handling Drag)"),
-	Missed  UMETA(DisplayName = "Missed (Expired / Full Recovery Drag)")
+	Early,
+	Perfect,
+	Late,
+	Missed
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFlowTimingResultDelegate, EAshenFlowTimingResult, Result);
 
-/**
- * UAbilityTask_EvaluateMontageFlowPosition
- *
- * Tracks UAnimMontage track traversal position (P_montage) to evaluate Flow Glint timing.
- * 100% immune to Hit-Stop frame freezes (DeltaT_effective = 0) and scaled with MontagePlayRate.
- * (PRS-001-CDTC-001-V2 / CONVERGENCE-SPEC-101)
- */
 UCLASS()
 class ASHENOATH_API UAbilityTask_EvaluateMontageFlowPosition : public UAbilityTask
 {
@@ -33,6 +26,13 @@ class ASHENOATH_API UAbilityTask_EvaluateMontageFlowPosition : public UAbilityTa
 
 public:
 	UAbilityTask_EvaluateMontageFlowPosition();
+
+	/**
+	 * Pure mathematical evaluation of Flow timing:
+	 * Uses half-open interval [ApexPosition, ApexPosition + WindowDuration) in montage-local seconds.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Ashen|Combat")
+	static EAshenFlowTimingResult EvaluateFlowTiming(float CurrentMontagePosition, float ApexPositionSeconds, float WindowDurationSeconds = 0.15f);
 
 	UFUNCTION(BlueprintCallable, Category = "Ashen|AbilityTasks", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "TRUE"))
 	static UAbilityTask_EvaluateMontageFlowPosition* CreateMontageFlowPositionEvaluator(
@@ -46,22 +46,12 @@ public:
 	virtual void TickTask(float DeltaTime) override;
 	virtual void OnDestroy(bool bInOwnerFinished) override;
 
-	/** Called by the Player Input Component when an attack/stance link is queued */
+	/** Called when player buffers a transition/action */
 	UFUNCTION(BlueprintCallable, Category = "Ashen|Combat")
 	EAshenFlowTimingResult RegisterInputAttempt();
 
-	/**
-	 * Pure classification, independent of any live montage.
-	 * Montage-local timeline seconds in, timing verdict out.
-	 * Framerate/play-rate agnostic by construction.
-	 */
-	UFUNCTION(BlueprintPure, Category = "Ashen|Combat", meta = (BlueprintThreadSafe))
-	static EAshenFlowTimingResult EvaluateFlowTiming(float CurrentMontagePosition, float ApexPositionSeconds, float WindowDurationSeconds = 0.15f);
-
 	UPROPERTY(BlueprintAssignable)
 	FFlowTimingResultDelegate OnInputResolved;
-
-	static constexpr float InvariantWindowDuration = 0.15f; // Invariant montage-local timeline seconds
 
 protected:
 	UPROPERTY()

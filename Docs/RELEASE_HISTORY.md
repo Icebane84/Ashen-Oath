@@ -4,6 +4,19 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.16.0: CDTC-002 Canonical Source Manifest Integration (PRS-001-SRC-CDTC-002)
+**Governing Directives:** `PRS-001-SRC-CDTC-002-ARCHIVE`, `PRS-001-CDTC-001-V2-HARDENED`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), 5-Part Canonical Boundary Test Suite Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Half-Open Interval Timing` | `Combat/`, `GAS` | `UAbilityTask_EvaluateMontageFlowPosition::EvaluateFlowTiming` enforcing strict $[Apex, Apex + WindowDuration)$ half-open interval checks | `FCDTC002_FlowTimingHalfOpenBounds` |
+| `NavMesh Synergy Reachability` | `Spatial/`, `AI` | `UAshenSpatialEvaluator::EvaluateSpatialSynergy` running `UNavigationSystemV1::TestPathSync` for active pathfinding validation | `FCDTC002_SpatialDistanceBounds`, `FCDTC002_FlankAngleBounds` |
+| `Two-Phase Relational Commits` | `Core/`, `Soul/` | `UAshenSoulPublisher` transaction abort boundary via `IAshenRelationalBridge`, anti-reentrancy lock `bIsBroadcasting`, and monotonic `TransactionId` tracking | `FCDTC002_TransactionValidation` |
+| `Continuous Mass Derivation` | `Core/`, `Soul/` | `UAshenSoulPublisher::CalculateGameplayEffectiveMass` deriving handling mass from $80.0\text{kg}$ baseline clamped continuously between $45.0\text{kg}$ and $120.0\text{kg}$ | `FCDTC002_EffectiveMassEnvelope` |
+
+---
+
 ### Patch v158.15.0: CDTC-001-V2 Hardened Architecture & Sentinel Anti-Theater Pass
 **Governing Directives:** `PRS-001-CDTC-001-V2-HARDENED`, `PRS-001-MECH-010-MANIFES-V5`, Constitutional Law I (SSoT)  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), 4-Part Sentinel Non-Tautological CI/CD Test Suite Verified

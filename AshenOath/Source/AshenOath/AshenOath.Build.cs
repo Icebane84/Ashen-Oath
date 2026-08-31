@@ -27,6 +27,7 @@ public class AshenOath : ModuleRules
 			"GameplayAbilities",
 			"GameplayTags",
 			"GameplayTasks",
+			"NavigationSystem",
 			"FieldSystemEngine"
 		});
 

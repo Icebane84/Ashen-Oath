@@ -11,7 +11,26 @@ UAbilityTask_EvaluateMontageFlowPosition::UAbilityTask_EvaluateMontageFlowPositi
 	bTickingTask = true;
 	bInputEvaluated = false;
 	ApexPosition = 0.0f;
-	WindowDuration = InvariantWindowDuration;
+	WindowDuration = 0.15f;
+}
+
+EAshenFlowTimingResult UAbilityTask_EvaluateMontageFlowPosition::EvaluateFlowTiming(float CurrentMontagePosition, float ApexPositionSeconds, float WindowDurationSeconds)
+{
+	const float WindowStart = ApexPositionSeconds;
+	const float WindowEnd = ApexPositionSeconds + WindowDurationSeconds;
+
+	if (CurrentMontagePosition < WindowStart)
+	{
+		return EAshenFlowTimingResult::Early;
+	}
+
+	// Canonical half-open interval [WindowStart, WindowEnd)
+	if (CurrentMontagePosition >= WindowStart && CurrentMontagePosition < WindowEnd)
+	{
+		return EAshenFlowTimingResult::Perfect;
+	}
+
+	return EAshenFlowTimingResult::Late;
 }
 
 UAbilityTask_EvaluateMontageFlowPosition* UAbilityTask_EvaluateMontageFlowPosition::CreateMontageFlowPositionEvaluator(
@@ -56,8 +75,8 @@ void UAbilityTask_EvaluateMontageFlowPosition::TickTask(float DeltaTime)
 	const float CurrentPosition = CachedAnimInstance->Montage_GetPosition(MonitoredMontage);
 	const float WindowEnd = ApexPosition + WindowDuration;
 
-	// If position passed window without input, flag as Missed
-	if (!bInputEvaluated && CurrentPosition > WindowEnd)
+	// Natural window expiration without input -> Broadcast Missed
+	if (!bInputEvaluated && CurrentPosition >= WindowEnd)
 	{
 		bInputEvaluated = true;
 		OnInputResolved.Broadcast(EAshenFlowTimingResult::Missed);
@@ -79,28 +98,6 @@ EAshenFlowTimingResult UAbilityTask_EvaluateMontageFlowPosition::RegisterInputAt
 	OnInputResolved.Broadcast(Result);
 	EndTask();
 	return Result;
-}
-
-EAshenFlowTimingResult UAbilityTask_EvaluateMontageFlowPosition::EvaluateFlowTiming(
-	float CurrentMontagePosition,
-	float ApexPositionSeconds,
-	float WindowDurationSeconds)
-{
-	const float WindowStart = ApexPositionSeconds;
-	const float WindowEnd = ApexPositionSeconds + WindowDurationSeconds;
-
-	if (CurrentMontagePosition < WindowStart)
-	{
-		return EAshenFlowTimingResult::Early;
-	}
-	else if (CurrentMontagePosition >= WindowStart && CurrentMontagePosition <= WindowEnd)
-	{
-		return EAshenFlowTimingResult::Perfect;
-	}
-	else
-	{
-		return EAshenFlowTimingResult::Late;
-	}
 }
 
 void UAbilityTask_EvaluateMontageFlowPosition::OnDestroy(bool bInOwnerFinished)
