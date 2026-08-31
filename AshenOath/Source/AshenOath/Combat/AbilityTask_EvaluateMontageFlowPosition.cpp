@@ -11,7 +11,7 @@ UAbilityTask_EvaluateMontageFlowPosition::UAbilityTask_EvaluateMontageFlowPositi
 	bTickingTask = true;
 	bInputEvaluated = false;
 	ApexPosition = 0.0f;
-	WindowDuration = 0.15f;
+	WindowDuration = InvariantWindowDuration;
 }
 
 UAbilityTask_EvaluateMontageFlowPosition* UAbilityTask_EvaluateMontageFlowPosition::CreateMontageFlowPositionEvaluator(
@@ -74,27 +74,33 @@ EAshenFlowTimingResult UAbilityTask_EvaluateMontageFlowPosition::RegisterInputAt
 
 	bInputEvaluated = true;
 	const float CurrentPosition = CachedAnimInstance->Montage_GetPosition(MonitoredMontage);
-	const float WindowStart = ApexPosition;
-	const float WindowEnd = ApexPosition + WindowDuration;
-
-	EAshenFlowTimingResult Result;
-
-	if (CurrentPosition < WindowStart)
-	{
-		Result = EAshenFlowTimingResult::Early;
-	}
-	else if (CurrentPosition >= WindowStart && CurrentPosition <= WindowEnd)
-	{
-		Result = EAshenFlowTimingResult::Perfect;
-	}
-	else
-	{
-		Result = EAshenFlowTimingResult::Late;
-	}
+	const EAshenFlowTimingResult Result = EvaluateFlowTiming(CurrentPosition, ApexPosition, WindowDuration);
 
 	OnInputResolved.Broadcast(Result);
 	EndTask();
 	return Result;
+}
+
+EAshenFlowTimingResult UAbilityTask_EvaluateMontageFlowPosition::EvaluateFlowTiming(
+	float CurrentMontagePosition,
+	float ApexPositionSeconds,
+	float WindowDurationSeconds)
+{
+	const float WindowStart = ApexPositionSeconds;
+	const float WindowEnd = ApexPositionSeconds + WindowDurationSeconds;
+
+	if (CurrentMontagePosition < WindowStart)
+	{
+		return EAshenFlowTimingResult::Early;
+	}
+	else if (CurrentMontagePosition >= WindowStart && CurrentMontagePosition <= WindowEnd)
+	{
+		return EAshenFlowTimingResult::Perfect;
+	}
+	else
+	{
+		return EAshenFlowTimingResult::Late;
+	}
 }
 
 void UAbilityTask_EvaluateMontageFlowPosition::OnDestroy(bool bInOwnerFinished)

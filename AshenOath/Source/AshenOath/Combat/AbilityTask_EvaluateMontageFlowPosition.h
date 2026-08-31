@@ -24,7 +24,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFlowTimingResultDelegate, EAshenFlo
  *
  * Tracks UAnimMontage track traversal position (P_montage) to evaluate Flow Glint timing.
  * 100% immune to Hit-Stop frame freezes (DeltaT_effective = 0) and scaled with MontagePlayRate.
- * (PRS-001-CDTC-001 / CONVERGENCE-SPEC-101)
+ * (PRS-001-CDTC-001-V2 / CONVERGENCE-SPEC-101)
  */
 UCLASS()
 class ASHENOATH_API UAbilityTask_EvaluateMontageFlowPosition : public UAbilityTask
@@ -50,8 +50,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ashen|Combat")
 	EAshenFlowTimingResult RegisterInputAttempt();
 
+	/**
+	 * Pure classification, independent of any live montage.
+	 * Montage-local timeline seconds in, timing verdict out.
+	 * Framerate/play-rate agnostic by construction.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Ashen|Combat", meta = (BlueprintThreadSafe))
+	static EAshenFlowTimingResult EvaluateFlowTiming(float CurrentMontagePosition, float ApexPositionSeconds, float WindowDurationSeconds = 0.15f);
+
 	UPROPERTY(BlueprintAssignable)
 	FFlowTimingResultDelegate OnInputResolved;
+
+	static constexpr float InvariantWindowDuration = 0.15f; // Invariant montage-local timeline seconds
 
 protected:
 	UPROPERTY()

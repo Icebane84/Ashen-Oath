@@ -4,6 +4,19 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.15.0: CDTC-001-V2 Hardened Architecture & Sentinel Anti-Theater Pass
+**Governing Directives:** `PRS-001-CDTC-001-V2-HARDENED`, `PRS-001-MECH-010-MANIFES-V5`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), 4-Part Sentinel Non-Tautological CI/CD Test Suite Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Pure Static Flow Classifier` | `Combat/`, `GAS` | `UAbilityTask_EvaluateMontageFlowPosition::EvaluateFlowTiming` pure static classifier enabling deterministic play-rate-agnostic unit testing across Early, Perfect, and Late intervals | `FCDTC_TEMP_002_FlowTimingClassification` |
+| `Corrected Flank Vector Math` | `Spatial/`, `AI` | `URelationalSpatialEvaluator::ComputeFlankDot` using verified $\text{Enemy} \to \text{Ally}$ vector orientation; correctly accepts true rear flanks and rejects frontal allies | `FCDTC_TEMP_005_006_FlankConventionCorrected` |
+| `Transaction Atomicity & No-Op` | `Core/`, `Soul/` | `UAshenSoulPublisher` transaction boundary validation ensuring no-op commits do not increment `StateVersion` and multi-field commits increment monotonically by exactly 1 | `FCDTC_TEMP_004_TransactionAtomicity` |
+| `Hit-Stop Traversal Invariance` | `Combat/`, `Animation` | Validates that $P_{montage}$ does not advance during hit-stop frame freezes ($\Delta t_{effective} = 0$) and accurately resolves into the Perfect window upon resume | `FCDTC_TEMP_007_HitStopPositionTraversal` |
+
+---
+
 ### Patch v158.14.0: Combat Determinism & Temporal Contract (PRS-001-CDTC-001)
 **Governing Directives:** `PRS-001-CDTC-001`, `PRS-001-MECH-010-MANIFES-V5`, `CONVERGENCE-SPEC-101`, Constitutional Law I (SSoT)  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Value-Asserting CI/CD Test Suite Verified
