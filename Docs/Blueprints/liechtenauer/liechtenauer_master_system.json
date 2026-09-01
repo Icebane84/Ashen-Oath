@@ -1,68 +1,229 @@
 {
-  "system_title": "Ashen Oath - Liechtenauer Grandmaster Combat Architecture",
-  "version": "1.0.0",
-  "engine_target": "Unreal Engine 5.8 C++ / Gameplay Ability System (GAS)",
-  "core_philosophical_pillars": [
-    {
-      "pillar": "Fühlen (Tactile Blade Sense)",
-      "description": "Blades in contact measure physical resistance (Weak/Weich vs Strong/Hart), determining whether to plunge directly (Vor) or mutate around the bind (Nach)."
+  "system_metadata": {
+    "tradition": "Kunst des Fechtens (14th-Century German)",
+    "master_codex": "Johannes Liechtenauer",
+    "architecture_target": "Ashen Oath Combat Engine v2.0",
+    "last_validated_epoch": 1785638400
+  },
+  "guards": {
+    "VOM_TAG": {
+      "german_term": "Vom Tag",
+      "english_name": "From the Roof",
+      "category": "Main Guard",
+      "native_footwork": "PASSING_STEP",
+      "animation_state": "AS_Kaelen_Stance_VomTag",
+      "spatial_profile": {
+        "hilt_position": "Right shoulder or held high above the head",
+        "point_orientation": "Pointing upward and slightly forward",
+        "hitbox_exposure": {
+          "high_line": "Exposed",
+          "low_line": "Protected",
+          "hands": "Protected"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 0.85,
+        "stamina_regen_modifier": 1.1,
+        "attack_velocity_bonus": 1.25,
+        "passive_parry_cone_degrees": 45.0
+      },
+      "counter_mechanics": {
+        "hard_counters": ["ZORNHAU", "ZWERCHHAU"],
+        "posture_damage_multiplier_when_hit_by_counter": 2.5,
+        "vulnerability_window_on_miss_frames": 18
+      }
     },
-    {
-      "pillar": "Vor and Nach (Initiative and Reaction)",
-      "description": "Attacking first with an authentic Master Cut seizes the Vor, forcing the defender into the Nach and preventing counter-hits."
+    "OCHS": {
+      "german_term": "Ochs",
+      "english_name": "Ox",
+      "category": "Main Guard",
+      "native_footwork": "TRIANGLE_STEP",
+      "animation_state": "AS_Kaelen_Stance_Ochs",
+      "spatial_profile": {
+        "hilt_position": "Held at head height (left or right side)",
+        "point_orientation": "Pointing directly at the opponent's face/eyes",
+        "hitbox_exposure": {
+          "high_line": "Protected",
+          "low_line": "Exposed",
+          "hands": "Highly Exposed"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 0.95,
+        "stamina_regen_modifier": 0.9,
+        "attack_velocity_bonus": 1.0,
+        "passive_parry_cone_degrees": 90.0
+      },
+      "counter_mechanics": {
+        "hard_counters": ["KRUMPHAU", "SCHIELHAU"],
+        "posture_damage_multiplier_when_hit_by_counter": 2.0,
+        "vulnerability_window_on_miss_frames": 12
+      }
     },
-    {
-      "pillar": "Simultaneous Defense and Offense",
-      "description": "Every Master Cut closes a line of attack with the crossguard or false edge while simultaneously threatening a lethal opening."
-    }
-  ],
-  "tempo_and_rhythm": {
-    "bpm_base": 115,
-    "flow_glint_window_seconds": 0.15,
-    "perfect_timing_reward": {
-      "stamina_cost_refund_fraction": 1.0,
-      "next_montage_playrate_multiplier": 1.25,
-      "resolve_gain_monotonic": 0.02,
-      "instant_guard_branching": true
+    "PFLUG": {
+      "german_term": "Pflug",
+      "english_name": "Plow",
+      "category": "Main Guard",
+      "native_footwork": "GATHERING_STEP",
+      "animation_state": "AS_Kaelen_Stance_Pflug",
+      "spatial_profile": {
+        "hilt_position": "Held near the hips (left or right side)",
+        "point_orientation": "Pointing at the opponent's chest or throat",
+        "hitbox_exposure": {
+          "high_line": "Exposed",
+          "low_line": "Protected",
+          "hands": "Protected"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 1.1,
+        "stamina_regen_modifier": 1.0,
+        "attack_velocity_bonus": 1.0,
+        "passive_parry_cone_degrees": 120.0
+      },
+      "counter_mechanics": {
+        "hard_counters": ["SCHIELHAU"],
+        "posture_damage_multiplier_when_hit_by_counter": 1.75,
+        "vulnerability_window_on_miss_frames": 8
+      }
     },
-    "missed_timing_penalty": {
-      "stamina_consumed_full": true,
-      "recovery_drag_multiplier": 1.40,
-      "vulnerability_window_seconds": 0.35
+    "ALBER": {
+      "german_term": "Alber",
+      "english_name": "Fool",
+      "category": "Main Guard",
+      "native_footwork": "BROKEN_STEP",
+      "animation_state": "AS_Kaelen_Stance_Alber",
+      "spatial_profile": {
+        "hilt_position": "Held low in front of the pelvis",
+        "point_orientation": "Pointing directly down at the ground",
+        "hitbox_exposure": {
+          "high_line": "Highly Exposed",
+          "low_line": "Protected",
+          "hands": "Exposed"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 1.0,
+        "stamina_regen_modifier": 1.2,
+        "attack_velocity_bonus": 0.9,
+        "passive_parry_cone_degrees": 30.0
+      },
+      "counter_mechanics": {
+        "hard_counters": ["SCHEITELHAU"],
+        "posture_damage_multiplier_when_hit_by_counter": 3.0,
+        "vulnerability_window_on_miss_frames": 22
+      },
+      "grapple_triggers": ["DURCHLAUFEN", "KRON_RINGEN"]
+    },
+    "SCHRANKHUT": {
+      "german_term": "Schrankhut",
+      "english_name": "Barrier Guard",
+      "category": "Secondary Guard",
+      "native_footwork": "TRAVERSING_STEP",
+      "animation_state": "AS_Kaelen_Stance_Schrankhut",
+      "spatial_profile": {
+        "hilt_position": "Held low near the lead knee",
+        "point_orientation": "Crossed downward, point facing the ground laterally",
+        "hitbox_exposure": {
+          "high_line": "Exposed",
+          "low_line": "Highly Protected",
+          "hands": "Exposed"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 0.8,
+        "stamina_regen_modifier": 0.95,
+        "attack_velocity_bonus": 1.1,
+        "passive_parry_cone_degrees": 160.0
+      },
+      "counter_mechanics": {
+        "hard_counters": ["SCHEITELHAU", "ZWERCHHAU"],
+        "posture_damage_multiplier_when_hit_by_counter": 1.5,
+        "vulnerability_window_on_miss_frames": 20
+      },
+      "grapple_triggers": ["HANDDRUECKEN", "EINHORN_HAKEN"]
     }
   },
-  "tactical_interaction_rules": [
-    {
-      "counter_rule": "Zornhau breaks Vom Tag",
-      "rationale": "Diagonal cleave intersects high descending cuts, taking the center line and threatening an immediate Zorn-Ort thrust."
+  "master_cuts": {
+    "ZORNHAU": {
+      "german_term": "Zornhau",
+      "english_name": "Wrath Cut",
+      "edge_utilized": "LONG_EDGE",
+      "primary_target_guard": "VOM_TAG",
+      "animation_state": "AS_Kaelen_Attack_Zornhau",
+      "posture_damage_multiplier": 2.0,
+      "success_follow_up_state": "LANGORT_THRUST",
+      "fail_recovery_state": "WECHSEL"
     },
-    {
-      "counter_rule": "Krumphau breaks Ochs",
-      "rationale": "Crossed-wrist offline step strikes the exposed hands and wrists over the high crossguard."
+    "KRUMPHAU": {
+      "german_term": "Krumphau",
+      "english_name": "Crooked Cut",
+      "edge_utilized": "SHORT_EDGE",
+      "primary_target_guard": "OCHS",
+      "animation_state": "AS_Kaelen_Attack_Krumphau",
+      "posture_damage_multiplier": 1.8,
+      "success_follow_up_state": "HAND_DISARM",
+      "fail_recovery_state": "SCHRANKHUT"
     },
-    {
-      "counter_rule": "Zwerchhau breaks Vom Tag",
-      "rationale": "High horizontal short-edge helicopter cut creates an impenetrable roof above Kaelen's head while striking the opponent's temple."
+    "ZWERCHHAU": {
+      "german_term": "Zwerchhau",
+      "english_name": "Thwart Cut",
+      "edge_utilized": "SHORT_EDGE",
+      "primary_target_guard": "VOM_TAG",
+      "animation_state": "AS_Kaelen_Attack_Zwerchhau",
+      "posture_damage_multiplier": 1.5,
+      "success_follow_up_state": "ZWERCHHAU_OPPOSITE_LOOP",
+      "fail_recovery_state": "KRONE"
     },
-    {
-      "counter_rule": "Schielhau breaks Pflug and Ochs",
-      "rationale": "Plunging false-edge cut beats down the opponent's forward-pointing blade, driving the point directly into the neck/collarbone."
+    "SCHIELHAU": {
+      "german_term": "Schielhau",
+      "english_name": "Squinting Cut",
+      "edge_utilized": "SHORT_EDGE",
+      "primary_target_guard": "PFLUG",
+      "animation_state": "AS_Kaelen_Attack_Schielhau",
+      "posture_damage_multiplier": 2.2,
+      "success_follow_up_state": "COLLAR_SLICE",
+      "fail_recovery_state": "LANGORT"
     },
-    {
-      "counter_rule": "Scheitelhau breaks Alber",
-      "rationale": "Maximum extension down the vertical centerline crushes the low-resting point before the opponent can lift it to guard."
-    },
-    {
-      "counter_rule": "Mordhau crushes Rigid Armor",
-      "rationale": "Inverted pommel strike delivers 100% armor-penetrating blunt impact, inducing high concussion and poise failure."
+    "SCHEITELHAU": {
+      "german_term": "Scheitelhau",
+      "english_name": "Crown Cut",
+      "edge_utilized": "LONG_EDGE",
+      "primary_target_guard": "ALBER",
+      "animation_state": "AS_Kaelen_Attack_Scheitelhau",
+      "posture_damage_multiplier": 2.5,
+      "success_follow_up_state": "PLUNGING_OVER_CLEAVE",
+      "fail_recovery_state": "ALBER"
     }
-  ],
-  "c_plus_plus_binding_manifest": {
-    "base_ability": "UAshenGameplayAbility_CombatStrike",
-    "timing_task": "UAbilityTask_EvaluateMontageFlowPosition",
-    "spatial_evaluator": "UAshenSpatialEvaluator",
-    "stance_component": "UAshenGreatswordStanceFlowComponent",
-    "soul_state_publisher": "UAshenSoulPublisher",
-    "morph_actuator": "UAshenOathbringerMorphComponent"
+  },
+  "grappling_mechanics": {
+    "DURCHLAUFEN": {
+      "german_term": "Durchlaufen",
+      "english_name": "Running-Through",
+      "input_window_ms": 350,
+      "execution_type": "TAKEDOWN_LEVER",
+      "animation_state": "AS_Kaelen_Grapple_Durchlaufen"
+    },
+    "HANDDRUECKEN": {
+      "german_term": "Handdrücken",
+      "english_name": "Pressing the Hands",
+      "input_window_ms": 250,
+      "execution_type": "PIN_STUN",
+      "animation_state": "AS_Kaelen_Grapple_Handdruecken"
+    },
+    "EINHORN_HAKEN": {
+      "german_term": "Einhorn-Haken",
+      "english_name": "Unicorn Hook",
+      "input_window_ms": 400,
+      "execution_type": "SWEEP_DOWN",
+      "animation_state": "AS_Kaelen_Grapple_EinhornHaken"
+    },
+    "KRON_RINGEN": {
+      "german_term": "Kron-Ringen",
+      "english_name": "Crown Grappling",
+      "input_window_ms": 300,
+      "execution_type": "DISLOCATION_THROW",
+      "animation_state": "AS_Kaelen_Grapple_KronRingen"
+    }
   }
 }

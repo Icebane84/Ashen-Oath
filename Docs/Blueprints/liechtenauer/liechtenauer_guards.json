@@ -1,118 +1,165 @@
 {
-  "system_name": "Liechtenauer Guard Framework",
-  "historical_tradition": "Kunst des Fechtens (14th Century)",
-  "grandmaster": "Johannes Liechtenauer",
-  "primary_guards": {
-    "VomTag": {
-      "name_english": "From the Roof / High Guard",
-      "historical_term": "Vom Tag",
-      "posture_description": "Greatsword held high above the right shoulder or directly overhead, blade angled steeply upward. Maximum potential gravitational energy.",
-      "tactical_purpose": "Dominates high lines. Threatens massive downward vertical and diagonal cleaves.",
-      "vulnerabilities": [
-        "Exposed lower torso and groin",
-        "Vulnerable to rapid horizontal thwart cuts (Zwerchhau)"
-      ],
-      "native_master_cuts": [
-        "Zornhau",
-        "Scheitelhau"
-      ],
-      "gameplay_attributes": {
-        "poise_bonus_fraction": 0.40,
-        "stamina_regen_multiplier": 1.0,
-        "parry_window_seconds": 0.18,
-        "armor_penetration_fraction": 0.25
+  "system_metadata": {
+    "tradition": "Kunst des Fechtens (14th-Century German)",
+    "source_inspiration": "Johannes Liechtenauer",
+    "architecture_target": "Ashen Oath Combat Engine"
+  },
+  "guards": [
+    {
+      "german_term": "Vom Tag",
+      "english_name": "From the Roof",
+      "category": "Main Guard",
+      "spatial_profile": {
+        "hilt_position": "Right shoulder or held high above the head",
+        "point_orientation": "Pointing upward and slightly forward",
+        "hitbox_exposure": {
+          "high_line": "Exposed",
+          "low_line": "Protected",
+          "hands": "Protected"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 0.85,
+        "stamina_regen_modifier": 1.1,
+        "attack_velocity_bonus": 1.25,
+        "passive_parry_cone_degrees": 45.0
+      },
+      "tactical_intent": "Maximum offensive posture designed to maximize gravity and leverage for devastating downward vertical cuts.",
+      "counter_mechanics": {
+        "hard_counters": ["Zornhau", "Zwerchhau"],
+        "posture_damage_multiplier_when_hit_by_counter": 2.5,
+        "vulnerability_window_on_miss_frames": 18
       }
     },
-    "Ochs": {
-      "name_english": "The Ox / High Window Guard",
-      "historical_term": "Ochs",
-      "posture_description": "Hands held high near the temples with the point directed at the opponent's face and eyes. Quillons form an angled protective roof.",
-      "tactical_purpose": "Threatens high plunging thrusts while providing strong upper parrying geometry.",
-      "vulnerabilities": [
-        "Hands and wrists are exposed to off-axis strikes (Krumphau)",
-        "Lower body openings below the quillons"
-      ],
-      "native_master_cuts": [
-        "Krumphau",
-        "Zwerchhau"
-      ],
-      "gameplay_attributes": {
-        "poise_bonus_fraction": 0.15,
-        "stamina_regen_multiplier": 1.15,
-        "parry_window_seconds": 0.22,
-        "armor_penetration_fraction": 0.35
+    {
+      "german_term": "Ochs",
+      "english_name": "Ox",
+      "category": "Main Guard",
+      "spatial_profile": {
+        "hilt_position": "Held at head height (left or right side)",
+        "point_orientation": "Pointing directly at the opponent's face/eyes",
+        "hitbox_exposure": {
+          "high_line": "Protected",
+          "low_line": "Exposed",
+          "hands": "Highly Exposed"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 0.95,
+        "stamina_regen_modifier": 0.9,
+        "attack_velocity_bonus": 1.0,
+        "passive_parry_cone_degrees": 90.0
+      },
+      "tactical_intent": "A highly defensive high-line posture that maintains a permanent thrust threat while shielding the upper body.",
+      "counter_mechanics": {
+        "hard_counters": ["Krumphau", "Schielhau"],
+        "posture_damage_multiplier_when_hit_by_counter": 2.0,
+        "vulnerability_window_on_miss_frames": 12
       }
     },
-    "Pflug": {
-      "name_english": "The Plow / Low Hip Guard",
-      "historical_term": "Pflug",
-      "posture_description": "Hilt held at the hip, thumb resting against the blade flat, point angled forward toward the opponent's throat/chest.",
-      "tactical_purpose": "Fast upward thrusts from below the opponent's line of sight; exceptional defensive leverage.",
-      "vulnerabilities": [
-        "Vulnerable to deceptive plunging false-edge counter cuts (Schielhau)",
-        "Overhead crown strikes (Scheitelhau) if point dips"
-      ],
-      "native_master_cuts": [
-        "Schielhau"
-      ],
-      "gameplay_attributes": {
-        "poise_bonus_fraction": 0.20,
-        "stamina_regen_multiplier": 1.30,
-        "parry_window_seconds": 0.20,
-        "armor_penetration_fraction": 0.50
+    {
+      "german_term": "Pflug",
+      "english_name": "Plow",
+      "category": "Main Guard",
+      "spatial_profile": {
+        "hilt_position": "Held near the hips (left or right side)",
+        "point_orientation": "Pointing at the opponent's chest or throat",
+        "hitbox_exposure": {
+          "high_line": "Exposed",
+          "low_line": "Protected",
+          "hands": "Protected"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 1.1,
+        "stamina_regen_modifier": 1.0,
+        "attack_velocity_bonus": 1.0,
+        "passive_parry_cone_degrees": 120.0
+      },
+      "tactical_intent": "The most versatile and balanced baseline sparring stance. Optimizes tracking, quick thrusting, and tight, energy-efficient parries.",
+      "counter_mechanics": {
+        "hard_counters": ["Schielhau"],
+        "posture_damage_multiplier_when_hit_by_counter": 1.75,
+        "vulnerability_window_on_miss_frames": 8
       }
     },
-    "Alber": {
-      "name_english": "The Fool / Low Ground Guard",
-      "historical_term": "Alber",
-      "posture_description": "Blade point resting low near the ground, arms extended downward, presenting an apparent opening to bait enemy overextension.",
-      "tactical_purpose": "Deceptive baiting stance. Lures enemies into attacking the exposed head, enabling explosive rising parries and counter-thrusts.",
-      "vulnerabilities": [
-        "Directly vulnerable to maximum-reach vertical crown cuts (Scheitelhau) that crush the blade before it lifts"
-      ],
-      "native_master_cuts": [],
-      "gameplay_attributes": {
-        "poise_bonus_fraction": 0.05,
-        "stamina_regen_multiplier": 1.50,
-        "parry_window_seconds": 0.25,
-        "armor_penetration_fraction": 0.10
+    {
+      "german_term": "Alber",
+      "english_name": "Fool",
+      "category": "Main Guard",
+      "spatial_profile": {
+        "hilt_position": "Held low in front of the pelvis",
+        "point_orientation": "Pointing directly down at the ground",
+        "hitbox_exposure": {
+          "high_line": "Highly Exposed",
+          "low_line": "Protected",
+          "hands": "Exposed"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 1.0,
+        "stamina_regen_modifier": 1.2,
+        "attack_velocity_bonus": 0.9,
+        "passive_parry_cone_degrees": 30.0
+      },
+      "tactical_intent": "A psychological baiting stance. Appears completely defenseless to invite high attacks, allowing Kaelen to clear the line with an explosive upward parry-riposte.",
+      "counter_mechanics": {
+        "hard_counters": ["Scheitelhau"],
+        "posture_damage_multiplier_when_hit_by_counter": 3.0,
+        "vulnerability_window_on_miss_frames": 22
       }
     },
-    "Mordhau": {
-      "name_english": "The Murder-Stroke / Half-Sword Stance",
-      "historical_term": "Mordhau",
-      "posture_description": "Inverted grip with both gauntleted hands grasping the mid-blade (half-swording), utilizing crossguard quillons and pommel as a war hammer.",
-      "tactical_purpose": "Transforms the sword into a devastating blunt concussive polearm designed to shatter rigid plate armor and heavy shields.",
-      "vulnerabilities": [
-        "Severely reduced striking reach compared to long edge cleaves",
-        "Linear thrust recovery frames"
-      ],
-      "native_master_cuts": [
-        "Mordhau"
-      ],
-      "gameplay_attributes": {
-        "poise_bonus_fraction": 0.50,
-        "stamina_regen_multiplier": 0.85,
-        "parry_window_seconds": 0.15,
-        "armor_penetration_fraction": 1.00
+    {
+      "german_term": "Schrankhut",
+      "english_name": "Barrier Guard",
+      "category": "Secondary Guard",
+      "spatial_profile": {
+        "hilt_position": "Held low near the lead knee",
+        "point_orientation": "Crossed downward, point facing the ground laterally",
+        "hitbox_exposure": {
+          "high_line": "Exposed",
+          "low_line": "Highly Protected",
+          "hands": "Exposed"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 0.8,
+        "stamina_regen_modifier": 0.95,
+        "attack_velocity_bonus": 1.1,
+        "passive_parry_cone_degrees": 160.0
+      },
+      "tactical_intent": "A heavy, grounded low-line defense designed to trap low sweeping cuts or under-strikes and sweep them wide.",
+      "counter_mechanics": {
+        "hard_counters": ["Scheitelhau", "Zwerchhau"],
+        "posture_damage_multiplier_when_hit_by_counter": 1.5,
+        "vulnerability_window_on_miss_frames": 20
       }
     },
-    "Langort": {
-      "name_english": "Long Point / Extended Centerline Guard",
-      "historical_term": "Langort",
-      "posture_description": "Arms fully extended with point fixed dead center on the opponent's throat. Terminal endpoint for all thrusts.",
-      "tactical_purpose": "Establishes an impassable barrier of distance; forces the enemy to step off-line or attempt to displace the blade.",
-      "vulnerabilities": [
-        "Susceptible to lateral blade beating and side-steps",
-        "Minimal lateral parrying leverage"
-      ],
-      "native_master_cuts": [],
-      "gameplay_attributes": {
-        "poise_bonus_fraction": 0.10,
-        "stamina_regen_multiplier": 1.10,
-        "parry_window_seconds": 0.16,
-        "armor_penetration_fraction": 0.60
+    {
+      "german_term": "Langort",
+      "english_name": "Long Point",
+      "category": "Endpoint State",
+      "spatial_profile": {
+        "hilt_position": "Fully extended forward from the chest",
+        "point_orientation": "Dead center, targeting the absolute center mass of the enemy",
+        "hitbox_exposure": {
+          "high_line": "Neutral",
+          "low_line": "Neutral",
+          "hands": "Highly Exposed"
+        }
+      },
+      "gameplay_modifiers": {
+        "movement_speed_multiplier": 0.5,
+        "stamina_regen_modifier": 0.7,
+        "attack_velocity_bonus": 0.8,
+        "passive_parry_cone_degrees": 15.0
+      },
+      "tactical_intent": "A transitional terminal state representing the extension of all strikes. Forces opponents to manually resolve or bind the blade before safely stepping forward.",
+      "counter_mechanics": {
+        "hard_counters": ["Krumphau"],
+        "posture_damage_multiplier_when_hit_by_counter": 2.0,
+        "vulnerability_window_on_miss_frames": 25
       }
     }
-  }
+  ]
 }

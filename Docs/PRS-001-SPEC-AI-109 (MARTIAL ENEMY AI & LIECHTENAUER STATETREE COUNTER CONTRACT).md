@@ -17,7 +17,7 @@ Traditional action RPGs treat enemies as damage sponges that cycle through pre-r
 
 1. **Symmetrical Martial Grounding:** Enemies hold authentic historical guards (*Vom Tag*, *Ochs*, *Pflug*, *Alber*), execute the Five Master Cuts, and evaluate blade pressure (*Fühlen*).
 2. **Diegetic Telegraphing (Zero Arcade Floating Icons):** Attack intent is communicated entirely through authentic weapon postures, weight shifts, footwork angles, and foley scrape acoustics.
-3. **StateTree Reactive Counter-Play:** Enemies actively evaluate Kaelen's stance and attempt to seize the *Vor* (initiative); if Kaelen predicts their intent and executes the authentic hard counter, the enemy suffers catastrophic posture damage ($1.75\times \to 2.0\times$) and poise collapse.
+3. **StateTree Reactive Counter-Play:** Enemies actively evaluate Kaelen's stance and attempt to seize the *Vor* (initiative); if Kaelen predicts their intent and executes the authentic hard counter, the enemy suffers catastrophic posture damage ($1.50\times \to 2.50\times$) and poise collapse.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -121,19 +121,19 @@ $$\text{StaggerDuration} = T_{base} \times S_{counter}$$
 ├────────────────────┬───────────────────┬───────────────────────────────┬────────────────────────────────────────┤
 │ Kaelen Master Cut  │ Enemy Guard       │ Posture Multiplier ($M$)      │ Stagger Duration ($S$) & Consequence   │
 ├────────────────────┼───────────────────┼───────────────────────────────┼────────────────────────────────────────┤
-│ **`Zornhau`**      │ **`Vom Tag`**     │ **$1.75\times$**              │ **$1.2\text{s}$ Stagger:** Centerline  │
+│ **`Zornhau`**      │ **`Vom Tag`**     │ **$2.00\times$**              │ **$1.2\text{s}$ Stagger:** Centerline  │
 │                    │                   │                               │ broken; opens free *Zorn-Ort* thrust.  │
 ├────────────────────┼───────────────────┼───────────────────────────────┼────────────────────────────────────────┤
-│ **`Krumphau`**     │ **`Ochs`**        │ **$2.00\times$** (Shield Break)│ **$1.5\text{s}$ Major Stagger:** Guard │
+│ **`Krumphau`**     │ **`Ochs`**        │ **$1.80\times$** (Shield Break)│ **$1.5\text{s}$ Major Stagger:** Guard │
 │                    │                   │                               │ collapsed; enemy weapon deflected away.│
 ├────────────────────┼───────────────────┼───────────────────────────────┼────────────────────────────────────────┤
 │ **`Zwerchhau`**    │ **`Vom Tag`**     │ **$1.50\times$**              │ **$0.8\text{s}$ Rapid Stun:** Chains   │
 │                    │                   │                               │ into horizontal helicopter loop.       │
 ├────────────────────┼───────────────────┼───────────────────────────────┼────────────────────────────────────────┤
-│ **`Schielhau`**    │ **`Pflug / Ochs`**│ **$1.80\times$**              │ **$1.3\text{s}$ Stagger:** Enemy point │
+│ **`Schielhau`**    │ **`Pflug / Ochs`**│ **$2.20\times$**              │ **$1.3\text{s}$ Stagger:** Enemy point │
 │                    │                   │                               │ beaten down; exposes neck for thrust.  │
 ├────────────────────┼───────────────────┼───────────────────────────────┼────────────────────────────────────────┤
-│ **`Scheitelhau`**  │ **`Alber`**       │ **$1.90\times$**              │ **$1.4\text{s}$ Heavy Stun:** Over-    │
+│ **`Scheitelhau`**  │ **`Alber`**       │ **$2.50\times$**              │ **$1.4\text{s}$ Heavy Stun:** Over-    │
 │                    │                   │                               │ head cleave induces ground fracture.   │
 └────────────────────┴───────────────────┴───────────────────────────────┴────────────────────────────────────────┘
 ```
