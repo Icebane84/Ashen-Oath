@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath - Liechtenauer Master Cuts & Fühlen Combat Simulator</title>
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --panel-bg: rgba(18, 22, 30, 0.95);
+            --border-gold: #c5a059;
+            --border-dim: #2a3441;
+            --accent-crimson: #8b1e1e;
+            --accent-silver: #d1d5db;
+            --accent-glow: #38bdf8;
+            --accent-void: #7c3aed;
+            --font-serif: 'Cinzel', 'Trajan Pro', 'Georgia', serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #e2e8f0;
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 20%, #171f2c 0%, #080a0f 80%);
+        }
+
+        header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-dim);
+            background: rgba(10, 12, 16, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title-group h1 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--border-gold);
+            text-transform: uppercase;
+        }
+
+        .title-group p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            letter-spacing: 1px;
+        }
+
+        .tempo-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-gold);
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            color: var(--border-gold);
+        }
+
+        .metronome-pulse {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #475569;
+            transition: all 0.05s ease;
+        }
+
+        .metronome-pulse.active {
+            background: #ef4444;
+            box-shadow: 0 0 12px #ef4444;
+            transform: scale(1.3);
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 320px 1fr 340px;
+            gap: 16px;
+            padding: 16px;
+            flex: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .panel-header {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            color: var(--border-gold);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.25);
+            padding-bottom: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Stance Selector */
+        .stance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .stance-btn {
+            background: #151a23;
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 12px 10px;
+            color: #cbd5e1;
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stance-btn:hover {
+            border-color: #64748b;
+            background: #1e2634;
+        }
+
+        .stance-btn.active {
+            border-color: var(--border-gold);
+            background: rgba(197, 160, 89, 0.15);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+        }
+
+        .stance-btn .desc {
+            font-family: var(--font-sans);
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        /* Arena Viewport */
+        .arena-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            background: #0d1117;
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 420px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Flow Glint & Timing Bar */
+        .flow-glint-bar-container {
+            background: #111827;
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            height: 38px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .flow-marker {
+            position: absolute;
+            height: 100%;
+            width: 4px;
+            background: #f87171;
+            left: 0%;
+            box-shadow: 0 0 8px #f87171;
+            z-index: 10;
+        }
+
+        .glint-window {
+            position: absolute;
+            height: 100%;
+            background: rgba(56, 189, 248, 0.35);
+            border-left: 2px solid #38bdf8;
+            border-right: 2px solid #38bdf8;
+            left: 65%;
+            width: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: #38bdf8;
+            font-family: var(--font-serif);
+            letter-spacing: 1px;
+        }
+
+        .combat-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 12px;
+            color: #f1f5f9;
+            font-family: var(--font-serif);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn:hover {
+            border-color: var(--border-gold);
+            transform: translateY(-2px);
+        }
+
+        .action-btn:active {
+            transform: translateY(1px);
+        }
+
+        .action-btn.strike-btn {
+            background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%);
+            border-color: #ef4444;
+        }
+
+        /* Fühlen Clash Modal */
+        .fuhlen-banner {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid #eab308;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 50;
+            display: none;
+            box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
+        }
+
+        .fuhlen-banner h3 {
+            font-family: var(--font-serif);
+            color: #facc15;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .fuhlen-choices {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .fuhlen-btn {
+            padding: 8px 16px;
+            background: #1e293b;
+            border: 1px solid #64748b;
+            border-radius: 4px;
+            color: #fff;
+            font-family: var(--font-serif);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+
+        .fuhlen-btn:hover {
+            border-color: #facc15;
+            background: #334155;
+        }
+
+        /* Combat Log & Telemetry */
+        .log-container {
+            background: #0b0f17;
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 10px;
+            height: 160px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .log-entry {
+            color: #94a3b8;
+            line-height: 1.3;
+        }
+
+        .log-entry.counter {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        .log-entry.flow {
+            color: #4ade80;
+        }
+
+        .log-entry.clash {
+            color: #facc15;
+        }
+
+        .log-entry.damage {
+            color: #f87171;
+        }
+
+        /* Stat Bars */
+        .stat-bar-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .bar-bg {
+            background: #1e293b;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            transition: width 0.2s ease;
+        }
+
+        .bar-stamina { background: #10b981; }
+        .bar-poise { background: #f59e0b; }
+        .bar-enemy-poise { background: #ef4444; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="title-group">
+        <h1>Ashen Oath: Martial Combat & Fühlen Simulator</h1>
+        <p>14th-Century Liechtenauer Grandmaster Engine (PRS-001-SPEC-106 / SPEC-108 / SPEC-109)</p>
+    </div>
+    <div class="tempo-badge">
+        <div class="metronome-pulse" id="metroPulse"></div>
+        <span>115 BPM RHYTHM LOCK</span>
+    </div>
+</header>
+
+<div class="main-container">
+    <!-- Left Column: Guard & Stance Controls -->
+    <div class="panel">
+        <div class="panel-header">
+            <span>Kaelen's Stance</span>
+            <span style="font-size:0.75rem; color:#64748b;">(Layer 1)</span>
+        </div>
+        <div class="stance-grid">
+            <button class="stance-btn active" onclick="setKaelenGuard('VomTag')">
+                <strong>Vom Tag</strong>
+                <span class="desc">High Roof (Cleaves)</span>
+            </button>
+            <button class="stance-btn" onclick="setKaelenGuard('Ochs')">
+                <strong>Ochs</strong>
+                <span class="desc">Window (Thwart/Flank)</span>
+            </button>
+            <button class="stance-btn" onclick="setKaelenGuard('Pflug')">
+                <strong>Pflug</strong>
+                <span class="desc">Plow (Thrust/Counter)</span>
+            </button>
+            <button class="stance-btn" onclick="setKaelenGuard('Alber')">
+                <strong>Alber</strong>
+                <span class="desc">Fool's Bait (Low)</span>
+            </button>
+            <button class="stance-btn" style="grid-column: span 2;" onclick="setKaelenGuard('Mordhau')">
+                <strong>Mordhau</strong>
+                <span class="desc">Half-Sword / 100% Armor Crusher</span>
+            </button>
+        </div>
+
+        <div class="panel-header" style="margin-top: 10px;">
+            <span>Player Attributes</span>
+        </div>
+        <div class="stat-bar-group">
+            <div class="stat-header"><span>Stamina</span><span id="txtStamina">100 / 100</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-stamina" id="barStamina" style="width: 100%;"></div></div>
+        </div>
+        <div class="stat-bar-group">
+            <div class="stat-header"><span>Poise Armor</span><span id="txtPoise">100 / 100</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-poise" id="barPoise" style="width: 100%;"></div></div>
+        </div>
+
+        <div class="panel-header" style="margin-top: 10px;">
+            <span>Martial Rules</span>
+        </div>
+        <div style="font-size: 0.75rem; color: #94a3b8; line-height: 1.4;">
+            • <strong>Zornhau</strong> breaks <strong>Vom Tag</strong><br>
+            • <strong>Krumphau</strong> breaks <strong>Ochs</strong><br>
+            • <strong>Zwerchhau</strong> breaks <strong>Vom Tag</strong><br>
+            • <strong>Schielhau</strong> breaks <strong>Pflug & Ochs</strong><br>
+            • <strong>Scheitelhau</strong> breaks <strong>Alber</strong>
+        </div>
+    </div>
+
+    <!-- Center Column: Visual Arena & Controls -->
+    <div class="arena-container">
+        <div class="canvas-wrapper">
+            <canvas id="arenaCanvas" width="700" height="420"></canvas>
+            
+            <!-- Fühlen Clash Banner -->
+            <div class="fuhlen-banner" id="fuhlenBanner">
+                <h3 id="fuhlenTitle">⚔️ BLADE CLASH (FÜHLEN)!</h3>
+                <p id="fuhlenDesc" style="font-size:0.8rem; color:#cbd5e1; margin-bottom:8px;">Opponent Pressure: WEAK (Weich)</p>
+                <div class="fuhlen-choices">
+                    <button class="fuhlen-btn" onclick="resolveFuhlen('Thrust')">⚡ Plunge Thrust (Vor)</button>
+                    <button class="fuhlen-btn" onclick="resolveFuhlen('Winden')">🌀 Winden / Mutieren (Nach)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 115 BPM Flow Glint Recovery Bar -->
+        <div class="flow-glint-bar-container">
+            <div class="glint-window">PERFECT GLINT (0.15s)</div>
+            <div class="flow-marker" id="flowMarker"></div>
+        </div>
+
+        <!-- Combat Execution Controls -->
+        <div class="combat-controls">
+            <button class="action-btn strike-btn" id="btnLightStrike" onclick="executeStrike('Light')">
+                <strong id="lblLight">Zornhau (Light)</strong>
+                <div style="font-size:0.7rem; opacity:0.8;">Primary Master Cut</div>
+            </button>
+            <button class="action-btn strike-btn" id="btnHeavyStrike" onclick="executeStrike('Heavy')">
+                <strong id="lblHeavy">Scheitelhau (Heavy)</strong>
+                <div style="font-size:0.7rem; opacity:0.8;">Heavy Crown Cleave</div>
+            </button>
+            <button class="action-btn" onclick="triggerFlowTransition()">
+                <strong>Flow Glint Chain</strong>
+                <div style="font-size:0.7rem; color:#4ade80;">Tap during Glint (0 Stamina)</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Right Column: Symmetrical AI StateTree & Telemetry -->
+    <div class="panel">
+        <div class="panel-header">
+            <span>Enemy Sentinel (AI)</span>
+            <span style="font-size:0.75rem; color:#f87171;">StateTree 60Hz</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.85rem; color:#cbd5e1;">Enemy Guard:</span>
+            <strong id="enemyStanceText" style="color:#f59e0b; font-family:var(--font-serif);">Vom Tag (High)</strong>
+        </div>
+
+        <div class="stat-bar-group">
+            <div class="stat-header"><span>Enemy Poise</span><span id="txtEnemyPoise">120 / 120</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-enemy-poise" id="barEnemyPoise" style="width: 100%;"></div></div>
+        </div>
+
+        <div style="display:flex; gap:6px; margin-top:4px;">
+            <button class="action-btn" style="flex:1; padding:6px; font-size:0.75rem;" onclick="setEnemyAIArchetype('Veteran')">Veteran AI</button>
+            <button class="action-btn" style="flex:1; padding:6px; font-size:0.75rem;" onclick="setEnemyAIArchetype('Grandmaster')">Grandmaster</button>
+        </div>
+
+        <div class="panel-header" style="margin-top: 10px;">
+            <span>Live Combat Telemetry</span>
+        </div>
+        <div class="log-container" id="combatLog">
+            <div class="log-entry">• Combat Session Initialized (115 BPM).</div>
+            <div class="log-entry">• Kaelen adopts Vom Tag posture.</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Audio Context for 115 BPM Metronome & Combat Sfx ---
+    let audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playTone(freq, duration, type='sine', gainVal=0.1) {
+        try {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    // --- State Machine & Parameters ---
+    let kaelen = {
+        guard: 'VomTag',
+        stamina: 100,
+        maxStamina: 100,
+        poise: 100,
+        maxPoise: 100,
+        x: 200,
+        y: 280,
+        state: 'Idle',
+        attackProgress: 0,
+        isFlowing: false
+    };
+
+    let enemy = {
+        guard: 'VomTag',
+        poise: 120,
+        maxPoise: 120,
+        x: 500,
+        y: 280,
+        state: 'Idle',
+        archetype: 'Veteran',
+        staggerTimer: 0
+    };
+
+    let combatTime = 0;
+    let attackAnim = null;
+    let fuhlenActive = false;
+    let currentBindType = 'Weak';
+
+    // --- 115 BPM Timing Metronome (521.7ms per beat) ---
+    const beatInterval = (60 / 115) * 1000;
+    setInterval(() => {
+        const pulse = document.getElementById('metroPulse');
+        pulse.classList.add('active');
+        playTone(330, 0.04, 'triangle', 0.03);
+        setTimeout(() => pulse.classList.remove('active'), 80);
+    }, beatInterval);
+
+    // --- Stance Definitions & Master Cuts Mapping ---
+    const stanceMapping = {
+        'VomTag': { name: 'Vom Tag', light: 'Zornhau (Light)', heavy: 'Scheitelhau (Heavy)', lightCut: 'Zornhau', heavyCut: 'Scheitelhau' },
+        'Ochs': { name: 'Ochs', light: 'Zwerchhau (Light)', heavy: 'Krumphau (Heavy)', lightCut: 'Zwerchhau', heavyCut: 'Krumphau' },
+        'Pflug': { name: 'Pflug', light: 'Schielhau (Light)', heavy: 'Stich Thrust (Heavy)', lightCut: 'Schielhau', heavyCut: 'Stich' },
+        'Alber': { name: 'Alber', light: 'Rising Parrying Cut', heavy: 'Under-Cleave', lightCut: 'RisingCut', heavyCut: 'UnderCleave' },
+        'Mordhau': { name: 'Mordhau', light: 'Pommel Hook', heavy: 'Armor Crusher (100% Pen)', lightCut: 'PommelHook', heavyCut: 'ArmorCrusher' }
+    };
+
+    function setKaelenGuard(newGuard) {
+        kaelen.guard = newGuard;
+        document.querySelectorAll('.stance-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        
+        const map = stanceMapping[newGuard];
+        document.getElementById('lblLight').textContent = map.light;
+        document.getElementById('lblHeavy').textContent = map.heavy;
+        addLog(`Kaelen shifts guard to [${map.name}].`, 'flow');
+        playTone(220, 0.08, 'sine', 0.05);
+    }
+
+    function addLog(msg, type='') {
+        const log = document.getElementById('combatLog');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        entry.textContent = `[${(combatTime/1000).toFixed(1)}s] ${msg}`;
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    // --- Attack Execution ---
+    function executeStrike(type) {
+        if (kaelen.state === 'Attacking' || fuhlenActive) return;
+        if (kaelen.stamina < 15) {
+            addLog('Stamina depleted! Cannot initiate strike.', 'damage');
+            return;
+        }
+
+        const map = stanceMapping[kaelen.guard];
+        const cutName = type === 'Light' ? map.lightCut : map.heavyCut;
+        kaelen.state = 'Attacking';
+        kaelen.attackProgress = 0;
+        kaelen.stamina -= (type === 'Light' ? 15 : 25);
+        updateUI();
+
+        addLog(`Kaelen executes [${cutName}] from [${map.name}].`);
+        playTone(type === 'Light' ? 440 : 280, 0.12, 'sawtooth', 0.08);
+
+        // Animate strike timeline
+        let progress = 0;
+        const marker = document.getElementById('flowMarker');
+        
+        const interval = setInterval(() => {
+            progress += 0.02;
+            kaelen.attackProgress = progress;
+            marker.style.left = `${progress * 100}%`;
+
+            // Contact Frame at 50%
+            if (progress >= 0.5 && progress < 0.52) {
+                evaluateHitContact(cutName);
+            }
+
+            // End of attack
+            if (progress >= 1.0) {
+                clearInterval(interval);
+                kaelen.state = 'Idle';
+                marker.style.left = '0%';
+            }
+        }, 16);
+    }
+
+    function evaluateHitContact(cutName) {
+        // Evaluate against Enemy Guard
+        const hardCounters = {
+            'VomTag': ['Zornhau', 'Zwerchhau'],
+            'Ochs': ['Krumphau', 'Schielhau'],
+            'Pflug': ['Schielhau', 'Stich'],
+            'Alber': ['Scheitelhau']
+        };
+
+        const isHardCounter = (hardCounters[enemy.guard] || []).includes(cutName);
+
+        // 40% chance of Fühlen blade clash
+        if (Math.random() < 0.45 && enemy.poise > 20) {
+            triggerFuhlenClash();
+            return;
+        }
+
+        if (isHardCounter) {
+            const poiseDmg = 55;
+            enemy.poise = Math.max(0, enemy.poise - poiseDmg);
+            addLog(`HARD COUNTER! [${cutName}] breaks enemy [${enemy.guard}] (${poiseDmg} Poise Dmg, 1.75x)!`, 'counter');
+            playTone(880, 0.25, 'square', 0.1);
+        } else {
+            const poiseDmg = 25;
+            enemy.poise = Math.max(0, enemy.poise - poiseDmg);
+            addLog(`Strike connects on enemy guard (${poiseDmg} Poise Dmg).`, 'damage');
+            playTone(520, 0.15, 'sawtooth', 0.06);
+        }
+
+        if (enemy.poise <= 0) {
+            addLog(`💥 ENEMY POISE COLLAPSE! 1.5s Execution Stagger!`, 'counter');
+            enemy.staggerTimer = 90;
+            enemy.poise = enemy.maxPoise;
+        }
+
+        updateUI();
+    }
+
+    // --- Fühlen Blade Clash System ---
+    function triggerFuhlenClash() {
+        fuhlenActive = true;
+        currentBindType = Math.random() < 0.5 ? 'Weak' : 'Strong';
+        
+        const banner = document.getElementById('fuhlenBanner');
+        const desc = document.getElementById('fuhlenDesc');
+        desc.textContent = `Opponent Resistance: ${currentBindType.toUpperCase()} (${currentBindType === 'Weak' ? 'Weich - Soft' : 'Hart - Rigid'})`;
+        banner.style.display = 'block';
+
+        addLog(`⚔️ BLADES LOCKED IN BIND! Fühlen Pressure: [${currentBindType}]. Choose reaction!`, 'clash');
+        playTone(180, 0.4, 'triangle', 0.12);
+    }
+
+    function resolveFuhlen(choice) {
+        document.getElementById('fuhlenBanner').style.display = 'none';
+        fuhlenActive = false;
+
+        if (currentBindType === 'Weak' && choice === 'Thrust') {
+            addLog(`PERFECT TACTILE READ! Kaelen plunges Zorn-Ort thrust through soft bind (+40 Poise Dmg)!`, 'counter');
+            enemy.poise = Math.max(0, enemy.poise - 45);
+            playTone(950, 0.2, 'sine', 0.12);
+        } else if (currentBindType === 'Strong' && choice === 'Winden') {
+            addLog(`MASTER WINDING! Kaelen rotates hilt around rigid blade, striking exposed flank (+50 Poise Dmg)!`, 'counter');
+            enemy.poise = Math.max(0, enemy.poise - 50);
+            playTone(720, 0.25, 'sine', 0.12);
+        } else {
+            addLog(`Bind misread! Weapon deflected during clash.`, 'damage');
+            kaelen.stamina = Math.max(0, kaelen.stamina - 15);
+        }
+
+        updateUI();
+    }
+
+    // --- Flow Glint Window Transition ---
+    function triggerFlowTransition() {
+        if (kaelen.state !== 'Attacking') return;
+        
+        // Check if attack progress is within [0.65, 0.80] (the 0.15s glint window)
+        if (kaelen.attackProgress >= 0.65 && kaelen.attackProgress <= 0.82) {
+            kaelen.stamina = Math.min(kaelen.maxStamina, kaelen.stamina + 20); // 100% refund
+            addLog(`✨ PERFECT FLOW GLINT! 0-Stamina Refund & +25% Speed Boost!`, 'flow');
+            playTone(1056, 0.15, 'sine', 0.15);
+        } else {
+            addLog(`Flow glint missed (Outside 0.15s window). Standard recovery frames applied.`);
+        }
+        updateUI();
+    }
+
+    function setEnemyAIArchetype(type) {
+        enemy.archetype = type;
+        addLog(`Enemy AI set to [${type}].`);
+    }
+
+    function updateUI() {
+        document.getElementById('barStamina').style.width = `${(kaelen.stamina/kaelen.maxStamina)*100}%`;
+        document.getElementById('txtStamina').textContent = `${Math.round(kaelen.stamina)} / ${kaelen.maxStamina}`;
+        
+        document.getElementById('barEnemyPoise').style.width = `${(enemy.poise/enemy.maxPoise)*100}%`;
+        document.getElementById('txtEnemyPoise').textContent = `${Math.round(enemy.poise)} / ${enemy.maxPoise}`;
+        
+        document.getElementById('enemyStanceText').textContent = `${enemy.guard}`;
+    }
+
+    // --- 2D Canvas Fighter Kinematics Renderer ---
+    const canvas = document.getElementById('arenaCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function renderLoop() {
+        combatTime += 16;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Ground Line
+        ctx.strokeStyle = '#2a3441';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(50, 320);
+        ctx.lineTo(650, 320);
+        ctx.stroke();
+
+        // Stamina Passive Regen
+        if (kaelen.state === 'Idle' && kaelen.stamina < kaelen.maxStamina) {
+            kaelen.stamina = Math.min(kaelen.maxStamina, kaelen.stamina + 0.15);
+            updateUI();
+        }
+
+        // Enemy AI Stance Cycling (every 3 seconds)
+        if (Math.random() < 0.008 && enemy.staggerTimer <= 0) {
+            const guards = ['VomTag', 'Ochs', 'Pflug', 'Alber'];
+            enemy.guard = guards[Math.floor(Math.random() * guards.length)];
+            updateUI();
+        }
+
+        if (enemy.staggerTimer > 0) enemy.staggerTimer--;
+
+        // Draw Kaelen (Blue / Silver)
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(kaelen.x, kaelen.y, 22, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '12px Cinzel, serif';
+        ctx.fillText('KAELEN', kaelen.x - 24, kaelen.y - 32);
+
+        // Draw Kaelen's Sword Vector based on Guard
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(kaelen.x, kaelen.y);
+        
+        if (kaelen.guard === 'VomTag') {
+            ctx.lineTo(kaelen.x + 35, kaelen.y - 65);
+        } else if (kaelen.guard === 'Ochs') {
+            ctx.lineTo(kaelen.x + 65, kaelen.y - 20);
+        } else if (kaelen.guard === 'Pflug') {
+            ctx.lineTo(kaelen.x + 60, kaelen.y + 15);
+        } else if (kaelen.guard === 'Alber') {
+            ctx.lineTo(kaelen.x + 40, kaelen.y + 60);
+        } else if (kaelen.guard === 'Mordhau') {
+            ctx.lineTo(kaelen.x + 30, kaelen.y - 30);
+        }
+        ctx.stroke();
+
+        // Draw Enemy Sentinel (Red / Gold)
+        ctx.fillStyle = enemy.staggerTimer > 0 ? '#fbbf24' : '#ef4444';
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y, 22, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fca5a5';
+        ctx.fillText(enemy.staggerTimer > 0 ? 'STAGGERED' : 'SENTINEL', enemy.x - 28, enemy.y - 32);
+
+        // Draw Enemy Sword Vector
+        ctx.strokeStyle = '#f87171';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(enemy.x, enemy.y);
+        if (enemy.guard === 'VomTag') {
+            ctx.lineTo(enemy.x - 35, enemy.y - 65);
+        } else if (enemy.guard === 'Ochs') {
+            ctx.lineTo(enemy.x - 65, enemy.y - 20);
+        } else if (enemy.guard === 'Pflug') {
+            ctx.lineTo(enemy.x - 60, enemy.y + 15);
+        } else if (enemy.guard === 'Alber') {
+            ctx.lineTo(enemy.x - 40, enemy.y + 60);
+        }
+        ctx.stroke();
+
+        requestAnimationFrame(renderLoop);
+    }
+
+    requestAnimationFrame(renderLoop);
+</script>
+
+</body>
+</html>

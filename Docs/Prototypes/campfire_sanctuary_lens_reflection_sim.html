@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashen Oath - Campfire Sanctuary & Living Blade Metallurgy Simulator</title>
+    <style>
+        :root {
+            --bg-dark: #07090e;
+            --panel-bg: rgba(15, 19, 28, 0.95);
+            --border-gold: #c5a059;
+            --border-dim: #252d3a;
+            --fire-amber: #f59e0b;
+            --void-violet: #8b5cf6;
+            --silver-chime: #e2e8f0;
+            --font-serif: 'Cinzel', 'Trajan Pro', 'Georgia', serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #e2e8f0;
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 50% 30%, #1e1b18 0%, #07090e 75%);
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-dim);
+            background: rgba(7, 9, 14, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title-group h1 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: var(--border-gold);
+            text-transform: uppercase;
+        }
+
+        .title-group p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            letter-spacing: 1px;
+        }
+
+        .hearth-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border-gold);
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            color: var(--border-gold);
+        }
+
+        .ember-pulse {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #f59e0b;
+            box-shadow: 0 0 10px #f59e0b;
+            animation: flicker 2s infinite ease-in-out;
+        }
+
+        @keyframes flicker {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 16px #f97316; }
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 340px 1fr 340px;
+            gap: 16px;
+            padding: 16px;
+            flex: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .panel-header {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            color: var(--border-gold);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.25);
+            padding-bottom: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 4 Morally Ambiguous Lenses */
+        .lens-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .lens-card {
+            background: #111622;
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .lens-card:hover {
+            border-color: #64748b;
+            background: #1a2232;
+        }
+
+        .lens-card.active {
+            border-color: var(--border-gold);
+            background: rgba(197, 160, 89, 0.12);
+            box-shadow: 0 0 12px rgba(197, 160, 89, 0.2);
+        }
+
+        .lens-card h4 {
+            font-family: var(--font-serif);
+            color: #f1f5f9;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .lens-card .quote {
+            font-style: italic;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .lens-card .tradeoff {
+            font-size: 0.7rem;
+            color: #38bdf8;
+            margin-top: 2px;
+        }
+
+        /* Central Hearth & Blade Canvas */
+        .canvas-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hearth-canvas-wrapper {
+            position: relative;
+            background: #090c12;
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            height: 420px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .crystallize-btn {
+            background: linear-gradient(180deg, #b45309 0%, #78350f 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            padding: 14px;
+            color: #fff;
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            text-transform: uppercase;
+        }
+
+        .crystallize-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+            background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
+        }
+
+        /* Telemetry & Companions */
+        .stat-bar-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .bar-bg {
+            background: #1e293b;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .bar-debt { background: #ef4444; }
+        .bar-drag { background: #f97316; }
+        .bar-resolve { background: #38bdf8; }
+        .bar-corrupt { background: #8b5cf6; }
+
+        .companion-box {
+            background: #0f1522;
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .companion-box h4 {
+            font-family: var(--font-serif);
+            font-size: 0.85rem;
+            color: var(--border-gold);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .companion-dialogue {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            font-style: italic;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="title-group">
+        <h1>Campfire Sanctuary & Living Blade Simulator</h1>
+        <p>Psychological Core, 4-Lens Reflection & Dynamic Metallurgy (PRS-001-SPEC-SOUL-107)</p>
+    </div>
+    <div class="hearth-status">
+        <div class="ember-pulse"></div>
+        <span>HEARTH WARMTH (ZERO DEBT SANCTUARY)</span>
+    </div>
+</header>
+
+<div class="main-container">
+    <!-- Left Column: The 4 Morally Ambiguous Lenses -->
+    <div class="panel">
+        <div class="panel-header">
+            <span>Interpretive Lenses</span>
+            <span style="font-size:0.75rem; color:#64748b;">(4 Worldviews)</span>
+        </div>
+        
+        <div class="lens-list">
+            <div class="lens-card active" onclick="selectLens('Duty')">
+                <h4>1. DUTY <span style="font-size:0.75rem; color:#38bdf8;">+Resolve</span></h4>
+                <div class="quote">"Order requires an unyielding standard. If I falter, all collapses."</div>
+                <div class="tradeoff">Strength: Flawless Parry | Cost: Emotional Isolation</div>
+            </div>
+
+            <div class="lens-card" onclick="selectLens('Devotion')">
+                <h4>2. DEVOTION <span style="font-size:0.75rem; color:#f59e0b;">+Poise Armor</span></h4>
+                <div class="quote">"A vow means bearing the wounds of others so they don't have to."</div>
+                <div class="tradeoff">Strength: Massive Poise Floor | Cost: -15% Max HP (Martyr)</div>
+            </div>
+
+            <div class="lens-card" onclick="selectLens('Survival')">
+                <h4>3. SURVIVAL <span style="font-size:0.75rem; color:#10b981;">+Economy</span></h4>
+                <div class="quote">"Ideals are luxuries for the dead. Adapt or bleed."</div>
+                <div class="tradeoff">Strength: -15% Stamina / Fast Recovery | Cost: Cynical Distrust</div>
+            </div>
+
+            <div class="lens-card" onclick="selectLens('Anguish')">
+                <h4>4. ANGUISH <span style="font-size:0.75rem; color:#8b5cf6;">+Void Wrath</span></h4>
+                <div class="quote">"The masters burned our world. I will tear down their empire."</div>
+                <div class="tradeoff">Strength: Execution Leech / 0kg Mass | Cost: Humanity Loss</div>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="crystallize-btn" style="flex:1; padding:10px; font-size:0.8rem; background:#1e293b; border-color:#475569;" onclick="addTraumaDebt()">
+                🩸 Suffer Combat Trauma (+0.25 Debt)
+            </button>
+        </div>
+    </div>
+
+    <!-- Center Column: Hearth Visual & Living Blade Metallurgy -->
+    <div class="canvas-container">
+        <div class="hearth-canvas-wrapper">
+            <canvas id="hearthCanvas" width="700" height="420"></canvas>
+        </div>
+
+        <button class="crystallize-btn" onclick="crystallizeReflection()">
+            🕯️ Crystallize Memories & Enforce Zero Debt ($Debt \to 0.0$)
+        </button>
+    </div>
+
+    <!-- Right Column: Soul Telemetry, Somatic Drag & Companions -->
+    <div class="panel">
+        <div class="panel-header">
+            <span>Somatic & Soul Vectors</span>
+        </div>
+
+        <div class="stat-bar-group">
+            <div class="stat-header"><span>Integration Debt ($Debt$)</span><span id="txtDebt">0.65 / 1.00</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-debt" id="barDebt" style="width: 65%;"></div></div>
+        </div>
+
+        <div class="stat-bar-group">
+            <div class="stat-header"><span>Somatic Gait Limb Drag</span><span id="txtDrag">15.0 uu (Dragging)</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-drag" id="barDrag" style="width: 75%;"></div></div>
+        </div>
+
+        <div class="stat-bar-group">
+            <div class="stat-header"><span>Weapon Handling Mass</span><span id="txtMass">98.5 kg (Bloated)</span></div>
+        </div>
+
+        <div class="stat-bar-group">
+            <div class="stat-header"><span>Resolve (White Flame)</span><span id="txtResolve">0.45</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-resolve" id="barResolve" style="width: 45%;"></div></div>
+        </div>
+
+        <div class="stat-bar-group">
+            <div class="stat-header"><span>Corruption (Void Residue)</span><span id="txtCorrupt">0.10</span></div>
+            <div class="bar-bg"><div class="bar-fill bar-corrupt" id="barCorrupt" style="width: 10%;"></div></div>
+        </div>
+
+        <div class="panel-header" style="margin-top: 10px;">
+            <span>Companion Dynamic Reaction</span>
+        </div>
+
+        <div class="companion-box">
+            <h4>Garrett <span id="garrettTension" style="font-size:0.7rem; color:#f59e0b;">Guarded</span></h4>
+            <div class="companion-dialogue" id="garrettText">"You carry yourself like a stone statue, Kaelen. When the stone cracks, who catches us?"</div>
+        </div>
+
+        <div class="companion-box">
+            <h4>Serafina <span id="serafinaTension" style="font-size:0.7rem; color:#38bdf8;">Comforted</span></h4>
+            <div class="companion-dialogue" id="serafinaText">"The discipline of the Order is our only anchor in this dark, Kaelen."</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Audio Context for Sfx ---
+    let audioCtx = null;
+    function initAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    function playTone(freq, duration, type='sine', gainVal=0.1) {
+        try {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    // --- State Variables ---
+    let selectedLens = 'Duty';
+    let integrationDebt = 0.65;
+    let resolve = 0.45;
+    let corruption = 0.10;
+    let weaponTier = 'TheScribedVow'; // BurdenedIron, HonedDamascus, TheScribedVow, DevouringNightsteel
+
+    function selectLens(lens) {
+        selectedLens = lens;
+        document.querySelectorAll('.lens-card').forEach(card => card.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        updateCompanionReactions();
+        playTone(300, 0.08, 'sine', 0.05);
+    }
+
+    function updateCompanionReactions() {
+        const gText = document.getElementById('garrettText');
+        const sText = document.getElementById('serafinaText');
+        const gTens = document.getElementById('garrettTension');
+        const sTens = document.getElementById('serafinaTension');
+
+        if (selectedLens === 'Duty') {
+            gTens.textContent = 'Resentful'; gTens.style.color = '#f87171';
+            gText.textContent = '"You carry yourself like a stone statue, Kaelen. When the stone cracks, who catches us?"';
+            sTens.textContent = 'Comforted'; sTens.style.color = '#38bdf8';
+            sText.textContent = '"The discipline of the Order is our only anchor in this dark, Kaelen."';
+            weaponTier = 'TheScribedVow';
+        } else if (selectedLens === 'Devotion') {
+            gTens.textContent = 'Moved'; gTens.style.color = '#4ade80';
+            gText.textContent = '"You always step in front of the blade for us... but don\'t die on me, brother."';
+            sTens.textContent = 'Terrified'; sTens.style.color = '#f87171';
+            sText.textContent = '"Stop treating your flesh as disposable! Who leads us when you bleed out?"';
+            weaponTier = 'BurdenedIron';
+        } else if (selectedLens === 'Survival') {
+            gTens.textContent = 'Approving'; gTens.style.color = '#4ade80';
+            gText.textContent = '"Now you\'re thinking with your head. Ideals won\'t buy bread or forge bolts."';
+            sTens.textContent = 'Uneasy'; sTens.style.color = '#f59e0b';
+            sText.textContent = '"If we cast off all sacred vows for survival, are we any better than the scavengers?"';
+            weaponTier = 'HonedDamascus';
+        } else if (selectedLens === 'Anguish') {
+            gTens.textContent = 'Fervent'; gTens.style.color = '#a855f7';
+            gText.textContent = '"Let them burn like they burned our homes. Give them hell, Kaelen."';
+            sTens.textContent = 'Horrified'; sTens.style.color = '#ef4444';
+            sText.textContent = '"Look at your blade, Kaelen! The void is eating your soul from the inside out!"';
+            weaponTier = 'DevouringNightsteel';
+        }
+    }
+
+    function addTraumaDebt() {
+        integrationDebt = Math.min(1.0, integrationDebt + 0.25);
+        playTone(180, 0.2, 'sawtooth', 0.08);
+        updateTelemetry();
+    }
+
+    function crystallizeReflection() {
+        // Enforce Zero-Debt Invariant
+        integrationDebt = 0.0;
+
+        if (selectedLens === 'Duty') {
+            resolve = Math.min(1.0, resolve + 0.35);
+            corruption = Math.max(0.0, corruption - 0.05);
+            playTone(528, 0.4, 'sine', 0.15); // 528Hz Solfeggio Chime
+        } else if (selectedLens === 'Devotion') {
+            resolve = Math.min(1.0, resolve + 0.15);
+            playTone(220, 0.3, 'triangle', 0.12);
+        } else if (selectedLens === 'Survival') {
+            resolve = Math.min(1.0, resolve + 0.10);
+            playTone(440, 0.2, 'sawtooth', 0.1);
+        } else if (selectedLens === 'Anguish') {
+            corruption = Math.min(1.0, corruption + 0.40);
+            resolve = Math.max(0.0, resolve - 0.05);
+            playTone(110, 0.5, 'square', 0.12); // 110Hz Sub-bass
+        }
+
+        updateTelemetry();
+    }
+
+    function updateTelemetry() {
+        // Somatic Drag: 15uu * Debt
+        const drag = integrationDebt * 15.0;
+        document.getElementById('barDebt').style.width = `${integrationDebt * 100}%`;
+        document.getElementById('txtDebt').textContent = `${integrationDebt.toFixed(2)} / 1.00`;
+
+        document.getElementById('barDrag').style.width = `${(drag / 15.0) * 100}%`;
+        document.getElementById('txtDrag').textContent = `${drag.toFixed(1)} uu (${drag === 0 ? 'Upright & Agile' : 'Dragging Feet'})`;
+
+        // Continuous Mass: 80 * (1 + 0.65*Debt - 0.35*Resolve)
+        let mass = 80.0 * (1.0 + 0.65 * integrationDebt - 0.35 * resolve);
+        if (selectedLens === 'Anguish' && corruption > 0.4) mass = 0.0; // Weightless void
+
+        document.getElementById('txtMass').textContent = `${mass.toFixed(1)} kg (${mass === 0 ? 'Weightless Scythe' : mass < 60 ? 'Nimble Edge' : 'Bloated Steel'})`;
+
+        document.getElementById('barResolve').style.width = `${resolve * 100}%`;
+        document.getElementById('txtResolve').textContent = resolve.toFixed(2);
+
+        document.getElementById('barCorrupt').style.width = `${corruption * 100}%`;
+        document.getElementById('txtCorrupt').textContent = corruption.toFixed(2);
+    }
+
+    // --- 2D Canvas Hearth & Oathbringer PBR Metallurgy Renderer ---
+    const canvas = document.getElementById('hearthCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let embers = [];
+    for (let i = 0; i < 40; i++) {
+        embers.push({
+            x: 350 + (Math.random() - 0.5) * 80,
+            y: 350 + Math.random() * 40,
+            radius: Math.random() * 2.5 + 1,
+            speedY: Math.random() * 1.5 + 0.5,
+            speedX: (Math.random() - 0.5) * 1.0,
+            alpha: Math.random() * 0.8 + 0.2
+        });
+    }
+
+    function renderHearth() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Ambient Hearth Fire Glow
+        const fireGrad = ctx.createRadialGradient(350, 340, 10, 350, 340, 180);
+        fireGrad.addColorStop(0, 'rgba(245, 158, 11, 0.45)');
+        fireGrad.addColorStop(0.5, 'rgba(180, 83, 9, 0.15)');
+        fireGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = fireGrad;
+        ctx.beginPath();
+        ctx.arc(350, 340, 180, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw Campfire Embers
+        for (let e of embers) {
+            ctx.fillStyle = `rgba(251, 146, 60, ${e.alpha})`;
+            ctx.beginPath();
+            ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+            ctx.fill();
+            e.y -= e.speedY;
+            e.x += e.speedX;
+            e.alpha -= 0.005;
+            if (e.y < 200 || e.alpha <= 0) {
+                e.y = 350 + Math.random() * 30;
+                e.x = 350 + (Math.random() - 0.5) * 80;
+                e.alpha = Math.random() * 0.8 + 0.2;
+            }
+        }
+
+        // Draw Fire Stones
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.arc(350, 360, 45, 0, Math.PI * 2);
+        ctx.fill();
+
+        // --- Draw Oathbringer Greatsword (Live Metallurgy) ---
+        ctx.save();
+        ctx.translate(350, 170);
+        ctx.rotate(-Math.PI / 4);
+
+        // 1. Blade Body
+        if (weaponTier === 'DevouringNightsteel') {
+            // Void Light Absorption Envelope (2.0-inch black aura)
+            ctx.shadowColor = '#000000';
+            ctx.shadowBlur = 35;
+            ctx.fillStyle = '#050505';
+        } else if (weaponTier === 'TheScribedVow') {
+            ctx.shadowColor = 'rgba(226, 232, 240, 0.6)';
+            ctx.shadowBlur = 20;
+            ctx.fillStyle = '#cbd5e1';
+        } else if (weaponTier === 'HonedDamascus') {
+            ctx.fillStyle = '#64748b';
+            ctx.shadowBlur = 0;
+        } else { // BurdenedIron
+            ctx.fillStyle = '#334155';
+            ctx.shadowBlur = 0;
+        }
+
+        // Blade Geometry (Greatsword Fuller & Edge)
+        ctx.beginPath();
+        ctx.moveTo(-12, -140);
+        ctx.lineTo(0, -180); // Point
+        ctx.lineTo(12, -140);
+        ctx.lineTo(12, 40);
+        ctx.lineTo(-12, 40);
+        ctx.closePath();
+        ctx.fill();
+
+        // 2. Fuller Seam & Silver Inlays (Tier 3 Scribed Vow)
+        if (weaponTier === 'TheScribedVow') {
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, -160);
+            ctx.lineTo(0, 30);
+            ctx.stroke();
+        } else if (weaponTier === 'DevouringNightsteel') {
+            // Retroreflective wolf eye glow
+            ctx.fillStyle = '#a855f7';
+            ctx.beginPath();
+            ctx.arc(-4, 45, 2, 0, Math.PI*2);
+            ctx.arc(4, 45, 2, 0, Math.PI*2);
+            ctx.fill();
+        }
+
+        // 3. Crossguard Quillons & Hilt
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(-35, 40, 70, 10); // Quillons
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(-5, 50, 10, 45); // Grip
+        ctx.fillStyle = '#334155';
+        ctx.beginPath();
+        ctx.arc(0, 100, 10, 0, Math.PI * 2); // Wolf Pommel
+        ctx.fill();
+
+        ctx.restore();
+
+        // Draw Metallurgical Tier Label
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = '14px Cinzel, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`ACTIVE BLADE: ${weaponTier.toUpperCase()}`, 350, 30);
+
+        requestAnimationFrame(renderHearth);
+    }
+
+    updateTelemetry();
+    requestAnimationFrame(renderHearth);
+</script>
+
+</body>
+</html>
