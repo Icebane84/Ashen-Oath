@@ -4,6 +4,18 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.17.0: Campfire Reflection & Memory Integration Playloop
+**Governing Directives:** `PRS-001-SPEC-SOUL-001`, `METALLURGY-SPEC-102`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Tri-Partite Sentinel Contract Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Campfire Reflection Subsystem` | `Memory/`, `Soul/` | `UAshenCampfireReflectionSubsystem` sanctuary state machine crystallizing buffered imprints through the 4 Interpretive Lenses; enforces Zero Integration Debt invariant ($Debt \to 0.0$) | `FAshenCampfireDebtPayoffTest`, `FAshenCampfireLensRoutingTest` |
+| `Oathbringer Morph Actuator` | `Combat/`, `Visuals/` | `UAshenOathbringerMorphComponent` listening to `FAshenStateSnapshot` commits and driving live PBR surface modulation, $2.0\text{-inch}$ light absorption envelope, wolf pommel retroreflection, and dynamic weapon mass ($45-120\text{kg}$) | `FAshenOathbringerMorphActuatorTest` |
+| `Campfire Constellation Slate UI` | `UI/` | `SAshenCampfireConstellationWidget` interactive 4-lens selection dial (Accountability, Grace/Compassion, Nihilism/Spite, Penance) and real-time soul telemetry display | Verified via UBT & Slate Link |
+
+---
+
 ### Patch v158.16.0: CDTC-002 Canonical Source Manifest Integration (PRS-001-SRC-CDTC-002)
 **Governing Directives:** `PRS-001-SRC-CDTC-002-ARCHIVE`, `PRS-001-CDTC-001-V2-HARDENED`, Constitutional Law I (SSoT)  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), 5-Part Canonical Boundary Test Suite Verified

@@ -14,8 +14,10 @@ UENUM(BlueprintType)
 enum class EInterpretiveLens : uint8
 {
 	Accountability  UMETA(DisplayName = "Accountability"),
-	Grace           UMETA(DisplayName = "Grace"),
+	Grace           UMETA(DisplayName = "Grace / Compassion"),
 	Utility         UMETA(DisplayName = "Utility"),
+	Nihilism        UMETA(DisplayName = "Nihilism / Spite"),
+	Penance         UMETA(DisplayName = "Penance"),
 };
 
 // ---------------------------------------------------------------------------

@@ -19,6 +19,7 @@ public class AshenOath : ModuleRules
 			"GameplayStateTreeModule",
 			"UMG",
 			"Slate",
+			"SlateCore",
 			"Niagara",
 			"DeveloperSettings",
 			"Json",
