@@ -1,8 +1,8 @@
-# Ashen Oath: Canonical Architecture & Documentation Index
+# Ashen Oath: Canonical Architecture, Documentation & Production Index
 
-**V-Control:** 2026-09-01T14:20:00-04:00  
+**V-Control:** 2026-09-01T14:25:00-04:00  
 **Target Engine:** Unreal Engine 5.8 C++ / Gameplay Ability System (GAS) / StateTree / MetaSounds / Chaos  
-**Authority Level:** Grand Master Sitemap & Architectural Hierarchy  
+**Authority Level:** Grand Master Sitemap & Omniscient Architectural Index  
 **Repository State:** 3,175 Builds Clean (0 Errors, 0 Warnings) Across 12 Domain-Driven Vertical Slices  
 
 ---
@@ -61,32 +61,100 @@ These specifications represent the **current, unassailable production standard**
 
 ---
 
-## 🗂️ III. The 12 Domain-Driven Vertical Slices
+## 📖 III. Narrative, Lore & Cognitive Architecture Treatises
+
+* **[`GDD - Ashen Oath_ Echoes of the Sundered.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/GDD%20-%20Ashen%20Oath_%20Echoes%20of%20the%20Sundered.md):** The 693KB Master Game Design Document covering the complete overarching world, factions, narrative arc, and thematic foundations.
+* **[`Ashen Oath Comprehensive Multi-Phase Implementation Plan.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Ashen%20Oath%20Comprehensive%20Multi-Phase%20Implementation%20Plan.md):** Multi-phase production roadmap across all engine milestones.
+* **[`Inner World of Oathbringer.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Inner%20World%20of%20Oathbringer.md):** Diegetic lore, Eldrin voice whispers, and psychological blade possession mechanics.
+* **[`ashen-oath-cognitive-architecture-spec.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/ashen-oath-cognitive-architecture-spec.md):** Cognitive theory, trauma transference, and phenomenological mindscape models.
+* **[`RIC-SLM Integration Synthesis.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/RIC-SLM%20Integration%20Synthesis.md) & [`SLM Governance Protocol.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/SLM%20Governance%20Protocol.md):** Zero-Trust Small Language Model (SLM) local inference firewall for dynamic companion dialogue generation without hallucinations or cloud leakage (Law 11 Faraday Cage).
+
+---
+
+## 🎨 IV. UI, Blueprints & Operational Design (`Docs/Blueprints/`)
+
+Located inside the [`Docs/Blueprints/`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Blueprints/) directory:
+
+* **`UMB-UI-002: The Psychological Operating System Blueprint`:** Specifications for diegetic HUD rendering, panic vignette shaders, and sanity telemetry.
+* **`UMB-UI-004: The Diegetic Psychological Interface Constitution`:** Operational rules governing minimal, immersive UI elements (zero arcade health bars).
+* **`UMB-UI-006: The Cartographer's Journal`:** Hand-drawn parchment map, dynamic charcoal annotations, and companion marginalia rendering.
+* **`VERTICAL SLICE SPECIFICATION_ THE DESECRATED BAPTISTERY.md`:** 7-Beat vertical slice design for the flooded undercroft boss fight.
+* **`Party Synchronized Finisher Moves.md`:** Choreography and motion-warping specifications for 3-person tripartite execution strikes.
+* **`THE LIVING JOURNAL & THE TRIO’S SHARED MEMORY PIPELINE.md`:** Tripartite shared memory inscription rules.
+* **`liechtenauer/` Directory:**
+  * [`Animation & Combat Flow State Chart (Mermaid).md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Blueprints/liechtenauer/Animation%20&%20Combat%20Flow%20State%20Chart%20%28Mermaid%29.md)
+  * [`combat_state_machine.py`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Blueprints/liechtenauer/combat_state_machine.py) (The working logic simulation script)
+  * [`liechtenauer_guards.json`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Blueprints/liechtenauer/liechtenauer_guards.json)
+  * [`liechtenauer_master_system.json`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Blueprints/liechtenauer/liechtenauer_master_system.json)
+  * [`liechtenauer_matrix.json`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Blueprints/liechtenauer/liechtenauer_matrix.json)
+
+---
+
+## 🛠️ V. Toolchain, Workflow & Developer Infrastructure
+
+* **[`3d-combat-model-pipeline.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/3d-combat-model-pipeline.md):** 3D asset import standards, rig conventions, FBX animation export guidelines, and weapon socket configurations.
+* **[`ASHEN_OATH_CONTENT_INTEGRATION_GUIDE.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/ASHEN_OATH_CONTENT_INTEGRATION_GUIDE.md):** Step-by-step editor staging guide for bringing raw assets into Unreal Engine 5.8.
+* **[`ASHEN_OATH_UNREAL_CODING_WORKFLOW_BLUEPRINT.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/ASHEN_OATH_UNREAL_CODING_WORKFLOW_BLUEPRINT.md):** C++ coding standards, forward declarations, UBT rules, and macro guidelines.
+* **[`editor_setup_guide.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/editor_setup_guide.md) & [`clang-format_guidelines.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/clang-format_guidelines.md):** IDE formatting and editor viewport configuration.
+* **[`Developer Nightmares.md`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Developer%20Nightmares.md):** Architectural post-mortem documenting anti-patterns to avoid (e.g. cyclic headers, multi-threaded GAS mutations, dangling delegates).
+* **[`BackendSync/rag_pipeline.py`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/BackendSync/rag_pipeline.py):** Local Python script for vectorized semantic search and RAG embedding of all project documentation.
+
+---
+
+## 🗂️ VI. Complete Domain Specification Catalog (Specs 014–099)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                     THE 12 DOMAIN-DRIVEN VERTICAL SLICES                                        │
-├──────┬──────────────────────┬────────────────────────────────────────────────────────┬──────────────────────────┤
-│ ID   │ Domain Slice         │ Core Responsibilities & C++ Subsystems                 │ Primary Specifications   │
-├──────┼──────────────────────┼────────────────────────────────────────────────────────┼──────────────────────────┤
-│ **01**│ **Combat & Motion**  │ 4 Guards, 5 Master Cuts, Flow Glint, Fühlen, Warping   │ `SPEC-106`, `SPEC-108`   │
-│ **02**│ **Soul & Memory**    │ 28-Byte SSoT, Integration Debt, 4 Lenses, Campfire     │ `SPEC-107`, `SPEC-V2.0`  │
-│ **03**│ **Living Blade**     │ 5 PBR Metallurgy Tiers, Dynamic Mass, Runic Loci       │ `SPEC-102`, `SPEC-107`   │
-│ **04**│ **Companions**       │ Garrett & Serafina AI, Relational Matrix, Tripartite   │ `TRIO-061`, `COMP-075`   │
-│ **05**│ **Martial AI**       │ StateTree 60Hz Sensing, Counter Matrix, Posture Breaks │ `SPEC-109`               │
-│ **06**│ **Audio & Music**    │ MetaSounds, Quartz 115/60 BPM, 6-Stem Conductor, Foley │ `QUARTZ-084`, `AUDIO-033`│
-│ **07**│ **Haptics**          │ DualSense Adaptive Triggers, Voice-Coil Telemetry      │ `HAPTIC-065`             │
-│ **08**│ **Physics & Chaos**  │ Chaos NavMesh Obstacle Cutting, Rubble, Dismemberment  │ `CHAOS-077`, `SEV-099`   │
-│ **09**│ **Journal & Lore**   │ Living Journal Marginalia, Forensic Mindscape Memory   │ `JOURNAL-082`, `MIND-097`│
-│ **10**│ **Alchemy & Food**   │ Thermal Slag Reactions, Campfire Rations, Ember Econ   │ `SLAG-095`, `COOK-087`   │
-│ **11**│ **Scenarios & Boss** │ 10 Bespoke Narrative Encounter Engines (Scenarios 1-10)│ `SCENARIO-068` to `081`  │
-│ **12**│ **Persistence & Net**│ Standardized `*SaveGameAdapter` Serialization, SSoT Net│ `CONTRACT-051`           │
-└──────┴──────────────────────┴────────────────────────────────────────────────────────┴──────────────────────────┘
+│                                     MASTER SPECIFICATION DIRECTORY BY DOMAIN                                    │
+├────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Domain Area        │ Specifications Included                                                                    │
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **Combat & Motion**│ `COMBAT-SPEC-024` (Stance Morphing & Motion Warping), `KINETIC-SPEC-060` (Mass Cleave),     │
+│                    │ `KINETIC-SPEC-072` (Kinetic Berserk), `KINEMATICS-SPEC-091` (Kinematics & Somatosensory),  │
+│                    │ `STANCE-SPEC-094` (Greatsword Stance Flow), `SEVERANCE-DISMEMBERMENT-SPEC-099` (Severance) │
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **Soul & Memory**  │ `MEMORY-SPEC-017` (Mindscape Battles), `MEMORY-SPEC-022` (Memory Palace Graph),            │
+│                    │ `LENS-SPEC-020` (Identity Compilation), `TRAUMA-SPEC-023` (Nightmare Incursions),          │
+│                    │ `PHILOSOPHY-SPEC-036` (4-Stage Causal Chain), `MEANING-SPEC-035` (Existential Meaning),    │
+│                    │ `SOMATIC-SPEC-050` (Universal Somatic Layer), `SOMATIC-SPEC-074` (Soot Provenance Matrix)  │
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **Campfire & Blade**│ `OATH-SPEC-016` (Living Oaths & Morphology), `CAMPFIRE-SPEC-062` (Integration Hearth),    │
+│                    │ `RELIQUARY-SPEC-064` (Runic Reliquary), `COOKING-SPEC-087` (Soul-Ember Rationing),        │
+│                    │ `RUNIC-FORGE-SPEC-098` (Sigil Inscription), `SANCTUARY-SURVIVAL-SPEC-096` (Survival Eco)   │
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **Companions**     │ `COMPANION-SPEC-021` (Trust Divergence), `NOVA-SPEC-027` (Empathic Conduit Nova),          │
+│                    │ `WEAVE-SPEC-042` (Memory Weaving), `ECOL-SPEC-053` (Ecology of Fellowship),                │
+│                    │ `INTENT-SPEC-056` (Intent Inference), `BURDEN-SPEC-057` (Shadow Burnout Matrix),           │
+│                    │ `TRIO-SPEC-061` (Tripartite Harmonized Finishers), `COMPANION-SPEC-075` (Cognitive Loop)   │
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **AI & Creatures** │ `TEM-SPEC-032` (Trauma Enemy Matrix), `GAMBIT-SPEC-038` (Shepherd's Gambit AI),           │
+│                    │ `ECOSYSTEM-SPEC-034` (Combat Ecosystems), `ARENA-SPEC-045` (Tripartite Arena),            │
+│                    │ `ARENA-SPEC-063` (Sundered Sanctuary Boss), `CREATURE-SPEC-085` (Shroud-Knight Boss)      │
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **Audio & Haptics**│ `AUDIO-SPEC-033` (DualSense Diegetic Audio), `FRICTION-SPEC-037` (Tactile Controller Frict),│
+│                    │ `HAPTIC-SPEC-048` (Haptic Resonance Chord), `HAPTIC-SPEC-065` (DualSense Tactile Whisper), │
+│                    │ `CHAOS-SPEC-077` (Chaos Spatial Audio), `QUARTZ-SPEC-084` (Quartz Dynamic 6-Stem Conductor)│
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **Chaos & Weather**│ `CORRUPTION-SPEC-019` (Null Zone), `WEATHER-SPEC-026` (Dynamic Weather),                   │
+│                    │ `CHAOS-SPEC-086` (Dynamic Rubble Physics), `WEATHER-SPEC-089` (Environmental Biome Hazard),│
+│                    │ `DESTRUCTION-WEATHER-AI-SPEC-093` (Weather Hazards & Destruction AI Tactics)               │
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **Journal & Lore** │ `CONSEQUENCE-SPEC-030` (Living Journal Consequence), `LORE-SPEC-025` (Living Codex Trees), │
+│                    │ `MAP-SPEC-044` (Cartographic Resonance), `JOURNAL-SPEC-055` (Campfire Marginalia),        │
+│                    │ `ARCHIVE-SPEC-067` (Ashen Codex), `JOURNAL-SPEC-082` (Forensic Campfire Journal),          │
+│                    │ `MAP-SPEC-088` (Fast Travel Waypoints), `FORENSIC-MINDSCAPE-SPEC-097` (Memory Palace Recon)│
+├────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+│ **Scenarios (1-10)**│ `SCENARIO-SPEC-068` (Scenario 1: The Cauterized Heart), `SCENARIO-SPEC-069` (Scenario 2),  │
+│                    │ `SCENARIO-SPEC-070` (Scenario 4), `SCENARIO-SPEC-071` (Scenario 5),                        │
+│                    │ `SCENARIO-SPEC-076` (Scenario 6), `SCENARIO-SPEC-078` (Scenario 7: The Ashen Crucible),   │
+│                    │ `SCENARIO-SPEC-079` (Scenario 8: Searing Abyss), `SCENARIO-SPEC-080` (Scenario 9),         │
+│                    │ `SCENARIO-SPEC-081` (Scenario 10: The Sovereign Convergence), `DEMO-SPEC-073` (Waystation) │
+└────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🎮 IV. Interactive HTML5 Sandbox Suite (`Docs/Prototypes/`)
+## 🎮 VII. Interactive HTML5 Sandbox Suite (`Docs/Prototypes/`)
 
 All mechanical systems have zero-dependency playable browser sandboxes in [`Docs/Prototypes/`](file:///c:/Users/Chris/Ashen%20Oath%20Unreal%20Engine/Docs/Prototypes/):
 
@@ -101,9 +169,7 @@ All mechanical systems have zero-dependency playable browser sandboxes in [`Docs
 
 ---
 
-## ⚠️ V. Deprecation, Evolution & Migration Registry
-
-To prevent regression and eliminate contradictory concepts, the following legacy mechanics have been **permanently superseded** by our canonical architecture:
+## ⚠️ VIII. Deprecation, Evolution & Migration Registry
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
