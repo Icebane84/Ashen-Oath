@@ -1,0 +1,91 @@
+{
+    "system_metadata": {
+        "style_tradition": "Kunst des Fechtens (Kunst des Fechtens)",
+        "century": 14,
+        "historical_grandmaster": "Johannes Liechtenauer",
+        "implementation_architecture": "Component-Based Combat System"
+    },
+    "master_cuts": {
+        "Zornhau": {
+            "english_name": "Wrath Cut",
+            "biomechanics": "Powerful diagonal downward cut driven by hips and core, stepping off-line.",
+            "edge_used": "Long Edge",
+            "hard_counters": [
+                "Vom Tag"
+            ],
+            "state_transitions": {
+                "on_weak_bind": "Langort Thrust (Zornhau-Ort)",
+                "on_strong_bind": "Winden (Winding to Upper Openings)"
+            },
+            "gameplay_modifiers": {
+                "posture_damage_multiplier": 1.75,
+                "stagger_duration_seconds": 1.2
+            }
+        },
+        "Krumphau": {
+            "english_name": "Crooked Cut",
+            "biomechanics": "Off-axis lateral strike with crossed wrists and a wide diagonal step.",
+            "edge_used": "Short Edge",
+            "hard_counters": [
+                "Ochs"
+            ],
+            "state_transitions": {
+                "on_success": "Wechsel (Transition to Low Guard)",
+                "on_block": "Ringen am Schwert (Close Quarters Grapple)"
+            },
+            "gameplay_modifiers": {
+                "posture_damage_multiplier": 2.0,
+                "stagger_duration_seconds": 1.5
+            }
+        },
+        "Zwerchhau": {
+            "english_name": "Thwart Cut",
+            "biomechanics": "High horizontal cut with hands raised above head, thumb turned under blade.",
+            "edge_used": "Short Edge",
+            "hard_counters": [
+                "Vom Tag"
+            ],
+            "state_transitions": {
+                "on_success": "Alternate Side Zwerchhau Chain",
+                "on_block": "Hengen (Hanging / High Bind)"
+            },
+            "gameplay_modifiers": {
+                "posture_damage_multiplier": 1.5,
+                "stagger_duration_seconds": 0.8
+            }
+        },
+        "Schielhau": {
+            "english_name": "Squinting Cut",
+            "biomechanics": "Deceptive plunging cut with turned wrists, dropping point over enemy guard.",
+            "edge_used": "Short Edge",
+            "hard_counters": [
+                "Ochs",
+                "Pflug"
+            ],
+            "state_transitions": {
+                "on_success": "Plunging Face Thrust",
+                "on_block": "Duplieren (Double Cut Behind Guard)"
+            },
+            "gameplay_modifiers": {
+                "posture_damage_multiplier": 1.8,
+                "stagger_duration_seconds": 1.3
+            }
+        },
+        "Scheitelhau": {
+            "english_name": "Crown Cut",
+            "biomechanics": "Perfectly vertical centerline cut extending arms fully to maximize range.",
+            "edge_used": "Long Edge",
+            "hard_counters": [
+                "Alber"
+            ],
+            "state_transitions": {
+                "on_success": "Overhead Cleave Execution",
+                "on_block": "Mutieren (Change Thrust to Lower Openings)"
+            },
+            "gameplay_modifiers": {
+                "posture_damage_multiplier": 1.9,
+                "stagger_duration_seconds": 1.4
+            }
+        }
+    }
+}

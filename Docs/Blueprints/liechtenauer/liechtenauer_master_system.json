@@ -1,0 +1,68 @@
+{
+  "system_title": "Ashen Oath - Liechtenauer Grandmaster Combat Architecture",
+  "version": "1.0.0",
+  "engine_target": "Unreal Engine 5.8 C++ / Gameplay Ability System (GAS)",
+  "core_philosophical_pillars": [
+    {
+      "pillar": "Fühlen (Tactile Blade Sense)",
+      "description": "Blades in contact measure physical resistance (Weak/Weich vs Strong/Hart), determining whether to plunge directly (Vor) or mutate around the bind (Nach)."
+    },
+    {
+      "pillar": "Vor and Nach (Initiative and Reaction)",
+      "description": "Attacking first with an authentic Master Cut seizes the Vor, forcing the defender into the Nach and preventing counter-hits."
+    },
+    {
+      "pillar": "Simultaneous Defense and Offense",
+      "description": "Every Master Cut closes a line of attack with the crossguard or false edge while simultaneously threatening a lethal opening."
+    }
+  ],
+  "tempo_and_rhythm": {
+    "bpm_base": 115,
+    "flow_glint_window_seconds": 0.15,
+    "perfect_timing_reward": {
+      "stamina_cost_refund_fraction": 1.0,
+      "next_montage_playrate_multiplier": 1.25,
+      "resolve_gain_monotonic": 0.02,
+      "instant_guard_branching": true
+    },
+    "missed_timing_penalty": {
+      "stamina_consumed_full": true,
+      "recovery_drag_multiplier": 1.40,
+      "vulnerability_window_seconds": 0.35
+    }
+  },
+  "tactical_interaction_rules": [
+    {
+      "counter_rule": "Zornhau breaks Vom Tag",
+      "rationale": "Diagonal cleave intersects high descending cuts, taking the center line and threatening an immediate Zorn-Ort thrust."
+    },
+    {
+      "counter_rule": "Krumphau breaks Ochs",
+      "rationale": "Crossed-wrist offline step strikes the exposed hands and wrists over the high crossguard."
+    },
+    {
+      "counter_rule": "Zwerchhau breaks Vom Tag",
+      "rationale": "High horizontal short-edge helicopter cut creates an impenetrable roof above Kaelen's head while striking the opponent's temple."
+    },
+    {
+      "counter_rule": "Schielhau breaks Pflug and Ochs",
+      "rationale": "Plunging false-edge cut beats down the opponent's forward-pointing blade, driving the point directly into the neck/collarbone."
+    },
+    {
+      "counter_rule": "Scheitelhau breaks Alber",
+      "rationale": "Maximum extension down the vertical centerline crushes the low-resting point before the opponent can lift it to guard."
+    },
+    {
+      "counter_rule": "Mordhau crushes Rigid Armor",
+      "rationale": "Inverted pommel strike delivers 100% armor-penetrating blunt impact, inducing high concussion and poise failure."
+    }
+  ],
+  "c_plus_plus_binding_manifest": {
+    "base_ability": "UAshenGameplayAbility_CombatStrike",
+    "timing_task": "UAbilityTask_EvaluateMontageFlowPosition",
+    "spatial_evaluator": "UAshenSpatialEvaluator",
+    "stance_component": "UAshenGreatswordStanceFlowComponent",
+    "soul_state_publisher": "UAshenSoulPublisher",
+    "morph_actuator": "UAshenOathbringerMorphComponent"
+  }
+}
