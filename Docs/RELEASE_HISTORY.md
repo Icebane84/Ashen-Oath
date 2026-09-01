@@ -4,6 +4,19 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.18.0: The Five Master Cuts & GAS Kinetic Combo Library
+**Governing Directives:** `CONVERGENCE-SPEC-101`, `PRS-001-SPEC-COMBAT-104`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Bi-Partite Sentinel Combat QA Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Base Strike GAS Ability` | `Combat/`, `GAS` | `UAshenGameplayAbility_CombatStrike` base class managing hit-stop-immune Flow Glint timing, 0-stamina refunds on Perfect timing, and guard transition updates | `FAshenMasterCutsParametersTest` |
+| `The Five Master Cuts` | `Combat/`, `GAS` | Historical Liechtenauer master strikes (`UGA_AshenStrike_Zornhau`, `UGA_AshenStrike_Krumphau`, `UGA_AshenStrike_Zwerchhau`, `UGA_AshenStrike_Schielhau`, `UGA_AshenStrike_Scheitelhau`) with authentic biomechanical properties | `FAshenMasterCutsParametersTest` |
+| `Mordhau Half-Sword Crush`| `Combat/`, `GAS` | `UGA_AshenStrike_Mordhau` inverted grip pommel strike with $100\%$ armor penetration and heavy blunt poise stagger | `FAshenMasterCutsParametersTest` |
+| `Kinetic Guard Branching` | `Combat/`, `Animation`| Non-modal guard chaining (*Vom Tag* $\to$ *Pflug* $\to$ *Ochs* $\to$ *Mordhau*) and self-chaining false-edge Zwerchhau loops | `FAshenMasterCutsGuardChainTest` |
+
+---
+
 ### Patch v158.17.0: Campfire Reflection & Memory Integration Playloop
 **Governing Directives:** `PRS-001-SPEC-SOUL-001`, `METALLURGY-SPEC-102`, Constitutional Law I (SSoT)  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Tri-Partite Sentinel Contract Test Verified
