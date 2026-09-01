@@ -4,6 +4,18 @@ This document tracks all builds, releases, and milestones implemented during the
 
 ---
 
+### Patch v158.19.0: Master Cuts Granular Splitting & Martial AI StateTree Migration
+**Governing Directives:** `PRS-001-SPEC-AI-109`, `PRS-001-SPEC-COMBAT-106`, Constitutional Law I (SSoT)  
+**Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Bi-Partite Sentinel StateTree Contract Test Verified
+
+| Component | Target Pipeline | Functional Output & Causal Chain | Test Suite |
+|---|---|---|---|
+| `Data-Driven Counter Matrix` | `AI/`, `Combat/` | `UAshenLiechtenauerMatrixDataAsset` Primary Data Asset storing guard counter mappings, posture damage multipliers ($1.75\times - 2.0\times$), and stagger duration parameters | `FAshenMartialAIMatrixLookupTest` |
+| `StateTree $60\text{Hz}$ Stance Evaluator` | `AI/`, `StateTree` | `UAshenAIStateTreeEvaluator_Liechtenauer` sampling target stance gameplay tags (`State.Stance.*`), distance, and poise ratio to select optimal Master Cut counter in real-time | `FAshenMartialAIEvaluatorTest` |
+| `StateTree Counter Attack Task` | `AI/`, `GAS` | `UAshenAITask_ExecuteMasterCutCounter` granting and activating the evaluated counter strike on the AI's Ability System Component | Verified via UBT & GAS Link |
+
+---
+
 ### Patch v158.18.0: The Five Master Cuts & GAS Kinetic Combo Library
 **Governing Directives:** `CONVERGENCE-SPEC-101`, `PRS-001-SPEC-COMBAT-104`, Constitutional Law I (SSoT)  
 **Status:** Clean UBT 5.8 Compile (0 Errors, 0 Warnings), Bi-Partite Sentinel Combat QA Test Verified
