@@ -156,3 +156,34 @@ This skill defines the exact cognitive loop, domain layout, 20-build cadence, co
    - Integration Debt reduction enforces the Zero-Debt Invariant ($Debt \to 0.0$ at Campfire Sanctuary).
    - Every state commit monotonically increments `int64 StateVersion`.
    - The Anti-Arcade Law: `EmissiveIntensity == 0.0f` across grounded metallurgical tiers.
+
+---
+
+## 🏛️ Section 6: PMIP-001 / PSAP-001 System Assimilation Pipeline
+
+When harvesting prototypes from `Docs/Prototypes/` or integrating new gameplay mechanics into *Ashen Oath*, all AI agents must strictly follow **PMIP-001 (Phoenix Modularization & Integration Protocol)** / **PSAP-001 (Phoenix System Assimilation Protocol)**.
+
+### 1. The Cardinal Rule of Assimilation
+> **"The legacy slice doesn't have to become modular. The adapter makes it modular from the outside."**
+- Never surgically dismantle a working, self-contained prototype into scattered fragments just to make it modular.
+- Enclose the prototype from the outside using a **`VSRP-001` external adapter**:
+  - Translate the 10-bit bitmasked `InputActions` into the prototype's internal keys.
+  - Subscribe to prototype callbacks and re-publish them as semantic `GameEvents` on the event bus.
+  - Expose authoritative state via `getState()` and volatile profiling metrics via `getDiagnostics()`.
+- Export a matching Unreal Engine 5.8 C++ component or subsystem (`UAshen*Component.h`, `UAshen*Subsystem.h`) that mirrors the same contracts.
+
+### 2. The Cardinal Rule of Integration
+> **"Integration must never silently repair a module."**
+- If an incompatibility occurs when mounting a slice into `MasterOrchestrator`, do NOT hack silent workarounds inside the orchestrator loop.
+- The module contract or input chord must be explicitly revised, documented, and re-verified.
+
+### 3. Rapid MRA-001 Triage Before Ingestion
+Evaluate every candidate prototype against the 12-point **MRA-001** checklist:
+- **GREEN**: Adapter-ready (wrap directly with VSRP-001).
+- **YELLOW**: Seams required (minor entry-point refactor of update loop or global state).
+- **RED**: Architectural reconstruction required (use prototype as math reference, build natively under `IVSRPModule`).
+
+### 4. Zero Test Theater Mandate (MVP-001)
+- Never simulate tests with dummy strings or mock classes.
+- Every vertical slice must register real assertions in the live multi-adapter test suite (`packages/isomorphic-orchestration/src/test_master_integration.ts`) and pass **Pass 7 of `sentinel_runner.py`**.
+
